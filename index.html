@@ -339,26 +339,28 @@
                                 <span class="w-6 h-6 rounded-full bg-cube-black text-white text-xs font-normal flex items-center justify-center flex-shrink-0">1</span>
                                 <h3 class="font-normal text-base text-cube-black">ข้อมูลลูกค้า</h3>
                             </div>
-                            <div id="section-body-1" class="section-body grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white/70 rounded-2xl shadow-md p-4 pb-8">
-                                <div>
+                            <div id="section-body-1" class="section-body grid grid-cols-2 sm:grid-cols-6 gap-4 bg-white/70 rounded-2xl shadow-md p-4 pb-8">
+                                <!-- แถว 1: เบอร์ + อีเมล -->
+                                <div class="col-span-2 sm:col-span-3">
                                     <label for="cust-phone" class="block text-xs font-normal text-cube-gray mb-1">เบอร์โทรศัพท์ <span class="text-red-500">*</span></label>
                                     <input type="tel" id="cust-phone" required aria-required="true" autocomplete="tel" inputmode="numeric" pattern="[0-9]*" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="min-h-[44px] w-full bg-gray-50 border border-gray-300 rounded-2xl px-3 py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-cube-gold focus:bg-white" placeholder="0812345678">
                                 </div>
-                                <div>
+                                <div class="col-span-2 sm:col-span-3">
                                     <label for="cust-email" class="block text-xs font-normal text-cube-gray mb-1">อีเมล</label>
                                     <input type="email" id="cust-email" autocomplete="email" class="min-h-[44px] w-full bg-gray-50 border border-gray-300 rounded-2xl px-3 py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-cube-gold focus:bg-white" placeholder="กรอกอีเมลลูกค้า">
                                 </div>
-                                <div class="sm:col-span-2">
+                                <!-- แถว 2: ชื่อ + ชื่อเล่น + เพศ -->
+                                <div class="col-span-2 sm:col-span-2">
                                     <label for="cust-firstname" class="block text-xs font-normal text-cube-gray mb-1">ชื่อลูกค้า <span class="text-red-500">*</span></label>
                                     <input type="text" id="cust-firstname" required aria-required="true" class="min-h-[44px] w-full bg-gray-50 border border-gray-300 rounded-2xl px-3 py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-cube-gold focus:bg-white" placeholder="กรอกชื่อลูกค้า">
                                 </div>
-                                <div>
+                                <div class="col-span-1 sm:col-span-2">
                                     <label for="cust-nickname" class="block text-xs font-normal text-cube-gray mb-1">ชื่อเล่น</label>
-                                    <input type="text" id="cust-nickname" class="min-h-[36px] w-full bg-gray-50 border border-gray-300 rounded-2xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cube-gold focus:bg-white" placeholder="ชื่อเล่น">
+                                    <input type="text" id="cust-nickname" class="min-h-[44px] w-full bg-gray-50 border border-gray-300 rounded-2xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cube-gold focus:bg-white" placeholder="ชื่อเล่น">
                                 </div>
-                                <div>
+                                <div class="col-span-1 sm:col-span-2">
                                     <label for="cust-gender" class="block text-xs font-normal text-cube-gray mb-1">เพศ</label>
-                                    <select id="cust-gender" class="min-h-[36px] w-full bg-gray-50 border border-gray-300 rounded-2xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cube-gold focus:bg-white">
+                                    <select id="cust-gender" class="min-h-[44px] w-full bg-gray-50 border border-gray-300 rounded-2xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cube-gold focus:bg-white">
                                         <option value="female">หญิง</option>
                                         <option value="male">ชาย</option>
                                         <option value="unspecified" selected>ไม่ระบุ</option>
@@ -611,6 +613,10 @@
                                 </div>
                                 <input type="hidden" id="image-data-shirt">
                             </div>
+                            <div>
+                                <label for="shirt-alteration-notes" class="block text-xs font-normal text-cube-gray mb-1">หมายเหตุ</label>
+                                <textarea id="shirt-alteration-notes" rows="2" class="w-full bg-white border border-gray-300 rounded-2xl px-3 py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-cube-gold resize-none" placeholder="บันทึกเพิ่มเติม..."></textarea>
+                            </div>
                         </div>
 
                         <!-- Section: Accessory Alteration Detail -->
@@ -648,6 +654,10 @@
                                 </div>
                                 <input type="hidden" id="image-data-accessory">
                             </div>
+                            <div>
+                                <label for="accessory-alteration-notes" class="block text-xs font-normal text-cube-gray mb-1">หมายเหตุ</label>
+                                <textarea id="accessory-alteration-notes" rows="2" class="w-full bg-white border border-gray-300 rounded-2xl px-3 py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-cube-gold resize-none" placeholder="บันทึกเพิ่มเติม..."></textarea>
+                            </div>
                         </div>
 
                         <!-- Section: Vest Alteration Detail -->
@@ -684,6 +694,10 @@
                                     <button type="button" id="image-remove-vest" class="hidden text-[11px] text-red-500 hover:underline">ลบรูป</button>
                                 </div>
                                 <input type="hidden" id="image-data-vest">
+                            </div>
+                            <div>
+                                <label for="vest-alteration-notes" class="block text-xs font-normal text-cube-gray mb-1">หมายเหตุ</label>
+                                <textarea id="vest-alteration-notes" rows="2" class="w-full bg-white border border-gray-300 rounded-2xl px-3 py-2 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-cube-gold resize-none" placeholder="บันทึกเพิ่มเติม..."></textarea>
                             </div>
                         </div>
                         </div>
@@ -2214,10 +2228,13 @@
                 // ── รายละเอียดเชิ้ต / Accessory / เสื้อกั๊ก
                 สาขาเชิ้ต:           orderData.shirtDetails?.branchName      || '',
                 พนักงานติดต่อเชิ้ต:   orderData.shirtDetails?.branchContact   || '',
+                หมายเหตุเชิ้ต:        orderData.shirtDetails?.notes           || '',
                 สาขาAccessory:       orderData.accessoryDetails?.branchName   || '',
                 พนักงานติดต่อAccess:  orderData.accessoryDetails?.branchContact || '',
+                หมายเหตุAccessory:    orderData.accessoryDetails?.notes        || '',
                 สาขาเสื้อกั๊ก:       orderData.vestDetails?.branchName       || '',
-                พนักงานติดต่อกั๊ก:   orderData.vestDetails?.branchContact    || ''
+                พนักงานติดต่อกั๊ก:   orderData.vestDetails?.branchContact    || '',
+                หมายเหตุเสื้อกั๊ก:   orderData.vestDetails?.notes            || ''
             };
 
             // ใช้ no-cors เพื่อให้ request ออกจาก file:// ได้โดยไม่ถูก browser block
@@ -2299,15 +2316,18 @@
                 },
                 shirtDetails: {
                     branchName: document.getElementById('shirt-branch-name').value,
-                    branchContact: document.getElementById('shirt-branch-contact').value
+                    branchContact: document.getElementById('shirt-branch-contact').value,
+                    notes: document.getElementById('shirt-alteration-notes').value
                 },
                 accessoryDetails: {
                     branchName: document.getElementById('accessory-branch-name').value,
-                    branchContact: document.getElementById('accessory-branch-contact').value
+                    branchContact: document.getElementById('accessory-branch-contact').value,
+                    notes: document.getElementById('accessory-alteration-notes').value
                 },
                 vestDetails: {
                     branchName: document.getElementById('vest-branch-name').value,
-                    branchContact: document.getElementById('vest-branch-contact').value
+                    branchContact: document.getElementById('vest-branch-contact').value,
+                    notes: document.getElementById('vest-alteration-notes').value
                 },
                 dates: {
                     submission: document.getElementById('date-submission').value,
@@ -2532,18 +2552,21 @@
             const shirtDetails = order.shirtDetails || {};
             document.getElementById('shirt-branch-name').value = shirtDetails.branchName || '';
             document.getElementById('shirt-branch-contact').value = shirtDetails.branchContact || '';
+            document.getElementById('shirt-alteration-notes').value = shirtDetails.notes || '';
             updateShirtSourceVisibility();
 
             // Accessory Details (older saved orders may not have this key)
             const accessoryDetails = order.accessoryDetails || {};
             document.getElementById('accessory-branch-name').value = accessoryDetails.branchName || '';
             document.getElementById('accessory-branch-contact').value = accessoryDetails.branchContact || '';
+            document.getElementById('accessory-alteration-notes').value = accessoryDetails.notes || '';
             updateAccessorySourceVisibility();
 
             // Vest Details (older saved orders may not have this key)
             const vestDetails = order.vestDetails || {};
             document.getElementById('vest-branch-name').value = vestDetails.branchName || '';
             document.getElementById('vest-branch-contact').value = vestDetails.branchContact || '';
+            document.getElementById('vest-alteration-notes').value = vestDetails.notes || '';
             updateVestSourceVisibility();
 
             // Dates
@@ -2651,15 +2674,18 @@
                 },
                 shirtDetails: {
                     branchName: document.getElementById('shirt-branch-name').value || '',
-                    branchContact: document.getElementById('shirt-branch-contact').value || ''
+                    branchContact: document.getElementById('shirt-branch-contact').value || '',
+                    notes: document.getElementById('shirt-alteration-notes').value || ''
                 },
                 accessoryDetails: {
                     branchName: document.getElementById('accessory-branch-name').value || '',
-                    branchContact: document.getElementById('accessory-branch-contact').value || ''
+                    branchContact: document.getElementById('accessory-branch-contact').value || '',
+                    notes: document.getElementById('accessory-alteration-notes').value || ''
                 },
                 vestDetails: {
                     branchName: document.getElementById('vest-branch-name').value || '',
-                    branchContact: document.getElementById('vest-branch-contact').value || ''
+                    branchContact: document.getElementById('vest-branch-contact').value || '',
+                    notes: document.getElementById('vest-alteration-notes').value || ''
                 },
                 dates: {
                     submission: document.getElementById('date-submission').value || '',
