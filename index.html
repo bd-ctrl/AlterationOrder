@@ -917,31 +917,6 @@
 
 
 
-        <!-- Dynamic Modal to view and print previously saved receipts -->
-        <div id="receipt-modal" class="fixed inset-0 z-50 bg-cube-black/50 backdrop-blur-lg flex justify-center items-center p-4 hidden" role="dialog" aria-modal="true" aria-labelledby="receipt-modal-title">
-            <div class="glass-shine bg-white/75 backdrop-blur-2xl backdrop-saturate-150 rounded-[32px] max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl shadow-black/15 border border-white/70 relative">
-                <div class="sticky top-0 bg-white/55 backdrop-blur-xl backdrop-saturate-150 p-4 border-b border-white/50 flex flex-wrap justify-between items-center z-10 gap-2 rounded-t-[32px]">
-                    <h3 id="receipt-modal-title" class="font-normal text-cube-black"><i class="fa-solid fa-file-invoice mr-1 text-cube-gold" aria-hidden="true"></i> ใบเสร็จระบบ</h3>
-                    <div class="flex space-x-2">
-                        <button onclick="downloadReceiptAsImage()" aria-label="ดาวน์โหลดใบเสร็จเป็นรูปภาพ" class="min-h-[44px] bg-cube-gray hover:bg-cube-black text-white text-sm font-normal px-4 py-2.5 rounded-full flex items-center space-x-1.5 transition-colors shadow-md active:scale-[0.97]">
-                            <i class="fa-solid fa-image" aria-hidden="true"></i>
-                            <span>โหลดรูปภาพ</span>
-                        </button>
-                        <button id="modal-print-btn" aria-label="พิมพ์ใบเสร็จ" class="min-h-[44px] bg-cube-gold hover:bg-cube-gold-dark text-cube-black text-sm font-medium px-4 py-2.5 rounded-full flex items-center space-x-1.5 transition-colors shadow-md active:scale-[0.97]">
-                            <i class="fa-solid fa-print" aria-hidden="true"></i>
-                            <span>พิมพ์</span>
-                        </button>
-                        <button onclick="closeReceiptModal()" aria-label="ปิดหน้าต่างใบเสร็จ" class="min-h-[44px] bg-gray-200 hover:bg-gray-300 text-cube-gray text-sm font-normal px-4 py-2.5 rounded-full transition-colors active:scale-[0.97]">
-                            ปิด
-                        </button>
-                    </div>
-                </div>
-                <div class="p-6 flex justify-center" id="modal-receipt-container">
-                    <!-- Cloned printable replica rendered dynamically -->
-                </div>
-            </div>
-        </div>
-
     </div>
     <!-- Core App Scripts: Data Handling, Reactive Event Observers, Local Database -->
     <script>
@@ -2647,6 +2622,11 @@
                 production: o.production || {},
                 customer: o.customer || {},
                 dates: o.dates || {},
+                suitDetails: o.suitDetails || {},
+                pantsDetails: o.pantsDetails || {},
+                shirtDetails: o.shirtDetails || {},
+                accessoryDetails: o.accessoryDetails || {},
+                vestDetails: o.vestDetails || {},
             }));
             filterOrders();
             updateStats();
@@ -2684,6 +2664,11 @@
                     production: o.production || {},
                     customer: o.customer || {},
                     dates: o.dates || {},
+                    suitDetails: o.suitDetails || {},
+                    pantsDetails: o.pantsDetails || {},
+                    shirtDetails: o.shirtDetails || {},
+                    accessoryDetails: o.accessoryDetails || {},
+                    vestDetails: o.vestDetails || {},
                 }));
                 _larkOrdersCache[cacheKey] = normalized;
                 return normalized;
@@ -3996,90 +3981,126 @@
             // สถานะจัดส่ง: ช่องทางที่เลือก+สถานที่ส่ง หรือ "รับที่สาขา X"
             applyReceiptShippingDisplay(clone, order.shipping || '', order.dates?.pickupLocation || order.branch || '');
 
-            // ใส่ clone เข้า modal แล้วแสดง
-            const container = document.getElementById('modal-receipt-container');
-            container.innerHTML = '';
-            container.appendChild(clone);
+            // ⚠️ เอา "ใบเสร็จระบบ" (การ์ดกราฟิก+ป็อปอัพ 3 ปุ่มเดิม) ออกแล้ว — clone นี้ใช้แค่เป็นแหล่งข้อมูล
+            // (ประชากรค่าไว้ใน pv-* ต่าง ๆ ด้านบน) ให้ buildThermalReceiptHTML() อ่านออกไปสร้างใบสรุปแบบ
+            // plain-text อย่างเดียว ไม่ต้องแสดง element นี้ให้ผู้ใช้เห็นเลย
+            const thermalHTML = buildThermalReceiptHTML(clone);
 
-            // ตั้ง print button — พิมพ์ลงใบเสร็จเครื่องพิมพ์ความร้อน 80มม.
-            const printBtn = document.getElementById('modal-print-btn');
-            if (printBtn) {
-                printBtn.onclick = () => {
-                    const thermalHTML = buildThermalReceiptHTML(clone);
-                    const win = window.open('', '_blank', 'width=420,height=700');
-                    if (!win) { alert('กรุณาอนุญาต pop-up เพื่อพิมพ์'); return; }
-                    win.document.write('<html lang="th"><head><meta charset="utf-8"><title>ใบเสร็จ</title>');
-                    // ฟอนต์ IBM Plex Sans Thai — โหลดเฉพาะหน้าต่างใบสรุปนี้เท่านั้น ไม่กระทบฟอนต์ของเว็บหลัก
-                    win.document.write('<link rel="preconnect" href="https://fonts.googleapis.com">');
-                    win.document.write('<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>');
-                    win.document.write('<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">');
-                    win.document.write('<style>' +
-                        // RESET
-                        '*{margin:0;padding:0;box-sizing:border-box;}' +
-                        // BASE — ฟอนต์ไทย Noto Sans Thai (fallback ฟอนต์ระบบถ้าเครื่องไม่มี), 12px ตามมาตรฐานกระดาษความร้อน
-                        'html,body{background:#fff;color:#000;}' +
-                        'body{width:80mm;margin:0 auto;font-family:"IBM Plex Sans Thai","Noto Sans Thai","Leelawadee UI","Tahoma",sans-serif;font-size:12px;line-height:1.55;}' +
-                        '.receipt{width:100%;padding:4mm 3mm;}' +
-                        '.t-center{text-align:center;margin-bottom:0.6mm;}' +
-                        '.t-bold{font-weight:700;}' +
-                        '.t-title{font-size:20px;}' +
-                        '.t-pickup-date{font-size:20px;}' +
-                        '.t-section-gap{margin-top:2.5mm;}' +
-                        // หัวบิล: เลขที่บิล ซ้าย / วันที่ ขวา บรรทัดเดียวกัน
-                        '.t-top-row{display:flex;justify-content:space-between;gap:6px;margin-bottom:1.5mm;}' +
-                        // ชื่อก้อนสินค้า + ไซส์ ชิดซ้าย
-                        '.t-block-title{font-weight:700;margin-top:3mm;margin-bottom:0.5mm;}' +
-                        '.t-block-sub{margin-bottom:1.5mm;color:#333;}' +
-                        // เส้นประคั่นก่อน/หลังรายการวัดของแต่ละก้อนสินค้า
-                        '.t-divider{border-top:1px dashed #000;margin:1.5mm 0;}' +
-                        // แถวรายการวัด 3 คอลัมน์: label ซ้าย / ตัวเลข กึ่งกลาง(คอลัมน์คงที่) / หน่วย ซ้าย(คอลัมน์คงที่) — ขยายใหญ่ให้อ่านง่าย
-                        '.t-row3{display:flex;gap:2mm;margin-bottom:1mm;font-size:20px;}' +
-                        '.t-row3-label{flex:1;}' +
-                        '.t-row3-value{width:14mm;text-align:right;}' +
-                        '.t-row3-unit{width:12mm;text-align:left;}' +
-                        '.t-notes{margin-top:1mm;word-break:break-word;color:#333;}' +
-                        // PRINT — กระดาษ 80มม. ความยาว auto ไหลตามเนื้อหา ไม่ตัดหน้า ไม่มีขอบ
-                        '@media print{' +
-                            '@page{size:80mm auto;margin:0;}' +
-                            'html,body{width:80mm;margin:0;padding:0;}' +
-                            '.receipt{padding:3mm 3mm 2mm;}' +
-                        '}' +
-                    '</style>');
-                    win.document.write('</head><body><div class="receipt">' + thermalHTML + '</div></body></html>');
-                    win.document.close();
-                    win.focus();
-                    // รอฟอนต์ IBM Plex Sans Thai โหลดเสร็จก่อนค่อยสั่งพิมพ์ (กันเคสพิมพ์ด้วยฟอนต์ fallback เพราะโหลดไม่ทัน)
-                    // กันพิมพ์ซ้ำสองครั้งด้วย flag เดียว
-                    let _printed = false;
-                    const triggerPrint = () => { if (_printed) return; _printed = true; win.print(); };
-                    if (win.document.fonts && win.document.fonts.ready) {
-                        win.document.fonts.ready.then(triggerPrint).catch(triggerPrint);
-                        setTimeout(triggerPrint, 1200); // กันเหนียว เผื่อ fonts.ready ไม่ resolve
-                    } else {
-                        setTimeout(triggerPrint, 500);
-                    }
-                };
+            openThermalPrintWindow(thermalHTML);
+
+            // บันทึกรูปใบสรุปกลับเข้า Lark Base ช่อง "ใบสรุป" แบบไม่บล็อกการปรินต์ — ถ้าพัง (เช่น ยังไม่ได้
+            // ตั้งค่า Lark App ใน Worker หรือหาเลขที่บิลนี้ใน Lark Base ไม่เจอ) จะเงียบแค่ log ไว้เฉย ๆ
+            saveThermalReceiptImageToLark(thermalHTML, order.orderNo);
+        }
+
+        // ─── สร้าง <style> ของใบสรุป thermal ใช้ร่วมกันทั้งตอนปรินต์ (popup window) และตอนแคปรูปออฟสกรีน ───
+        const THERMAL_RECEIPT_FONT_LINKS =
+            '<link rel="preconnect" href="https://fonts.googleapis.com">' +
+            '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' +
+            '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">';
+
+        const THERMAL_RECEIPT_STYLE_TEXT =
+            // RESET
+            '*{margin:0;padding:0;box-sizing:border-box;}' +
+            // BASE — ฟอนต์ไทย Noto Sans Thai (fallback ฟอนต์ระบบถ้าเครื่องไม่มี), 12px ตามมาตรฐานกระดาษความร้อน
+            'html,body{background:#fff;color:#000;}' +
+            'body{width:80mm;margin:0 auto;font-family:"IBM Plex Sans Thai","Noto Sans Thai","Leelawadee UI","Tahoma",sans-serif;font-size:12px;line-height:1.55;}' +
+            '.receipt{width:100%;padding:4mm 3mm;}' +
+            '.t-center{text-align:center;margin-bottom:0.6mm;}' +
+            '.t-bold{font-weight:700;}' +
+            '.t-title{font-size:20px;}' +
+            '.t-pickup-date{font-size:20px;}' +
+            '.t-section-gap{margin-top:2.5mm;}' +
+            // หัวบิล: เลขที่บิล ซ้าย / วันที่ ขวา บรรทัดเดียวกัน
+            '.t-top-row{display:flex;justify-content:space-between;gap:6px;margin-bottom:1.5mm;}' +
+            // ชื่อก้อนสินค้า + ไซส์ ชิดซ้าย
+            '.t-block-title{font-weight:700;margin-top:3mm;margin-bottom:0.5mm;}' +
+            '.t-block-sub{margin-bottom:1.5mm;color:#333;}' +
+            // เส้นประคั่นก่อน/หลังรายการวัดของแต่ละก้อนสินค้า
+            '.t-divider{border-top:1px dashed #000;margin:1.5mm 0;}' +
+            // แถวรายการวัด 3 คอลัมน์: label ซ้าย / ตัวเลข กึ่งกลาง(คอลัมน์คงที่) / หน่วย ซ้าย(คอลัมน์คงที่) — ขยายใหญ่ให้อ่านง่าย
+            '.t-row3{display:flex;gap:2mm;margin-bottom:1mm;font-size:20px;}' +
+            '.t-row3-label{flex:1;}' +
+            '.t-row3-value{width:14mm;text-align:right;}' +
+            '.t-row3-unit{width:12mm;text-align:left;}' +
+            '.t-notes{margin-top:1mm;word-break:break-word;color:#333;}' +
+            // PRINT — กระดาษ 80มม. ความยาว auto ไหลตามเนื้อหา ไม่ตัดหน้า ไม่มีขอบ
+            '@media print{' +
+                '@page{size:80mm auto;margin:0;}' +
+                'html,body{width:80mm;margin:0;padding:0;}' +
+                '.receipt{padding:3mm 3mm 2mm;}' +
+            '}';
+
+        // เปิดหน้าต่างใหม่ พิมพ์ใบสรุป thermal 80มม. โดยตรง (ไม่ผ่านการ์ดกราฟิก/โมดัลอีกต่อไป)
+        function openThermalPrintWindow(thermalHTML) {
+            const win = window.open('', '_blank', 'width=420,height=700');
+            if (!win) { alert('กรุณาอนุญาต pop-up เพื่อพิมพ์'); return; }
+            win.document.write('<html lang="th"><head><meta charset="utf-8"><title>ใบเสร็จ</title>');
+            // ฟอนต์ IBM Plex Sans Thai — โหลดเฉพาะหน้าต่างใบสรุปนี้เท่านั้น ไม่กระทบฟอนต์ของเว็บหลัก
+            win.document.write(THERMAL_RECEIPT_FONT_LINKS);
+            win.document.write('<style>' + THERMAL_RECEIPT_STYLE_TEXT + '</style>');
+            win.document.write('</head><body><div class="receipt">' + thermalHTML + '</div></body></html>');
+            win.document.close();
+            win.focus();
+            // รอฟอนต์ IBM Plex Sans Thai โหลดเสร็จก่อนค่อยสั่งพิมพ์ (กันเคสพิมพ์ด้วยฟอนต์ fallback เพราะโหลดไม่ทัน)
+            // กันพิมพ์ซ้ำสองครั้งด้วย flag เดียว
+            let _printed = false;
+            const triggerPrint = () => { if (_printed) return; _printed = true; win.print(); };
+            if (win.document.fonts && win.document.fonts.ready) {
+                win.document.fonts.ready.then(triggerPrint).catch(triggerPrint);
+                setTimeout(triggerPrint, 1200); // กันเหนียว เผื่อ fonts.ready ไม่ resolve
+            } else {
+                setTimeout(triggerPrint, 500);
             }
-
-
-            document.getElementById('receipt-modal').classList.remove('hidden');
         }
 
-        function closeReceiptModal() {
-            document.getElementById('receipt-modal').classList.add('hidden');
-        }
+        // เรนเดอร์ใบสรุป thermal แบบออฟสกรีน (ไม่ให้ผู้ใช้เห็น) ในหน้าเดิม แล้วแคปเป็นรูป PNG ด้วย html2canvas
+        // จากนั้นส่งกลับไปบันทึกในฟิลด์ "ใบสรุป" ของ Lark Base ผ่าน Worker — ทำแบบไม่บล็อก ไม่รบกวนการปรินต์
+        // ถ้าพังจุดไหน (html2canvas โหลดไม่ทัน / เน็ตหลุด / ยังไม่ตั้งค่า Lark App) แค่ log ไว้เฉย ๆ
+        async function saveThermalReceiptImageToLark(thermalHTML, orderNo) {
+            try {
+                if (typeof html2canvas === 'undefined') throw new Error('html2canvas ยังไม่โหลด');
 
-        function downloadReceiptAsImage() {
-            const container = document.getElementById('modal-receipt-container');
-            const el = container.querySelector('#receipt-print-area') || container.firstElementChild;
-            if (!el) return;
-            if (typeof html2canvas === 'undefined') { alert('html2canvas โหลดไม่สำเร็จ'); return; }
-            html2canvas(el, { scale: 2, useCORS: true, backgroundColor: '#ffffff' }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'receipt_' + (document.getElementById('pv-order-no')?.innerText || 'order') + '.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            });
+                const wrap = document.createElement('div');
+                wrap.style.position = 'fixed';
+                wrap.style.left = '-99999px';
+                wrap.style.top = '0';
+                wrap.style.background = '#fff';
+
+                const style = document.createElement('style');
+                style.textContent = THERMAL_RECEIPT_STYLE_TEXT;
+
+                const receiptDiv = document.createElement('div');
+                receiptDiv.className = 'receipt';
+                receiptDiv.innerHTML = thermalHTML;
+
+                wrap.appendChild(style);
+                wrap.appendChild(receiptDiv);
+                document.body.appendChild(wrap);
+
+                // รอฟอนต์ IBM Plex Sans Thai ให้พร้อมก่อนแคป (ฟอนต์นี้ถูกโหลดไว้แล้วตอนเปิดเว็บ — ดู <head>)
+                if (document.fonts && document.fonts.ready) {
+                    await Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1000))]);
+                }
+
+                const canvas = await html2canvas(receiptDiv, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+                const dataUrl = canvas.toDataURL('image/png');
+                wrap.remove();
+
+                const base64 = dataUrl.split(',')[1] || '';
+                if (!base64) throw new Error('แคปรูปใบสรุปไม่สำเร็จ');
+
+                const res = await fetch(`${SF_ORDER_WORKER_URL}/attach-summary-image`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderNo, imageBase64: base64 }),
+                });
+                const json = await res.json();
+                if (!json.success) throw new Error(json.error || 'ไม่ทราบสาเหตุ');
+                console.log('[ใบสรุป] บันทึกรูปกลับเข้า Lark Base สำเร็จ:', orderNo);
+            } catch (e) {
+                console.error('[ใบสรุป] บันทึกรูปกลับเข้า Lark Base ไม่สำเร็จ (ไม่กระทบการปรินต์):', e);
+            }
         }
     </script>
 </body>
