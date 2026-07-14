@@ -4054,6 +4054,31 @@
             }
         }
 
+        // ⚠️ CSS สำหรับแคปรูปออฟสกรีนโดยเฉพาะ — ต้อง SCOPE ทุก selector ด้วย .thermal-capture-scope
+        // ห้ามใช้ THERMAL_RECEIPT_STYLE_TEXT ตรงๆ ในหน้าเว็บหลัก เพราะอันนั้นมีกฎ "body{width:80mm...}"
+        // ซึ่งตอนใช้ในหน้าต่างปรินต์ (popup แยกหน้าต่าง) ไม่มีปัญหา แต่ถ้าเอามาแปะเป็น <style> ในหน้าเว็บหลัก
+        // (ไม่ใช่ popup) กฎ "body{...}" จะไปทับ <body> จริงของทั้งเว็บทันที (เพราะ <style> มีผลทั้งหน้าเสมอ
+        // ไม่ว่าจะแปะไว้ตรงไหนใน DOM) ทำให้เว็บทั้งหน้าหดเหลือ 80mm ไปด้วยตอนกำลังแคปรูป — บั๊กที่เจอจริง
+        const THERMAL_CAPTURE_STYLE_TEXT =
+            '.thermal-capture-scope{position:fixed;left:-99999px;top:0;background:#fff;}' +
+            '.thermal-capture-scope *{margin:0;padding:0;box-sizing:border-box;}' +
+            '.thermal-capture-scope .receipt{width:80mm;margin:0 auto;padding:4mm 3mm;background:#fff;color:#000;' +
+                'font-family:"IBM Plex Sans Thai","Noto Sans Thai","Leelawadee UI","Tahoma",sans-serif;font-size:12px;line-height:1.55;}' +
+            '.thermal-capture-scope .t-center{text-align:center;margin-bottom:0.6mm;}' +
+            '.thermal-capture-scope .t-bold{font-weight:700;}' +
+            '.thermal-capture-scope .t-title{font-size:20px;}' +
+            '.thermal-capture-scope .t-pickup-date{font-size:20px;}' +
+            '.thermal-capture-scope .t-section-gap{margin-top:2.5mm;}' +
+            '.thermal-capture-scope .t-top-row{display:flex;justify-content:space-between;gap:6px;margin-bottom:1.5mm;}' +
+            '.thermal-capture-scope .t-block-title{font-weight:700;margin-top:3mm;margin-bottom:0.5mm;}' +
+            '.thermal-capture-scope .t-block-sub{margin-bottom:1.5mm;color:#333;}' +
+            '.thermal-capture-scope .t-divider{border-top:1px dashed #000;margin:1.5mm 0;}' +
+            '.thermal-capture-scope .t-row3{display:flex;gap:2mm;margin-bottom:1mm;font-size:20px;}' +
+            '.thermal-capture-scope .t-row3-label{flex:1;}' +
+            '.thermal-capture-scope .t-row3-value{width:14mm;text-align:right;}' +
+            '.thermal-capture-scope .t-row3-unit{width:12mm;text-align:left;}' +
+            '.thermal-capture-scope .t-notes{margin-top:1mm;word-break:break-word;color:#333;}';
+
         // เรนเดอร์ใบสรุป thermal แบบออฟสกรีน (ไม่ให้ผู้ใช้เห็น) ในหน้าเดิม แล้วแคปเป็นรูป PNG ด้วย html2canvas
         // จากนั้นส่งกลับไปบันทึกในฟิลด์ "ใบสรุป" ของ Lark Base ผ่าน Worker — ทำแบบไม่บล็อก ไม่รบกวนการปรินต์
         // ถ้าพังจุดไหน (html2canvas โหลดไม่ทัน / เน็ตหลุด / ยังไม่ตั้งค่า Lark App) แค่ log ไว้เฉย ๆ
@@ -4062,13 +4087,10 @@
                 if (typeof html2canvas === 'undefined') throw new Error('html2canvas ยังไม่โหลด');
 
                 const wrap = document.createElement('div');
-                wrap.style.position = 'fixed';
-                wrap.style.left = '-99999px';
-                wrap.style.top = '0';
-                wrap.style.background = '#fff';
+                wrap.className = 'thermal-capture-scope';
 
                 const style = document.createElement('style');
-                style.textContent = THERMAL_RECEIPT_STYLE_TEXT;
+                style.textContent = THERMAL_CAPTURE_STYLE_TEXT;
 
                 const receiptDiv = document.createElement('div');
                 receiptDiv.className = 'receipt';
