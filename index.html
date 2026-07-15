@@ -3850,21 +3850,25 @@
             html += `<div class="t-top-row"><span>${esc(orderNo)}</span><span>วันที่ส่งแก้ ${esc(submissionShort)}</span></div>`;
 
             // ชื่อเรื่อง : ประเภทสินค้า (กึ่งกลาง)
+            // หมายเหตุ: buildReceiptTitleTypes() คืนค่ามาพร้อม " : " นำหน้าอยู่แล้ว (เช่น " : เสื้อสูท")
+            // ห้ามใส่ " : " ซ้ำตรงนี้อีก ไม่งั้นจะกลายเป็น "ใบสั่งแก้ปรับทรง : : เสื้อสูท" (โคลอนคู่)
             const titleTypes = txt('#pv-title-types', '');
-            html += `<div class="t-center t-bold t-title">ใบสั่งแก้ปรับทรง : ${esc(titleTypes)}</div>`;
+            html += `<div class="t-center t-bold t-title">ใบสั่งแก้ปรับทรง${esc(titleTypes)}</div>`;
 
             // สถานะจ่ายเงิน — เก็บไว้ใช้รวมกับบรรทัดช่องทางรับสินค้าด้านล่าง (ไม่ต่อท้ายชื่อลูกค้าแล้ว ตามภาพตัวอย่าง)
             const paid = q('#pv-status-paid')?.innerText.trim();
             const debtChecked = q('#pv-status-debt')?.innerText.trim();
             const payText = paid ? 'จ่ายเงินแล้ว' : (debtChecked ? `ค้างชำระ${esc(txt('#pv-debt-amount', ''))}` : '');
 
-            // ข้อมูลลูกค้า (กึ่งกลาง) — รวมชื่อลูกค้า + เบอร์โทร (มีขีดคั่น) + ชื่อเล่น (ถ้ามี) ไว้บรรทัดเดียวกัน / พนักงานขายแยกบรรทัดถัดไป
+            // ข้อมูลลูกค้า (กึ่งกลาง) — ชื่อลูกค้า + เบอร์โทร (มีขีดคั่น) บรรทัดเดียวกัน / ชื่อเล่น (ถ้ามี) แยกบรรทัดถัดไป / พนักงานขายแยกบรรทัดถัดไปอีกที
             const nickname = txt('#pv-cust-nickname', '');
             const phoneFormatted = formatPhone(txt('#pv-cust-phone', ''));
             let custLine = `ชื่อลูกค้า: ${esc(txt('#pv-cust-firstname'))}`;
             if (phoneFormatted) custLine += ` ${esc(phoneFormatted)}`;
-            if (nickname && nickname !== '-') custLine += ` (คุณ${esc(nickname)})`;
             html += `<div class="t-center">${custLine}</div>`;
+            if (nickname && nickname !== '-') {
+                html += `<div class="t-center">คุณ${esc(nickname)}</div>`;
+            }
             html += `<div class="t-center">พนักงานขาย: ${esc(txt('#pv-staff-take'))}</div>`;
 
             // ก้อนกางเกง (ชิดซ้าย) — ถ้าไม่ถูกซ่อน
