@@ -449,7 +449,18 @@
             <!-- App title + branch/staff quick-info bar: always visible -->
             <div class="mb-4 no-print">
                 <div class="flex flex-col items-center text-center gap-1 pb-2">
-                    <h2 class="font-normal text-lg text-cube-black leading-[2]">สั่งปรับแก้ทรงออนไลน์</h2>
+                    <div class="relative flex items-center gap-1.5">
+                        <h2 class="font-normal text-lg text-cube-black leading-[2]">สั่งปรับแก้ทรงออนไลน์</h2>
+                        <!-- ปุ่ม (i) อธิบายความหมายไอคอนต่างๆ ในหน้านี้ (ล้างข้อมูล / บันทึกร่าง / บันทึก+ส่ง Lark) -->
+                        <button type="button" onclick="toggleButtonsHelp(event)" aria-label="วิธีใช้ไอคอนต่างๆ ในหน้านี้" title="วิธีใช้ไอคอนต่างๆ ในหน้านี้" class="min-h-[20px] min-w-[20px] w-5 h-5 bg-cube-gray/15 hover:bg-cube-gray/25 text-cube-gray rounded-full flex items-center justify-center transition-colors shrink-0">
+                            <i class="fa-solid fa-info text-[10px]" aria-hidden="true"></i>
+                        </button>
+                        <div id="buttons-help-popover" class="hidden absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 max-w-[90vw] bg-white border border-gray-200 rounded-xl shadow-lg p-3 text-xs text-gray-700 space-y-2 z-30 text-left">
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-trash-can text-red-500 mt-0.5" aria-hidden="true"></i><span><b>ล้างข้อมูล</b> — เคลียร์ฟอร์มทั้งหมด เริ่มกรอกใหม่</span></div>
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-floppy-disk text-cube-gold-dark mt-0.5" aria-hidden="true"></i><span><b>บันทึกร่าง (Draft)</b> — เก็บข้อมูลไว้ก่อน ยังไม่ส่งเข้า Lark ต้องกรอกข้อมูลบางส่วนก่อนถึงจะบันทึกได้</span></div>
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-check text-white bg-cube-black rounded-full p-0.5 text-[9px] mt-0.5" aria-hidden="true"></i><span><b>บันทึกข้อมูล</b> — บันทึกจริงและส่งเข้า Lark ทันที หลังส่งแล้ว Lark จะแจ้งเตือนสาขาว่าส่งข้อมูลแล้ว รอลงงานใน Salesforce</span></div>
+                        </div>
+                    </div>
                     <div class="relative -mt-1">
                         <h1 class="font-title-antic-slab text-5xl sm:text-6xl text-cube-black leading-none">Alteration Order</h1>
                         <!-- เส้นหยักประดับใต้ชื่อ -->
@@ -660,22 +671,14 @@
                 </div>
 
                 <!-- Buttons — sticky to viewport bottom -->
-                <div class="relative mt-4 flex items-center justify-between gap-3 no-print pb-4">
-                    <!-- ปุ่ม (i) อธิบายความหมายไอคอนต่างๆ ในแถวนี้ (ล้างข้อมูล / บันทึกร่าง / บันทึก+ส่ง Lark) -->
-                    <button type="button" onclick="toggleButtonsHelp(event)" aria-label="วิธีใช้ปุ่มด้านล่าง" title="วิธีใช้ปุ่มด้านล่าง" class="absolute -top-3 left-1 min-h-[22px] min-w-[22px] w-[22px] h-[22px] bg-cube-gray/15 hover:bg-cube-gray/25 text-cube-gray rounded-full flex items-center justify-center transition-colors z-10">
-                        <i class="fa-solid fa-info text-[10px]" aria-hidden="true"></i>
-                    </button>
-                    <div id="buttons-help-popover" class="hidden absolute bottom-full left-0 mb-2 w-72 max-w-[90vw] bg-white border border-gray-200 rounded-xl shadow-lg p-3 text-xs text-gray-700 space-y-2 z-20">
-                        <div class="flex items-start gap-2"><i class="fa-solid fa-trash-can text-red-500 mt-0.5" aria-hidden="true"></i><span><b>ล้างข้อมูล</b> — เคลียร์ฟอร์มทั้งหมด เริ่มกรอกใหม่</span></div>
-                        <div class="flex items-start gap-2"><i class="fa-solid fa-floppy-disk text-cube-gold-dark mt-0.5" aria-hidden="true"></i><span><b>บันทึกร่าง (Draft)</b> — เก็บข้อมูลไว้ก่อน ยังไม่ส่งเข้า Lark ไม่บังคับกรอกครบทุกช่อง</span></div>
-                        <div class="flex items-start gap-2"><i class="fa-solid fa-check text-white bg-cube-black rounded-full p-0.5 text-[9px] mt-0.5" aria-hidden="true"></i><span><b>บันทึกข้อมูล</b> — บันทึกจริงและส่งเข้า Lark ทันที หลังส่งแล้ว Lark จะแจ้งเตือนสาขาว่าส่งข้อมูลแล้ว รอลงงานใน Salesforce</span></div>
-                    </div>
+                <div class="mt-4 flex items-center justify-between gap-3 no-print pb-4">
                     <button type="button" onclick="resetForm()" aria-label="ล้างข้อมูล" title="ล้างข้อมูล" class="min-h-[52px] min-w-[52px] bg-white border border-gray-200 text-red-500 rounded-full shadow-sm hover:bg-red-50 transition-colors active:scale-[0.97] flex items-center justify-center shrink-0">
                         <i class="fa-solid fa-trash-can text-base" aria-hidden="true"></i>
                     </button>
                     <div class="flex items-center gap-3">
-                        <button type="button" id="btn-draft-save" onclick="saveOrder(event, true)" aria-label="บันทึกร่าง (Draft)" title="บันทึกร่าง (Draft) — ยังไม่ส่งเข้า Lark" class="min-h-[44px] min-w-[44px] bg-white border border-cube-gold text-cube-gold-dark hover:bg-cube-gold/10 rounded-full transition-colors shadow-sm flex items-center justify-center active:scale-[0.98] px-3.5">
-                            <i id="btn-draft-save-icon" class="fa-solid fa-floppy-disk text-base" aria-hidden="true"></i>
+                        <!-- ⚠️ เอาวงกลม/กรอบล้อมออกแล้วตามที่ขอ เหลือแค่ไอคอนเซฟเปล่าๆ (ยังกดได้ตามปกติ) -->
+                        <button type="button" id="btn-draft-save" onclick="handleDraftSaveClick(event)" aria-label="บันทึกร่าง (Draft)" title="บันทึกร่าง (Draft) — ยังไม่ส่งเข้า Lark" class="min-h-[44px] min-w-[44px] text-cube-gold-dark hover:text-cube-gold transition-colors flex items-center justify-center active:scale-[0.98] px-2">
+                            <i id="btn-draft-save-icon" class="fa-solid fa-floppy-disk text-lg" aria-hidden="true"></i>
                         </button>
                         <button type="submit" id="btn-main-submit" form="alteration-form" onclick="handleMainSubmitClick(event)" title="บันทึกและส่งข้อมูลไป Lark" class="min-h-[44px] bg-cube-black hover:bg-cube-black/80 text-white font-normal text-sm py-2.5 px-7 rounded-full transition-colors text-center shadow-md flex items-center justify-center active:scale-[0.98]">
                             <span id="btn-main-submit-label">บันทึกข้อมูล</span>
@@ -889,9 +892,15 @@
                         </div>
                         <div class="flex gap-2 w-full sm:w-auto items-center">
                             <button type="button" id="btn-toggle-drafts" onclick="toggleDraftView()" aria-pressed="false" class="min-h-[40px] shrink-0 flex items-center gap-1.5 bg-white/15 backdrop-blur-lg backdrop-saturate-150 border border-white/25 text-white rounded-full px-3.5 py-1.5 text-sm font-normal hover:bg-white/25 transition-colors whitespace-nowrap">
-                                <i class="fa-solid fa-pen-ruler text-cube-gold" aria-hidden="true"></i>
                                 <span id="btn-toggle-drafts-label">ดูบันทึกร่าง</span>
                             </button>
+                            <!-- แยกดูระหว่าง "ชำระแล้ว" กับ "ค้างชำระ" (นอกจากตัวกรองสาขา/ค้นหาที่มีอยู่แล้ว) -->
+                            <label for="history-payment-filter" class="sr-only">กรองตามสถานะการชำระเงิน</label>
+                            <select id="history-payment-filter" onchange="filterOrders()" class="min-h-[40px] shrink-0 bg-white/15 backdrop-blur-lg backdrop-saturate-150 border border-white/25 text-white rounded-full px-3.5 py-1.5 text-sm font-normal focus:outline-none focus:ring-2 focus:ring-cube-gold">
+                                <option value="all" class="text-cube-black">ชำระเงิน: ทั้งหมด</option>
+                                <option value="paid" class="text-cube-black">ชำระแล้ว</option>
+                                <option value="debt" class="text-cube-black">ค้างชำระ</option>
+                            </select>
                             <div class="relative flex-grow sm:w-64">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
                                     <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
@@ -2939,6 +2948,45 @@
             });
         }
 
+        // เช็คว่าฟอร์ม "ยังไม่ได้กรอกอะไรเลย" หรือยัง — ใช้กันปุ่มบันทึกร่างจากการบันทึกออเดอร์เปล่าๆ
+        // (เกณฑ์หลวมกว่า hasKeyOrderData(): แค่มีอะไรสักอย่างถูกกรอก/เลือกไว้ก็ถือว่า "เริ่มกรอกแล้ว" ให้บันทึกร่างได้)
+        function isFormCompletelyEmpty() {
+            const firstname = document.getElementById('cust-firstname')?.value.trim();
+            const phone     = document.getElementById('cust-phone')?.value.trim();
+            const nickname  = document.getElementById('cust-nickname')?.value.trim();
+            const address   = document.getElementById('cust-address')?.value.trim();
+            if (firstname || phone || nickname || address) return false;
+
+            // หมายเหตุ: ช่อง "ประเภทสินค้า" (select) จะมีค่า default ติดมาด้วยเสมอตั้งแต่สร้างแถวขึ้นมา (ดู addProductTypeRow)
+            // จึงไม่นับเป็นสัญญาณว่าผู้ใช้กรอกข้อมูลจริง — ต้องมีรหัสสินค้าหรือไซส์กรอกจริงเท่านั้นถึงจะถือว่ามีข้อมูล
+            const rows = document.querySelectorAll('#product-type-rows > div');
+            const anyRowHasData = Array.from(rows).some(row => {
+                const code = row.querySelector('.row-code-input')?.value.trim();
+                const size = row.querySelector('.row-size-input')?.value.trim();
+                return !!(code || size);
+            });
+            if (anyRowHasData) return false;
+
+            const staff = document.getElementById('staff-take')?.value.trim();
+            if (staff) return false;
+
+            // หมายเหตุ: ปุ่ม "ชำระแล้ว" ถูก checked ไว้เป็นค่าเริ่มต้นตั้งแต่โหลดหน้ามาแล้ว (ดู <input ... checked> ด้านบน)
+            // จึงไม่ถือเป็นสัญญาณว่าผู้ใช้กรอกข้อมูลจริง — นับเฉพาะกรณีเลือก "ค้างชำระ" ซึ่งต้องกดเปลี่ยนเองเท่านั้น
+            const payValue = document.querySelector('input[name="pay-status"]:checked')?.value;
+            if (payValue === 'debt') return false;
+
+            return true;
+        }
+
+        // ปุ่ม "บันทึกร่าง" — บล็อกไว้ถ้าฟอร์มยังว่างเปล่าเลย (ไม่มีอะไรให้บันทึกจริงๆ)
+        function handleDraftSaveClick(event) {
+            if (isFormCompletelyEmpty()) {
+                showToast('กรุณากรอกข้อมูลก่อนบันทึกร่าง', 'error');
+                return;
+            }
+            saveOrder(event, true);
+        }
+
         // อัปเดตสไตล์ปุ่ม "บันทึกข้อมูล" ตามว่ามีข้อมูลสำคัญครบหรือยัง (เน้นดำเมื่อพร้อมบันทึกจริง)
         // ⚠️ ปุ่ม "บันทึกร่าง" (btn-draft-save) แยกออกมาเป็นปุ่มเดี่ยวถาวรแล้ว เรียก saveOrder(event, true)
         // ตรงๆ เสมอ ไม่ต้องสลับไปหน้าดูประวัติอีกต่อไป (มีไอคอนดูประวัติแยกต่างหากอยู่แล้วตรงเลขที่บิลด้านบน)
@@ -3397,6 +3445,7 @@
         function filterOrders() {
             const query = document.getElementById('search-order').value.toLowerCase();
             const branch = document.getElementById('order-branch')?.value || '';
+            const paymentFilter = document.getElementById('history-payment-filter')?.value || 'all';
             const runId = ++_filterOrdersRunId;
 
             const filtered = orders.filter(order => {
@@ -3404,6 +3453,8 @@
                 // แยกชุดข้อมูล: โหมด "บันทึกร่าง" โชว์เฉพาะ isDraft, โหมดปกติโชว์เฉพาะที่บันทึกจริงแล้ว
                 const isDraft = !!order.isDraft;
                 if (showingDraftsInHistory !== isDraft) return false;
+                // แยกดู ชำระแล้ว / ค้างชำระ (ถ้าเลือก "ทั้งหมด" ก็ไม่กรอง)
+                if (paymentFilter !== 'all' && order.payment !== paymentFilter) return false;
                 return matchOrderQuery(order, query);
             });
             renderOrdersTable(filtered);
@@ -3421,7 +3472,9 @@
                 const extra = remoteOrders.filter(o => !localOrderNos.has(String(o.orderNo)));
                 if (!extra.length) return;
 
-                const merged = [...filtered, ...extra.filter(o => matchOrderQuery(o, query))];
+                const merged = [...filtered, ...extra.filter(o =>
+                    (paymentFilter === 'all' || o.payment === paymentFilter) && matchOrderQuery(o, query)
+                )];
                 renderOrdersTable(merged);
             });
         }
