@@ -3821,6 +3821,12 @@
                 return t || fallback;
             };
             const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            // จัดรูปแบบเบอร์โทร 10 หลักให้มีขีดคั่นแบบไทย (0811111111 -> 081-111-1111) ถ้าไม่ครบ 10 หลักคืนค่าดิบไป
+            const formatPhone = (raw) => {
+                const digits = String(raw || '').replace(/\D/g, '');
+                if (digits.length === 10) return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+                return raw || '';
+            };
 
             // แถวรายการวัด 3 คอลัมน์ (label / ตัวเลข / หน่วย) — ข้ามแถวที่ไม่มีค่าจริง (ว่างหรือ "-") ไปเลย ไม่โชว์ "-"
             const row = (label, rawValue) => {
@@ -3852,13 +3858,13 @@
             const debtChecked = q('#pv-status-debt')?.innerText.trim();
             const payText = paid ? 'จ่ายเงินแล้ว' : (debtChecked ? `ค้างชำระ${esc(txt('#pv-debt-amount', ''))}` : '');
 
-            // ข้อมูลลูกค้า (กึ่งกลาง) — ชื่อลูกค้า / เบอร์โทร / ชื่อเล่น (แยกบรรทัดของตัวเอง ถ้ามี) / พนักงานขาย
+            // ข้อมูลลูกค้า (กึ่งกลาง) — รวมชื่อลูกค้า + เบอร์โทร (มีขีดคั่น) + ชื่อเล่น (ถ้ามี) ไว้บรรทัดเดียวกัน / พนักงานขายแยกบรรทัดถัดไป
             const nickname = txt('#pv-cust-nickname', '');
-            html += `<div class="t-center">ชื่อลูกค้า:${esc(txt('#pv-cust-firstname'))}</div>`;
-            html += `<div class="t-center">เบอร์โทร: ${esc(txt('#pv-cust-phone'))}</div>`;
-            if (nickname && nickname !== '-') {
-                html += `<div class="t-center">ชื่อเล่น:${esc(nickname)}</div>`;
-            }
+            const phoneFormatted = formatPhone(txt('#pv-cust-phone', ''));
+            let custLine = `ชื่อลูกค้า: ${esc(txt('#pv-cust-firstname'))}`;
+            if (phoneFormatted) custLine += ` ${esc(phoneFormatted)}`;
+            if (nickname && nickname !== '-') custLine += ` (คุณ${esc(nickname)})`;
+            html += `<div class="t-center">${custLine}</div>`;
             html += `<div class="t-center">พนักงานขาย: ${esc(txt('#pv-staff-take'))}</div>`;
 
             // ก้อนกางเกง (ชิดซ้าย) — ถ้าไม่ถูกซ่อน
