@@ -2189,19 +2189,48 @@
 
         // Generate the alteration job bill number: {สาขา}{ลำดับ 2 หลัก ต่อสาขาต่อเดือน}{ปี YY}{เดือน MM}
         // เช่น สาขา KK รายการแรกของเดือน มิ.ย. 2569 (2026) -> KK012606
-        function generateOrderNo() {
+        //
+        // ⚠️ [แก้ 16/07/2026] เดิมนับ "ลำดับที่เท่าไหร่ของเดือนนี้" จากข้อมูลในเครื่องนี้เท่านั้น (orders array
+        // ที่มาจาก localStorage) — ถ้าเครื่องอื่นสร้างบิลสาขา/เดือนเดียวกันไปแล้ว เครื่องนี้จะไม่รู้เลย ทำให้สอง
+        // เครื่องอาจออกเลขที่บิลซ้ำกันโดยไม่ตั้งใจ (เช่น ทั้งคู่คิดว่าตัวเองเป็น "บิลที่ 4") พอส่งเข้า Lark Base
+        // แล้วฝั่งเว็บมาเทียบ/ตัดข้อมูลซ้ำตอนแสดงประวัติด้วยเลขที่บิล (เพราะเข้าใจผิดว่าเป็นบิลเดียวกัน) เลยมีบิลหาย
+        // จากหน้าประวัติไปข้างใดข้างหนึ่ง ไม่เท่ากันข้ามเครื่อง — แก้โดยถามความจริงจาก Lark Base (แหล่งข้อมูลกลาง
+        // ที่ทุกเครื่องเห็นตรงกัน) ก่อนออกเลขจริง: โชว์เลขจากในเครื่องไปก่อน (ไวกว่า ระหว่างรอเน็ต) แล้วค่อยแก้เป็น
+        // เลขที่ถูกต้องอีกทีถ้าต่างจากเดิม (ยังมีโอกาสชนกันได้เล็กน้อยถ้าสองเครื่องกดบันทึกพร้อมกันเป๊ะๆ แต่ลดโอกาส
+        // ชนกันไปมากจากเดิมที่ไม่เคยเช็คเลย)
+        async function generateOrderNo() {
             const branch = document.getElementById('order-branch')?.value || '';
             const today = new Date();
             const yy = String(today.getFullYear()).slice(-2);
             const mm = String(today.getMonth() + 1).padStart(2, '0');
             const suffix = yy + mm;
-            const countThisMonth = orders.filter(o => o.branch === branch && typeof o.orderNo === 'string' && o.orderNo.endsWith(suffix)).length;
-            const seq = String(countThisMonth + 1).padStart(2, '0');
-            const num = `${branch}${seq}${suffix}`;
-            document.getElementById('pv-order-no').innerText = num;
             const headerBadge = document.getElementById('form-header-order-no');
-            if (headerBadge) headerBadge.innerText = num;
-            return num;
+
+            const localCount = orders.filter(o => o.branch === branch && typeof o.orderNo === 'string' && o.orderNo.endsWith(suffix)).length;
+            const provisionalNum = `${branch}${String(localCount + 1).padStart(2, '0')}${suffix}`;
+            document.getElementById('pv-order-no').innerText = provisionalNum;
+            if (headerBadge) headerBadge.innerText = provisionalNum;
+            if (!branch) return provisionalNum;
+
+            try {
+                const remoteOrders = await fetchLarkOrdersForBranch(branch);
+                if (remoteOrders) {
+                    const localOrderNos = new Set(orders.map(o => String(o.orderNo)));
+                    const remoteExtraCount = remoteOrders.filter(o =>
+                        typeof o.orderNo === 'string' && o.orderNo.endsWith(suffix) && !localOrderNos.has(String(o.orderNo))
+                    ).length;
+                    const num = `${branch}${String(localCount + remoteExtraCount + 1).padStart(2, '0')}${suffix}`;
+                    // อัปเดตเป็นเลขจริงเฉพาะตอนยังอยู่ที่สาขาเดิม/ยังไม่ได้พิมพ์เลขที่บิลเองระหว่างรอ
+                    if (document.getElementById('order-branch')?.value === branch && !currentEditingId) {
+                        document.getElementById('pv-order-no').innerText = num;
+                        if (headerBadge) headerBadge.innerText = num;
+                    }
+                    return num;
+                }
+            } catch (e) {
+                console.warn('ออกเลขที่บิลแบบเช็คกับ Lark Base ไม่สำเร็จ (ใช้เลขจากข้อมูลในเครื่องนี้แทน):', e);
+            }
+            return provisionalNum;
         }
 
         // วันที่นัดรับ: ปกติ +7 วันจากวันนี้ แต่ถ้าสาขา (ด้านบนสุด) เป็น KK/PK/KR/CM ให้ +10 วัน
