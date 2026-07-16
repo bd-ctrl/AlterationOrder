@@ -48,6 +48,14 @@
             min-height: 100vh;
         }
 
+        /* [ใหม่ 16/07/2026] ปรับให้พอดีกับ iPad gen 9/10/11 (portrait ~810-834px, landscape ~1080-1194px)
+           - ขยายความกว้างของกล่องเนื้อหาหลักตอนแนวนอน กันไม่ให้ดูเล็กลอยอยู่กลางจอโดยมีขอบดำว่างๆ ทั้งสองข้างเยอะเกินไป
+           - ขยายขนาดตัวอักษรพื้นฐานขึ้นอีกนิด (Tailwind ใช้หน่วย rem ทุกคลาส เลยขยายพร้อมกันหมดด้วยการปรับ root font-size) */
+        @media (min-width: 768px) and (max-width: 1200px) {
+            html { font-size: 18px; }
+            main.max-w-4xl { max-width: 1100px; }
+        }
+
         /* ท้ายเว็บ: แถบขาวด้านล่างสุด โลโก้ SUITCUBE + ลิงก์บันทึกแบบร่าง/ดูรายการย้อนหลัง (ย้ายจาก header เดิมมาเป็น footer) */
         .app-header {
             background: #fff;
@@ -459,6 +467,7 @@
                             <div class="flex items-start gap-2"><i class="fa-solid fa-trash-can text-red-500 mt-0.5" aria-hidden="true"></i><span><b>ล้างข้อมูล</b> — เคลียร์ฟอร์มทั้งหมด เริ่มกรอกใหม่</span></div>
                             <div class="flex items-start gap-2"><i class="fa-solid fa-floppy-disk text-cube-gold-dark mt-0.5" aria-hidden="true"></i><span><b>บันทึกร่าง (Draft)</b> — เก็บข้อมูลไว้ก่อน ยังไม่ส่งเข้า Lark ต้องกรอกข้อมูลบางส่วนก่อนถึงจะบันทึกได้</span></div>
                             <div class="flex items-start gap-2"><i class="fa-solid fa-check text-white bg-cube-black rounded-full p-0.5 text-[9px] mt-0.5" aria-hidden="true"></i><span><b>บันทึกข้อมูล</b> — บันทึกจริงและส่งเข้า Lark ทันที หลังส่งแล้ว Lark จะแจ้งเตือนสาขาว่าส่งข้อมูลแล้ว รอลงงานใน Salesforce</span></div>
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-clock-rotate-left text-cube-gray mt-0.5" aria-hidden="true"></i><span><b>ดูประวัติรายการย้อนหลัง</b> — ดูใบสั่งแก้ที่เคยบันทึกไว้ทั้งหมดของสาขาที่เลือก</span></div>
                         </div>
                     </div>
                     <div class="relative -mt-1">
@@ -887,7 +896,6 @@
                             <button type="button" onclick="toggleHistoryView()" aria-label="กลับไปหน้ากรอกข้อมูล" title="กลับไปหน้ากรอกข้อมูล" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/15 hover:bg-white/25 transition-colors mr-1">
                                 <i class="fa-solid fa-arrow-left text-sm" aria-hidden="true"></i>
                             </button>
-                            <i class="fa-solid fa-database text-cube-gold text-lg" aria-hidden="true"></i>
                             <h2 class="font-normal text-lg">ประวัติใบสั่งแก้ปรับทรง <span id="history-branch-label" class="text-cube-gold"></span></h2>
                         </div>
                         <div class="flex gap-2 w-full sm:w-auto items-center">
@@ -901,12 +909,12 @@
                                 <option value="paid" class="text-cube-black">ชำระแล้ว</option>
                                 <option value="debt" class="text-cube-black">ค้างชำระ</option>
                             </select>
-                            <div class="relative flex-grow sm:w-64">
+                            <div class="relative w-40 sm:w-48 shrink-0">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
                                     <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                                 </span>
                                 <label for="search-order" class="sr-only">ค้นหารายการใบสั่งแก้</label>
-                                <input type="text" id="search-order" oninput="filterOrders()" class="min-h-[40px] w-full bg-white/15 backdrop-blur-lg backdrop-saturate-150 border border-white/25 text-white placeholder-cube-graylight rounded-full pl-9 pr-3 py-1.5 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-cube-gold" placeholder="ค้นหาชื่อลูกค้า, เบอร์โทร, รหัส...">
+                                <input type="text" id="search-order" oninput="filterOrders()" class="min-h-[40px] w-full bg-white/15 backdrop-blur-lg backdrop-saturate-150 border border-white/25 text-white placeholder-cube-graylight rounded-full pl-9 pr-3 py-1.5 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-cube-gold" placeholder="ค้นหาชื่อลูกค้า, เบอร์โทร">
                             </div>
                         </div>
                     </div>
@@ -1458,12 +1466,14 @@
         }
 
         // ปุ่มเลือก แก้ไขขนาดสินค้า / ไม่แก้ไขขนาดสินค้า ของแต่ละแถว (ซ่อน/โชว์ช่องวัดตัว)
+        // ⚠️ [แก้ 16/07/2026] เปลี่ยนจากปุ่มเหลี่ยม (rounded-xl) มาเป็นแคปซูลกลม (rounded-full) ให้เข้าชุดกับปุ่ม/แท็บอื่นๆ
+        // ทั่วทั้งแอป (ดูบันทึกร่าง, ตัวกรองชำระเงิน ฯลฯ ที่ใช้ทรงแคปซูลเหมือนกันหมด)
         function buildSizeEditToggleHTML(type, rowId) {
             return `<div class="mb-3">
                 <input type="hidden" id="size-edit-mode-${type}-${rowId}" value="edit">
-                <div class="inline-flex rounded-xl overflow-hidden border border-gray-300">
-                    <button type="button" id="size-edit-yes-${type}-${rowId}" onclick="setSizeEditMode('${type}','${rowId}','edit')" class="px-3 py-2 text-xs font-normal transition-colors bg-cube-gold text-white">แก้ไขขนาดสินค้า</button>
-                    <button type="button" id="size-edit-no-${type}-${rowId}" onclick="setSizeEditMode('${type}','${rowId}','none')" class="px-3 py-2 text-xs font-normal border-l border-gray-300 transition-colors bg-gray-50 text-cube-gray">ไม่แก้ไขขนาดสินค้า</button>
+                <div class="inline-flex rounded-full bg-gray-100 p-1 gap-1">
+                    <button type="button" id="size-edit-yes-${type}-${rowId}" onclick="setSizeEditMode('${type}','${rowId}','edit')" class="px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors bg-cube-gold text-white shadow-sm">แก้ไขขนาดสินค้า</button>
+                    <button type="button" id="size-edit-no-${type}-${rowId}" onclick="setSizeEditMode('${type}','${rowId}','none')" class="px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors text-cube-gray hover:text-cube-black">ไม่แก้ไขขนาดสินค้า</button>
                 </div>
             </div>`;
         }
@@ -1633,7 +1643,10 @@
             updateRowContactVisibility(row);
 
             setupProductCodeCombobox(row.querySelector('.row-code-input'), row.querySelector('.row-code-listbox'));
-            row.querySelector('.row-code-input').addEventListener('input', syncProductionPreview);
+            row.querySelector('.row-code-input').addEventListener('input', () => {
+                syncProductionPreview();
+                maybeAutoAddMatchingPantsRow(row);
+            });
             row.querySelector('.row-date-input').addEventListener('change', syncProductionPreview);
             updateRowDeadline(row);
 
@@ -1641,6 +1654,43 @@
             refreshSectionTabs();
             renumberProductTypeRows();
             return row;
+        }
+
+        // ตัวย่อท้ายรหัสสินค้า: -J = Jacket (เสื้อสูท), -P = Pant (กางเกง) — ถ้ากรอกรหัสเสื้อสูทที่ลงท้าย -J
+        // แล้วมีรหัสกางเกงคู่เซ็ตเดียวกันลงท้าย -P อยู่จริงในรายการรหัสสินค้า (PRODUCT_SKUS) ให้เพิ่ม Product แถวใหม่
+        // เป็นกางเกงรหัสนั้นให้อัตโนมัติ (กันลืมใส่กางเกงเวลาสินค้าขายเป็นเซ็ตคู่) ไม่เพิ่มซ้ำถ้ามีแถวกางเกงรหัสนี้อยู่แล้ว
+        function maybeAutoAddMatchingPantsRow(row) {
+            const type = row.querySelector('.product-type-select')?.value;
+            if (type !== 'suit') return; // เช็คเฉพาะตอนประเภทที่เลือกไว้เป็น "เสื้อสูท" เท่านั้น
+
+            const code = row.querySelector('.row-code-input')?.value.trim();
+            if (!code) return;
+
+            const jacketMatch = code.match(/^(.+)-J$/i);
+            if (!jacketMatch) return; // รหัสนี้ไม่ได้ลงท้าย -J เลยไม่ใช่ตัวเสื้อของเซ็ต ข้ามไป
+
+            const pantsCode = `${jacketMatch[1]}-P`;
+            // หารหัสกางเกงคู่เซ็ตแบบตรงตัว (case-insensitive กันเคสตัวพิมพ์ใหญ่เล็กไม่ตรงกันเป๊ะในรายการ)
+            const realPantsCode = PRODUCT_SKUS.find(sku => sku.toUpperCase() === pantsCode.toUpperCase());
+            if (!realPantsCode) return; // ไม่มีกางเกงคู่เซ็ตนี้จริงในระบบ ไม่ต้องเพิ่มอะไรให้
+
+            // กันเพิ่มซ้ำ — เช็คว่ามีแถวกางเกงรหัสนี้อยู่แล้วหรือยัง (ผู้ใช้อาจเพิ่มเองแล้ว หรือระบบเคยเพิ่มให้รอบก่อนหน้า)
+            const alreadyExists = Array.from(document.querySelectorAll('#product-type-rows > div')).some(r => {
+                if (r === row) return false;
+                const rType = r.querySelector('.product-type-select')?.value;
+                const rCode = (r.querySelector('.row-code-input')?.value || '').trim();
+                return rType === 'pants' && rCode.toUpperCase() === realPantsCode.toUpperCase();
+            });
+            if (alreadyExists) return;
+
+            const newRow = addProductTypeRow('pants');
+            const newCodeInput = newRow.querySelector('.row-code-input');
+            if (newCodeInput) {
+                newCodeInput.value = realPantsCode;
+                newCodeInput.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+            syncProductTypePreview();
+            showToast(`เพิ่มรายการกางเกงรหัส ${realPantsCode} ให้อัตโนมัติ (เซ็ตคู่กับเสื้อสูท ${code})`, 'success');
         }
 
         // ทุกประเภทสินค้าเลือกซ้ำได้ใน 1 ใบงาน — ไม่ disable options ใดๆ
@@ -2441,8 +2491,10 @@
             if (hidden) hidden.value = mode;
             const yesBtn = document.getElementById(`size-edit-yes-${type}-${rowId}`);
             const noBtn = document.getElementById(`size-edit-no-${type}-${rowId}`);
-            if (yesBtn) yesBtn.className = 'px-3 py-2 text-xs font-normal transition-colors ' + (mode === 'edit' ? 'bg-cube-gold text-white' : 'bg-gray-50 text-cube-gray');
-            if (noBtn) noBtn.className = 'px-3 py-2 text-xs font-normal border-l border-gray-300 transition-colors ' + (mode === 'none' ? 'bg-cube-gold text-white' : 'bg-gray-50 text-cube-gray');
+            const activeCls   = 'px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors bg-cube-gold text-white shadow-sm';
+            const inactiveCls = 'px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors text-cube-gray hover:text-cube-black';
+            if (yesBtn) yesBtn.className = (mode === 'edit') ? activeCls : inactiveCls;
+            if (noBtn)  noBtn.className  = (mode === 'none') ? activeCls : inactiveCls;
             const wrap = document.getElementById(`measure-wrap-${type}-${rowId}`);
             if (wrap) wrap.style.display = (mode === 'none') ? 'none' : '';
         }
