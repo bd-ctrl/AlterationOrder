@@ -3324,12 +3324,17 @@
                         <button onclick="const p=this.parentElement.nextElementSibling;p.classList.toggle('hidden');this.querySelector('i').classList.toggle('rotate-180')" class="flex items-center gap-1 text-[11px] text-gray-400 hover:text-cube-black transition-colors">
                             <i class="fa-solid fa-chevron-down transition-transform duration-200"></i> ดูรายละเอียด
                         </button>
-                        <button onclick="viewAndPrintReceipt(${order.id})" aria-label="พิมพ์ใบเสร็จ เลขที่บิล ${order.orderNo}" class="min-h-[44px] min-w-[44px] bg-cube-black hover:bg-cube-gray text-white p-2 rounded-full transition-colors active:scale-[0.95]" title="พิมพ์ใบเสร็จ">
+                        <button class="btn-history-print min-h-[44px] min-w-[44px] bg-cube-black hover:bg-cube-gray text-white p-2 rounded-full transition-colors active:scale-[0.95]" aria-label="พิมพ์ใบเสร็จ เลขที่บิล ${order.orderNo}" title="พิมพ์ใบเสร็จ">
                             <i class="fa-solid fa-print" aria-hidden="true"></i>
                         </button>
                     </div>
                     <div class="hidden mt-3">${detailHTML}</div>
                 `;
+                // ⚠️ [แก้ 15/07/2026] เดิมใช้ onclick="viewAndPrintReceipt(${order.id})" ฝังใน HTML ตรงๆ — พังกับออเดอร์ที่
+                // มาจาก Lark Base เพราะ id ของมันเป็น record_id แบบตัวอักษร (เช่น recuABCDEF123) ไม่ใช่ตัวเลข ทำให้กลาย
+                // เป็นโค้ด JS ที่พัง (ตัวแปรไม่มีอยู่จริง) กดปุ่มพิมพ์แล้วไม่มีอะไรเกิดขึ้นเลย — เปลี่ยนมาผูก event ตรงนี้แทน
+                // พร้อมส่ง order ทั้งก้อนไปเลย (ไม่ต้องพึ่ง orders.find() ซึ่งไม่มีออเดอร์จาก Lark Base เก็บอยู่ในนั้นด้วย)
+                card.querySelector('.btn-history-print').addEventListener('click', () => viewAndPrintReceipt(order.id, order));
                 container.appendChild(card);
             });
         }
@@ -3938,7 +3943,9 @@
         }
 
         function viewAndPrintReceipt(id, directObject = null) {
-            const order = directObject || orders.find(o => o.id === id);
+            // เทียบแบบแปลงเป็น string ก่อนเสมอ เพราะ id ของออเดอร์ในเครื่อง (localStorage) เป็นตัวเลข
+            // แต่ id ของออเดอร์ที่ดึงมาจาก Lark Base เป็น record_id ซึ่งเป็นตัวอักษร (เช่น "recuABCDEF123")
+            const order = directObject || orders.find(o => String(o.id) === String(id));
             if (!order) return;
 
             // Reconstruct the print container clone
