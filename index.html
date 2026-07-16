@@ -56,6 +56,17 @@
             main.max-w-4xl { max-width: 1100px; }
         }
 
+        /* [แก้ 16/07/2026] ช่อง "วันที่นัดรับ" (input type=date) บน iPad/Safari จะโชว์วันที่แบบเต็ม
+           ตามภาษาเครื่อง (เช่น "23 ก.ค. 2569") ซึ่งกว้างกว่ารูปแบบตัวเลขที่ Chrome/เดสก์ท็อปโชว์มาก
+           ปกติ grid item จะมี min-width:auto ไม่ยอมหดเล็กกว่าความกว้างของเนื้อหาข้างใน ทำให้ช่องนี้ดัน/ทับ
+           ช่อง "เวลานัดรับ" ที่อยู่ติดกัน — บังคับ min-width:0 ให้หดตามคอลัมน์ grid ได้จริง + ลด padding
+           ของช่องวันที่ลงเฉพาะช่วงจอ iPad กันข้อความเบียดกันเกินไป */
+        #pickup-fields-grid > div { min-width: 0; }
+        #pickup-fields-grid input[type="date"] { min-width: 0; }
+        @media (min-width: 768px) and (max-width: 1200px) {
+            #pickup-fields-grid input[type="date"] { padding-left: 10px; padding-right: 10px; font-size: 0.8rem; }
+        }
+
         /* ท้ายเว็บ: แถบขาวด้านล่างสุด โลโก้ SUITCUBE + ลิงก์บันทึกแบบร่าง/ดูรายการย้อนหลัง (ย้ายจาก header เดิมมาเป็น footer) */
         .app-header {
             background: #fff;
@@ -656,7 +667,7 @@
                     </form>
 
                 <!-- Pickup location / date / time — outside the form sections, visible at all times -->
-                <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3 no-print">
+                <div id="pickup-fields-grid" class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3 no-print">
                     <div>
                         <label for="pickup-location" class="block text-[11px] font-normal text-cube-gray mb-1">สาขาที่นัดรับ <span class="text-red-500">*</span></label>
                         <div class="relative flex items-center">
