@@ -2893,14 +2893,53 @@
             console.log('[Lark v2] คีย์แรกของ payload:', Object.keys(payload)[0], '| ชื่อลูกค้า key:', 'ชื่อลูกค้า' in payload ? 'Thai ✓' : 'ไม่พบ ✗');
 
             // ใช้ no-cors เพื่อให้ request ออกจาก file:// ได้โดยไม่ถูก browser block
+            // ⚠️ ข้อจำกัดของ no-cors: อ่านผลลัพธ์จริงไม่ได้เลย .then() จะรันเสมอแม้ Lark Automation จะปฏิเสธ/พังฝั่งนั้นก็ตาม
+            // (แก้ปัญหา "ข้อมูลประวัติไม่เท่ากันระหว่างเครื่อง" — เพราะเดิมมันมั่นใจว่า "ส่งสำเร็จ" ทั้งที่ไม่รู้จริง)
+            // จึงต้องเช็คย้อนกลับด้วย verifyOrderReachedLark() ด้านล่าง เพื่อฟันธงให้ผู้ใช้เห็นชัดๆ ว่าจริงๆ แล้วสำเร็จไหม
             fetch(LARK_WEBHOOK_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
                 body: JSON.stringify(payload)
             })
-            .then(() => console.log('[Lark] webhook sent'))
-            .catch(err => console.warn('[Lark] webhook error:', err));
+            .then(() => {
+                console.log('[Lark] webhook sent (ส่งออกไปแล้ว — ยังไม่ยืนยันว่า Lark รับจริง)');
+                verifyOrderReachedLark(orderData.orderNo, orderData.branch);
+            })
+            .catch(err => {
+                console.warn('[Lark] webhook error:', err);
+                showToast(`⚠️ ส่งข้อมูลเข้า Lark Base ไม่สำเร็จ (เลขที่บิล ${orderData.orderNo}) เครื่องอื่นจะยังไม่เห็นออเดอร์นี้ — กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองบันทึกใหม่`, 'error');
+            });
+        }
+
+        // ตรวจสอบย้อนกลับว่าออเดอร์ที่เพิ่งบันทึกไปจริงๆ แล้วถึง Lark Base หรือยัง (no-cors ด้านบนบอกไม่ได้ตรงๆ)
+        // รอให้ Lark Automation มีเวลาประมวลผลก่อน (มักไม่ทันทีทันใด) แล้วเช็คผ่าน /list-orders — ถ้ายังไม่เจอลองซ้ำอีกครั้ง
+        // ก่อนจะแจ้งเตือนผู้ใช้ตรงๆ ว่าออเดอร์นี้อาจไม่ได้ซิงค์เข้า Lark Base จริง (สาเหตุหลักที่ทำให้ประวัติระหว่าง
+        // เครื่องไม่ตรงกัน — เครื่องที่บันทึกจะเห็นในเครื่องตัวเองเสมอผ่าน localStorage แต่เครื่องอื่นอ่านจาก Lark เท่านั้น)
+        async function verifyOrderReachedLark(orderNo, branch, attempt = 1) {
+            const MAX_ATTEMPTS = 2;
+            const DELAY_MS = 6000;
+            await new Promise(r => setTimeout(r, DELAY_MS));
+            try {
+                const res = await fetch(`${SF_ORDER_WORKER_URL}/list-orders?branch=${encodeURIComponent(branch || '')}&_ts=${Date.now()}`);
+                const json = await res.json();
+                if (!json.success) throw new Error(json.error || 'ไม่ทราบสาเหตุ');
+                const found = (json.orders || []).some(o => String(o.orderNo) === String(orderNo));
+                if (found) {
+                    console.log(`[Lark] ยืนยันแล้ว: เลขที่บิล ${orderNo} เข้า Lark Base สำเร็จ`);
+                    // ล้าง cache ของสาขานี้ทิ้ง เพื่อให้หน้าประวัติ (เครื่องเดียวกัน) เห็นออเดอร์ใหม่ทันทีโดยไม่ต้องรีเฟรช
+                    delete _larkOrdersCache[branch || '__all__'];
+                    delete _larkOrdersCache['__all__'];
+                    return;
+                }
+                if (attempt < MAX_ATTEMPTS) {
+                    return verifyOrderReachedLark(orderNo, branch, attempt + 1);
+                }
+                showToast(`⚠️ บันทึกในเครื่องนี้แล้ว แต่ยังไม่พบเลขที่บิล ${orderNo} ใน Lark Base — เครื่องอื่นอาจยังไม่เห็นออเดอร์นี้ กรุณาตรวจสอบอินเทอร์เน็ต หรือลองบันทึกใหม่อีกครั้ง`, 'error');
+            } catch (e) {
+                // เช็คเองไม่ได้ (เช่น ยังไม่ตั้งค่า Lark App ใน Worker) — เงียบไว้ ไม่ฟันธงว่าพัง เพราะอาจเป็นแค่เช็คไม่ได้ ไม่ใช่ส่งไม่สำเร็จ
+                console.warn('[Lark] ตรวจสอบการซิงค์ไม่สำเร็จ (ข้ามการแจ้งเตือน):', e);
+            }
         }
         // ─────────────────────────────────────────────────────────────────────────
 
