@@ -3016,9 +3016,17 @@
                 const res = await fetch(`${SF_ORDER_WORKER_URL}/list-orders?branch=${encodeURIComponent(branch || '')}&_ts=${Date.now()}`);
                 const json = await res.json();
                 if (!json.success) throw new Error(json.error || 'ไม่ทราบสาเหตุ');
-                const found = (json.orders || []).some(o => String(o.orderNo) === String(orderNo));
-                if (found) {
+                const matched = (json.orders || []).find(o => String(o.orderNo) === String(orderNo));
+                if (matched) {
                     console.log(`[Lark] ยืนยันแล้ว: เลขที่บิล ${orderNo} เข้า Lark Base สำเร็จ`);
+                    // จำ record_id ของ Lark ไว้กับออเดอร์ในเครื่องนี้ ใช้เป็นคีย์เทียบซ้ำที่แม่นยำกว่าเลขที่บิลเฉยๆ
+                    // ตอน merge ข้อมูลในหน้าประวัติ (ดู filterOrders()) — กันเข้าใจผิดว่าออเดอร์คนละคนที่บังเอิญได้
+                    // เลขที่บิลชนกันเป็นออเดอร์เดียวกัน
+                    const localIdx = orders.findIndex(o => String(o.orderNo) === String(orderNo) && !o.isDraft);
+                    if (localIdx !== -1 && matched.id) {
+                        orders[localIdx].larkRecordId = matched.id;
+                        saveOrderToStorage();
+                    }
                     // ล้าง cache ของสาขานี้ทิ้ง เพื่อให้หน้าประวัติ (เครื่องเดียวกัน) เห็นออเดอร์ใหม่ทันทีโดยไม่ต้องรีเฟรช
                     delete _larkOrdersCache[branch || '__all__'];
                     delete _larkOrdersCache['__all__'];
@@ -3600,12 +3608,30 @@
 
             // โหมด "บันทึกจริง": เสริมด้วยรายการจริงจาก Lark Base (source of truth ข้ามเครื่อง/เบราว์เซอร์)
             // แสดงผลจากในเครื่องไปก่อน (ไวกว่า) แล้วค่อยเติมของจาก Lark ที่ยังไม่มีในเครื่องนี้เข้ามาทีหลัง
+            //
+            // ⚠️ [แก้ 16/07/2026] เดิม "ตัดข้อมูลซ้ำ" ระหว่างของในเครื่อง/ของจาก Lark โดยเทียบแค่ "เลขที่บิล" อย่างเดียว
+            // แต่เลขที่บิลไม่ได้การันตีว่าไม่ซ้ำจริง (บั๊กเดิมที่แก้ไปแล้วใน generateOrderNo() เคยทำให้สองเครื่องออกเลขที่
+            // บิลชนกันได้) ผลคือถ้าเครื่อง A มีลูกค้าคนหนึ่งใช้เลขที่บิล SC042607 และ Lark Base มีอีกออเดอร์ของลูกค้า
+            // คนละคนที่ดันได้เลขที่บิล SC042607 เหมือนกัน (จากอีกเครื่อง) ระบบเดิมจะเข้าใจผิดว่าเป็นออเดอร์เดียวกัน
+            // แล้ว "ซ่อน" ออเดอร์จาก Lark ทิ้งไปเลย ทำให้ประวัติเครื่อง A ไม่เห็นออเดอร์นั้น ขณะที่เครื่อง B (ซึ่งมี
+            // ออเดอร์นั้นเป็นของในเครื่องตัวเอง) เห็นปกติ — หน้าประวัติเลยไม่เท่ากันข้ามเครื่องแม้ Lark Base จะมีข้อมูล
+            // ครบถูกต้องอยู่แล้วก็ตาม แก้โดยเทียบด้วยคีย์ที่แม่นยำกว่าเดิม: ใช้ record_id ของ Lark ที่ยืนยันแล้ว
+            // (ผ่าน verifyOrderReachedLark) เป็นหลักถ้ามี ถ้ายังไม่มี (ออเดอร์เก่าก่อนอัปเดตนี้) fallback ไปเทียบ
+            // "เลขที่บิล + เบอร์โทร" คู่กัน แทนที่จะเทียบเลขที่บิลเดี่ยวๆ ลดโอกาสเข้าใจผิดว่าเป็นออเดอร์เดียวกันไปมาก
             fetchLarkOrdersForBranch(viewAllBranchesMode ? '' : branch).then(remoteOrders => {
                 if (runId !== _filterOrdersRunId) return; // มีการเรียก filterOrders รอบใหม่แล้ว ทิ้งผลลัพธ์รอบนี้
                 if (!remoteOrders) return; // ดึงไม่สำเร็จ (เช่น ยังไม่ตั้งค่า Lark App ใน Worker) — โชว์แค่ข้อมูลในเครื่องต่อไป
 
-                const localOrderNos = new Set(orders.filter(o => !o.isDraft).map(o => String(o.orderNo)));
-                const extra = remoteOrders.filter(o => !localOrderNos.has(String(o.orderNo)));
+                const localKnownKeys = new Set();
+                orders.filter(o => !o.isDraft).forEach(o => {
+                    if (o.larkRecordId) localKnownKeys.add('id:' + o.larkRecordId);
+                    localKnownKeys.add('legacy:' + String(o.orderNo) + '|' + String(o.customer?.phone || ''));
+                });
+                const extra = remoteOrders.filter(o => {
+                    if (o.id && localKnownKeys.has('id:' + o.id)) return false;
+                    if (localKnownKeys.has('legacy:' + String(o.orderNo) + '|' + String(o.customer?.phone || ''))) return false;
+                    return true;
+                });
                 if (!extra.length) return;
 
                 const merged = [...filtered, ...extra.filter(o =>
