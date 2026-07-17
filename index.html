@@ -475,10 +475,10 @@
                             <i class="fa-solid fa-info text-[10px]" aria-hidden="true"></i>
                         </button>
                         <div id="buttons-help-popover" class="hidden absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 max-w-[90vw] bg-white border border-gray-200 rounded-xl shadow-lg p-3 text-xs text-gray-700 space-y-2 z-30 text-left">
-                            <div class="flex items-start gap-2"><i class="fa-solid fa-trash-can text-red-500 mt-0.5" aria-hidden="true"></i><span><b>ล้างข้อมูล</b> — เคลียร์ฟอร์มทั้งหมด เริ่มกรอกใหม่</span></div>
                             <div class="flex items-start gap-2"><i class="fa-solid fa-floppy-disk text-cube-gold-dark mt-0.5" aria-hidden="true"></i><span><b>บันทึกร่าง (Draft)</b> — เก็บข้อมูลไว้ก่อน ยังไม่ส่งเข้า Lark ต้องกรอกข้อมูลบางส่วนก่อนถึงจะบันทึกได้</span></div>
                             <div class="flex items-start gap-2"><i class="fa-solid fa-check text-white bg-cube-black rounded-full p-0.5 text-[9px] mt-0.5" aria-hidden="true"></i><span><b>บันทึกข้อมูล</b> — บันทึกจริงและส่งเข้า Lark ทันที หลังส่งแล้ว Lark จะแจ้งเตือนสาขาว่าส่งข้อมูลแล้ว รอลงงานใน Salesforce</span></div>
                             <div class="flex items-start gap-2"><i class="fa-solid fa-clock-rotate-left text-cube-gray mt-0.5" aria-hidden="true"></i><span><b>ดูประวัติรายการย้อนหลัง</b> — ดูใบสั่งแก้ที่เคยบันทึกไว้ทั้งหมดของสาขาที่เลือก</span></div>
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-trash-can text-red-500 mt-0.5" aria-hidden="true"></i><span><b>ล้างข้อมูล</b> — เคลียร์ฟอร์มทั้งหมด เริ่มกรอกใหม่</span></div>
                             <!-- [ใหม่ 17/07/2026] แสดงเวลาที่ไฟล์หน้านี้ถูกอัปเดตล่าสุด (document.lastModified) ไว้ให้เห็นตรงๆ
                                  ในเครื่อง — ใช้เช็คได้เองว่ากำลังเปิดหน้าเว็บเวอร์ชันล่าสุดจริงหรือเป็นแค่ cache เก่าค้างอยู่
                                  (กันปัญหา "แจ้งว่าแก้แล้วแต่ user ยังเห็นเหมือนเดิม" เพราะ browser cache ที่เจอบ่อย) -->
@@ -636,7 +636,19 @@
                                     </div>
                                 </div>
 
-                                <div class="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 border-t pt-3 border-gray-200">
+                                <div class="mt-3 pt-3 border-t border-gray-200">
+                                    <label for="pickup-location" class="block text-[11px] font-normal text-cube-gray mb-1">สาขาที่นัดรับ <span class="text-red-500">*</span></label>
+                                    <div class="relative flex items-center max-w-xs">
+                                        <select id="pickup-location" class="sku-input appearance-none pr-8 cursor-pointer w-full">
+                                            <option value="">เลือกสาขาที่นัดรับ</option>
+                                        </select>
+                                        <div class="absolute right-3 pointer-events-none text-cube-gold">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="shipping-method-wrap" style="display:none" class="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 border-t pt-3 border-gray-200">
                                     <label class="min-h-[36px] flex items-center gap-2 text-xs text-cube-gray cursor-pointer">
                                         <span class="relative w-3.5 h-3.5 rounded-full border border-gray-300 bg-white flex items-center justify-center flex-shrink-0 transition-colors has-[:checked]:bg-cube-gold has-[:checked]:border-cube-gold">
                                             <input type="radio" name="shipping" value="SPX" class="sr-only">
@@ -670,18 +682,7 @@
                     </form>
 
                 <!-- Pickup location / date / time — outside the form sections, visible at all times -->
-                <div id="pickup-fields-grid" class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3 no-print">
-                    <div>
-                        <label for="pickup-location" class="block text-[11px] font-normal text-cube-gray mb-1">สาขาที่นัดรับ <span class="text-red-500">*</span></label>
-                        <div class="relative flex items-center">
-                            <select id="pickup-location" class="sku-input appearance-none pr-8 cursor-pointer w-full">
-                                <option value="">เลือกสาขาที่นัดรับ</option>
-                            </select>
-                            <div class="absolute right-3 pointer-events-none text-cube-gold">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-                            </div>
-                        </div>
-                    </div>
+                <div id="pickup-fields-grid" class="mt-3 grid grid-cols-2 gap-3 no-print">
                     <div>
                         <div id="urgent-pickup-flag" class="hidden text-xl font-normal italic text-red-600 leading-none mb-1">งานด่วน</div>
                         <label for="date-pickup" class="block text-[11px] font-normal text-cube-gray mb-1">วันที่นัดรับ <span class="text-red-500">*</span></label>
@@ -2108,9 +2109,11 @@
                 document.getElementById('pickup-location').addEventListener('change', () => {
                     _pickupLocationTouched = true;
                     updateReceiptShippingDisplay();
+                    updateShippingMethodRowVisibility();
                 });
             }, 'pickup-location change listener');
             safe(updateReceiptShippingDisplay, 'updateReceiptShippingDisplay');
+            safe(updateShippingMethodRowVisibility, 'updateShippingMethodRowVisibility');
 
             // Folder-tab section headers: re-check completeness on any change inside the form
             // (delegated, so dynamically-added product-type rows are covered automatically)
@@ -2493,12 +2496,22 @@
                 sel.value = branch;
             }
             if (typeof updateReceiptShippingDisplay === 'function') updateReceiptShippingDisplay();
+            updateShippingMethodRowVisibility();
         }
 
         // เลือก SPX/EMS/LLM -> สถานที่นัดรับเป็น "จัดส่ง"
         function setPickupLocationToDelivery() {
             const sel = document.getElementById('pickup-location');
             if (sel) sel.value = PICKUP_DELIVERY_VALUE;
+            updateShippingMethodRowVisibility();
+        }
+
+        // ต้องเลือก "สาขาที่นัดรับ" ก่อน ถึงจะแสดงตัวเลือกช่องทางจัดส่ง SPX/EMS/LLM ให้เลือก
+        function updateShippingMethodRowVisibility() {
+            const sel = document.getElementById('pickup-location');
+            const wrap = document.getElementById('shipping-method-wrap');
+            if (!sel || !wrap) return;
+            wrap.style.display = sel.value ? 'flex' : 'none';
         }
 
         // Show/hide and toggle required on the "สถานที่ส่ง" field based on shipping selection
@@ -3831,6 +3844,7 @@
             // สถานที่นัดรับ — ออเดอร์เก่าอาจไม่มีค่านี้ ให้ default ตามสาขาของออเดอร์
             _pickupLocationTouched = true;
             document.getElementById('pickup-location').value = order.dates.pickupLocation || order.branch || '';
+            updateShippingMethodRowVisibility();
             // Re-enforce min = tomorrow so calendar picker can't select past dates
             (function() {
                 const _t = new Date(); _t.setDate(_t.getDate() + 1);
