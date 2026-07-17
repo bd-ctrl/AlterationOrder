@@ -3622,14 +3622,31 @@
                 if (runId !== _filterOrdersRunId) return; // มีการเรียก filterOrders รอบใหม่แล้ว ทิ้งผลลัพธ์รอบนี้
                 if (!remoteOrders) return; // ดึงไม่สำเร็จ (เช่น ยังไม่ตั้งค่า Lark App ใน Worker) — โชว์แค่ข้อมูลในเครื่องต่อไป
 
-                const localKnownKeys = new Set();
+                // ⚠️ [แก้เพิ่ม 17/07/2026] เจอเคสที่ Lark Base มีมากกว่า 1 แถวที่ "เลขที่บิล + เบอร์โทร" ตรงกันเป๊ะ
+                // แต่เป็นคนละลูกค้ากันจริงๆ (เช่น SC042607 เบอร์ 081-111-1111 มีทั้ง "วันวิเศษ" และ "ป๊อกแป๊ก")
+                // ถ้าใช้ Set เทียบแบบเดิม (มี key นี้ในเครื่องไหม) พอเจอ key ซ้ำจะไปตัดทิ้งทั้งคู่เลยทั้งที่ในเครื่อง
+                // มีแค่รายการเดียวที่ตรงกับ key นั้นจริงๆ เปลี่ยนมานับจำนวนแทน (Map ของ key -> จำนวนที่มีในเครื่อง)
+                // ตัดออกจาก Lark ได้ไม่เกินจำนวนที่มีในเครื่องจริงๆ เท่านั้น ถ้าเกินจำนวน (เจอ key ซ้ำในเครื่องแค่ 1
+                // แต่ Lark มี 2 แถว) ให้โชว์ตัวที่เหลือเป็นรายการแยกแทนการซ่อนทิ้งไปเฉยๆ (เสี่ยงบิลหายน้อยกว่าเสี่ยงบิลซ้ำ)
+                // legacy key รวม "ชื่อลูกค้า" เข้าไปด้วย (ไม่ใช่แค่เลขที่บิล+เบอร์โทร) เพราะเจอเคสจริงที่เบอร์โทร
+                // เดียวกันถูกใช้กับคนละชื่อ (ลูกค้าทดสอบ/ลูกค้าจริงที่บังเอิญเบอร์ตรงกัน) ถ้าไม่ใส่ชื่อด้วย ระบบจะ
+                // จับคู่ผิดคน (ตัดโชว์ของอีกคนทิ้งแทน) เพราะแค่นับจำนวนไม่ได้เช็คว่า "ใช่คนเดียวกันจริงไหม"
+                const legacyKeyOf = o => `${o.orderNo}|${o.customer?.phone || ''}|${(o.customer?.firstname || '').trim()}`;
+                const localIdKeys   = new Set();
+                const localLegacyCount = new Map();
                 orders.filter(o => !o.isDraft).forEach(o => {
-                    if (o.larkRecordId) localKnownKeys.add('id:' + o.larkRecordId);
-                    localKnownKeys.add('legacy:' + String(o.orderNo) + '|' + String(o.customer?.phone || ''));
+                    if (o.larkRecordId) localIdKeys.add(o.larkRecordId);
+                    const key = legacyKeyOf(o);
+                    localLegacyCount.set(key, (localLegacyCount.get(key) || 0) + 1);
                 });
                 const extra = remoteOrders.filter(o => {
-                    if (o.id && localKnownKeys.has('id:' + o.id)) return false;
-                    if (localKnownKeys.has('legacy:' + String(o.orderNo) + '|' + String(o.customer?.phone || ''))) return false;
+                    if (o.id && localIdKeys.has(o.id)) return false;
+                    const key = legacyKeyOf(o);
+                    const remaining = localLegacyCount.get(key) || 0;
+                    if (remaining > 0) {
+                        localLegacyCount.set(key, remaining - 1);
+                        return false;
+                    }
                     return true;
                 });
                 if (!extra.length) return;
