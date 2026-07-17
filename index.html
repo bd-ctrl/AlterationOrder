@@ -479,6 +479,10 @@
                             <div class="flex items-start gap-2"><i class="fa-solid fa-floppy-disk text-cube-gold-dark mt-0.5" aria-hidden="true"></i><span><b>บันทึกร่าง (Draft)</b> — เก็บข้อมูลไว้ก่อน ยังไม่ส่งเข้า Lark ต้องกรอกข้อมูลบางส่วนก่อนถึงจะบันทึกได้</span></div>
                             <div class="flex items-start gap-2"><i class="fa-solid fa-check text-white bg-cube-black rounded-full p-0.5 text-[9px] mt-0.5" aria-hidden="true"></i><span><b>บันทึกข้อมูล</b> — บันทึกจริงและส่งเข้า Lark ทันที หลังส่งแล้ว Lark จะแจ้งเตือนสาขาว่าส่งข้อมูลแล้ว รอลงงานใน Salesforce</span></div>
                             <div class="flex items-start gap-2"><i class="fa-solid fa-clock-rotate-left text-cube-gray mt-0.5" aria-hidden="true"></i><span><b>ดูประวัติรายการย้อนหลัง</b> — ดูใบสั่งแก้ที่เคยบันทึกไว้ทั้งหมดของสาขาที่เลือก</span></div>
+                            <!-- [ใหม่ 17/07/2026] แสดงเวลาที่ไฟล์หน้านี้ถูกอัปเดตล่าสุด (document.lastModified) ไว้ให้เห็นตรงๆ
+                                 ในเครื่อง — ใช้เช็คได้เองว่ากำลังเปิดหน้าเว็บเวอร์ชันล่าสุดจริงหรือเป็นแค่ cache เก่าค้างอยู่
+                                 (กันปัญหา "แจ้งว่าแก้แล้วแต่ user ยังเห็นเหมือนเดิม" เพราะ browser cache ที่เจอบ่อย) -->
+                            <div class="pt-1.5 mt-0.5 border-t border-gray-100 text-[10px] text-gray-400">เวอร์ชันหน้านี้ (อัปเดตล่าสุด): <span id="app-build-stamp">-</span></div>
                         </div>
                     </div>
                     <div class="relative -mt-1">
@@ -2064,6 +2068,14 @@
         }
 
         window.addEventListener('load', () => {
+            // [ใหม่ 17/07/2026] โชว์เวลาที่ไฟล์นี้อัปเดตล่าสุด (document.lastModified) ไว้เช็คเอง — ต้องอยู่บนสุด
+            // ของ handler นี้ (ก่อนขั้นตอนอื่นที่อาจ error แล้วลากทั้ง handler ให้หยุดทำงาน) จะได้ขึ้นเสมอไม่ว่า
+            // ขั้นตอนหลังจากนี้จะพังหรือไม่ก็ตาม
+            try {
+                const stampEl = document.getElementById('app-build-stamp');
+                if (stampEl) stampEl.textContent = document.lastModified;
+            } catch (e) { /* เงียบไว้ ไม่ให้กระทบการทำงานส่วนอื่น */ }
+
             // ⚠️ แก้บัก "กดเพิ่มประเภทสินค้าแล้วไม่มีอะไรเกิดขึ้น":
             // เดิมปุ่มนี้ถูกผูก event ไว้ท้ายๆ handler นี้ ถ้ามีขั้นตอนไหนก่อนหน้า (เช่น
             // loadOrdersFromStorage/loadSalesforceEmployees ที่คุยกับ localStorage/เน็ตเวิร์ก) throw
