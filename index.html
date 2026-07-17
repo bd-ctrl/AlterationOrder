@@ -3312,6 +3312,15 @@
             }
 
             saveOrderToStorage();
+
+            // [ใหม่ 17/07/2026] "กดปุ่มบันทึกทีเดียวแล้วพิมพ์ออกมาเลย" — บันทึกจริง (ไม่ใช่ร่าง) แล้วเปิดหน้าต่าง
+            // พิมพ์ใบสรุป thermal ให้อัตโนมัติทันที ไม่ต้องกดปุ่มพิมพ์แยกอีกขั้นตอน (ใช้ viewAndPrintReceipt()
+            // ตัวเดียวกับที่ปุ่มพิมพ์ในหน้าประวัติใช้ ซึ่งข้างในมันแคปรูปส่งเข้า Lark Base ให้ด้วยอยู่แล้ว)
+            if (!isDraft) {
+                try { viewAndPrintReceipt(orderData.id, orderData); }
+                catch (e) { console.warn('พิมพ์ใบสรุปอัตโนมัติหลังบันทึกไม่สำเร็จ (ยังบันทึกข้อมูลสำเร็จตามปกติ):', e); }
+            }
+
             resetForm();
         }
 
@@ -4250,17 +4259,18 @@
         }
 
         // ─── สร้าง <style> ของใบสรุป thermal ใช้ร่วมกันทั้งตอนปรินต์ (popup window) และตอนแคปรูปออฟสกรีน ───
+        // [แก้ 17/07/2026] เปลี่ยนฟอนต์ใบสรุปจาก IBM Plex Sans Thai เป็น Sarabun ตามที่ขอ
         const THERMAL_RECEIPT_FONT_LINKS =
             '<link rel="preconnect" href="https://fonts.googleapis.com">' +
             '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' +
-            '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">';
+            '<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">';
 
         const THERMAL_RECEIPT_STYLE_TEXT =
             // RESET
             '*{margin:0;padding:0;box-sizing:border-box;}' +
-            // BASE — ฟอนต์ไทย Noto Sans Thai (fallback ฟอนต์ระบบถ้าเครื่องไม่มี), 12px ตามมาตรฐานกระดาษความร้อน
+            // BASE — ฟอนต์ไทย Sarabun (fallback ฟอนต์ระบบถ้าเครื่องไม่มี), 12px ตามมาตรฐานกระดาษความร้อน
             'html,body{background:#fff;color:#000;}' +
-            'body{width:80mm;margin:0 auto;font-family:"IBM Plex Sans Thai","Noto Sans Thai","Leelawadee UI","Tahoma",sans-serif;font-size:12px;line-height:1.55;}' +
+            'body{width:80mm;margin:0 auto;font-family:"Sarabun","Noto Sans Thai","Leelawadee UI","Tahoma",sans-serif;font-size:12px;line-height:1.55;}' +
             '.receipt{width:100%;padding:4mm 3mm;}' +
             '.t-center{text-align:center;margin-bottom:0.6mm;}' +
             '.t-bold{font-weight:700;}' +
@@ -4292,13 +4302,13 @@
             const win = window.open('', '_blank', 'width=420,height=700');
             if (!win) { alert('กรุณาอนุญาต pop-up เพื่อพิมพ์'); return; }
             win.document.write('<html lang="th"><head><meta charset="utf-8"><title>ใบเสร็จ</title>');
-            // ฟอนต์ IBM Plex Sans Thai — โหลดเฉพาะหน้าต่างใบสรุปนี้เท่านั้น ไม่กระทบฟอนต์ของเว็บหลัก
+            // ฟอนต์ Sarabun — โหลดเฉพาะหน้าต่างใบสรุปนี้เท่านั้น ไม่กระทบฟอนต์ของเว็บหลัก
             win.document.write(THERMAL_RECEIPT_FONT_LINKS);
             win.document.write('<style>' + THERMAL_RECEIPT_STYLE_TEXT + '</style>');
             win.document.write('</head><body><div class="receipt">' + thermalHTML + '</div></body></html>');
             win.document.close();
             win.focus();
-            // รอฟอนต์ IBM Plex Sans Thai โหลดเสร็จก่อนค่อยสั่งพิมพ์ (กันเคสพิมพ์ด้วยฟอนต์ fallback เพราะโหลดไม่ทัน)
+            // รอฟอนต์ Sarabun โหลดเสร็จก่อนค่อยสั่งพิมพ์ (กันเคสพิมพ์ด้วยฟอนต์ fallback เพราะโหลดไม่ทัน)
             // กันพิมพ์ซ้ำสองครั้งด้วย flag เดียว
             let _printed = false;
             const triggerPrint = () => { if (_printed) return; _printed = true; win.print(); };
@@ -4319,7 +4329,7 @@
             '.thermal-capture-scope{position:fixed;left:-99999px;top:0;background:#fff;}' +
             '.thermal-capture-scope *{margin:0;padding:0;box-sizing:border-box;}' +
             '.thermal-capture-scope .receipt{width:80mm;margin:0 auto;padding:4mm 3mm;background:#fff;color:#000;' +
-                'font-family:"IBM Plex Sans Thai","Noto Sans Thai","Leelawadee UI","Tahoma",sans-serif;font-size:12px;line-height:1.55;}' +
+                'font-family:"Sarabun","Noto Sans Thai","Leelawadee UI","Tahoma",sans-serif;font-size:12px;line-height:1.55;}' +
             '.thermal-capture-scope .t-center{text-align:center;margin-bottom:0.6mm;}' +
             '.thermal-capture-scope .t-bold{font-weight:700;}' +
             '.thermal-capture-scope .t-title{font-size:20px;}' +
@@ -4356,7 +4366,7 @@
                 wrap.appendChild(receiptDiv);
                 document.body.appendChild(wrap);
 
-                // รอฟอนต์ IBM Plex Sans Thai ให้พร้อมก่อนแคป (ฟอนต์นี้ถูกโหลดไว้แล้วตอนเปิดเว็บ — ดู <head>)
+                // รอฟอนต์ Sarabun ให้พร้อมก่อนแคป (ฟอนต์นี้ถูกโหลดไว้แล้วตอนเปิดเว็บ — ดู <head>)
                 if (document.fonts && document.fonts.ready) {
                     await Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1000))]);
                 }
