@@ -479,6 +479,7 @@
                             <div class="flex items-start gap-2"><i class="fa-solid fa-check text-white bg-cube-black rounded-full p-0.5 text-[9px] mt-0.5" aria-hidden="true"></i><span><b>บันทึกข้อมูล</b> — บันทึกจริงและส่งเข้า Lark ทันที หลังส่งแล้ว Lark จะแจ้งเตือนสาขาว่าส่งข้อมูลแล้ว รอลงงานใน Salesforce</span></div>
                             <div class="flex items-start gap-2"><i class="fa-solid fa-clock-rotate-left text-cube-gray mt-0.5" aria-hidden="true"></i><span><b>ดูประวัติรายการย้อนหลัง</b> — ดูใบสั่งแก้ที่เคยบันทึกไว้ทั้งหมดของสาขาที่เลือก</span></div>
                             <div class="flex items-start gap-2"><i class="fa-solid fa-trash-can text-red-500 mt-0.5" aria-hidden="true"></i><span><b>ล้างข้อมูล</b> — เคลียร์ฟอร์มทั้งหมด เริ่มกรอกใหม่</span></div>
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-hashtag text-cube-gray mt-0.5" aria-hidden="true"></i><span><b>เลขที่บิล</b> — อักษรย่อสาขา + ลำดับบิลของสาขาในเดือนนั้น (2 หลัก นับใหม่ทุกเดือน) + ปี ค.ศ. 2 หลักท้าย + เดือน 2 หลัก</span></div>
                             <!-- [ใหม่ 17/07/2026] แสดงเวลาที่ไฟล์หน้านี้ถูกอัปเดตล่าสุด (document.lastModified) ไว้ให้เห็นตรงๆ
                                  ในเครื่อง — ใช้เช็คได้เองว่ากำลังเปิดหน้าเว็บเวอร์ชันล่าสุดจริงหรือเป็นแค่ cache เก่าค้างอยู่
                                  (กันปัญหา "แจ้งว่าแก้แล้วแต่ user ยังเห็นเหมือนเดิม" เพราะ browser cache ที่เจอบ่อย) -->
@@ -634,17 +635,11 @@
                                         <label for="debt-amount" class="text-xs font-normal text-cube-gray whitespace-nowrap">จำนวนเงินที่ค้างชำระ (บาท) <span class="text-red-500">*</span></label>
                                         <input type="number" id="debt-amount" min="0" step="0.01" inputmode="decimal" class="sku-input-sm" placeholder="กรอกจำนวนเงิน">
                                     </div>
-                                </div>
-
-                                <div class="mt-3 pt-3 border-t border-gray-200 flex items-center gap-2 flex-wrap">
-                                    <label for="pickup-location" class="text-xs font-normal text-cube-gray whitespace-nowrap">สาขาที่นัดรับ <span class="text-red-500">*</span></label>
-                                    <div class="relative flex items-center w-auto">
-                                        <select id="pickup-location" style="width:auto; min-width:110px;" class="sku-input appearance-none pr-8 pl-3 cursor-pointer">
+                                    <div class="flex items-center gap-1.5">
+                                        <label for="pickup-location" class="text-xs font-normal text-cube-gray whitespace-nowrap">สาขาที่นัดรับ <span class="text-red-500">*</span></label>
+                                        <select id="pickup-location" class="text-[13px] cursor-pointer appearance-none pr-5 bg-transparent border-0 border-b border-gray-300 focus:border-cube-gold focus:ring-0">
                                             <option value="">เลือกสาขาที่นัดรับ</option>
                                         </select>
-                                        <div class="absolute right-2 pointer-events-none text-cube-gold">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-                                        </div>
                                     </div>
                                 </div>
 
@@ -2109,6 +2104,11 @@
                 document.getElementById('pickup-location').addEventListener('change', () => {
                     _pickupLocationTouched = true;
                     updateReceiptShippingDisplay();
+                    if (document.getElementById('pickup-location').value !== PICKUP_DELIVERY_VALUE) {
+                        document.querySelectorAll('input[name="shipping"]').forEach(r => r.checked = false);
+                        _shippingLastValue = null;
+                        updateShippingAddressVisibility();
+                    }
                     updateShippingMethodRowVisibility();
                 });
             }, 'pickup-location change listener');
@@ -2511,7 +2511,7 @@
             const sel = document.getElementById('pickup-location');
             const wrap = document.getElementById('shipping-method-wrap');
             if (!sel || !wrap) return;
-            wrap.style.display = sel.value ? 'flex' : 'none';
+            wrap.style.display = (sel.value === PICKUP_DELIVERY_VALUE) ? 'flex' : 'none';
         }
 
         // Show/hide and toggle required on the "สถานที่ส่ง" field based on shipping selection
