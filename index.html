@@ -71,6 +71,12 @@
         .adjust-toggle-label.expanded { color: #1a1a1a; font-weight: 600; }
         .adjust-toggle-chip { display: inline-flex; align-items: baseline; justify-content: center; min-width: 58px; padding: 5px 9px; border-radius: 999px; border: 1px solid #e7e2d6; background: #fff; color: #1a1a1a; font-size: 12px; font-weight: 600; transition: all .15s ease; }
         .adjust-unit-suffix { font-size: 11px; color: #9a9484; font-weight: 400; white-space: nowrap; }
+        .adjust-slider-ticks { position: relative; height: 6px; margin-top: 4px; }
+        .adjust-slider-ticks .tick2 { position: absolute; top: 0; width: 1px; height: 6px; background: #d3cdbe; transform: translateX(-50%); }
+        .adjust-slider-scale { position: relative; height: 14px; margin-top: 3px; }
+        .adjust-slider-scale span { position: absolute; top: 0; transform: translateX(-50%); font-size: 10px; color: #9a9484; white-space: nowrap; }
+        .adjust-slider-scale span:first-child { transform: translateX(0); }
+        .adjust-slider-scale span:last-child { transform: translateX(-100%); }
         .adjust-toggle-chip.adjust-toggle-chip-unchanged { background: transparent; border-color: transparent; color: #9a9484; font-weight: 300; font-style: italic; padding-left: 0; padding-right: 0; min-width: 0; }
         .notes-fill-input.has-value { background: #e2e8f0 !important; }
         .image-attach-btn.has-value { background-color: #e2e8f0 !important; border-color: #cbd5e1 !important; }
@@ -80,15 +86,15 @@
         .adjust-toggle-chip.expanded { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
         .adjust-toggle-chip.expanded .adjust-toggle-unit { color: #cfcabb; }
         .adjust-field-wrap.adjust-field-expanded { grid-column: 1 / -1; }
-        .adjust-slider-wrap { flex: 1 1 110px; min-width: 90px; display: flex; align-items: center; margin-left: 17px; }
-        .adjust-slider-track { position: relative; height: 38px; width: 100%; display: flex; align-items: center; cursor: pointer; touch-action: none; }
+        .adjust-slider-wrap { flex: 1 1 160px; min-width: 140px; display: flex; flex-direction: column; align-items: stretch; margin-left: 17px; }
+        .adjust-slider-track { position: relative; height: 22px; width: 100%; display: flex; align-items: center; cursor: pointer; touch-action: none; }
         .adjust-slider-track .rail { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); height: 3px; background: #e7e2d6; border-radius: 2px; }
         .adjust-slider-track .fill { position: absolute; left: 0; top: 50%; transform: translateY(-50%); height: 3px; background: linear-gradient(90deg, #5a5a5a, #000000); border-radius: 2px; pointer-events: none; }
         .adjust-slider-track .tick { position: absolute; top: 50%; width: 2px; height: 6px; background: #d3cdbe; transform: translate(-50%, -50%); pointer-events: none; }
-        .adjust-slider-track .handle { position: absolute; top: 50%; width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #4d4d4d, #000000); transform: translate(-50%, -50%); box-shadow: 0 2px 6px rgba(0,0,0,0.25); cursor: grab; z-index: 2; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .adjust-slider-track .handle { position: absolute; top: 0; bottom: 0; width: 4px; border-radius: 2px; background: linear-gradient(180deg, #4d4d4d, #000000); transform: translateX(-50%); box-shadow: 0 1px 3px rgba(0,0,0,0.3); cursor: grab; z-index: 2; }
         .adjust-slider-track .handle:active { cursor: grabbing; }
         .adjust-slider-track .handle:focus { outline: 2px solid #C9A24B; outline-offset: 2px; }
-        .adjust-slider-track .handle-value { color: #fff; font-size: 13px; font-weight: 400; pointer-events: none; white-space: nowrap; }
+        .adjust-slider-track .handle-value { display: none; }
 
         /* ท้ายเว็บ: แถบขาวด้านล่างสุด โลโก้ SUITCUBE + ลิงก์บันทึกแบบร่าง/ดูรายการย้อนหลัง (ย้ายจาก header เดิมมาเป็น footer) */
         .app-header {
@@ -1484,18 +1490,31 @@
                         <div class="adjust-slider-track">
                             <div class="rail"></div>
                             <div class="fill" style="width:50%"></div>
-                            <div class="tick" style="left:0%"></div>
-                            <div class="tick" style="left:12.5%"></div>
-                            <div class="tick" style="left:25%"></div>
-                            <div class="tick" style="left:37.5%"></div>
-                            <div class="tick" style="left:50%"></div>
-                            <div class="tick" style="left:62.5%"></div>
-                            <div class="tick" style="left:75%"></div>
-                            <div class="tick" style="left:87.5%"></div>
-                            <div class="tick" style="left:100%"></div>
                             <div class="handle" tabindex="0" role="slider" aria-valuemin="-2" aria-valuemax="2" aria-valuenow="0" style="left:50%">
                                 <span class="handle-value">0</span>
                             </div>
+                        </div>
+                        <div class="adjust-slider-ticks">
+                            <div class="tick2" style="left:0%"></div>
+                            <div class="tick2" style="left:12.5%"></div>
+                            <div class="tick2" style="left:25%"></div>
+                            <div class="tick2" style="left:37.5%"></div>
+                            <div class="tick2" style="left:50%"></div>
+                            <div class="tick2" style="left:62.5%"></div>
+                            <div class="tick2" style="left:75%"></div>
+                            <div class="tick2" style="left:87.5%"></div>
+                            <div class="tick2" style="left:100%"></div>
+                        </div>
+                        <div class="adjust-slider-scale">
+                            <span style="left:0%">-2</span>
+                            <span style="left:12.5%">-1.5</span>
+                            <span style="left:25%">-1</span>
+                            <span style="left:37.5%">-0.5</span>
+                            <span style="left:50%">0</span>
+                            <span style="left:62.5%">0.5</span>
+                            <span style="left:75%">1</span>
+                            <span style="left:87.5%">1.5</span>
+                            <span style="left:100%">2</span>
                         </div>
                     </div>
                     <span class="adjust-unit-suffix" data-target="${id}" style="display:none;">นิ้ว</span>
@@ -1516,18 +1535,31 @@
                         <div class="adjust-slider-track">
                             <div class="rail"></div>
                             <div class="fill" style="width:50%"></div>
-                            <div class="tick" style="left:0%"></div>
-                            <div class="tick" style="left:12.5%"></div>
-                            <div class="tick" style="left:25%"></div>
-                            <div class="tick" style="left:37.5%"></div>
-                            <div class="tick" style="left:50%"></div>
-                            <div class="tick" style="left:62.5%"></div>
-                            <div class="tick" style="left:75%"></div>
-                            <div class="tick" style="left:87.5%"></div>
-                            <div class="tick" style="left:100%"></div>
                             <div class="handle" tabindex="0" role="slider" aria-valuemin="-2" aria-valuemax="2" aria-valuenow="0" style="left:50%">
                                 <span class="handle-value">0</span>
                             </div>
+                        </div>
+                        <div class="adjust-slider-ticks">
+                            <div class="tick2" style="left:0%"></div>
+                            <div class="tick2" style="left:12.5%"></div>
+                            <div class="tick2" style="left:25%"></div>
+                            <div class="tick2" style="left:37.5%"></div>
+                            <div class="tick2" style="left:50%"></div>
+                            <div class="tick2" style="left:62.5%"></div>
+                            <div class="tick2" style="left:75%"></div>
+                            <div class="tick2" style="left:87.5%"></div>
+                            <div class="tick2" style="left:100%"></div>
+                        </div>
+                        <div class="adjust-slider-scale">
+                            <span style="left:0%">-2</span>
+                            <span style="left:12.5%">-1.5</span>
+                            <span style="left:25%">-1</span>
+                            <span style="left:37.5%">-0.5</span>
+                            <span style="left:50%">0</span>
+                            <span style="left:62.5%">0.5</span>
+                            <span style="left:75%">1</span>
+                            <span style="left:87.5%">1.5</span>
+                            <span style="left:100%">2</span>
                         </div>
                     </div>
                     <span class="adjust-unit-suffix" data-target="${valId}" style="display:none;">นิ้ว</span>
@@ -1589,7 +1621,7 @@
                     </div>
                     <div>
                         <p class="text-xs font-normal text-cube-black mb-2">เสื้อ</p>
-                        <div class="grid grid-cols-2 gap-2 sm:gap-3">
+                        <div class="grid grid-cols-1 gap-2">
                             ${buildMeasureFieldHTML(`val-suit-front-length-${rowId}`, 'ความยาวหน้า')}
                             ${buildMeasureFieldHTML(`val-suit-back-length-${rowId}`, 'ความยาวหลัง')}
                         </div>
