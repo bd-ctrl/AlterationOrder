@@ -1604,9 +1604,9 @@
                     <textarea id="notes-${type}-${rowId}" class="row-notes-input sku-input notes-fill-input" rows="2" oninput="this.classList.toggle('has-value', this.value.trim().length>0)"></textarea>
                 </div>
             </div>
-            <div class="image-attach-block" data-fieldset-type="${type}">
+            <div class="image-attach-block flex items-center gap-2 flex-wrap" data-fieldset-type="${type}">
                 <button type="button" class="adjust-toggle-label notes-toggle-btn inline-flex items-center gap-1.5" data-target="image-wrap-${type}-${rowId}"><i class="fa-solid fa-circle-plus" aria-hidden="true"></i> แนบรูป (ถ้ามี)</button>
-                <div id="image-wrap-${type}-${rowId}" style="display:none;" class="mt-2">
+                <div id="image-wrap-${type}-${rowId}" style="display:none;">
                     <div class="flex items-center gap-3">
                         <label for="image-input-${type}-${rowId}" id="image-attach-btn-${type}-${rowId}" class="image-attach-btn cursor-pointer inline-flex items-center gap-2 min-h-[40px] px-4 bg-white border border-gray-300 rounded-2xl text-xs text-cube-gray hover:bg-gray-50 transition-colors">
                             <i class="fa-solid fa-camera" aria-hidden="true"></i>
