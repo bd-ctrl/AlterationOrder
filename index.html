@@ -67,6 +67,32 @@
             #pickup-fields-grid input[type="date"] { padding-left: 10px; padding-right: 10px; font-size: 0.8rem; }
         }
 
+        .adjust-slider-wrap { margin-top: 4px; }
+        .adjust-slider-track { position: relative; height: 30px; display: flex; align-items: center; cursor: pointer; touch-action: none; }
+        .adjust-slider-track .rail { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); height: 3px; background: #e7e2d6; border-radius: 2px; }
+        .adjust-slider-track .fill { position: absolute; left: 0; top: 50%; transform: translateY(-50%); height: 3px; background: #1a1a1a; border-radius: 2px; pointer-events: none; }
+        .adjust-slider-track .tick { position: absolute; top: 50%; width: 2px; height: 6px; background: #d3cdbe; transform: translate(-50%, -50%); pointer-events: none; }
+        .adjust-slider-track .handle { position: absolute; top: 50%; width: 17px; height: 17px; border-radius: 50%; background: #1a1a1a; transform: translate(-50%, -50%); box-shadow: 0 2px 6px rgba(0,0,0,0.25); cursor: grab; z-index: 2; }
+        .adjust-slider-track .handle:active { cursor: grabbing; }
+        .adjust-slider-track .handle:focus { outline: 2px solid #C9A24B; outline-offset: 2px; }
+        .adjust-slider-track .bubble {
+            position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-4px) scale(0.85);
+            background: #1a1a1a; color: #fff; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;
+            white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+        .adjust-slider-track .bubble::after {
+            content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+            border: 4px solid transparent; border-top-color: #1a1a1a;
+        }
+        .adjust-slider-track.active .bubble,
+        .adjust-slider-track:hover .bubble,
+        .adjust-slider-track .handle:focus ~ .bubble { opacity: 1; transform: translateX(-50%) translateY(-2px) scale(1); }
+        .adjust-step-row { display: flex; align-items: center; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
+        .adjust-step-btn { font-size: 10px; padding: 2px 7px; border-radius: 999px; border: 1px solid #e7e2d6; background: #fff; color: #8a8577; cursor: pointer; transition: all .15s ease; }
+        .adjust-step-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+        .adjust-nudge-btn { font-size: 14px; font-weight: 600; width: 22px; height: 22px; border-radius: 50%; border: 1px solid #e7e2d6; background: #fff; color: #1a1a1a; cursor: pointer; line-height: 1; display: flex; align-items: center; justify-content: center; }
+        .adjust-nudge-btn:active { background: #f3f1ec; }
+
         /* ท้ายเว็บ: แถบขาวด้านล่างสุด โลโก้ SUITCUBE + ลิงก์บันทึกแบบร่าง/ดูรายการย้อนหลัง (ย้ายจาก header เดิมมาเป็น footer) */
         .app-header {
             background: #fff;
@@ -1452,6 +1478,42 @@
             </div>`;
         }
 
+        function buildAdjustSliderFieldHTML(id, label) {
+            return `<div>
+                <div class="flex items-center justify-between mb-1">
+                    <label class="block text-xs font-normal text-cube-gray">${label}</label>
+                    <span class="text-[10px] text-gray-400">นิ้ว</span>
+                </div>
+                <input type="hidden" id="${id}" value="0">
+                <div class="adjust-slider-wrap" data-target="${id}">
+                    <div class="adjust-slider-track">
+                        <div class="rail"></div>
+                        <div class="fill" style="width:50%"></div>
+                        <div class="tick" style="left:0%"></div>
+                        <div class="tick" style="left:12.5%"></div>
+                        <div class="tick" style="left:25%"></div>
+                        <div class="tick" style="left:37.5%"></div>
+                        <div class="tick" style="left:50%"></div>
+                        <div class="tick" style="left:62.5%"></div>
+                        <div class="tick" style="left:75%"></div>
+                        <div class="tick" style="left:87.5%"></div>
+                        <div class="tick" style="left:100%"></div>
+                        <div class="handle" tabindex="0" role="slider" aria-valuemin="-2" aria-valuemax="2" aria-valuenow="0" style="left:50%">
+                            <div class="bubble">0</div>
+                        </div>
+                    </div>
+                    <div class="adjust-step-row">
+                        <button type="button" class="adjust-step-btn" data-step="0.5">0.5</button>
+                        <button type="button" class="adjust-step-btn active" data-step="1">1</button>
+                        <button type="button" class="adjust-step-btn" data-step="1.5">1.5</button>
+                        <button type="button" class="adjust-step-btn" data-step="2">2</button>
+                        <button type="button" class="adjust-nudge-btn" data-dir="-1" aria-label="ลด">−</button>
+                        <button type="button" class="adjust-nudge-btn" data-dir="1" aria-label="เพิ่ม">+</button>
+                    </div>
+                </div>
+            </div>`;
+        }
+
         // บันทึกเพิ่มเติม + แนบรูป (ใช้ซ้ำได้ทุกประเภท — รูปเป็นของ "แถว" ไม่ใช่ของ "ประเภท")
         function buildNotesAndImageHTML(type, rowId, notesLabel) {
             return `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1510,9 +1572,9 @@
                     <div class="sm:col-span-2">
                         <p class="text-xs font-normal text-cube-black mb-2">รอบตัว</p>
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
-                            ${buildMeasureFieldHTML(`val-chest-${rowId}`, 'อก')}
-                            ${buildMeasureFieldHTML(`val-waist-size-${rowId}`, 'เอว')}
-                            ${buildMeasureFieldHTML(`val-hip-${rowId}`, 'สะโพก')}
+                            ${buildAdjustSliderFieldHTML(`val-chest-${rowId}`, 'อก')}
+                            ${buildAdjustSliderFieldHTML(`val-waist-size-${rowId}`, 'เอว')}
+                            ${buildAdjustSliderFieldHTML(`val-hip-${rowId}`, 'สะโพก')}
                             ${buildMeasureFieldHTML(`val-waist-lower-${rowId}`, 'เอวล่าง')}
                         </div>
                     </div>
@@ -2574,6 +2636,107 @@
                 el.value = intPart;
             }
         }
+
+        const ADJUST_SLIDER_MIN = -2, ADJUST_SLIDER_MAX = 2, ADJUST_SLIDER_STEP = 0.5;
+        function formatAdjustValue(v) {
+            const n = Math.round(v * 10) / 10;
+            if (n === 0) return '0';
+            return (n > 0 ? '+' : '') + n;
+        }
+        function adjustSliderPercent(v) {
+            return ((v - ADJUST_SLIDER_MIN) / (ADJUST_SLIDER_MAX - ADJUST_SLIDER_MIN)) * 100;
+        }
+        function setAdjustSliderValue(wrap, rawValue, opts) {
+            opts = opts || {};
+            let v = Math.max(ADJUST_SLIDER_MIN, Math.min(ADJUST_SLIDER_MAX, rawValue));
+            v = Math.round(v / ADJUST_SLIDER_STEP) * ADJUST_SLIDER_STEP;
+            v = Math.round(v * 10) / 10;
+            const targetId = wrap.dataset.target;
+            const input = document.getElementById(targetId);
+            if (!input) return;
+            const pct = adjustSliderPercent(v);
+            const handle = wrap.querySelector('.handle');
+            const fill = wrap.querySelector('.fill');
+            const bubble = wrap.querySelector('.bubble');
+            if (handle) { handle.style.left = pct + '%'; handle.setAttribute('aria-valuenow', String(v)); }
+            if (fill) fill.style.width = pct + '%';
+            if (bubble) bubble.textContent = formatAdjustValue(v);
+            const prevValue = input.value;
+            input.value = (v === 0) ? '0' : String(v);
+            if (!opts.silent && input.value !== prevValue) {
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        }
+        function syncAdjustSliderVisual(id) {
+            const input = document.getElementById(id);
+            if (!input) return;
+            const wrap = document.querySelector(`.adjust-slider-wrap[data-target="${id}"]`);
+            if (!wrap) return;
+            const v = parseFloat(input.value);
+            setAdjustSliderValue(wrap, isNaN(v) ? 0 : v, { silent: true });
+        }
+        function getAdjustSliderStep(wrap) {
+            const activeBtn = wrap.querySelector('.adjust-step-btn.active');
+            return activeBtn ? parseFloat(activeBtn.dataset.step) : 1;
+        }
+        function adjustSliderValueFromClientX(wrap, clientX) {
+            const track = wrap.querySelector('.adjust-slider-track');
+            const rect = track.getBoundingClientRect();
+            const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+            return ADJUST_SLIDER_MIN + pct * (ADJUST_SLIDER_MAX - ADJUST_SLIDER_MIN);
+        }
+        let _adjustSliderDragWrap = null;
+        document.addEventListener('pointerdown', function(e) {
+            const track = e.target.closest('.adjust-slider-track');
+            if (!track) return;
+            const wrap = track.closest('.adjust-slider-wrap');
+            if (!wrap) return;
+            _adjustSliderDragWrap = wrap;
+            track.classList.add('active');
+            setAdjustSliderValue(wrap, adjustSliderValueFromClientX(wrap, e.clientX));
+            e.preventDefault();
+        });
+        document.addEventListener('pointermove', function(e) {
+            if (!_adjustSliderDragWrap) return;
+            setAdjustSliderValue(_adjustSliderDragWrap, adjustSliderValueFromClientX(_adjustSliderDragWrap, e.clientX));
+        });
+        document.addEventListener('pointerup', function() {
+            if (_adjustSliderDragWrap) {
+                const t2 = _adjustSliderDragWrap.querySelector('.adjust-slider-track');
+                if (t2) t2.classList.remove('active');
+            }
+            _adjustSliderDragWrap = null;
+        });
+        document.addEventListener('click', function(e) {
+            const stepBtn = e.target.closest('.adjust-step-btn');
+            if (stepBtn) {
+                const row = stepBtn.closest('.adjust-step-row');
+                row.querySelectorAll('.adjust-step-btn').forEach(b => b.classList.remove('active'));
+                stepBtn.classList.add('active');
+                return;
+            }
+            const nudgeBtn = e.target.closest('.adjust-nudge-btn');
+            if (nudgeBtn) {
+                const wrap = nudgeBtn.closest('.adjust-slider-wrap');
+                const input = document.getElementById(wrap.dataset.target);
+                const current = parseFloat(input.value) || 0;
+                const step = getAdjustSliderStep(wrap);
+                const dir = parseFloat(nudgeBtn.dataset.dir);
+                setAdjustSliderValue(wrap, current + dir * step);
+                return;
+            }
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+            const handle = document.activeElement;
+            if (!handle || !handle.classList || !handle.classList.contains('handle')) return;
+            const wrap = handle.closest('.adjust-slider-wrap');
+            const input = document.getElementById(wrap.dataset.target);
+            const current = parseFloat(input.value) || 0;
+            setAdjustSliderValue(wrap, current + (e.key === 'ArrowRight' ? ADJUST_SLIDER_STEP : -ADJUST_SLIDER_STEP));
+            e.preventDefault();
+        });
 
         // Show/hide and toggle required on the "จำนวนเงินที่ค้างชำระ" field based on pay-status selection
         function updateDebtAmountVisibility() {
@@ -3784,8 +3947,11 @@
                     setVal(`val-suit-front-length-${rowId}`, m.frontLength);
                     setVal(`val-suit-back-length-${rowId}`, m.backLength);
                     setVal(`val-chest-${rowId}`, m.chest);
+                    syncAdjustSliderVisual(`val-chest-${rowId}`);
                     setVal(`val-waist-size-${rowId}`, m.waistSize);
+                    syncAdjustSliderVisual(`val-waist-size-${rowId}`);
                     setVal(`val-hip-${rowId}`, m.hip);
+                    syncAdjustSliderVisual(`val-hip-${rowId}`);
                     setVal(`val-waist-lower-${rowId}`, m.waistLower);
                 } else if (item.type === 'pants') {
                     const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
@@ -3951,6 +4117,7 @@
         function resetForm() {
             currentEditingId = null;
             document.getElementById('alteration-form').reset();
+            document.querySelectorAll('.adjust-slider-wrap').forEach(w => syncAdjustSliderVisual(w.dataset.target));
 
             // รีเซ็ตฟิลด์สาขา (รวม OFFICE) กลับเป็นค่า default OFFICE
             const _s = id => document.getElementById(id);
