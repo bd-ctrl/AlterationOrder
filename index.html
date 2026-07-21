@@ -83,6 +83,8 @@
         .notes-toggle-btn { background: none; border: none; padding: 0; }
         .adjust-toggle-label.notes-toggle-btn { font-weight: 400; font-size: 13px; color: #1a1a1a; }
         .adjust-toggle-label.notes-toggle-btn.expanded { font-weight: 400; }
+        .adjust-toggle-label.notes-toggle-btn.section-toggle { font-weight: 500; font-size: 15px; color: #6b6656; }
+        .adjust-toggle-label.notes-toggle-btn.section-toggle.expanded { font-weight: 600; color: #1a1a1a; }
         .adjust-toggle-chip.expanded { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
         .adjust-toggle-chip.expanded .adjust-toggle-unit { color: #cfcabb; }
         .adjust-field-wrap.adjust-field-expanded { grid-column: 1 / -1; }
@@ -442,11 +444,12 @@
     .row-field-h52 { height: 52px !important; }
     /* measurement with unit label on right */
     .sku-input-unit.measure-pill-input {
-      width: auto;
-      max-width: 90px;
+      flex: 0 0 76px;
+      width: 76px;
       height: 36px;
       border-radius: 999px;
-      padding: 0 12px;
+      padding: 0 8px;
+      text-align: center;
     }
     .sku-input-unit {
       width: 100%;
@@ -1503,6 +1506,18 @@
             }
         }
 
+        function expandLegWrapIfSet(rowId) {
+            const lengthEl = document.getElementById(`val-leg-length-${rowId}`);
+            const thighEl = document.getElementById(`val-thigh-tighten-${rowId}`);
+            const hasValue = (lengthEl && lengthEl.value) || (thighEl && parseFloat(thighEl.value) !== 0);
+            if (hasValue) {
+                const wrap = document.getElementById(`leg-wrap-${rowId}`);
+                const btn = document.querySelector(`.notes-toggle-btn[data-target="leg-wrap-${rowId}"]`);
+                if (wrap) wrap.style.display = 'block';
+                if (btn) btn.classList.add('expanded');
+            }
+        }
+
         function buildAdjustSliderFieldHTML(id, label) {
             return `<div class="adjust-field-wrap" data-target="${id}">
                 <input type="hidden" id="${id}" value="0">
@@ -1636,14 +1651,14 @@
                 ${buildSizeEditToggleHTML('suit', rowId)}
                 <div id="measure-wrap-suit-${rowId}" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
                     <div>
-                        <button type="button" class="adjust-toggle-label notes-toggle-btn" data-target="arm-wrap-${rowId}">แขน</button>
+                        <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="arm-wrap-${rowId}">แขน</button>
                         <div id="arm-wrap-${rowId}" style="display:none;" class="mt-2"><div class="grid grid-cols-1 gap-2">
                             ${buildPlainPillMeasureFieldHTML(`val-sleeve-length-${rowId}`, 'ยาวแขน')}
                             ${buildPlainPillMeasureFieldHTML(`val-arm-upper-${rowId}`, 'ต้นแขน')}
                         </div></div>
                     </div>
                     <div>
-                        <button type="button" class="adjust-toggle-label notes-toggle-btn" data-target="body-wrap-${rowId}">เสื้อ</button>
+                        <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="body-wrap-${rowId}">ความยาวเสื้อ</button>
                         <div id="body-wrap-${rowId}" style="display:none;" class="mt-2"><div class="grid grid-cols-1 gap-2">
                             ${buildPlainPillMeasureFieldHTML(`val-suit-front-length-${rowId}`, 'ความยาวหน้า')}
                             ${buildPlainPillMeasureFieldHTML(`val-suit-back-length-${rowId}`, 'ความยาวหลัง')}
@@ -1662,10 +1677,17 @@
 
             const pantsHTML = `<div class="row-detail-fieldset hidden" data-fieldset-type="pants">
                 ${buildSizeEditToggleHTML('pants', rowId)}
-                <div id="measure-wrap-pants-${rowId}" class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
-                    ${buildMeasureFieldHTML(`val-leg-length-${rowId}`, 'ความยาวขา')}
+                <div>
+                        <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="leg-wrap-${rowId}">ขา</button>
+                        <div id="leg-wrap-${rowId}" style="display:none;" class="mt-2">
+                            <div class="grid grid-cols-1 gap-2">
+                                ${buildPlainPillMeasureFieldHTML(`val-leg-length-${rowId}`, 'ความยาวขา')}
+                                ${buildAdjustSliderFieldHTML(`val-thigh-tighten-${rowId}`, 'เก็บโคนขา')}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="measure-wrap-pants-${rowId}" class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
                     ${buildDirectionalAdjustSliderFieldHTML(`val-waist-change-${rowId}`, `val-waist-dir-${rowId}`, 'เอว', 'expand', 'tighten')}
-                    ${buildAdjustSliderFieldHTML(`val-thigh-tighten-${rowId}`, 'เก็บโคนขา')}
                     ${buildAdjustSliderFieldHTML(`val-ankle-tighten-${rowId}`, 'เก็บปลายขา')}
                     ${buildMeasureFieldHTML(`val-knee-below-${rowId}`, 'ต่ำเข่า')}
                     ${buildMeasureFieldHTML(`val-pants-hip-${rowId}`, 'สะโพก')}
@@ -4082,6 +4104,7 @@
                     setVal(`val-leg-length-${rowId}`, m.legLength);
                     setVal(`val-thigh-tighten-${rowId}`, m.thighTighten);
                     syncAdjustSliderVisual(`val-thigh-tighten-${rowId}`);
+                    expandLegWrapIfSet(rowId);
                     setVal(`val-ankle-tighten-${rowId}`, m.ankleTighten);
                     syncAdjustSliderVisual(`val-ankle-tighten-${rowId}`);
                     setVal(`val-knee-below-${rowId}`, m.kneeBelow);
