@@ -1482,11 +1482,13 @@
         const SIZE_PLACEHOLDER_BY_TYPE = { suit: '48', pants: '32', shirt: 'M', accessory: '-', vest: '48' };
 
         // ช่องตัวเลข + หน่วยนิ้ว (ใช้ซ้ำสำหรับทุกรายการวัด)
-        function buildMeasureFieldHTML(id, label) {
+        function buildMeasureFieldHTML(id, label, boxWidth) {
+            const bw = boxWidth || 90;
+            const iw = boxWidth ? Math.max(bw - 30, 24) : 50;
             return `<div class="flex items-center gap-2 flex-wrap">
                 <label for="${id}" class="text-xs font-normal text-cube-gray whitespace-nowrap">${label}</label>
-                <span class="flex items-center gap-1" style="flex:1 1 90px; min-width:90px;">
-                    <input type="text" inputmode="decimal" id="${id}" oninput="sanitizeMeasureInput(this)" class="row-measure-input sku-input-unit" placeholder="ระบุค่า" style="flex:1 1 auto; min-width:50px;">
+                <span class="flex items-center gap-1" style="flex:1 1 ${bw}px; min-width:${bw}px;">
+                    <input type="text" inputmode="decimal" id="${id}" oninput="sanitizeMeasureInput(this)" class="row-measure-input sku-input-unit" placeholder="ระบุค่า" style="flex:1 1 auto; min-width:${iw}px;">
                     <span class="text-[11px] text-gray-400 whitespace-nowrap">นิ้ว</span>
                 </span>
             </div>`;
@@ -1689,7 +1691,7 @@
                             <div class="grid grid-cols-1 gap-2">
                                 ${buildAdjustSliderFieldHTML(`val-thigh-tighten-${rowId}`, 'เก็บโคนขา')}
                                 ${buildAdjustSliderFieldHTML(`val-ankle-tighten-${rowId}`, 'เก็บปลายขา')}
-                                ${buildMeasureFieldHTML(`val-knee-below-${rowId}`, 'ต่ำเข่า')}
+                                ${buildMeasureFieldHTML(`val-knee-below-${rowId}`, 'ต่ำเข่า', 60)}
                             </div>
                         </div>
                     </div>
