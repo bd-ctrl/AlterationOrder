@@ -1485,24 +1485,20 @@
             </div>`;
         }
 
-        function buildToggleMeasureFieldHTML(id, label) {
-            return `<div class="adjust-field-wrap" data-target="${id}">
-                <div class="flex items-center gap-2 flex-wrap">
-                    <button type="button" class="adjust-toggle-label notes-toggle-btn" data-target="measure-wrap-${id}"><i class="fa-solid fa-circle-plus" aria-hidden="true"></i> ${label}</button>
-                    <div id="measure-wrap-${id}" class="flex items-center gap-1" style="display:none;">
-                        <input type="text" inputmode="decimal" id="${id}" oninput="sanitizeMeasureInput(this)" class="row-measure-input sku-input-unit measure-pill-input" placeholder="ระบุค่า">
-                        <span class="text-[11px] text-gray-400 whitespace-nowrap">นิ้ว</span>
-                    </div>
-                </div>
+        function buildPlainPillMeasureFieldHTML(id, label) {
+            return `<div class="flex items-center gap-1">
+                <label for="${id}" class="text-xs text-cube-gray whitespace-nowrap">${label}</label>
+                <input type="text" inputmode="decimal" id="${id}" oninput="sanitizeMeasureInput(this)" class="row-measure-input sku-input-unit measure-pill-input" placeholder="ระบุค่า">
+                <span class="text-[11px] text-gray-400 whitespace-nowrap">นิ้ว</span>
             </div>`;
         }
 
-        function expandMeasureToggleIfSet(id) {
-            const el = document.getElementById(id);
-            if (el && el.value) {
-                const wrap = document.getElementById(`measure-wrap-${id}`);
-                const btn = document.querySelector(`.notes-toggle-btn[data-target="measure-wrap-${id}"]`);
-                if (wrap) wrap.style.display = 'flex';
+        function expandSectionMeasureIfSet(wrapId, ids) {
+            const hasValue = ids.some(id => { const el = document.getElementById(id); return el && el.value; });
+            if (hasValue) {
+                const wrap = document.getElementById(wrapId);
+                const btn = document.querySelector(`.notes-toggle-btn[data-target="${wrapId}"]`);
+                if (wrap) wrap.style.display = 'block';
                 if (btn) btn.classList.add('expanded');
             }
         }
@@ -1640,17 +1636,17 @@
                 ${buildSizeEditToggleHTML('suit', rowId)}
                 <div id="measure-wrap-suit-${rowId}" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
                     <div>
-                        <p class="text-xs font-normal text-cube-black mb-2">แขน</p>
+                        <button type="button" class="adjust-toggle-label notes-toggle-btn" data-target="arm-wrap-${rowId}">แขน</button>
                         <div class="grid grid-cols-2 gap-2 sm:gap-3">
-                            ${buildToggleMeasureFieldHTML(`val-sleeve-length-${rowId}`, 'ยาวแขน')}
-                            ${buildToggleMeasureFieldHTML(`val-arm-upper-${rowId}`, 'ต้นแขน')}
+                            ${buildPlainPillMeasureFieldHTML(`val-sleeve-length-${rowId}`, 'ยาวแขน')}
+                            ${buildPlainPillMeasureFieldHTML(`val-arm-upper-${rowId}`, 'ต้นแขน')}
                         </div>
                     </div>
                     <div>
-                        <p class="text-xs font-normal text-cube-black mb-2">เสื้อ</p>
+                        <button type="button" class="adjust-toggle-label notes-toggle-btn" data-target="body-wrap-${rowId}">เสื้อ</button>
                         <div class="grid grid-cols-2 gap-2 sm:gap-3">
-                            ${buildToggleMeasureFieldHTML(`val-suit-front-length-${rowId}`, 'ความยาวหน้า')}
-                            ${buildToggleMeasureFieldHTML(`val-suit-back-length-${rowId}`, 'ความยาวหลัง')}
+                            ${buildPlainPillMeasureFieldHTML(`val-suit-front-length-${rowId}`, 'ความยาวหน้า')}
+                            ${buildPlainPillMeasureFieldHTML(`val-suit-back-length-${rowId}`, 'ความยาวหลัง')}
                         </div>
                     </div>
                     <div class="sm:col-span-2">
@@ -1705,7 +1701,7 @@
             const badgeEl = row.querySelector('.row-seq-badge');
             if (!badgeEl) return;
             const badgeWrap = badgeEl.parentElement;
-            badgeWrap.classList.add('flex', 'items-center', 'gap-3', 'flex-wrap', 'w-full');
+            badgeWrap.classList.add('flex', 'items-center', 'gap-3', 'flex-wrap', 'w-full', 'justify-between');
             if (row.firstElementChild !== badgeWrap) {
                 row.insertBefore(badgeWrap, row.firstElementChild);
             }
@@ -4067,13 +4063,11 @@
                 if (item.type === 'suit') {
                     const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
                     setVal(`val-sleeve-length-${rowId}`, m.sleeveLength);
-                    expandMeasureToggleIfSet(`val-sleeve-length-${rowId}`);
                     setVal(`val-arm-upper-${rowId}`, m.armUpper);
-                    expandMeasureToggleIfSet(`val-arm-upper-${rowId}`);
+                    expandSectionMeasureIfSet(`arm-wrap-${rowId}`, [`val-sleeve-length-${rowId}`, `val-arm-upper-${rowId}`]);
                     setVal(`val-suit-front-length-${rowId}`, m.frontLength);
-                    expandMeasureToggleIfSet(`val-suit-front-length-${rowId}`);
                     setVal(`val-suit-back-length-${rowId}`, m.backLength);
-                    expandMeasureToggleIfSet(`val-suit-back-length-${rowId}`);
+                    expandSectionMeasureIfSet(`body-wrap-${rowId}`, [`val-suit-front-length-${rowId}`, `val-suit-back-length-${rowId}`]);
                     setVal(`val-chest-${rowId}`, m.chest);
                     syncAdjustSliderVisual(`val-chest-${rowId}`);
                     setVal(`val-waist-size-${rowId}`, m.waistSize);
