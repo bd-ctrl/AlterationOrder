@@ -1598,27 +1598,25 @@
 
         // บันทึกเพิ่มเติม + แนบรูป (ใช้ซ้ำได้ทุกประเภท — รูปเป็นของ "แถว" ไม่ใช่ของ "ประเภท")
         function buildNotesAndImageHTML(type, rowId, notesLabel) {
-            return `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                    <button type="button" class="adjust-toggle-label notes-toggle-btn inline-flex items-center gap-1.5" data-target="notes-wrap-${type}-${rowId}"><i class="fa-solid fa-circle-plus" aria-hidden="true"></i> ${notesLabel}</button>
-                    <div id="notes-wrap-${type}-${rowId}" style="display:none;" class="mt-2">
-                        <textarea id="notes-${type}-${rowId}" class="row-notes-input sku-input notes-fill-input" rows="2" oninput="this.classList.toggle('has-value', this.value.trim().length>0)"></textarea>
-                    </div>
+            return `<div>
+                <button type="button" class="adjust-toggle-label notes-toggle-btn inline-flex items-center gap-1.5" data-target="notes-wrap-${type}-${rowId}"><i class="fa-solid fa-circle-plus" aria-hidden="true"></i> ${notesLabel}</button>
+                <div id="notes-wrap-${type}-${rowId}" style="display:none;" class="mt-2">
+                    <textarea id="notes-${type}-${rowId}" class="row-notes-input sku-input notes-fill-input" rows="2" oninput="this.classList.toggle('has-value', this.value.trim().length>0)"></textarea>
                 </div>
-                <div>
-                    <button type="button" class="adjust-toggle-label notes-toggle-btn inline-flex items-center gap-1.5" data-target="image-wrap-${type}-${rowId}"><i class="fa-solid fa-circle-plus" aria-hidden="true"></i> แนบรูป (ถ้ามี)</button>
-                    <div id="image-wrap-${type}-${rowId}" style="display:none;" class="mt-2">
-                        <div class="flex items-center gap-3">
-                            <label for="image-input-${type}-${rowId}" id="image-attach-btn-${type}-${rowId}" class="image-attach-btn cursor-pointer inline-flex items-center gap-2 min-h-[40px] px-4 bg-white border border-gray-300 rounded-2xl text-xs text-cube-gray hover:bg-gray-50 transition-colors">
-                                <i class="fa-solid fa-camera" aria-hidden="true"></i>
-                                <span>เลือกรูปภาพ</span>
-                            </label>
-                            <input type="file" id="image-input-${type}-${rowId}" accept="image/*" multiple class="hidden">
-                            <span id="image-count-${type}-${rowId}" class="text-[11px] text-cube-gray"></span>
-                        </div>
-                        <div id="image-preview-list-${type}-${rowId}" class="mt-2 flex flex-wrap items-center gap-2"></div>
-                        <input type="hidden" id="image-data-${type}-${rowId}">
+            </div>
+            <div class="image-attach-block" data-fieldset-type="${type}">
+                <button type="button" class="adjust-toggle-label notes-toggle-btn inline-flex items-center gap-1.5" data-target="image-wrap-${type}-${rowId}"><i class="fa-solid fa-circle-plus" aria-hidden="true"></i> แนบรูป (ถ้ามี)</button>
+                <div id="image-wrap-${type}-${rowId}" style="display:none;" class="mt-2">
+                    <div class="flex items-center gap-3">
+                        <label for="image-input-${type}-${rowId}" id="image-attach-btn-${type}-${rowId}" class="image-attach-btn cursor-pointer inline-flex items-center gap-2 min-h-[40px] px-4 bg-white border border-gray-300 rounded-2xl text-xs text-cube-gray hover:bg-gray-50 transition-colors">
+                            <i class="fa-solid fa-camera" aria-hidden="true"></i>
+                            <span>เลือกรูปภาพ</span>
+                        </label>
+                        <input type="file" id="image-input-${type}-${rowId}" accept="image/*" multiple class="hidden">
+                        <span id="image-count-${type}-${rowId}" class="text-[11px] text-cube-gray"></span>
                     </div>
+                    <div id="image-preview-list-${type}-${rowId}" class="mt-2 flex flex-wrap items-center gap-2"></div>
+                    <input type="hidden" id="image-data-${type}-${rowId}">
                 </div>
             </div>`;
         }
@@ -1700,6 +1698,19 @@
             row.querySelectorAll('.row-detail-fieldset').forEach(fs => {
                 fs.classList.toggle('hidden', fs.dataset.fieldsetType !== type);
             });
+            relocateImageAttachToHeader(row, type);
+        }
+
+        function relocateImageAttachToHeader(row, type) {
+            const badgeEl = row.querySelector('.row-seq-badge');
+            if (!badgeEl) return;
+            const badgeWrap = badgeEl.parentElement;
+            badgeWrap.classList.add('flex', 'items-center', 'gap-3', 'flex-wrap');
+            badgeWrap.querySelectorAll('.image-attach-block').forEach(el => {
+                if (el.parentElement === badgeWrap) el.remove();
+            });
+            const activeBlock = row.querySelector(`.image-attach-block[data-fieldset-type="${type}"]`);
+            if (activeBlock) badgeWrap.appendChild(activeBlock);
         }
 
         function addProductTypeRow(selectedValue) {
