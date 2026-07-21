@@ -68,6 +68,7 @@
         }
 
         .adjust-toggle-label { display: inline-flex; align-items: center; font-size: 15px; font-weight: 500; color: #6b6656; cursor: pointer; user-select: none; transition: color .15s ease; white-space: nowrap; background: none; border: none; padding: 0; }
+        .adjust-toggle-label-fixed { width: 64px; flex: 0 0 64px; }
         .adjust-toggle-label.expanded { color: #1a1a1a; font-weight: 600; }
         .adjust-toggle-chip { display: inline-flex; align-items: baseline; justify-content: center; min-width: 58px; padding: 5px 9px; border-radius: 999px; border: 1px solid #e7e2d6; background: #fff; color: #1a1a1a; font-size: 12px; font-weight: 400; transition: background-color .15s ease, border-color .15s ease, color .15s ease, padding .15s ease, min-width .15s ease; }
         .adjust-unit-suffix { font-size: 11px; color: #9a9484; font-weight: 400; white-space: nowrap; }
@@ -733,7 +734,7 @@
 
                     <!-- Buttons — sticky to viewport bottom -->
                 <div class="mt-4 flex items-center justify-between gap-3 no-print pb-4">
-                    <button type="button" onclick="resetForm()" aria-label="ล้างข้อมูล" title="ล้างข้อมูล" class="min-h-[52px] min-w-[52px] bg-white border border-gray-200 text-red-500 rounded-full shadow-sm hover:bg-red-50 transition-colors active:scale-[0.97] flex items-center justify-center shrink-0">
+                    <button type="button" onclick="resetForm()" aria-label="ล้างข้อมูล" title="ล้างข้อมูล" class="min-h-[52px] min-w-[52px] text-red-500 hover:text-red-700 transition-colors active:scale-[0.97] flex items-center justify-center shrink-0">
                         <i class="fa-solid fa-trash-can text-base" aria-hidden="true"></i>
                     </button>
                     <div class="flex items-center gap-3">
@@ -1525,7 +1526,7 @@
             return `<div class="adjust-field-wrap" data-target="${id}">
                 <input type="hidden" id="${id}" value="0">
                 <div class="flex items-center gap-2 flex-wrap">
-                    <button type="button" class="adjust-toggle-label" data-target="${id}">${label}</button>
+                    <button type="button" class="adjust-toggle-label adjust-toggle-label-fixed" data-target="${id}">${label}</button>
                     <span class="adjust-toggle-chip adjust-toggle-chip-unchanged" data-target="${id}">
                         <span class="adjust-toggle-value">ไม่แก้ขนาด</span>
                     </span>
@@ -1570,7 +1571,7 @@
                 <input type="hidden" id="${valId}" value="0">
                 <input type="hidden" id="${dirId}" value="${posDir}">
                 <div class="flex items-center gap-2 flex-wrap">
-                    <button type="button" class="adjust-toggle-label" data-target="${valId}">${label}</button>
+                    <button type="button" class="adjust-toggle-label adjust-toggle-label-fixed" data-target="${valId}">${label}</button>
                     <span class="adjust-toggle-chip adjust-toggle-chip-unchanged" data-target="${valId}">
                         <span class="adjust-toggle-value">ไม่แก้ขนาด</span>
                     </span>
@@ -1686,18 +1687,18 @@
                         <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="leg-wrap-${rowId}">ขา <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px; margin-left:6px;"></i></button>
                         <div id="leg-wrap-${rowId}" style="display:none;" class="mt-2">
                             <div class="grid grid-cols-1 gap-2">
-                                ${buildPlainPillMeasureFieldHTML(`val-leg-length-${rowId}`, 'ความยาวขา')}
                                 ${buildAdjustSliderFieldHTML(`val-thigh-tighten-${rowId}`, 'เก็บโคนขา')}
+                                ${buildAdjustSliderFieldHTML(`val-ankle-tighten-${rowId}`, 'เก็บปลายขา')}
                             </div>
                         </div>
                     </div>
                     <div id="measure-wrap-pants-${rowId}" class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
                     ${buildDirectionalAdjustSliderFieldHTML(`val-waist-change-${rowId}`, `val-waist-dir-${rowId}`, 'เอว', 'expand', 'tighten')}
-                    ${buildAdjustSliderFieldHTML(`val-ankle-tighten-${rowId}`, 'เก็บปลายขา')}
                     ${buildMeasureFieldHTML(`val-knee-below-${rowId}`, 'ต่ำเข่า')}
                     ${buildMeasureFieldHTML(`val-pants-hip-${rowId}`, 'สะโพก')}
                     ${buildMeasureFieldHTML(`val-crotch-${rowId}`, 'เป้า')}
                     ${buildMeasureFieldHTML(`val-thigh-size-${rowId}`, 'ต้นขา')}
+                    ${buildPlainPillMeasureFieldHTML(`val-leg-length-${rowId}`, 'ความยาวขา')}
                 </div>
                 ${buildNotesAndImageHTML('pants', rowId, 'หมายเหตุกางเกง')}
             </div>`;
@@ -1941,7 +1942,11 @@
         }
 
         function updateUrgentPickupFlag() {
-            const urgent = isTodayDateString(document.getElementById('date-pickup')?.value || '');
+            const dpVal = document.getElementById('date-pickup')?.value || '';
+            function fmtYmd(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+            const nowD = new Date();
+            const tomorrowD = new Date(nowD); tomorrowD.setDate(tomorrowD.getDate()+1);
+            const urgent = (dpVal === fmtYmd(nowD) || dpVal === fmtYmd(tomorrowD));
             const flag = document.getElementById('urgent-pickup-flag');
             if (flag) flag.classList.toggle('hidden', !urgent);
             const pvFlag = document.getElementById('pv-urgent-flag');
