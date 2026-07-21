@@ -1465,8 +1465,10 @@
         function buildMeasureFieldHTML(id, label) {
             return `<div class="flex items-center gap-2 flex-wrap">
                 <label for="${id}" class="text-xs font-normal text-cube-gray whitespace-nowrap">${label}</label>
-                <input type="text" inputmode="decimal" id="${id}" oninput="sanitizeMeasureInput(this)" class="row-measure-input sku-input-unit" placeholder="ระบุค่า" style="flex:1 1 90px; min-width:70px;">
-                <span class="text-[11px] text-gray-400 whitespace-nowrap">นิ้ว</span>
+                <span class="flex items-center gap-1" style="flex:1 1 90px; min-width:90px;">
+                    <input type="text" inputmode="decimal" id="${id}" oninput="sanitizeMeasureInput(this)" class="row-measure-input sku-input-unit" placeholder="ระบุค่า" style="flex:1 1 auto; min-width:50px;">
+                    <span class="text-[11px] text-gray-400 whitespace-nowrap">นิ้ว</span>
+                </span>
             </div>`;
         }
 
