@@ -67,10 +67,12 @@
             #pickup-fields-grid input[type="date"] { padding-left: 10px; padding-right: 10px; font-size: 0.8rem; }
         }
 
-        .adjust-toggle-label { display: inline-flex; align-items: center; justify-content: center; padding: 3px 11px; border-radius: 999px; border: 1px solid #d8d2c2; font-size: 12px; font-weight: 500; color: #4a4738; background: #fff; cursor: pointer; user-select: none; transition: all .15s ease; white-space: nowrap; }
-        .adjust-toggle-label.expanded { border-color: #1a1a1a; color: #1a1a1a; font-weight: 600; }
+        .adjust-toggle-label { display: inline-flex; align-items: center; font-size: 12px; font-weight: 400; color: #6b6656; cursor: pointer; user-select: none; transition: color .15s ease; white-space: nowrap; background: none; border: none; padding: 0; }
+        .adjust-toggle-label.expanded { color: #1a1a1a; font-weight: 600; }
         .adjust-toggle-chip { display: inline-flex; align-items: baseline; justify-content: center; min-width: 58px; padding: 5px 9px; border-radius: 999px; border: 1px solid #e7e2d6; background: #fff; color: #1a1a1a; font-size: 12px; font-weight: 600; transition: all .15s ease; }
         .adjust-unit-suffix { font-size: 11px; color: #9a9484; font-weight: 400; white-space: nowrap; }
+        .notes-toggle-btn { display: inline-flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 400; color: #6b6656; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; }
+        .notes-toggle-btn.expanded { color: #1a1a1a; font-weight: 600; text-decoration: none; }
         .adjust-toggle-chip.expanded { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
         .adjust-toggle-chip.expanded .adjust-toggle-unit { color: #cfcabb; }
         .adjust-field-wrap.adjust-field-expanded { grid-column: 1 / -1; }
@@ -1497,12 +1499,47 @@
             </div>`;
         }
 
+        function buildDirectionalAdjustSliderFieldHTML(valId, dirId, label, posDir, negDir) {
+            return `<div class="adjust-field-wrap" data-target="${valId}">
+                <input type="hidden" id="${valId}" value="0">
+                <input type="hidden" id="${dirId}" value="${posDir}">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <button type="button" class="adjust-toggle-label" data-target="${valId}">${label}</button>
+                    <span class="adjust-toggle-chip" data-target="${valId}">
+                        <span class="adjust-toggle-value">0</span>
+                    </span>
+                    <div class="adjust-slider-wrap" data-target="${valId}" data-dir-target="${dirId}" data-pos-dir="${posDir}" data-neg-dir="${negDir}" style="display:none;">
+                        <div class="adjust-slider-track">
+                            <div class="rail"></div>
+                            <div class="fill" style="width:50%"></div>
+                            <div class="tick" style="left:0%"></div>
+                            <div class="tick" style="left:12.5%"></div>
+                            <div class="tick" style="left:25%"></div>
+                            <div class="tick" style="left:37.5%"></div>
+                            <div class="tick" style="left:50%"></div>
+                            <div class="tick" style="left:62.5%"></div>
+                            <div class="tick" style="left:75%"></div>
+                            <div class="tick" style="left:87.5%"></div>
+                            <div class="tick" style="left:100%"></div>
+                            <div class="handle" tabindex="0" role="slider" aria-valuemin="-2" aria-valuemax="2" aria-valuenow="0" style="left:50%">
+                                <span class="handle-value">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="adjust-unit-suffix">นิ้ว</span>
+                </div>
+            </div>`;
+        }
+
         // บันทึกเพิ่มเติม + แนบรูป (ใช้ซ้ำได้ทุกประเภท — รูปเป็นของ "แถว" ไม่ใช่ของ "ประเภท")
         function buildNotesAndImageHTML(type, rowId, notesLabel) {
             return `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                    <label for="notes-${type}-${rowId}" class="block text-xs font-normal text-cube-gray mb-1">${notesLabel}</label>
-                    <textarea id="notes-${type}-${rowId}" class="row-notes-input sku-input" rows="2"></textarea>
+                    <button type="button" class="notes-toggle-btn" data-target="notes-wrap-${type}-${rowId}">+ ${notesLabel}</button>
+                    <div id="notes-wrap-${type}-${rowId}" style="display:none;" class="mt-2">
+                        <label for="notes-${type}-${rowId}" class="block text-xs font-normal text-cube-gray mb-1">${notesLabel}</label>
+                        <textarea id="notes-${type}-${rowId}" class="row-notes-input sku-input" rows="2"></textarea>
+                    </div>
                 </div>
                 <div>
                     <label class="block text-xs font-normal text-cube-gray mb-1">แนบรูป (ถ้ามี)</label>
@@ -1567,23 +1604,10 @@
             const pantsHTML = `<div class="row-detail-fieldset hidden" data-fieldset-type="pants">
                 ${buildSizeEditToggleHTML('pants', rowId)}
                 <div id="measure-wrap-pants-${rowId}" class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
-                    <div>
-                        <input type="hidden" id="val-waist-dir-${rowId}" value="expand">
-                        <label class="block text-xs font-normal text-cube-gray mb-1">เอว</label>
-                        <div class="flex items-center gap-2">
-                            <div class="flex rounded-xl overflow-hidden border border-gray-300 flex-shrink-0">
-                                <button type="button" id="waist-dir-expand-${rowId}" onclick="setWaistDir('${rowId}','expand')" class="px-3 py-2 text-xs font-normal transition-colors bg-cube-gold text-white">ขยายออก</button>
-                                <button type="button" id="waist-dir-tighten-${rowId}" onclick="setWaistDir('${rowId}','tighten')" class="px-3 py-2 text-xs font-normal border-l border-gray-300 transition-colors bg-gray-50 text-cube-gray">เอาเข้า</button>
-                            </div>
-                            <div class="relative flex-1">
-                                <input type="text" inputmode="decimal" id="val-waist-change-${rowId}" oninput="sanitizeMeasureInput(this)" class="row-measure-input sku-input-unit" placeholder="ระบุค่า">
-                                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-gray-400 pointer-events-none">นิ้ว</span>
-                            </div>
-                        </div>
-                    </div>
+                    ${buildDirectionalAdjustSliderFieldHTML(`val-waist-change-${rowId}`, `val-waist-dir-${rowId}`, 'เอว', 'expand', 'tighten')}
                     ${buildMeasureFieldHTML(`val-leg-length-${rowId}`, 'ความยาวขา')}
-                    ${buildMeasureFieldHTML(`val-thigh-tighten-${rowId}`, 'เก็บโคนขา')}
-                    ${buildMeasureFieldHTML(`val-ankle-tighten-${rowId}`, 'เก็บปลายขา')}
+                    ${buildAdjustSliderFieldHTML(`val-thigh-tighten-${rowId}`, 'เก็บโคนขา')}
+                    ${buildAdjustSliderFieldHTML(`val-ankle-tighten-${rowId}`, 'เก็บปลายขา')}
                     ${buildMeasureFieldHTML(`val-knee-below-${rowId}`, 'ต่ำเข่า')}
                     ${buildMeasureFieldHTML(`val-pants-hip-${rowId}`, 'สะโพก')}
                     ${buildMeasureFieldHTML(`val-crotch-${rowId}`, 'เป้า')}
@@ -2644,8 +2668,20 @@
             if (handleValue) handleValue.textContent = formatAdjustValue(v);
             const chip = document.querySelector(`.adjust-toggle-chip[data-target="${targetId}"] .adjust-toggle-value`);
             if (chip) chip.textContent = formatAdjustValue(v);
+            const dirTargetId = wrap.dataset.dirTarget;
+            let newValue;
+            if (dirTargetId) {
+                const dirInput = document.getElementById(dirTargetId);
+                const posDir = wrap.dataset.posDir || 'expand';
+                const negDir = wrap.dataset.negDir || 'tighten';
+                const mag = Math.abs(v);
+                newValue = (mag === 0) ? '0' : String(mag);
+                if (dirInput && v !== 0) dirInput.value = v > 0 ? posDir : negDir;
+            } else {
+                newValue = (v === 0) ? '0' : String(v);
+            }
             const prevValue = input.value;
-            input.value = (v === 0) ? '0' : String(v);
+            input.value = newValue;
             if (!opts.silent && input.value !== prevValue) {
                 input.dispatchEvent(new Event('input', { bubbles: true }));
                 input.dispatchEvent(new Event('change', { bubbles: true }));
@@ -2656,7 +2692,16 @@
             if (!input) return;
             const wrap = document.querySelector(`.adjust-slider-wrap[data-target="${id}"]`);
             if (!wrap) return;
-            const v = parseFloat(input.value);
+            const dirTargetId = wrap.dataset.dirTarget;
+            let v;
+            if (dirTargetId) {
+                const dirInput = document.getElementById(dirTargetId);
+                const posDir = wrap.dataset.posDir || 'expand';
+                const mag = parseFloat(input.value) || 0;
+                v = (dirInput && dirInput.value === posDir) ? mag : -mag;
+            } else {
+                v = parseFloat(input.value);
+            }
             setAdjustSliderValue(wrap, isNaN(v) ? 0 : v, { silent: true });
         }
         function adjustSliderValueFromClientX(wrap, clientX) {
@@ -2696,9 +2741,19 @@
                 if (wrap) {
                     const isOpen = wrap.style.display !== 'none';
                     wrap.style.display = isOpen ? 'none' : 'flex';
-                    if (chip) chip.classList.toggle('expanded', !isOpen);
+                    if (chip) { chip.classList.toggle('expanded', !isOpen); chip.style.display = isOpen ? '' : 'none'; }
                     label.classList.toggle('expanded', !isOpen);
                     if (fieldWrap) fieldWrap.classList.toggle('adjust-field-expanded', !isOpen);
+                }
+                return;
+            }
+            const notesBtn = e.target.closest('.notes-toggle-btn');
+            if (notesBtn) {
+                const nwrap = document.getElementById(notesBtn.dataset.target);
+                if (nwrap) {
+                    const nIsOpen = nwrap.style.display !== 'none';
+                    nwrap.style.display = nIsOpen ? 'none' : 'block';
+                    notesBtn.classList.toggle('expanded', !nIsOpen);
                 }
                 return;
             }
@@ -3931,18 +3986,27 @@
                 } else if (item.type === 'pants') {
                     const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
                     setVal(`val-waist-change-${rowId}`, m.waistChange);
+                    setWaistDir(rowId, m.waistDir || 'expand');
+                    syncAdjustSliderVisual(`val-waist-change-${rowId}`);
                     setVal(`val-leg-length-${rowId}`, m.legLength);
                     setVal(`val-thigh-tighten-${rowId}`, m.thighTighten);
+                    syncAdjustSliderVisual(`val-thigh-tighten-${rowId}`);
                     setVal(`val-ankle-tighten-${rowId}`, m.ankleTighten);
+                    syncAdjustSliderVisual(`val-ankle-tighten-${rowId}`);
                     setVal(`val-knee-below-${rowId}`, m.kneeBelow);
                     setVal(`val-pants-hip-${rowId}`, m.hip);
                     setVal(`val-crotch-${rowId}`, m.crotch);
                     setVal(`val-thigh-size-${rowId}`, m.thighSize);
-                    setWaistDir(rowId, m.waistDir || 'expand');
                 }
 
                 const notesEl = document.getElementById(`notes-${item.type}-${rowId}`);
                 if (notesEl) notesEl.value = item.notes || '';
+                if (item.notes) {
+                    const notesWrap = document.getElementById(`notes-wrap-${item.type}-${rowId}`);
+                    const notesBtn = document.querySelector(`.notes-toggle-btn[data-target="notes-wrap-${item.type}-${rowId}"]`);
+                    if (notesWrap) notesWrap.style.display = 'block';
+                    if (notesBtn) notesBtn.classList.add('expanded');
+                }
 
                 setImageAttachList(`${item.type}-${rowId}`, item.images || []);
                 updateRowDetailVisibility(row);
@@ -4093,9 +4157,10 @@
             currentEditingId = null;
             document.getElementById('alteration-form').reset();
             document.querySelectorAll('.adjust-slider-wrap').forEach(w => { syncAdjustSliderVisual(w.dataset.target); w.style.display = 'none'; });
-            document.querySelectorAll('.adjust-toggle-chip').forEach(c => c.classList.remove('expanded'));
+            document.querySelectorAll('.adjust-toggle-chip').forEach(c => { c.classList.remove('expanded'); c.style.display = ''; });
             document.querySelectorAll('.adjust-toggle-label').forEach(l => l.classList.remove('expanded'));
             document.querySelectorAll('.adjust-field-wrap').forEach(f => f.classList.remove('adjust-field-expanded'));
+            document.querySelectorAll('.notes-toggle-btn').forEach(b => { b.classList.remove('expanded'); const w = document.getElementById(b.dataset.target); if (w) w.style.display = 'none'; });
 
             // รีเซ็ตฟิลด์สาขา (รวม OFFICE) กลับเป็นค่า default OFFICE
             const _s = id => document.getElementById(id);
