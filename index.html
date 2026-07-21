@@ -3833,7 +3833,7 @@
                 // เป็นโค้ด JS ที่พัง (ตัวแปรไม่มีอยู่จริง) กดปุ่มพิมพ์แล้วไม่มีอะไรเกิดขึ้นเลย — เปลี่ยนมาผูก event ตรงนี้แทน
                 // พร้อมส่ง order ทั้งก้อนไปเลย (ไม่ต้องพึ่ง orders.find() ซึ่งไม่มีออเดอร์จาก Lark Base เก็บอยู่ในนั้นด้วย)
                 card.querySelector('.btn-history-print').addEventListener('click', () => viewAndPrintReceipt(order.id, order));
-            container.querySelector('.btn-history-receive').addEventListener('click', () => openReceiveModal(order));
+            card.querySelector('.btn-history-receive').addEventListener('click', () => openReceiveModal(order));
                 container.appendChild(card);
             });
         }
