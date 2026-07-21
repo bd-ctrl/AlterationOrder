@@ -1637,17 +1637,17 @@
                 <div id="measure-wrap-suit-${rowId}" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
                     <div>
                         <button type="button" class="adjust-toggle-label notes-toggle-btn" data-target="arm-wrap-${rowId}">แขน</button>
-                        <div class="grid grid-cols-2 gap-2 sm:gap-3">
+                        <div id="arm-wrap-${rowId}" style="display:none;" class="mt-2"><div class="grid grid-cols-2 gap-2 sm:gap-3">
                             ${buildPlainPillMeasureFieldHTML(`val-sleeve-length-${rowId}`, 'ยาวแขน')}
                             ${buildPlainPillMeasureFieldHTML(`val-arm-upper-${rowId}`, 'ต้นแขน')}
-                        </div>
+                        </div></div>
                     </div>
                     <div>
                         <button type="button" class="adjust-toggle-label notes-toggle-btn" data-target="body-wrap-${rowId}">เสื้อ</button>
-                        <div class="grid grid-cols-2 gap-2 sm:gap-3">
+                        <div id="body-wrap-${rowId}" style="display:none;" class="mt-2"><div class="grid grid-cols-2 gap-2 sm:gap-3">
                             ${buildPlainPillMeasureFieldHTML(`val-suit-front-length-${rowId}`, 'ความยาวหน้า')}
                             ${buildPlainPillMeasureFieldHTML(`val-suit-back-length-${rowId}`, 'ความยาวหลัง')}
-                        </div>
+                        </div></div>
                     </div>
                     <div class="sm:col-span-2">
                         <div class="grid grid-cols-3 sm:grid-cols-3 gap-2 sm:gap-3">
