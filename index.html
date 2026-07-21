@@ -86,6 +86,7 @@
         .adjust-toggle-label.notes-toggle-btn.section-toggle { font-weight: 500; font-size: 15px; color: #6b6656; }
         .adjust-toggle-label.notes-toggle-btn.section-toggle.expanded { font-weight: 600; color: #1a1a1a; }
         #pickup-location option[value=""] { color: #9ca3af; }
+        #pickup-location:has(option[value=""]:checked) { color: #9ca3af; }
         #date-pickup, #time-pickup { max-width: 140px; }
         .adjust-toggle-chip.expanded { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
         .adjust-toggle-chip.expanded .adjust-toggle-unit { color: #cfcabb; }
@@ -718,7 +719,7 @@
                     </form>
 
                 <!-- Pickup location / date / time — outside the form sections, visible at all times -->
-                <div id="pickup-fields-grid" class="mt-3 grid grid-cols-2 gap-3 no-print">
+                <div id="pickup-fields-grid" class="mt-3 flex items-center gap-6 flex-wrap no-print">
                     <div class="flex items-center gap-2 flex-wrap">
                         <div id="urgent-pickup-flag" class="hidden w-full basis-full text-xl font-normal italic text-red-600 leading-none mb-1">งานด่วน</div>
                         <label for="date-pickup" class="text-xs font-normal text-cube-gray whitespace-nowrap">วันที่นัดรับ <span class="text-red-500">*</span></label>
