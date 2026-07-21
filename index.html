@@ -69,7 +69,7 @@
 
         .adjust-toggle-label { display: inline-flex; align-items: center; font-size: 15px; font-weight: 500; color: #6b6656; cursor: pointer; user-select: none; transition: color .15s ease; white-space: nowrap; background: none; border: none; padding: 0; }
         .adjust-toggle-label.expanded { color: #1a1a1a; font-weight: 600; }
-        .adjust-toggle-chip { display: inline-flex; align-items: baseline; justify-content: center; min-width: 58px; padding: 5px 9px; border-radius: 999px; border: 1px solid #e7e2d6; background: #fff; color: #1a1a1a; font-size: 12px; font-weight: 600; transition: all .15s ease; }
+        .adjust-toggle-chip { display: inline-flex; align-items: baseline; justify-content: center; min-width: 58px; padding: 5px 9px; border-radius: 999px; border: 1px solid #e7e2d6; background: #fff; color: #1a1a1a; font-size: 12px; font-weight: 400; transition: all .15s ease; }
         .adjust-unit-suffix { font-size: 11px; color: #9a9484; font-weight: 400; white-space: nowrap; }
         .adjust-slider-ticks { position: relative; height: 6px; margin-top: 4px; }
         .adjust-slider-ticks .tick2 { position: absolute; top: 0; width: 1px; height: 6px; background: #d3cdbe; transform: translateX(-50%); }
@@ -1657,14 +1657,14 @@
                 <div id="measure-wrap-suit-${rowId}" class="grid grid-cols-1 gap-4 mb-3">
                     <div>
                         <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="arm-wrap-${rowId}">แขน <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px; margin-left:6px;"></i></button>
-                        <div id="arm-wrap-${rowId}" style="display:none;" class="mt-2"><div class="flex items-center gap-4 flex-wrap">
+                        <div id="arm-wrap-${rowId}" style="display:none;" class="mt-2"><div class="flex items-center gap-8 flex-wrap">
                             ${buildPlainPillMeasureFieldHTML(`val-sleeve-length-${rowId}`, 'ยาวแขน')}
                             ${buildPlainPillMeasureFieldHTML(`val-arm-upper-${rowId}`, 'ต้นแขน')}
                         </div></div>
                     </div>
                     <div>
                         <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="body-wrap-${rowId}">ความยาวเสื้อ <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px; margin-left:6px;"></i></button>
-                        <div id="body-wrap-${rowId}" style="display:none;" class="mt-2"><div class="flex items-center gap-4 flex-wrap">
+                        <div id="body-wrap-${rowId}" style="display:none;" class="mt-2"><div class="flex items-center gap-8 flex-wrap">
                             ${buildPlainPillMeasureFieldHTML(`val-suit-front-length-${rowId}`, 'ความยาวหน้า')}
                             ${buildPlainPillMeasureFieldHTML(`val-suit-back-length-${rowId}`, 'ความยาวหลัง')}
                         </div></div>
@@ -1673,7 +1673,7 @@
                         <div class="grid grid-cols-1 gap-2 sm:gap-3">
                             ${buildAdjustSliderFieldHTML(`val-chest-${rowId}`, 'อก')}
                         </div>
-                        <div class="grid grid-cols-2 gap-2 sm:gap-3 mt-2">
+                        <div class="grid grid-cols-1 gap-2 sm:gap-3 mt-2">
                             ${buildAdjustSliderFieldHTML(`val-waist-size-${rowId}`, 'เอว')}
                             ${buildAdjustSliderFieldHTML(`val-hip-${rowId}`, 'สะโพก')}
                         </div>
