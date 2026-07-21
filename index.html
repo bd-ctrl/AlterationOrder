@@ -67,8 +67,9 @@
             #pickup-fields-grid input[type="date"] { padding-left: 10px; padding-right: 10px; font-size: 0.8rem; }
         }
 
-        .adjust-toggle-chip { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; padding: 4px 10px; border-radius: 999px; border: 1px solid #e7e2d6; background: #fff; color: #1a1a1a; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s ease; }
+        .adjust-toggle-chip { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; padding: 4px 10px; border-radius: 999px; border: 1px solid #e7e2d6; background: #fff; color: #1a1a1a; font-size: 12px; font-weight: 600; transition: all .15s ease; }
         .adjust-toggle-chip.expanded { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+        .adjust-toggle-label.expanded { color: #1a1a1a; font-weight: 600; }
         .adjust-slider-wrap { margin-top: 8px; }
         .adjust-slider-track { position: relative; height: 34px; display: flex; align-items: center; cursor: pointer; touch-action: none; }
         .adjust-slider-track .rail { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); height: 3px; background: #e7e2d6; border-radius: 2px; }
@@ -845,10 +846,7 @@
                                         <span>สะโพก</span>
                                         <span class="border border-black rounded-lg w-[88px] py-1 inline-flex items-center justify-center whitespace-nowrap flex-shrink-0"><span id="pv-val-hip">-</span>&nbsp;นิ้ว</span>
                                     </div>
-                                    <div class="flex items-center justify-between gap-2">
-                                        <span>เอวล่าง</span>
-                                        <span class="border border-black rounded-lg w-[88px] py-1 inline-flex items-center justify-center whitespace-nowrap flex-shrink-0"><span id="pv-val-waist-lower">-</span>&nbsp;นิ้ว</span>
-                                    </div>
+                                    
                                 </div>
                                 <div class="mt-2 pt-1.5 border-t border-gray-300">
                                     <div class="text-sm font-normal">บันทึกเพิ่มเติมเสื้อสูท</div>
@@ -1467,13 +1465,13 @@
         function buildAdjustSliderFieldHTML(id, label) {
             return `<div>
                 <div class="flex items-center justify-between mb-1">
-                    <label class="block text-xs font-normal text-cube-gray">${label}</label>
+                    <label class="adjust-toggle-label cursor-pointer select-none block text-xs font-normal text-cube-gray" data-target="${id}">${label}</label>
                     <span class="text-[10px] text-gray-400">นิ้ว</span>
                 </div>
                 <input type="hidden" id="${id}" value="0">
-                <button type="button" class="adjust-toggle-chip" data-target="${id}">
+                <span class="adjust-toggle-chip" data-target="${id}">
                     <span class="adjust-toggle-value">0</span>
-                </button>
+                </span>
                 <div class="adjust-slider-wrap" data-target="${id}" style="display:none;">
                     <div class="adjust-slider-track">
                         <div class="rail"></div>
@@ -1552,11 +1550,10 @@
                     </div>
                     <div class="sm:col-span-2">
                         <p class="text-xs font-normal text-cube-black mb-2">รอบตัว</p>
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+                        <div class="grid grid-cols-3 sm:grid-cols-3 gap-2 sm:gap-3">
                             ${buildAdjustSliderFieldHTML(`val-chest-${rowId}`, 'อก')}
                             ${buildAdjustSliderFieldHTML(`val-waist-size-${rowId}`, 'เอว')}
                             ${buildAdjustSliderFieldHTML(`val-hip-${rowId}`, 'สะโพก')}
-                            ${buildMeasureFieldHTML(`val-waist-lower-${rowId}`, 'เอวล่าง')}
                         </div>
                     </div>
                 </div>
@@ -2403,7 +2400,6 @@
                     measurements.chest        = document.getElementById(`val-chest-${rowId}`)?.value || '';
                     measurements.waistSize    = document.getElementById(`val-waist-size-${rowId}`)?.value || '';
                     measurements.hip          = document.getElementById(`val-hip-${rowId}`)?.value || '';
-                    measurements.waistLower   = document.getElementById(`val-waist-lower-${rowId}`)?.value || '';
                 } else if (sizeEdit !== 'none' && type === 'pants') {
                     measurements.waistChange  = document.getElementById(`val-waist-change-${rowId}`)?.value || '';
                     measurements.waistDir     = document.getElementById(`val-waist-dir-${rowId}`)?.value || 'expand';
@@ -2688,13 +2684,15 @@
             _adjustSliderDragWrap = null;
         });
         document.addEventListener('click', function(e) {
-            const chip = e.target.closest('.adjust-toggle-chip');
-            if (chip) {
-                const wrap = document.querySelector(`.adjust-slider-wrap[data-target="${chip.dataset.target}"]`);
+            const label = e.target.closest('.adjust-toggle-label');
+            if (label) {
+                const wrap = document.querySelector(`.adjust-slider-wrap[data-target="${label.dataset.target}"]`);
+                const chip = document.querySelector(`.adjust-toggle-chip[data-target="${label.dataset.target}"]`);
                 if (wrap) {
                     const isOpen = wrap.style.display !== 'none';
                     wrap.style.display = isOpen ? 'none' : 'block';
-                    chip.classList.toggle('expanded', !isOpen);
+                    if (chip) chip.classList.toggle('expanded', !isOpen);
+                    label.classList.toggle('expanded', !isOpen);
                 }
                 return;
             }
@@ -3924,7 +3922,6 @@
                     syncAdjustSliderVisual(`val-waist-size-${rowId}`);
                     setVal(`val-hip-${rowId}`, m.hip);
                     syncAdjustSliderVisual(`val-hip-${rowId}`);
-                    setVal(`val-waist-lower-${rowId}`, m.waistLower);
                 } else if (item.type === 'pants') {
                     const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
                     setVal(`val-waist-change-${rowId}`, m.waistChange);
@@ -4138,7 +4135,7 @@
                 'pv-order-code-suit', 'pv-order-code-pants', 'pv-date-deadline-suit', 'pv-date-deadline-pants',
                 'pv-size-suit', 'pv-size-pants', 'pv-use-office-suit-detail',
                 'pv-val-sleeve-length', 'pv-val-arm-upper', 'pv-val-suit-front-length', 'pv-val-suit-back-length',
-                'pv-val-chest', 'pv-val-waist-size', 'pv-val-hip', 'pv-val-waist-lower',
+                'pv-val-chest', 'pv-val-waist-size', 'pv-val-hip',
                 'pv-use-office-pants-detail', 'pv-val-waist-change', 'pv-val-leg-length', 'pv-val-thigh-tighten',
                 'pv-val-ankle-tighten', 'pv-val-knee-below', 'pv-val-pants-hip', 'pv-val-crotch', 'pv-val-thigh-size',
                 'pv-suit-alteration-notes', 'pv-pants-alteration-notes'
@@ -4255,8 +4252,7 @@
                     ['ยาวหลัง', txt('#pv-val-suit-back-length')],
                     ['อก', txt('#pv-val-chest')],
                     ['เอว', txt('#pv-val-waist-size')],
-                    ['สะโพก', txt('#pv-val-hip')],
-                    ['เอวล่าง', txt('#pv-val-waist-lower')]
+                    ['สะโพก', txt('#pv-val-hip')]
                 ]);
                 const suitNotes = txt('#pv-suit-alteration-notes', '');
                 if (suitNotes) html += `<div class="t-notes">บันทึกเพิ่มเติม: ${esc(suitNotes)}</div>`;
@@ -4349,7 +4345,6 @@
             clone.querySelector('#pv-val-chest').innerText = order.suitDetails.chest || '-';
             clone.querySelector('#pv-val-waist-size').innerText = order.suitDetails.waistSize || '-';
             clone.querySelector('#pv-val-hip').innerText = order.suitDetails.hip || '-';
-            clone.querySelector('#pv-val-waist-lower').innerText = order.suitDetails.waistLower || '-';
             clone.querySelector('#pv-suit-alteration-notes').innerText = order.suitDetails.notes || '';
 
             {
