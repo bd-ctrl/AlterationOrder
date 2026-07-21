@@ -722,15 +722,19 @@
                     </form>
 
                 <!-- Pickup location / date / time — outside the form sections, visible at all times -->
-                <div id="pickup-fields-grid" class="mt-3 no-print">
-                        <div id="urgent-pickup-flag" class="hidden text-xl font-normal italic text-red-600 leading-none mb-1">งานด่วน</div>
-                        <div class="grid gap-x-8 gap-y-1" style="grid-template-columns: max-content max-content;">
+                <div id="pickup-fields-grid" class="mt-3 no-print flex flex-col items-center">
+                    <div id="urgent-pickup-flag" class="hidden text-xl font-normal italic text-red-600 leading-none mb-1">งานด่วน</div>
+                    <div class="flex items-center justify-center flex-wrap gap-x-6 gap-y-2">
+                        <div class="flex items-center gap-2">
                             <label for="date-pickup" class="text-xs font-normal text-cube-gray whitespace-nowrap">วันที่นัดรับ <span class="text-red-500">*</span></label>
-                            <label for="time-pickup" class="text-xs font-normal text-cube-gray whitespace-nowrap">เวลานัดรับ</label>
                             <input type="date" id="date-pickup" required aria-required="true" class="sku-input flex-none min-w-0" style="width:140px;">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <label for="time-pickup" class="text-xs font-normal text-cube-gray whitespace-nowrap">เวลานัดรับ</label>
                             <input type="time" id="time-pickup" class="sku-input flex-none min-w-0" style="width:120px;">
                         </div>
                     </div>
+                </div>
 
                     <!-- Buttons — sticky to viewport bottom -->
                 <div class="mt-4 flex items-center justify-between gap-3 no-print pb-4">
