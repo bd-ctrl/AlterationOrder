@@ -71,9 +71,12 @@
         .adjust-toggle-label.expanded { color: #1a1a1a; font-weight: 600; }
         .adjust-toggle-chip { display: inline-flex; align-items: baseline; justify-content: center; min-width: 58px; padding: 5px 9px; border-radius: 999px; border: 1px solid #e7e2d6; background: #fff; color: #1a1a1a; font-size: 12px; font-weight: 600; transition: all .15s ease; }
         .adjust-unit-suffix { font-size: 11px; color: #9a9484; font-weight: 400; white-space: nowrap; }
+        .adjust-toggle-chip.adjust-toggle-chip-unchanged { background: transparent; border-color: transparent; color: #9a9484; font-weight: 300; font-style: italic; padding-left: 0; padding-right: 0; min-width: 0; }
         .notes-fill-input.has-value { background: #e2e8f0 !important; }
         .image-attach-btn.has-value { background-color: #e2e8f0 !important; border-color: #cbd5e1 !important; }
         .notes-toggle-btn { background: none; border: none; padding: 0; }
+        .adjust-toggle-label.notes-toggle-btn { font-weight: 400; font-size: 13px; }
+        .adjust-toggle-label.notes-toggle-btn.expanded { font-weight: 400; }
         .adjust-toggle-chip.expanded { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
         .adjust-toggle-chip.expanded .adjust-toggle-unit { color: #cfcabb; }
         .adjust-field-wrap.adjust-field-expanded { grid-column: 1 / -1; }
@@ -1474,8 +1477,8 @@
                 <input type="hidden" id="${id}" value="0">
                 <div class="flex items-center gap-2 flex-wrap">
                     <button type="button" class="adjust-toggle-label" data-target="${id}">${label}</button>
-                    <span class="adjust-toggle-chip" data-target="${id}">
-                        <span class="adjust-toggle-value">0</span>
+                    <span class="adjust-toggle-chip adjust-toggle-chip-unchanged" data-target="${id}">
+                        <span class="adjust-toggle-value">ไม่แก้ขนาด</span>
                     </span>
                     <div class="adjust-slider-wrap" data-target="${id}" style="display:none;">
                         <div class="adjust-slider-track">
@@ -1495,7 +1498,7 @@
                             </div>
                         </div>
                     </div>
-                    <span class="adjust-unit-suffix">นิ้ว</span>
+                    <span class="adjust-unit-suffix" data-target="${id}" style="display:none;">นิ้ว</span>
                 </div>
             </div>`;
         }
@@ -1506,8 +1509,8 @@
                 <input type="hidden" id="${dirId}" value="${posDir}">
                 <div class="flex items-center gap-2 flex-wrap">
                     <button type="button" class="adjust-toggle-label" data-target="${valId}">${label}</button>
-                    <span class="adjust-toggle-chip" data-target="${valId}">
-                        <span class="adjust-toggle-value">0</span>
+                    <span class="adjust-toggle-chip adjust-toggle-chip-unchanged" data-target="${valId}">
+                        <span class="adjust-toggle-value">ไม่แก้ขนาด</span>
                     </span>
                     <div class="adjust-slider-wrap" data-target="${valId}" data-dir-target="${dirId}" data-pos-dir="${posDir}" data-neg-dir="${negDir}" style="display:none;">
                         <div class="adjust-slider-track">
@@ -1527,7 +1530,7 @@
                             </div>
                         </div>
                     </div>
-                    <span class="adjust-unit-suffix">นิ้ว</span>
+                    <span class="adjust-unit-suffix" data-target="${valId}" style="display:none;">นิ้ว</span>
                 </div>
             </div>`;
         }
@@ -1536,13 +1539,13 @@
         function buildNotesAndImageHTML(type, rowId, notesLabel) {
             return `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                    <button type="button" class="adjust-toggle-label notes-toggle-btn" data-target="notes-wrap-${type}-${rowId}">${notesLabel}</button>
+                    <button type="button" class="adjust-toggle-label notes-toggle-btn" data-target="notes-wrap-${type}-${rowId}">+ ${notesLabel}</button>
                     <div id="notes-wrap-${type}-${rowId}" style="display:none;" class="mt-2">
                         <textarea id="notes-${type}-${rowId}" class="row-notes-input sku-input notes-fill-input" rows="2" placeholder="ระบุค่า" oninput="this.classList.toggle('has-value', this.value.trim().length>0)"></textarea>
                     </div>
                 </div>
                 <div>
-                    <button type="button" class="adjust-toggle-label notes-toggle-btn" data-target="image-wrap-${type}-${rowId}">แนบรูป (ถ้ามี)</button>
+                    <button type="button" class="adjust-toggle-label notes-toggle-btn" data-target="image-wrap-${type}-${rowId}">+ แนบรูป (ถ้ามี)</button>
                     <div id="image-wrap-${type}-${rowId}" style="display:none;" class="mt-2">
                         <div class="flex items-center gap-3">
                             <label for="image-input-${type}-${rowId}" id="image-attach-btn-${type}-${rowId}" class="image-attach-btn cursor-pointer inline-flex items-center gap-2 min-h-[40px] px-4 bg-white border border-gray-300 rounded-2xl text-xs text-cube-gray hover:bg-gray-50 transition-colors">
@@ -2670,8 +2673,18 @@
             if (handle) { handle.style.left = pct + '%'; handle.setAttribute('aria-valuenow', String(v)); }
             if (fill) fill.style.width = pct + '%';
             if (handleValue) handleValue.textContent = formatAdjustValue(v);
-            const chip = document.querySelector(`.adjust-toggle-chip[data-target="${targetId}"] .adjust-toggle-value`);
-            if (chip) chip.textContent = formatAdjustValue(v);
+            const chipEl = document.querySelector(`.adjust-toggle-chip[data-target="${targetId}"]`);
+            const chip = chipEl ? chipEl.querySelector('.adjust-toggle-value') : null;
+            const unitEl = document.querySelector(`.adjust-unit-suffix[data-target="${targetId}"]`);
+            if (v === 0) {
+                if (chip) chip.textContent = 'ไม่แก้ขนาด';
+                if (chipEl) chipEl.classList.add('adjust-toggle-chip-unchanged');
+                if (unitEl) unitEl.style.display = 'none';
+            } else {
+                if (chip) chip.textContent = formatAdjustValue(v);
+                if (chipEl) chipEl.classList.remove('adjust-toggle-chip-unchanged');
+                if (unitEl) unitEl.style.display = '';
+            }
             const dirTargetId = wrap.dataset.dirTarget;
             let newValue;
             if (dirTargetId) {
