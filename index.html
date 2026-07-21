@@ -75,7 +75,7 @@
         .notes-fill-input.has-value { background: #e2e8f0 !important; }
         .image-attach-btn.has-value { background-color: #e2e8f0 !important; border-color: #cbd5e1 !important; }
         .notes-toggle-btn { background: none; border: none; padding: 0; }
-        .adjust-toggle-label.notes-toggle-btn { font-weight: 400; font-size: 13px; }
+        .adjust-toggle-label.notes-toggle-btn { font-weight: 400; font-size: 13px; color: #1a1a1a; }
         .adjust-toggle-label.notes-toggle-btn.expanded { font-weight: 400; }
         .adjust-toggle-chip.expanded { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
         .adjust-toggle-chip.expanded .adjust-toggle-unit { color: #cfcabb; }
@@ -1539,13 +1539,13 @@
         function buildNotesAndImageHTML(type, rowId, notesLabel) {
             return `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                    <button type="button" class="adjust-toggle-label notes-toggle-btn" data-target="notes-wrap-${type}-${rowId}">+ ${notesLabel}</button>
+                    <button type="button" class="adjust-toggle-label notes-toggle-btn inline-flex items-center gap-1.5" data-target="notes-wrap-${type}-${rowId}"><i class="fa-solid fa-circle-plus" aria-hidden="true"></i> ${notesLabel}</button>
                     <div id="notes-wrap-${type}-${rowId}" style="display:none;" class="mt-2">
                         <textarea id="notes-${type}-${rowId}" class="row-notes-input sku-input notes-fill-input" rows="2" placeholder="ระบุค่า" oninput="this.classList.toggle('has-value', this.value.trim().length>0)"></textarea>
                     </div>
                 </div>
                 <div>
-                    <button type="button" class="adjust-toggle-label notes-toggle-btn" data-target="image-wrap-${type}-${rowId}">+ แนบรูป (ถ้ามี)</button>
+                    <button type="button" class="adjust-toggle-label notes-toggle-btn inline-flex items-center gap-1.5" data-target="image-wrap-${type}-${rowId}"><i class="fa-solid fa-circle-plus" aria-hidden="true"></i> แนบรูป (ถ้ามี)</button>
                     <div id="image-wrap-${type}-${rowId}" style="display:none;" class="mt-2">
                         <div class="flex items-center gap-3">
                             <label for="image-input-${type}-${rowId}" id="image-attach-btn-${type}-${rowId}" class="image-attach-btn cursor-pointer inline-flex items-center gap-2 min-h-[40px] px-4 bg-white border border-gray-300 rounded-2xl text-xs text-cube-gray hover:bg-gray-50 transition-colors">
