@@ -77,6 +77,7 @@
         .adjust-slider-scale span { position: absolute; top: 0; transform: translateX(-50%); font-size: 10px; color: #9a9484; white-space: nowrap; }
         .adjust-slider-scale span:first-child { transform: translateX(0); }
         .adjust-slider-scale span:last-child { transform: translateX(-100%); }
+        .adjust-slider-scale span.active { font-size: 15px; font-weight: 700; color: #1a1a1a; }
         .adjust-toggle-chip.adjust-toggle-chip-unchanged { background: transparent; border-color: transparent; color: #9a9484; font-weight: 300; font-style: italic; padding-left: 0; padding-right: 0; min-width: 0; }
         .notes-fill-input.has-value { background: #e2e8f0 !important; }
         .image-attach-btn.has-value { background-color: #e2e8f0 !important; border-color: #cbd5e1 !important; }
@@ -135,7 +136,8 @@
         }
         /* ดรอปดาวน์ทุกช่อง: ลูกศรสีทอง (ยกเว้นตัวที่มีลูกศร SVG ของตัวเองอยู่แล้ว = appearance-none) */
         select.sku-input:not(.appearance-none),
-        select.sku-input-sm:not(.appearance-none) {
+        select.sku-input-sm:not(.appearance-none),
+        #pickup-location {
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
@@ -511,7 +513,7 @@
             <div class="mb-4 no-print">
                 <div class="flex flex-col items-center text-center gap-1 pb-2">
                     <div class="relative flex items-center gap-1.5">
-                        <h2 class="font-normal text-lg text-cube-black leading-[2]">สั่งปรับแก้ทรงออนไลน์</h2>
+                        <h2 class="font-normal text-lg text-cube-black leading-[2]">สั่งปรับแก้ทรง<span class="font-bold">สำเร็จรูป</span></h2>
                         <!-- ปุ่ม (i) อธิบายความหมายไอคอนต่างๆ ในหน้านี้ (ล้างข้อมูล / บันทึกร่าง / บันทึก+ส่ง Lark) -->
                         <button type="button" onclick="toggleButtonsHelp(event)" aria-label="วิธีใช้ไอคอนต่างๆ ในหน้านี้" title="วิธีใช้ไอคอนต่างๆ ในหน้านี้" class="min-h-[20px] min-w-[20px] w-5 h-5 bg-cube-gray/15 hover:bg-cube-gray/25 text-cube-gray rounded-full flex items-center justify-center transition-colors shrink-0">
                             <i class="fa-solid fa-info text-[10px]" aria-hidden="true"></i>
@@ -1549,15 +1551,15 @@
                             <div class="tick2" style="left:100%"></div>
                         </div>
                         <div class="adjust-slider-scale">
-                            <span style="left:0%">-2</span>
-                            <span style="left:12.5%">-1.5</span>
-                            <span style="left:25%">-1</span>
-                            <span style="left:37.5%">-0.5</span>
-                            <span style="left:50%">0</span>
-                            <span style="left:62.5%">0.5</span>
-                            <span style="left:75%">1</span>
-                            <span style="left:87.5%">1.5</span>
-                            <span style="left:100%">2</span>
+                            <span data-val="-2" style="left:0%">-2</span>
+                            <span data-val="-1.5" style="left:12.5%">-1.5</span>
+                            <span data-val="-1" style="left:25%">-1</span>
+                            <span data-val="-0.5" style="left:37.5%">-0.5</span>
+                            <span data-val="0" style="left:50%">0</span>
+                            <span data-val="0.5" style="left:62.5%">0.5</span>
+                            <span data-val="1" style="left:75%">1</span>
+                            <span data-val="1.5" style="left:87.5%">1.5</span>
+                            <span data-val="2" style="left:100%">2</span>
                         </div>
                     </div>
                     <span class="adjust-unit-suffix" data-target="${id}" style="display:none;">นิ้ว</span>
@@ -1594,15 +1596,15 @@
                             <div class="tick2" style="left:100%"></div>
                         </div>
                         <div class="adjust-slider-scale">
-                            <span style="left:0%">-2</span>
-                            <span style="left:12.5%">-1.5</span>
-                            <span style="left:25%">-1</span>
-                            <span style="left:37.5%">-0.5</span>
-                            <span style="left:50%">0</span>
-                            <span style="left:62.5%">0.5</span>
-                            <span style="left:75%">1</span>
-                            <span style="left:87.5%">1.5</span>
-                            <span style="left:100%">2</span>
+                            <span data-val="-2" style="left:0%">-2</span>
+                            <span data-val="-1.5" style="left:12.5%">-1.5</span>
+                            <span data-val="-1" style="left:25%">-1</span>
+                            <span data-val="-0.5" style="left:37.5%">-0.5</span>
+                            <span data-val="0" style="left:50%">0</span>
+                            <span data-val="0.5" style="left:62.5%">0.5</span>
+                            <span data-val="1" style="left:75%">1</span>
+                            <span data-val="1.5" style="left:87.5%">1.5</span>
+                            <span data-val="2" style="left:100%">2</span>
                         </div>
                     </div>
                     <span class="adjust-unit-suffix" data-target="${valId}" style="display:none;">นิ้ว</span>
@@ -1654,15 +1656,15 @@
                 ${buildSizeEditToggleHTML('suit', rowId)}
                 <div id="measure-wrap-suit-${rowId}" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
                     <div>
-                        <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="arm-wrap-${rowId}">แขน</button>
-                        <div id="arm-wrap-${rowId}" style="display:none;" class="mt-2"><div class="grid grid-cols-1 gap-2">
+                        <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="arm-wrap-${rowId}">แขน <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px;"></i></button>
+                        <div id="arm-wrap-${rowId}" style="display:none;" class="mt-2"><div class="flex items-center gap-4 flex-wrap">
                             ${buildPlainPillMeasureFieldHTML(`val-sleeve-length-${rowId}`, 'ยาวแขน')}
                             ${buildPlainPillMeasureFieldHTML(`val-arm-upper-${rowId}`, 'ต้นแขน')}
                         </div></div>
                     </div>
                     <div>
-                        <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="body-wrap-${rowId}">ความยาวเสื้อ</button>
-                        <div id="body-wrap-${rowId}" style="display:none;" class="mt-2"><div class="grid grid-cols-1 gap-2">
+                        <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="body-wrap-${rowId}">ความยาวเสื้อ <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px;"></i></button>
+                        <div id="body-wrap-${rowId}" style="display:none;" class="mt-2"><div class="flex items-center gap-4 flex-wrap">
                             ${buildPlainPillMeasureFieldHTML(`val-suit-front-length-${rowId}`, 'ความยาวหน้า')}
                             ${buildPlainPillMeasureFieldHTML(`val-suit-back-length-${rowId}`, 'ความยาวหลัง')}
                         </div></div>
@@ -2752,6 +2754,12 @@
             if (n === 0) return '0';
             return (n > 0 ? '+ ' : '- ') + Math.abs(n);
         }
+
+        function formatAdjustChipValue(v) {
+            const n = Math.round(v * 10) / 10;
+            if (n === 0) return 'ไม่แก้ขนาด';
+            return (n > 0 ? 'ขยายออก ' : 'เอาเข้า ') + Math.abs(n);
+        }
         function adjustSliderPercent(v) {
             return ((v - ADJUST_SLIDER_MIN) / (ADJUST_SLIDER_MAX - ADJUST_SLIDER_MIN)) * 100;
         }
@@ -2778,10 +2786,14 @@
                 if (chipEl) chipEl.classList.add('adjust-toggle-chip-unchanged');
                 if (unitEl) unitEl.style.display = 'none';
             } else {
-                if (chip) chip.textContent = formatAdjustValue(v);
+                if (chip) chip.textContent = formatAdjustChipValue(v);
                 if (chipEl) chipEl.classList.remove('adjust-toggle-chip-unchanged');
                 if (unitEl) unitEl.style.display = '';
             }
+            const scaleSpans = wrap.querySelectorAll('.adjust-slider-scale span[data-val]');
+            scaleSpans.forEach(function(sp) {
+                sp.classList.toggle('active', parseFloat(sp.dataset.val) === v);
+            });
             const dirTargetId = wrap.dataset.dirTarget;
             let newValue;
             if (dirTargetId) {
