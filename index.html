@@ -805,7 +805,7 @@
                                         <span class="border border-black rounded-lg w-[88px] py-1 inline-flex items-center justify-center whitespace-nowrap flex-shrink-0"><span id="pv-val-waist-change">-</span>&nbsp;นิ้ว</span>
                                     </div>
                                     <div class="flex items-center justify-between gap-2">
-                                        <span>เก็บปลายขา</span>
+                                        <span>ปลายขา</span>
                                         <span class="border border-black rounded-lg w-[88px] py-1 inline-flex items-center justify-center whitespace-nowrap flex-shrink-0"><span id="pv-val-ankle-tighten">-</span>&nbsp;นิ้ว</span>
                                     </div>
                                     <div class="flex items-center justify-between gap-2">
@@ -817,7 +817,7 @@
                                         <span class="border border-black rounded-lg w-[88px] py-1 inline-flex items-center justify-center whitespace-nowrap flex-shrink-0"><span id="pv-val-knee-below">-</span>&nbsp;นิ้ว</span>
                                     </div>
                                     <div class="flex items-center justify-between gap-2">
-                                        <span>เก็บโคนขา</span>
+                                        <span>โคนขา</span>
                                         <span class="border border-black rounded-lg w-[88px] py-1 inline-flex items-center justify-center whitespace-nowrap flex-shrink-0"><span id="pv-val-thigh-tighten">-</span>&nbsp;นิ้ว</span>
                                     </div>
                                     <div class="flex items-center justify-between gap-2">
@@ -1485,9 +1485,10 @@
         function buildMeasureFieldHTML(id, label, boxWidth) {
             const bw = boxWidth || 90;
             const iw = boxWidth ? Math.max(bw - 30, 24) : 50;
+            const spanStyle = boxWidth ? `flex: 0 0 ${bw}px; width:${bw}px; min-width:${bw}px;` : `flex:1 1 ${bw}px; min-width:${bw}px;`;
             return `<div class="flex items-center gap-2 flex-wrap">
                 <label for="${id}" class="text-xs font-normal text-cube-gray whitespace-nowrap">${label}</label>
-                <span class="flex items-center gap-1" style="flex:1 1 ${bw}px; min-width:${bw}px;">
+                <span class="flex items-center gap-1" style="${spanStyle}">
                     <input type="text" inputmode="decimal" id="${id}" oninput="sanitizeMeasureInput(this)" class="row-measure-input sku-input-unit" placeholder="ระบุค่า" style="flex:1 1 auto; min-width:${iw}px;">
                     <span class="text-[11px] text-gray-400 whitespace-nowrap">นิ้ว</span>
                 </span>
@@ -1689,9 +1690,9 @@
                         <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="leg-wrap-${rowId}">ขา <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px; margin-left:6px;"></i></button>
                         <div id="leg-wrap-${rowId}" style="display:none;" class="mt-2">
                             <div class="grid grid-cols-1 gap-2">
-                                ${buildAdjustSliderFieldHTML(`val-thigh-tighten-${rowId}`, 'เก็บโคนขา')}
-                                ${buildAdjustSliderFieldHTML(`val-ankle-tighten-${rowId}`, 'เก็บปลายขา')}
-                                ${buildMeasureFieldHTML(`val-knee-below-${rowId}`, 'ต่ำเข่า', 60)}
+                                ${buildAdjustSliderFieldHTML(`val-thigh-tighten-${rowId}`, 'โคนขา')}
+                                ${buildAdjustSliderFieldHTML(`val-ankle-tighten-${rowId}`, 'ปลายขา')}
+                                ${buildMeasureFieldHTML(`val-knee-below-${rowId}`, 'ต่ำเข่า', 90)}
                             </div>
                         </div>
                     </div>
@@ -3186,8 +3187,8 @@
             } else if (item.type === 'pants') {
                 if (m.waistChange) parts.push(`${m.waistDir === 'tighten' ? 'เอวเอาเข้า' : 'เอวขยายออก'} ${m.waistChange}"`);
                 if (m.legLength) parts.push(`ยาวขา ${m.legLength}"`);
-                if (m.thighTighten) parts.push(`เก็บโคนขา ${m.thighTighten}"`);
-                if (m.ankleTighten) parts.push(`เก็บปลายขา ${m.ankleTighten}"`);
+                if (m.thighTighten) parts.push(`โคนขา ${m.thighTighten}"`);
+                if (m.ankleTighten) parts.push(`ปลายขา ${m.ankleTighten}"`);
                 if (m.kneeBelow) parts.push(`ต่ำเข่า ${m.kneeBelow}"`);
                 if (m.hip) parts.push(`สะโพก ${m.hip}"`);
                 if (m.crotch) parts.push(`เป้า ${m.crotch}"`);
@@ -3704,7 +3705,7 @@
                 html += '<div class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-0.5 text-[11px] text-gray-700">';
                 html += f('รหัส: ', p.codePants) + f('Size: ', p.sizePants) + f('สาขา: ', pd.branchName);
                 html += f('พนักงานติดต่อ: ', pd.branchContact) + f('เอว: ', waistTxt) + f('ความยาวขา: ', pd.legLength);
-                html += f('เก็บโคนขา: ', pd.thighTighten) + f('เก็บปลายขา: ', pd.ankleTighten) + f('ต่ำเข่า: ', pd.kneeBelow);
+                html += f('โคนขา: ', pd.thighTighten) + f('ปลายขา: ', pd.ankleTighten) + f('ต่ำเข่า: ', pd.kneeBelow);
                 html += f('สะโพก: ', pd.hip) + f('เป้า: ', pd.crotch) + f('ต้นขา: ', pd.thighSize);
                 html += '</div>';
                 if (pd.notes) html += '<div class="mt-1.5 text-[11px] text-gray-500 italic">' + pd.notes + '</div>';
@@ -4439,10 +4440,10 @@
                 html += `<div class="t-block-sub">size: ${esc(txt('#pv-size-pants', ''))}</div>`;
                 html += measurementRows([
                     [txt('#pv-waist-dir-label', 'ขยายออก'), txt('#pv-val-waist-change')],
-                    ['เก็บปลายขา', txt('#pv-val-ankle-tighten')],
+                    ['ปลายขา', txt('#pv-val-ankle-tighten')],
                     ['ยาวขา', txt('#pv-val-leg-length')],
                     ['ต่ำเข่า', txt('#pv-val-knee-below')],
-                    ['เก็บโคนขา', txt('#pv-val-thigh-tighten')],
+                    ['โคนขา', txt('#pv-val-thigh-tighten')],
                     ['สะโพก', txt('#pv-val-pants-hip')],
                     ['เป้า', txt('#pv-val-crotch')],
                     ['ต้นขา', txt('#pv-val-thigh-size')]
