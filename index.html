@@ -441,6 +441,13 @@
     /* บังคับความสูง Size/สาขา ในแถว Product ให้เท่ากับช่องรหัสสินค้า (.sku-input = 52px) */
     .row-field-h52 { height: 52px !important; }
     /* measurement with unit label on right */
+    .sku-input-unit.measure-pill-input {
+      width: auto;
+      max-width: 120px;
+      height: 36px;
+      border-radius: 999px;
+      padding: 0 16px;
+    }
     .sku-input-unit {
       width: 100%;
       height: 48px;
@@ -1478,6 +1485,28 @@
             </div>`;
         }
 
+        function buildToggleMeasureFieldHTML(id, label) {
+            return `<div class="adjust-field-wrap" data-target="${id}">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <button type="button" class="adjust-toggle-label notes-toggle-btn" data-target="measure-wrap-${id}"><i class="fa-solid fa-circle-plus" aria-hidden="true"></i> ${label}</button>
+                    <div id="measure-wrap-${id}" class="flex items-center gap-1" style="display:none;">
+                        <input type="text" inputmode="decimal" id="${id}" oninput="sanitizeMeasureInput(this)" class="row-measure-input sku-input-unit measure-pill-input" placeholder="ระบุค่า">
+                        <span class="text-[11px] text-gray-400 whitespace-nowrap">นิ้ว</span>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        function expandMeasureToggleIfSet(id) {
+            const el = document.getElementById(id);
+            if (el && el.value) {
+                const wrap = document.getElementById(`measure-wrap-${id}`);
+                const btn = document.querySelector(`.notes-toggle-btn[data-target="measure-wrap-${id}"]`);
+                if (wrap) wrap.style.display = 'flex';
+                if (btn) btn.classList.add('expanded');
+            }
+        }
+
         function buildAdjustSliderFieldHTML(id, label) {
             return `<div class="adjust-field-wrap" data-target="${id}">
                 <input type="hidden" id="${id}" value="0">
@@ -1615,15 +1644,15 @@
                     <div>
                         <p class="text-xs font-normal text-cube-black mb-2">แขน</p>
                         <div class="grid grid-cols-2 gap-2 sm:gap-3">
-                            ${buildMeasureFieldHTML(`val-sleeve-length-${rowId}`, 'ยาวแขน')}
-                            ${buildMeasureFieldHTML(`val-arm-upper-${rowId}`, 'ต้นแขน')}
+                            ${buildToggleMeasureFieldHTML(`val-sleeve-length-${rowId}`, 'ยาวแขน')}
+                            ${buildToggleMeasureFieldHTML(`val-arm-upper-${rowId}`, 'ต้นแขน')}
                         </div>
                     </div>
                     <div>
                         <p class="text-xs font-normal text-cube-black mb-2">เสื้อ</p>
-                        <div class="grid grid-cols-1 gap-2">
-                            ${buildMeasureFieldHTML(`val-suit-front-length-${rowId}`, 'ความยาวหน้า')}
-                            ${buildMeasureFieldHTML(`val-suit-back-length-${rowId}`, 'ความยาวหลัง')}
+                        <div class="grid grid-cols-2 gap-2 sm:gap-3">
+                            ${buildToggleMeasureFieldHTML(`val-suit-front-length-${rowId}`, 'ความยาวหน้า')}
+                            ${buildToggleMeasureFieldHTML(`val-suit-back-length-${rowId}`, 'ความยาวหลัง')}
                         </div>
                     </div>
                     <div class="sm:col-span-2">
@@ -4022,9 +4051,13 @@
                 if (item.type === 'suit') {
                     const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
                     setVal(`val-sleeve-length-${rowId}`, m.sleeveLength);
+                    expandMeasureToggleIfSet(`val-sleeve-length-${rowId}`);
                     setVal(`val-arm-upper-${rowId}`, m.armUpper);
+                    expandMeasureToggleIfSet(`val-arm-upper-${rowId}`);
                     setVal(`val-suit-front-length-${rowId}`, m.frontLength);
+                    expandMeasureToggleIfSet(`val-suit-front-length-${rowId}`);
                     setVal(`val-suit-back-length-${rowId}`, m.backLength);
+                    expandMeasureToggleIfSet(`val-suit-back-length-${rowId}`);
                     setVal(`val-chest-${rowId}`, m.chest);
                     syncAdjustSliderVisual(`val-chest-${rowId}`);
                     setVal(`val-waist-size-${rowId}`, m.waistSize);
