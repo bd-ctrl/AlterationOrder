@@ -2653,7 +2653,7 @@
         function formatAdjustValue(v) {
             const n = Math.round(v * 10) / 10;
             if (n === 0) return '0';
-            return (n > 0 ? '+' : '') + n;
+            return (n > 0 ? '+ ' : '- ') + Math.abs(n);
         }
         function adjustSliderPercent(v) {
             return ((v - ADJUST_SLIDER_MIN) / (ADJUST_SLIDER_MAX - ADJUST_SLIDER_MIN)) * 100;
