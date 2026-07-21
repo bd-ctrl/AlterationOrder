@@ -85,7 +85,7 @@
         .adjust-slider-track .rail { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); height: 3px; background: #e7e2d6; border-radius: 2px; }
         .adjust-slider-track .fill { position: absolute; left: 0; top: 50%; transform: translateY(-50%); height: 3px; background: linear-gradient(90deg, #5a5a5a, #000000); border-radius: 2px; pointer-events: none; }
         .adjust-slider-track .tick { position: absolute; top: 50%; width: 2px; height: 6px; background: #d3cdbe; transform: translate(-50%, -50%); pointer-events: none; }
-        .adjust-slider-track .handle { position: absolute; top: 50%; width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, #4d4d4d, #000000); transform: translate(-50%, -50%); box-shadow: 0 2px 6px rgba(0,0,0,0.25); cursor: grab; z-index: 2; display: flex; align-items: center; justify-content: center; }
+        .adjust-slider-track .handle { position: absolute; top: 50%; width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #4d4d4d, #000000); transform: translate(-50%, -50%); box-shadow: 0 2px 6px rgba(0,0,0,0.25); cursor: grab; z-index: 2; display: flex; align-items: center; justify-content: center; text-align: center; }
         .adjust-slider-track .handle:active { cursor: grabbing; }
         .adjust-slider-track .handle:focus { outline: 2px solid #C9A24B; outline-offset: 2px; }
         .adjust-slider-track .handle-value { color: #fff; font-size: 13px; font-weight: 400; pointer-events: none; white-space: nowrap; }
@@ -1541,7 +1541,7 @@
                 <div>
                     <button type="button" class="adjust-toggle-label notes-toggle-btn inline-flex items-center gap-1.5" data-target="notes-wrap-${type}-${rowId}"><i class="fa-solid fa-circle-plus" aria-hidden="true"></i> ${notesLabel}</button>
                     <div id="notes-wrap-${type}-${rowId}" style="display:none;" class="mt-2">
-                        <textarea id="notes-${type}-${rowId}" class="row-notes-input sku-input notes-fill-input" rows="2" placeholder="ระบุค่า" oninput="this.classList.toggle('has-value', this.value.trim().length>0)"></textarea>
+                        <textarea id="notes-${type}-${rowId}" class="row-notes-input sku-input notes-fill-input" rows="2" oninput="this.classList.toggle('has-value', this.value.trim().length>0)"></textarea>
                     </div>
                 </div>
                 <div>
@@ -1595,7 +1595,6 @@
                         </div>
                     </div>
                     <div class="sm:col-span-2">
-                        <p class="text-xs font-normal text-cube-black mb-2">รอบตัว</p>
                         <div class="grid grid-cols-3 sm:grid-cols-3 gap-2 sm:gap-3">
                             ${buildAdjustSliderFieldHTML(`val-chest-${rowId}`, 'อก')}
                             ${buildAdjustSliderFieldHTML(`val-waist-size-${rowId}`, 'เอว')}
@@ -1609,8 +1608,8 @@
             const pantsHTML = `<div class="row-detail-fieldset hidden" data-fieldset-type="pants">
                 ${buildSizeEditToggleHTML('pants', rowId)}
                 <div id="measure-wrap-pants-${rowId}" class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
-                    ${buildDirectionalAdjustSliderFieldHTML(`val-waist-change-${rowId}`, `val-waist-dir-${rowId}`, 'เอว', 'expand', 'tighten')}
                     ${buildMeasureFieldHTML(`val-leg-length-${rowId}`, 'ความยาวขา')}
+                    ${buildDirectionalAdjustSliderFieldHTML(`val-waist-change-${rowId}`, `val-waist-dir-${rowId}`, 'เอว', 'expand', 'tighten')}
                     ${buildAdjustSliderFieldHTML(`val-thigh-tighten-${rowId}`, 'เก็บโคนขา')}
                     ${buildAdjustSliderFieldHTML(`val-ankle-tighten-${rowId}`, 'เก็บปลายขา')}
                     ${buildMeasureFieldHTML(`val-knee-below-${rowId}`, 'ต่ำเข่า')}
