@@ -67,31 +67,17 @@
             #pickup-fields-grid input[type="date"] { padding-left: 10px; padding-right: 10px; font-size: 0.8rem; }
         }
 
-        .adjust-slider-wrap { margin-top: 4px; }
-        .adjust-slider-track { position: relative; height: 30px; display: flex; align-items: center; cursor: pointer; touch-action: none; }
+        .adjust-toggle-chip { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; padding: 4px 10px; border-radius: 999px; border: 1px solid #e7e2d6; background: #fff; color: #1a1a1a; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s ease; }
+        .adjust-toggle-chip.expanded { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+        .adjust-slider-wrap { margin-top: 8px; }
+        .adjust-slider-track { position: relative; height: 34px; display: flex; align-items: center; cursor: pointer; touch-action: none; }
         .adjust-slider-track .rail { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); height: 3px; background: #e7e2d6; border-radius: 2px; }
         .adjust-slider-track .fill { position: absolute; left: 0; top: 50%; transform: translateY(-50%); height: 3px; background: #1a1a1a; border-radius: 2px; pointer-events: none; }
         .adjust-slider-track .tick { position: absolute; top: 50%; width: 2px; height: 6px; background: #d3cdbe; transform: translate(-50%, -50%); pointer-events: none; }
-        .adjust-slider-track .handle { position: absolute; top: 50%; width: 17px; height: 17px; border-radius: 50%; background: #1a1a1a; transform: translate(-50%, -50%); box-shadow: 0 2px 6px rgba(0,0,0,0.25); cursor: grab; z-index: 2; }
+        .adjust-slider-track .handle { position: absolute; top: 50%; width: 26px; height: 26px; border-radius: 50%; background: #1a1a1a; transform: translate(-50%, -50%); box-shadow: 0 2px 6px rgba(0,0,0,0.25); cursor: grab; z-index: 2; display: flex; align-items: center; justify-content: center; }
         .adjust-slider-track .handle:active { cursor: grabbing; }
         .adjust-slider-track .handle:focus { outline: 2px solid #C9A24B; outline-offset: 2px; }
-        .adjust-slider-track .bubble {
-            position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%) translateY(-4px) scale(0.85);
-            background: #1a1a1a; color: #fff; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;
-            white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.15s ease, transform 0.15s ease;
-        }
-        .adjust-slider-track .bubble::after {
-            content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-            border: 4px solid transparent; border-top-color: #1a1a1a;
-        }
-        .adjust-slider-track.active .bubble,
-        .adjust-slider-track:hover .bubble,
-        .adjust-slider-track .handle:focus ~ .bubble { opacity: 1; transform: translateX(-50%) translateY(-2px) scale(1); }
-        .adjust-step-row { display: flex; align-items: center; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
-        .adjust-step-btn { font-size: 10px; padding: 2px 7px; border-radius: 999px; border: 1px solid #e7e2d6; background: #fff; color: #8a8577; cursor: pointer; transition: all .15s ease; }
-        .adjust-step-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
-        .adjust-nudge-btn { font-size: 14px; font-weight: 600; width: 22px; height: 22px; border-radius: 50%; border: 1px solid #e7e2d6; background: #fff; color: #1a1a1a; cursor: pointer; line-height: 1; display: flex; align-items: center; justify-content: center; }
-        .adjust-nudge-btn:active { background: #f3f1ec; }
+        .adjust-slider-track .handle-value { color: #fff; font-size: 9px; font-weight: 700; pointer-events: none; white-space: nowrap; }
 
         /* ท้ายเว็บ: แถบขาวด้านล่างสุด โลโก้ SUITCUBE + ลิงก์บันทึกแบบร่าง/ดูรายการย้อนหลัง (ย้ายจาก header เดิมมาเป็น footer) */
         .app-header {
@@ -1485,7 +1471,10 @@
                     <span class="text-[10px] text-gray-400">นิ้ว</span>
                 </div>
                 <input type="hidden" id="${id}" value="0">
-                <div class="adjust-slider-wrap" data-target="${id}">
+                <button type="button" class="adjust-toggle-chip" data-target="${id}">
+                    <span class="adjust-toggle-value">0</span>
+                </button>
+                <div class="adjust-slider-wrap" data-target="${id}" style="display:none;">
                     <div class="adjust-slider-track">
                         <div class="rail"></div>
                         <div class="fill" style="width:50%"></div>
@@ -1499,16 +1488,8 @@
                         <div class="tick" style="left:87.5%"></div>
                         <div class="tick" style="left:100%"></div>
                         <div class="handle" tabindex="0" role="slider" aria-valuemin="-2" aria-valuemax="2" aria-valuenow="0" style="left:50%">
-                            <div class="bubble">0</div>
+                            <span class="handle-value">0</span>
                         </div>
-                    </div>
-                    <div class="adjust-step-row">
-                        <button type="button" class="adjust-step-btn" data-step="0.5">0.5</button>
-                        <button type="button" class="adjust-step-btn active" data-step="1">1</button>
-                        <button type="button" class="adjust-step-btn" data-step="1.5">1.5</button>
-                        <button type="button" class="adjust-step-btn" data-step="2">2</button>
-                        <button type="button" class="adjust-nudge-btn" data-dir="-1" aria-label="ลด">−</button>
-                        <button type="button" class="adjust-nudge-btn" data-dir="1" aria-label="เพิ่ม">+</button>
                     </div>
                 </div>
             </div>`;
@@ -2657,10 +2638,12 @@
             const pct = adjustSliderPercent(v);
             const handle = wrap.querySelector('.handle');
             const fill = wrap.querySelector('.fill');
-            const bubble = wrap.querySelector('.bubble');
+            const handleValue = wrap.querySelector('.handle-value');
             if (handle) { handle.style.left = pct + '%'; handle.setAttribute('aria-valuenow', String(v)); }
             if (fill) fill.style.width = pct + '%';
-            if (bubble) bubble.textContent = formatAdjustValue(v);
+            if (handleValue) handleValue.textContent = formatAdjustValue(v);
+            const chip = document.querySelector(`.adjust-toggle-chip[data-target="${targetId}"] .adjust-toggle-value`);
+            if (chip) chip.textContent = formatAdjustValue(v);
             const prevValue = input.value;
             input.value = (v === 0) ? '0' : String(v);
             if (!opts.silent && input.value !== prevValue) {
@@ -2675,10 +2658,6 @@
             if (!wrap) return;
             const v = parseFloat(input.value);
             setAdjustSliderValue(wrap, isNaN(v) ? 0 : v, { silent: true });
-        }
-        function getAdjustSliderStep(wrap) {
-            const activeBtn = wrap.querySelector('.adjust-step-btn.active');
-            return activeBtn ? parseFloat(activeBtn.dataset.step) : 1;
         }
         function adjustSliderValueFromClientX(wrap, clientX) {
             const track = wrap.querySelector('.adjust-slider-track');
@@ -2709,21 +2688,14 @@
             _adjustSliderDragWrap = null;
         });
         document.addEventListener('click', function(e) {
-            const stepBtn = e.target.closest('.adjust-step-btn');
-            if (stepBtn) {
-                const row = stepBtn.closest('.adjust-step-row');
-                row.querySelectorAll('.adjust-step-btn').forEach(b => b.classList.remove('active'));
-                stepBtn.classList.add('active');
-                return;
-            }
-            const nudgeBtn = e.target.closest('.adjust-nudge-btn');
-            if (nudgeBtn) {
-                const wrap = nudgeBtn.closest('.adjust-slider-wrap');
-                const input = document.getElementById(wrap.dataset.target);
-                const current = parseFloat(input.value) || 0;
-                const step = getAdjustSliderStep(wrap);
-                const dir = parseFloat(nudgeBtn.dataset.dir);
-                setAdjustSliderValue(wrap, current + dir * step);
+            const chip = e.target.closest('.adjust-toggle-chip');
+            if (chip) {
+                const wrap = document.querySelector(`.adjust-slider-wrap[data-target="${chip.dataset.target}"]`);
+                if (wrap) {
+                    const isOpen = wrap.style.display !== 'none';
+                    wrap.style.display = isOpen ? 'none' : 'block';
+                    chip.classList.toggle('expanded', !isOpen);
+                }
                 return;
             }
         });
@@ -4117,7 +4089,8 @@
         function resetForm() {
             currentEditingId = null;
             document.getElementById('alteration-form').reset();
-            document.querySelectorAll('.adjust-slider-wrap').forEach(w => syncAdjustSliderVisual(w.dataset.target));
+            document.querySelectorAll('.adjust-slider-wrap').forEach(w => { syncAdjustSliderVisual(w.dataset.target); w.style.display = 'none'; });
+            document.querySelectorAll('.adjust-toggle-chip').forEach(c => c.classList.remove('expanded'));
 
             // รีเซ็ตฟิลด์สาขา (รวม OFFICE) กลับเป็นค่า default OFFICE
             const _s = id => document.getElementById(id);
