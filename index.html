@@ -721,19 +721,17 @@
                     </form>
 
                 <!-- Pickup location / date / time — outside the form sections, visible at all times -->
-                <div id="pickup-fields-grid" class="mt-3 flex items-center gap-6 flex-wrap no-print">
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <div id="urgent-pickup-flag" class="hidden w-full basis-full text-xl font-normal italic text-red-600 leading-none mb-1">งานด่วน</div>
-                        <label for="date-pickup" class="text-xs font-normal text-cube-gray whitespace-nowrap">วันที่นัดรับ <span class="text-red-500">*</span></label>
-                        <input type="date" id="date-pickup" required aria-required="true" class="sku-input flex-none min-w-0" style="width:140px;">
+                <div id="pickup-fields-grid" class="mt-3 no-print">
+                        <div id="urgent-pickup-flag" class="hidden text-xl font-normal italic text-red-600 leading-none mb-1">งานด่วน</div>
+                        <div class="grid gap-x-8 gap-y-1" style="grid-template-columns: max-content max-content;">
+                            <label for="date-pickup" class="text-xs font-normal text-cube-gray whitespace-nowrap">วันที่นัดรับ <span class="text-red-500">*</span></label>
+                            <label for="time-pickup" class="text-xs font-normal text-cube-gray whitespace-nowrap">เวลานัดรับ</label>
+                            <input type="date" id="date-pickup" required aria-required="true" class="sku-input flex-none min-w-0" style="width:140px;">
+                            <input type="time" id="time-pickup" class="sku-input flex-none min-w-0" style="width:120px;">
+                        </div>
                     </div>
-                    <div class="flex items-center gap-2 flex-wrap">
-                        <label for="time-pickup" class="text-xs font-normal text-cube-gray whitespace-nowrap">เวลานัดรับ</label>
-                        <input type="time" id="time-pickup" class="sku-input flex-none min-w-0" style="width:120px;">
-                    </div>
-                </div>
 
-                <!-- Buttons — sticky to viewport bottom -->
+                    <!-- Buttons — sticky to viewport bottom -->
                 <div class="mt-4 flex items-center justify-between gap-3 no-print pb-4">
                     <button type="button" onclick="resetForm()" aria-label="ล้างข้อมูล" title="ล้างข้อมูล" class="min-h-[52px] min-w-[52px] bg-white border border-gray-200 text-red-500 rounded-full shadow-sm hover:bg-red-50 transition-colors active:scale-[0.97] flex items-center justify-center shrink-0">
                         <i class="fa-solid fa-trash-can text-base" aria-hidden="true"></i>
@@ -1657,14 +1655,14 @@
                 <div id="measure-wrap-suit-${rowId}" class="grid grid-cols-1 gap-4 mb-3">
                     <div>
                         <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="arm-wrap-${rowId}">แขน <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px; margin-left:6px;"></i></button>
-                        <div id="arm-wrap-${rowId}" style="display:none;" class="mt-2"><div class="flex items-center gap-8 flex-wrap">
+                        <div id="arm-wrap-${rowId}" style="display:none;" class="mt-2"><div class="flex items-center gap-16 flex-wrap">
                             ${buildPlainPillMeasureFieldHTML(`val-sleeve-length-${rowId}`, 'ยาวแขน')}
                             ${buildPlainPillMeasureFieldHTML(`val-arm-upper-${rowId}`, 'ต้นแขน')}
                         </div></div>
                     </div>
                     <div>
                         <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="body-wrap-${rowId}">ความยาวเสื้อ <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px; margin-left:6px;"></i></button>
-                        <div id="body-wrap-${rowId}" style="display:none;" class="mt-2"><div class="flex items-center gap-8 flex-wrap">
+                        <div id="body-wrap-${rowId}" style="display:none;" class="mt-2"><div class="flex items-center gap-16 flex-wrap">
                             ${buildPlainPillMeasureFieldHTML(`val-suit-front-length-${rowId}`, 'ความยาวหน้า')}
                             ${buildPlainPillMeasureFieldHTML(`val-suit-back-length-${rowId}`, 'ความยาวหลัง')}
                         </div></div>
@@ -2969,6 +2967,7 @@
             document.getElementById('date-submission').addEventListener('change', (e) => {
                 document.getElementById('pv-date-submission').innerText = formatThaiDate(e.target.value);
             });
+            document.getElementById('date-pickup').min = new Date().toISOString().slice(0,10);
             document.getElementById('date-pickup').addEventListener('change', (e) => {
                 const val = e.target.value;
                 if (val) {
