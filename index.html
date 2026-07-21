@@ -443,10 +443,10 @@
     /* measurement with unit label on right */
     .sku-input-unit.measure-pill-input {
       width: auto;
-      max-width: 120px;
+      max-width: 90px;
       height: 36px;
       border-radius: 999px;
-      padding: 0 16px;
+      padding: 0 12px;
     }
     .sku-input-unit {
       width: 100%;
@@ -1601,7 +1601,7 @@
                 </div>
             </div>
             <div class="image-attach-block flex items-center gap-2 flex-wrap" data-fieldset-type="${type}">
-                <button type="button" class="adjust-toggle-label notes-toggle-btn inline-flex items-center gap-1.5" data-target="image-wrap-${type}-${rowId}"><i class="fa-solid fa-circle-plus" aria-hidden="true"></i> แนบรูป (ถ้ามี)</button>
+                <button type="button" class="adjust-toggle-label notes-toggle-btn inline-flex items-center gap-1.5" data-target="image-wrap-${type}-${rowId}"><i class="fa-solid fa-circle-plus" aria-hidden="true"></i> แนบรูป <span class="text-gray-300 font-normal">(ถ้ามี)</span></button>
                 <div id="image-wrap-${type}-${rowId}" style="display:none;">
                     <div class="flex items-center gap-3">
                         <label for="image-input-${type}-${rowId}" id="image-attach-btn-${type}-${rowId}" class="image-attach-btn cursor-pointer inline-flex items-center gap-2 min-h-[40px] px-4 bg-white border border-gray-300 rounded-2xl text-xs text-cube-gray hover:bg-gray-50 transition-colors">
@@ -1637,14 +1637,14 @@
                 <div id="measure-wrap-suit-${rowId}" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
                     <div>
                         <button type="button" class="adjust-toggle-label notes-toggle-btn" data-target="arm-wrap-${rowId}">แขน</button>
-                        <div id="arm-wrap-${rowId}" style="display:none;" class="mt-2"><div class="grid grid-cols-2 gap-2 sm:gap-3">
+                        <div id="arm-wrap-${rowId}" style="display:none;" class="mt-2"><div class="grid grid-cols-1 gap-2">
                             ${buildPlainPillMeasureFieldHTML(`val-sleeve-length-${rowId}`, 'ยาวแขน')}
                             ${buildPlainPillMeasureFieldHTML(`val-arm-upper-${rowId}`, 'ต้นแขน')}
                         </div></div>
                     </div>
                     <div>
                         <button type="button" class="adjust-toggle-label notes-toggle-btn" data-target="body-wrap-${rowId}">เสื้อ</button>
-                        <div id="body-wrap-${rowId}" style="display:none;" class="mt-2"><div class="grid grid-cols-2 gap-2 sm:gap-3">
+                        <div id="body-wrap-${rowId}" style="display:none;" class="mt-2"><div class="grid grid-cols-1 gap-2">
                             ${buildPlainPillMeasureFieldHTML(`val-suit-front-length-${rowId}`, 'ความยาวหน้า')}
                             ${buildPlainPillMeasureFieldHTML(`val-suit-back-length-${rowId}`, 'ความยาวหลัง')}
                         </div></div>
