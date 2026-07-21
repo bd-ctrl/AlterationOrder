@@ -71,12 +71,14 @@
         .adjust-toggle-label.expanded { color: #1a1a1a; font-weight: 600; }
         .adjust-toggle-chip { display: inline-flex; align-items: baseline; justify-content: center; min-width: 58px; padding: 5px 9px; border-radius: 999px; border: 1px solid #e7e2d6; background: #fff; color: #1a1a1a; font-size: 12px; font-weight: 600; transition: all .15s ease; }
         .adjust-unit-suffix { font-size: 11px; color: #9a9484; font-weight: 400; white-space: nowrap; }
+        .notes-fill-input.has-value { background: #e2e8f0 !important; }
+        .image-attach-btn.has-value { background-color: #e2e8f0 !important; border-color: #cbd5e1 !important; }
         .notes-toggle-btn { display: inline-flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 400; color: #6b6656; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; }
         .notes-toggle-btn.expanded { color: #1a1a1a; font-weight: 600; text-decoration: none; }
         .adjust-toggle-chip.expanded { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
         .adjust-toggle-chip.expanded .adjust-toggle-unit { color: #cfcabb; }
         .adjust-field-wrap.adjust-field-expanded { grid-column: 1 / -1; }
-        .adjust-slider-wrap { flex: 1 1 110px; min-width: 90px; display: flex; align-items: center; }
+        .adjust-slider-wrap { flex: 1 1 110px; min-width: 90px; display: flex; align-items: center; margin-left: 17px; }
         .adjust-slider-track { position: relative; height: 38px; width: 100%; display: flex; align-items: center; cursor: pointer; touch-action: none; }
         .adjust-slider-track .rail { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); height: 3px; background: #e7e2d6; border-radius: 2px; }
         .adjust-slider-track .fill { position: absolute; left: 0; top: 50%; transform: translateY(-50%); height: 3px; background: #1a1a1a; border-radius: 2px; pointer-events: none; }
@@ -1535,16 +1537,13 @@
         function buildNotesAndImageHTML(type, rowId, notesLabel) {
             return `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                    <button type="button" class="notes-toggle-btn" data-target="notes-wrap-${type}-${rowId}">+ ${notesLabel}</button>
-                    <div id="notes-wrap-${type}-${rowId}" style="display:none;" class="mt-2">
-                        <label for="notes-${type}-${rowId}" class="block text-xs font-normal text-cube-gray mb-1">${notesLabel}</label>
-                        <textarea id="notes-${type}-${rowId}" class="row-notes-input sku-input" rows="2"></textarea>
-                    </div>
+                    <label for="notes-${type}-${rowId}" class="block text-xs font-normal text-cube-gray mb-1">${notesLabel}</label>
+                    <textarea id="notes-${type}-${rowId}" class="row-notes-input sku-input notes-fill-input" rows="2" placeholder="ระบุค่า" oninput="this.classList.toggle('has-value', this.value.trim().length>0)"></textarea>
                 </div>
                 <div>
                     <label class="block text-xs font-normal text-cube-gray mb-1">แนบรูป (ถ้ามี)</label>
                     <div class="flex items-center gap-3">
-                        <label for="image-input-${type}-${rowId}" class="cursor-pointer inline-flex items-center gap-2 min-h-[40px] px-4 bg-white border border-gray-300 rounded-2xl text-xs text-cube-gray hover:bg-gray-50 transition-colors">
+                        <label for="image-input-${type}-${rowId}" id="image-attach-btn-${type}-${rowId}" class="image-attach-btn cursor-pointer inline-flex items-center gap-2 min-h-[40px] px-4 bg-white border border-gray-300 rounded-2xl text-xs text-cube-gray hover:bg-gray-50 transition-colors">
                             <i class="fa-solid fa-camera" aria-hidden="true"></i>
                             <span>เลือกรูปภาพ</span>
                         </label>
@@ -2049,6 +2048,8 @@
                 wrap.appendChild(item);
             });
             if (countEl) countEl.textContent = list.length ? `${list.length}/${MAX_IMAGES_PER_TYPE} รูป` : '';
+            const attachBtn = document.getElementById(`image-attach-btn-${type}`);
+            if (attachBtn) attachBtn.classList.toggle('has-value', list.length > 0);
         }
 
         // บีบอัดรูปก่อนเก็บเป็น base64 — รูปจากกล้องมือถือมักใหญ่ 3-8MB/รูป ถ้าไม่บีบอัด
