@@ -524,7 +524,7 @@
                             <div class="flex items-start gap-2"><i class="fa-solid fa-check text-white bg-cube-black rounded-full p-0.5 text-[9px] mt-0.5" aria-hidden="true"></i><span><b>บันทึกข้อมูล</b> — บันทึกจริงและส่งเข้า Lark ทันที หลังส่งแล้ว Lark จะแจ้งเตือนสาขาว่าส่งข้อมูลแล้ว รอลงงานใน Salesforce</span></div>
                             <div class="flex items-start gap-2"><i class="fa-solid fa-clock-rotate-left text-cube-gray mt-0.5" aria-hidden="true"></i><span><b>ดูประวัติรายการย้อนหลัง</b> — ดูใบสั่งแก้ที่เคยบันทึกไว้ทั้งหมดของสาขาที่เลือก</span></div>
                             <div class="flex items-start gap-2"><i class="fa-solid fa-trash-can text-red-500 mt-0.5" aria-hidden="true"></i><span><b>ล้างข้อมูล</b> — เคลียร์ฟอร์มทั้งหมด เริ่มกรอกใหม่</span></div>
-                            <div class="flex items-start gap-2"><i class="fa-solid fa-hashtag text-cube-gray mt-0.5" aria-hidden="true"></i><span><b>เลขที่บิล</b> — อักษรย่อสาขา + ลำดับบิลของสาขาในเดือนนั้น (2 หลัก นับใหม่ทุกเดือน) + ปี ค.ศ. 2 หลักท้าย + เดือน 2 หลัก</span></div>
+                            <div class="flex items-start gap-2"><i class="fa-solid fa-hashtag text-cube-gray mt-0.5" aria-hidden="true"></i><span><b>เลขที่บิล</b> — อักษรย่อสาขา + ลำดับบิลของสาขาในเดือนนั้น (2 หลัก นับใหม่ทุกเดือน) + ปี ค.ศ. 2 หลักท้าย + เดือน 2 หลัก</span></div><div class="flex items-start gap-2"><i class="fa-solid fa-asterisk text-red-500 mt-0.5" aria-hidden="true"></i><span><b>*</b> — คือฟิลด์ที่ต้องกรอก (บังคับ) เช่น เบอร์โทร ชื่อลูกค้า</span></div>
                             <!-- [ใหม่ 17/07/2026] แสดงเวลาที่ไฟล์หน้านี้ถูกอัปเดตล่าสุด (document.lastModified) ไว้ให้เห็นตรงๆ
                                  ในเครื่อง — ใช้เช็คได้เองว่ากำลังเปิดหน้าเว็บเวอร์ชันล่าสุดจริงหรือเป็นแค่ cache เก่าค้างอยู่
                                  (กันปัญหา "แจ้งว่าแก้แล้วแต่ user ยังเห็นเหมือนเดิม" เพราะ browser cache ที่เจอบ่อย) -->
@@ -1689,15 +1689,12 @@
                             <div class="grid grid-cols-1 gap-2">
                                 ${buildAdjustSliderFieldHTML(`val-thigh-tighten-${rowId}`, 'เก็บโคนขา')}
                                 ${buildAdjustSliderFieldHTML(`val-ankle-tighten-${rowId}`, 'เก็บปลายขา')}
+                                ${buildMeasureFieldHTML(`val-knee-below-${rowId}`, 'ต่ำเข่า')}
                             </div>
                         </div>
                     </div>
                     <div id="measure-wrap-pants-${rowId}" class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
                     ${buildDirectionalAdjustSliderFieldHTML(`val-waist-change-${rowId}`, `val-waist-dir-${rowId}`, 'เอว', 'expand', 'tighten')}
-                    ${buildMeasureFieldHTML(`val-knee-below-${rowId}`, 'ต่ำเข่า')}
-                    ${buildMeasureFieldHTML(`val-pants-hip-${rowId}`, 'สะโพก')}
-                    ${buildMeasureFieldHTML(`val-crotch-${rowId}`, 'เป้า')}
-                    ${buildMeasureFieldHTML(`val-thigh-size-${rowId}`, 'ต้นขา')}
                     ${buildPlainPillMeasureFieldHTML(`val-leg-length-${rowId}`, 'ความยาวขา')}
                 </div>
                 ${buildNotesAndImageHTML('pants', rowId, 'หมายเหตุกางเกง')}
@@ -3744,7 +3741,7 @@
                 if (ad.notes) html += '<div class="mt-1.5 text-[11px] text-gray-500 italic">' + ad.notes + '</div>';
                 html += '</div>';
             }
-            return html || '<div class="text-[11px] text-gray-400 text-center py-1">ไม่มีรายละเอียดเพิ่มเติม</div>';
+            return html || '<div class="text-[11px] text-gray-400 text-center py-1">ออเดอร์นี้ยังไม่มีข้อมูลสินค้า/รายละเอียดการวัดตัวในระบบ</div>';
         }
 
         // Dynamic Table Builder for Orders History Dashboard
@@ -3822,6 +3819,9 @@
                         <button onclick="const p=this.parentElement.nextElementSibling;p.classList.toggle('hidden');this.querySelector('i').classList.toggle('rotate-180')" class="flex items-center gap-1 text-[11px] text-gray-400 hover:text-cube-black transition-colors">
                             <i class="fa-solid fa-chevron-down transition-transform duration-200"></i> ดูรายละเอียด
                         </button>
+                        <button class="btn-history-receive min-h-[44px] min-w-[44px] bg-white border border-cube-black text-cube-black hover:bg-gray-50 p-2 rounded-full transition-colors active:scale-[0.95]" aria-label="รับสินค้า เลขที่บิล ${order.orderNo}" title="รับสินค้า">
+                            <i class="fa-solid fa-hand-holding" aria-hidden="true"></i>
+                        </button>
                         <button class="btn-history-print min-h-[44px] min-w-[44px] bg-cube-black hover:bg-cube-gray text-white p-2 rounded-full transition-colors active:scale-[0.95]" aria-label="พิมพ์ใบเสร็จ เลขที่บิล ${order.orderNo}" title="พิมพ์ใบเสร็จ">
                             <i class="fa-solid fa-print" aria-hidden="true"></i>
                         </button>
@@ -3833,6 +3833,7 @@
                 // เป็นโค้ด JS ที่พัง (ตัวแปรไม่มีอยู่จริง) กดปุ่มพิมพ์แล้วไม่มีอะไรเกิดขึ้นเลย — เปลี่ยนมาผูก event ตรงนี้แทน
                 // พร้อมส่ง order ทั้งก้อนไปเลย (ไม่ต้องพึ่ง orders.find() ซึ่งไม่มีออเดอร์จาก Lark Base เก็บอยู่ในนั้นด้วย)
                 card.querySelector('.btn-history-print').addEventListener('click', () => viewAndPrintReceipt(order.id, order));
+            container.querySelector('.btn-history-receive').addEventListener('click', () => openReceiveModal(order));
                 container.appendChild(card);
             });
         }
@@ -4745,6 +4746,130 @@
             } catch (e) {
                 console.error('[ใบสรุป] บันทึกรูปกลับเข้า Lark Base ไม่สำเร็จ (ไม่กระทบการปรินต์):', e);
             }
+        }
+    </script>
+
+    <div id="receive-modal-overlay" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-lg w-full max-w-md p-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-base font-medium text-cube-black">รับสินค้า <span id="receive-modal-orderno" class="text-cube-gold"></span></h3>
+                <button type="button" onclick="closeReceiveModal()" class="text-gray-400 hover:text-cube-black"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            </div>
+            <div id="receive-modal-checkboxes" class="flex flex-wrap gap-4 mb-4 text-sm text-cube-black"></div>
+            <div class="mb-2 text-xs text-cube-gray">ลายเซ็นลูกค้า</div>
+            <div class="border border-gray-200 rounded-xl overflow-hidden mb-2">
+                <canvas id="receive-signature-canvas" style="touch-action:none; display:block; width:100%; height:180px;" class="bg-gray-50"></canvas>
+            </div>
+            <div class="flex items-center justify-between mb-4">
+                <button type="button" onclick="clearReceiveSignature()" class="text-xs text-cube-gray hover:text-cube-black">ล้างลายเซ็น</button>
+                <span id="receive-signature-hint" class="text-[11px] text-gray-400">กรุณาให้ลูกค้าเซ็นในกรอบด้านบน</span>
+            </div>
+            <button type="button" id="receive-modal-save-btn" onclick="saveReceiveOrder()" disabled class="w-full bg-cube-black text-white rounded-full py-2.5 font-normal disabled:opacity-40 disabled:cursor-not-allowed transition-colors">บันทึกการรับสินค้า</button>
+        </div>
+    </div>
+    <script>
+        let _receiveOrder = null;
+        let _receiveSigDirty = false;
+        let _receiveDrawing = false;
+
+        function openReceiveModal(order) {
+            _receiveOrder = order;
+            _receiveSigDirty = false;
+            document.getElementById('receive-modal-orderno').textContent = order.orderNo || '';
+            const itemTypes = (order.items && order.items.length) ? [...new Set(order.items.map(i => i.type))] : ['suit', 'pants'];
+            const labelMap = { suit: 'รับเสื้อ', pants: 'รับกางเกง', shirt: 'รับเชิ้ต', vest: 'รับเสื้อกั๊ก', accessory: 'รับ Accessory' };
+            const box = document.getElementById('receive-modal-checkboxes');
+            box.innerHTML = itemTypes.map(t => `<label class="flex items-center gap-2"><input type="checkbox" class="receive-item-checkbox" data-type="${t}" style="width:18px;height:18px;"> ${labelMap[t] || t}</label>`).join('');
+            document.getElementById('receive-modal-save-btn').disabled = true;
+            document.getElementById('receive-modal-overlay').classList.remove('hidden');
+            setupReceiveSignaturePad();
+        }
+
+        function closeReceiveModal() {
+            document.getElementById('receive-modal-overlay').classList.add('hidden');
+            _receiveOrder = null;
+        }
+
+        function setupReceiveSignaturePad() {
+            const canvas = document.getElementById('receive-signature-canvas');
+            const ctx = canvas.getContext('2d');
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height || 180;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#1a1a1a';
+
+            function pos(e) {
+                const r = canvas.getBoundingClientRect();
+                const cx = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+                const cy = (e.touches ? e.touches[0].clientY : e.clientY) - r.top;
+                return { x: cx, y: cy };
+            }
+            function start(e) {
+                e.preventDefault();
+                _receiveDrawing = true;
+                const p = pos(e);
+                ctx.beginPath();
+                ctx.moveTo(p.x, p.y);
+            }
+            function move(e) {
+                if (!_receiveDrawing) return;
+                e.preventDefault();
+                const p = pos(e);
+                ctx.lineTo(p.x, p.y);
+                ctx.stroke();
+                if (!_receiveSigDirty) {
+                    _receiveSigDirty = true;
+                    document.getElementById('receive-modal-save-btn').disabled = false;
+                }
+            }
+            function end() { _receiveDrawing = false; }
+
+            canvas.onmousedown = start; canvas.onmousemove = move; canvas.onmouseup = end; canvas.onmouseleave = end;
+            canvas.ontouchstart = start; canvas.ontouchmove = move; canvas.ontouchend = end;
+        }
+
+        function clearReceiveSignature() {
+            const canvas = document.getElementById('receive-signature-canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            _receiveSigDirty = false;
+            document.getElementById('receive-modal-save-btn').disabled = true;
+        }
+
+        async function saveReceiveOrder() {
+            if (!_receiveOrder || !_receiveSigDirty) return;
+            const canvas = document.getElementById('receive-signature-canvas');
+            const signatureDataUrl = canvas.toDataURL('image/png');
+            const checkboxes = Array.from(document.querySelectorAll('.receive-item-checkbox'));
+            const receivedItems = {};
+            checkboxes.forEach(cb => { receivedItems[cb.dataset.type] = cb.checked; });
+
+            const btn = document.getElementById('receive-modal-save-btn');
+            btn.disabled = true;
+            btn.textContent = 'กำลังบันทึก...';
+            try {
+                const res = await fetch(`${SF_ORDER_WORKER_URL}/receive-order`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        orderId: _receiveOrder.id,
+                        orderNo: _receiveOrder.orderNo,
+                        receivedItems,
+                        signature: signatureDataUrl,
+                        receivedAt: new Date().toISOString()
+                    })
+                });
+                if (!res.ok) throw new Error('save failed');
+                if (typeof showToast === 'function') showToast('บันทึกการรับสินค้าเรียบร้อย', 'success');
+                closeReceiveModal();
+            } catch (err) {
+                if (typeof showToast === 'function') showToast('บันทึกไม่สำเร็จ - ระบบหลังบ้านยังไม่รองรับฟีเจอร์นี้ (ต้องเพิ่ม endpoint /receive-order ฝั่ง Worker)', 'error');
+                btn.disabled = false;
+            }
+            btn.textContent = 'บันทึกการรับสินค้า';
         }
     </script>
 </body>
