@@ -452,7 +452,7 @@
       flex: 0 0 76px;
       width: 76px;
       height: 36px;
-      border-radius: 999px;
+      border-radius: 12px;
       padding: 0 8px;
       text-align: center;
     }
@@ -1669,7 +1669,7 @@
                             ${buildPlainPillMeasureFieldHTML(`val-suit-back-length-${rowId}`, 'ความยาวหลัง')}
                         </div></div>
                     </div>
-                    <div class="sm:col-span-2">
+                    <div>
                         <div class="grid grid-cols-3 sm:grid-cols-3 gap-2 sm:gap-3">
                             ${buildAdjustSliderFieldHTML(`val-chest-${rowId}`, 'อก')}
                             ${buildAdjustSliderFieldHTML(`val-waist-size-${rowId}`, 'เอว')}
@@ -1683,7 +1683,7 @@
             const pantsHTML = `<div class="row-detail-fieldset hidden" data-fieldset-type="pants">
                 ${buildSizeEditToggleHTML('pants', rowId)}
                 <div>
-                        <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="leg-wrap-${rowId}">ขา</button>
+                        <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="leg-wrap-${rowId}">ขา <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px; margin-left:6px;"></i></button>
                         <div id="leg-wrap-${rowId}" style="display:none;" class="mt-2">
                             <div class="grid grid-cols-1 gap-2">
                                 ${buildPlainPillMeasureFieldHTML(`val-leg-length-${rowId}`, 'ความยาวขา')}
