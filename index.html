@@ -70,7 +70,7 @@
         .adjust-toggle-label { display: inline-flex; align-items: center; justify-content: center; padding: 3px 11px; border-radius: 999px; border: 1px solid #d8d2c2; font-size: 12px; font-weight: 500; color: #4a4738; background: #fff; cursor: pointer; user-select: none; transition: all .15s ease; white-space: nowrap; }
         .adjust-toggle-label.expanded { border-color: #1a1a1a; color: #1a1a1a; font-weight: 600; }
         .adjust-toggle-chip { display: inline-flex; align-items: baseline; justify-content: center; min-width: 58px; padding: 5px 9px; border-radius: 999px; border: 1px solid #e7e2d6; background: #fff; color: #1a1a1a; font-size: 12px; font-weight: 600; transition: all .15s ease; }
-        .adjust-toggle-chip .adjust-toggle-unit { font-size: 11px; line-height: 1.6; color: #9a9484; margin-left: 1px; font-weight: 400; display: inline-block; }
+        .adjust-unit-suffix { font-size: 11px; color: #9a9484; font-weight: 400; white-space: nowrap; }
         .adjust-toggle-chip.expanded { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
         .adjust-toggle-chip.expanded .adjust-toggle-unit { color: #cfcabb; }
         .adjust-field-wrap.adjust-field-expanded { grid-column: 1 / -1; }
@@ -1472,7 +1472,7 @@
                 <div class="flex items-center gap-2 flex-wrap">
                     <button type="button" class="adjust-toggle-label" data-target="${id}">${label}</button>
                     <span class="adjust-toggle-chip" data-target="${id}">
-                        <span class="adjust-toggle-value">0</span> <span class="adjust-toggle-unit">นิ้ว</span>
+                        <span class="adjust-toggle-value">0</span>
                     </span>
                     <div class="adjust-slider-wrap" data-target="${id}" style="display:none;">
                         <div class="adjust-slider-track">
@@ -1492,6 +1492,7 @@
                             </div>
                         </div>
                     </div>
+                    <span class="adjust-unit-suffix">นิ้ว</span>
                 </div>
             </div>`;
         }
