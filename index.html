@@ -78,7 +78,7 @@
         .adjust-slider-scale span:first-child { transform: translateX(0); }
         .adjust-slider-scale span:last-child { transform: translateX(-100%); }
         .adjust-slider-scale span.active { font-size: 15px; font-weight: 700; color: #1a1a1a; }
-        .adjust-toggle-chip.adjust-toggle-chip-unchanged { background: transparent; border-color: transparent; color: #9a9484; font-weight: 300; font-style: italic; padding-left: 0; padding-right: 0; min-width: 0; }
+        .adjust-toggle-chip.adjust-toggle-chip-unchanged { background: transparent; border-color: transparent; color: #9a9484; font-weight: 300; font-style: oblique 6deg; padding-left: 0; padding-right: 0; min-width: 0; }
         .notes-fill-input.has-value { background: #e2e8f0 !important; }
         .image-attach-btn.has-value { background-color: #e2e8f0 !important; border-color: #cbd5e1 !important; }
         .notes-toggle-btn { background: none; border: none; padding: 0; }
@@ -510,8 +510,8 @@
             <div class="app-card p-4 sm:p-8 mt-4 sm:mt-8 mb-8">
 
             <!-- App title + branch/staff quick-info bar: always visible -->
-            <div class="mb-4 no-print">
-                <div class="flex flex-col items-center text-center gap-1 pb-2">
+            <div class="mb-4 no-print flex items-start justify-between flex-wrap gap-4">
+                <div class="flex flex-col items-start text-left gap-1 pb-2">
                     <div class="relative flex items-center gap-1.5">
                         <h2 class="font-normal text-lg text-cube-black leading-[2]">สั่งปรับแก้ทรง<span class="font-bold">สำเร็จรูป</span></h2>
                         <!-- ปุ่ม (i) อธิบายความหมายไอคอนต่างๆ ในหน้านี้ (ล้างข้อมูล / บันทึกร่าง / บันทึก+ส่ง Lark) -->
@@ -544,7 +544,7 @@
                 </div>
 
                 <!-- เลขที่บิล (ซ้าย) + สาขา/พนักงานขาย แบบไม่มีกรอบ (ขวาล่าง) แถวเดียวกัน -->
-                <div class="flex items-end justify-between gap-x-4 gap-y-2 w-full flex-wrap">
+                <div class="flex flex-col items-end gap-2">
                     <div class="flex items-center gap-2 flex-wrap">
                         <span class="text-[11px] text-cube-gray self-end mb-1 whitespace-nowrap">เลขที่บิล</span>
                         <span id="form-header-order-no" class="text-lg font-medium text-cube-gold tracking-wide whitespace-nowrap">-</span>
@@ -1656,14 +1656,14 @@
                 ${buildSizeEditToggleHTML('suit', rowId)}
                 <div id="measure-wrap-suit-${rowId}" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
                     <div>
-                        <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="arm-wrap-${rowId}">แขน <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px;"></i></button>
+                        <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="arm-wrap-${rowId}">แขน <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px; margin-left:6px;"></i></button>
                         <div id="arm-wrap-${rowId}" style="display:none;" class="mt-2"><div class="flex items-center gap-4 flex-wrap">
                             ${buildPlainPillMeasureFieldHTML(`val-sleeve-length-${rowId}`, 'ยาวแขน')}
                             ${buildPlainPillMeasureFieldHTML(`val-arm-upper-${rowId}`, 'ต้นแขน')}
                         </div></div>
                     </div>
                     <div>
-                        <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="body-wrap-${rowId}">ความยาวเสื้อ <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px;"></i></button>
+                        <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="body-wrap-${rowId}">ความยาวเสื้อ <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px; margin-left:6px;"></i></button>
                         <div id="body-wrap-${rowId}" style="display:none;" class="mt-2"><div class="flex items-center gap-4 flex-wrap">
                             ${buildPlainPillMeasureFieldHTML(`val-suit-front-length-${rowId}`, 'ความยาวหน้า')}
                             ${buildPlainPillMeasureFieldHTML(`val-suit-back-length-${rowId}`, 'ความยาวหลัง')}
@@ -1754,7 +1754,7 @@
                 <div class="grid items-end gap-2 grid-cols-2 sm:grid-cols-[minmax(80px,1fr)_minmax(80px,1fr)_auto_minmax(80px,1fr)_auto]">
                     <div class="min-w-0 col-span-2 sm:col-span-1">
                         <div class="mb-2">
-                            <span class="row-seq-badge inline-block bg-cube-black text-white text-sm font-light uppercase tracking-wide px-3 py-1 rounded-full whitespace-nowrap">Product #${seq}</span>
+                            <span class="row-seq-badge inline-block bg-cube-black text-white text-xs font-light uppercase tracking-wide px-3 py-1 rounded-full whitespace-nowrap">Product #${seq}</span>
                         </div>
                         <label class="block text-[11px] text-cube-gray mb-1">ประเภทสินค้า</label>
                         <select class="product-type-select sku-input">
