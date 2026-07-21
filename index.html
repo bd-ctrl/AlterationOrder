@@ -67,18 +67,22 @@
             #pickup-fields-grid input[type="date"] { padding-left: 10px; padding-right: 10px; font-size: 0.8rem; }
         }
 
-        .adjust-toggle-chip { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; padding: 4px 10px; border-radius: 999px; border: 1px solid #e7e2d6; background: #fff; color: #1a1a1a; font-size: 12px; font-weight: 600; transition: all .15s ease; }
+        .adjust-toggle-label { display: inline-flex; align-items: center; justify-content: center; padding: 3px 11px; border-radius: 999px; border: 1px solid #d8d2c2; font-size: 12px; font-weight: 500; color: #4a4738; background: #fff; cursor: pointer; user-select: none; transition: all .15s ease; white-space: nowrap; }
+        .adjust-toggle-label.expanded { border-color: #1a1a1a; color: #1a1a1a; font-weight: 600; }
+        .adjust-toggle-chip { display: inline-flex; align-items: baseline; justify-content: center; min-width: 50px; padding: 4px 8px; border-radius: 999px; border: 1px solid #e7e2d6; background: #fff; color: #1a1a1a; font-size: 12px; font-weight: 600; transition: all .15s ease; }
+        .adjust-toggle-chip .adjust-toggle-unit { font-size: 9px; color: #9a9484; margin-left: 2px; font-weight: 400; }
         .adjust-toggle-chip.expanded { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
-        .adjust-toggle-label.expanded { color: #1a1a1a; font-weight: 600; }
-        .adjust-slider-wrap { margin-top: 8px; }
-        .adjust-slider-track { position: relative; height: 34px; display: flex; align-items: center; cursor: pointer; touch-action: none; }
+        .adjust-toggle-chip.expanded .adjust-toggle-unit { color: #cfcabb; }
+        .adjust-field-wrap.adjust-field-expanded { grid-column: 1 / -1; }
+        .adjust-slider-wrap { flex: 1 1 110px; min-width: 90px; }
+        .adjust-slider-track { position: relative; height: 38px; display: flex; align-items: center; cursor: pointer; touch-action: none; }
         .adjust-slider-track .rail { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); height: 3px; background: #e7e2d6; border-radius: 2px; }
         .adjust-slider-track .fill { position: absolute; left: 0; top: 50%; transform: translateY(-50%); height: 3px; background: #1a1a1a; border-radius: 2px; pointer-events: none; }
         .adjust-slider-track .tick { position: absolute; top: 50%; width: 2px; height: 6px; background: #d3cdbe; transform: translate(-50%, -50%); pointer-events: none; }
-        .adjust-slider-track .handle { position: absolute; top: 50%; width: 26px; height: 26px; border-radius: 50%; background: #1a1a1a; transform: translate(-50%, -50%); box-shadow: 0 2px 6px rgba(0,0,0,0.25); cursor: grab; z-index: 2; display: flex; align-items: center; justify-content: center; }
+        .adjust-slider-track .handle { position: absolute; top: 50%; width: 34px; height: 34px; border-radius: 50%; background: #1a1a1a; transform: translate(-50%, -50%); box-shadow: 0 2px 6px rgba(0,0,0,0.25); cursor: grab; z-index: 2; display: flex; align-items: center; justify-content: center; }
         .adjust-slider-track .handle:active { cursor: grabbing; }
         .adjust-slider-track .handle:focus { outline: 2px solid #C9A24B; outline-offset: 2px; }
-        .adjust-slider-track .handle-value { color: #fff; font-size: 9px; font-weight: 700; pointer-events: none; white-space: nowrap; }
+        .adjust-slider-track .handle-value { color: #fff; font-size: 13px; font-weight: 700; pointer-events: none; white-space: nowrap; }
 
         /* ท้ายเว็บ: แถบขาวด้านล่างสุด โลโก้ SUITCUBE + ลิงก์บันทึกแบบร่าง/ดูรายการย้อนหลัง (ย้ายจาก header เดิมมาเป็น footer) */
         .app-header {
@@ -1463,30 +1467,29 @@
         }
 
         function buildAdjustSliderFieldHTML(id, label) {
-            return `<div>
-                <div class="flex items-center justify-between mb-1">
-                    <label class="adjust-toggle-label cursor-pointer select-none block text-xs font-normal text-cube-gray" data-target="${id}">${label}</label>
-                    <span class="text-[10px] text-gray-400">นิ้ว</span>
-                </div>
+            return `<div class="adjust-field-wrap" data-target="${id}">
                 <input type="hidden" id="${id}" value="0">
-                <span class="adjust-toggle-chip" data-target="${id}">
-                    <span class="adjust-toggle-value">0</span>
-                </span>
-                <div class="adjust-slider-wrap" data-target="${id}" style="display:none;">
-                    <div class="adjust-slider-track">
-                        <div class="rail"></div>
-                        <div class="fill" style="width:50%"></div>
-                        <div class="tick" style="left:0%"></div>
-                        <div class="tick" style="left:12.5%"></div>
-                        <div class="tick" style="left:25%"></div>
-                        <div class="tick" style="left:37.5%"></div>
-                        <div class="tick" style="left:50%"></div>
-                        <div class="tick" style="left:62.5%"></div>
-                        <div class="tick" style="left:75%"></div>
-                        <div class="tick" style="left:87.5%"></div>
-                        <div class="tick" style="left:100%"></div>
-                        <div class="handle" tabindex="0" role="slider" aria-valuemin="-2" aria-valuemax="2" aria-valuenow="0" style="left:50%">
-                            <span class="handle-value">0</span>
+                <div class="flex items-center gap-2 flex-wrap">
+                    <button type="button" class="adjust-toggle-label" data-target="${id}">${label}</button>
+                    <span class="adjust-toggle-chip" data-target="${id}">
+                        <span class="adjust-toggle-value">0</span><span class="adjust-toggle-unit">นิ้ว</span>
+                    </span>
+                    <div class="adjust-slider-wrap" data-target="${id}" style="display:none;">
+                        <div class="adjust-slider-track">
+                            <div class="rail"></div>
+                            <div class="fill" style="width:50%"></div>
+                            <div class="tick" style="left:0%"></div>
+                            <div class="tick" style="left:12.5%"></div>
+                            <div class="tick" style="left:25%"></div>
+                            <div class="tick" style="left:37.5%"></div>
+                            <div class="tick" style="left:50%"></div>
+                            <div class="tick" style="left:62.5%"></div>
+                            <div class="tick" style="left:75%"></div>
+                            <div class="tick" style="left:87.5%"></div>
+                            <div class="tick" style="left:100%"></div>
+                            <div class="handle" tabindex="0" role="slider" aria-valuemin="-2" aria-valuemax="2" aria-valuenow="0" style="left:50%">
+                                <span class="handle-value">0</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2688,11 +2691,13 @@
             if (label) {
                 const wrap = document.querySelector(`.adjust-slider-wrap[data-target="${label.dataset.target}"]`);
                 const chip = document.querySelector(`.adjust-toggle-chip[data-target="${label.dataset.target}"]`);
+                const fieldWrap = document.querySelector(`.adjust-field-wrap[data-target="${label.dataset.target}"]`);
                 if (wrap) {
                     const isOpen = wrap.style.display !== 'none';
-                    wrap.style.display = isOpen ? 'none' : 'block';
+                    wrap.style.display = isOpen ? 'none' : 'flex';
                     if (chip) chip.classList.toggle('expanded', !isOpen);
                     label.classList.toggle('expanded', !isOpen);
+                    if (fieldWrap) fieldWrap.classList.toggle('adjust-field-expanded', !isOpen);
                 }
                 return;
             }
@@ -4088,6 +4093,8 @@
             document.getElementById('alteration-form').reset();
             document.querySelectorAll('.adjust-slider-wrap').forEach(w => { syncAdjustSliderVisual(w.dataset.target); w.style.display = 'none'; });
             document.querySelectorAll('.adjust-toggle-chip').forEach(c => c.classList.remove('expanded'));
+            document.querySelectorAll('.adjust-toggle-label').forEach(l => l.classList.remove('expanded'));
+            document.querySelectorAll('.adjust-field-wrap').forEach(f => f.classList.remove('adjust-field-expanded'));
 
             // รีเซ็ตฟิลด์สาขา (รวม OFFICE) กลับเป็นค่า default OFFICE
             const _s = id => document.getElementById(id);
