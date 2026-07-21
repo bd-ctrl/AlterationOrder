@@ -1705,12 +1705,17 @@
             const badgeEl = row.querySelector('.row-seq-badge');
             if (!badgeEl) return;
             const badgeWrap = badgeEl.parentElement;
-            badgeWrap.classList.add('flex', 'items-center', 'gap-3', 'flex-wrap');
-            badgeWrap.querySelectorAll('.image-attach-block').forEach(el => {
-                if (el.parentElement === badgeWrap) el.remove();
-            });
+            badgeWrap.classList.add('flex', 'items-center', 'gap-3', 'flex-wrap', 'w-full');
+            if (row.firstElementChild !== badgeWrap) {
+                row.insertBefore(badgeWrap, row.firstElementChild);
+            }
             const activeBlock = row.querySelector(`.image-attach-block[data-fieldset-type="${type}"]`);
-            if (activeBlock) badgeWrap.appendChild(activeBlock);
+            badgeWrap.querySelectorAll('.image-attach-block').forEach(el => {
+                if (el !== activeBlock && el.parentElement === badgeWrap) el.remove();
+            });
+            if (activeBlock && activeBlock.parentElement !== badgeWrap) {
+                badgeWrap.appendChild(activeBlock);
+            }
         }
 
         function addProductTypeRow(selectedValue) {
