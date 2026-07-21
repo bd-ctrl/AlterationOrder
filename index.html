@@ -547,7 +547,7 @@
                 <div class="flex flex-col items-end gap-2">
                     <div class="flex items-center gap-2 flex-wrap">
                         <span class="text-[11px] text-cube-gray self-end mb-1 whitespace-nowrap">เลขที่บิล</span>
-                        <span id="form-header-order-no" class="text-lg font-medium text-cube-gold tracking-wide whitespace-nowrap">-</span>
+                        <span id="form-header-order-no" class="text-2xl font-medium text-cube-gold tracking-wide whitespace-nowrap">-</span>
                         <!-- ไอคอนดูรายการที่บันทึกจริงย้อนหลัง (ไม่ใช่ Draft) -->
                         <button type="button" onclick="toggleHistoryView()" aria-label="ดูรายการที่บันทึกไว้ย้อนหลัง" title="ดูรายการที่บันทึกไว้ย้อนหลัง" class="self-end mb-1 w-6 h-6 flex items-center justify-center text-cube-gray hover:text-cube-gold transition-colors">
                             <i class="fa-solid fa-clock-rotate-left text-sm" aria-hidden="true"></i>
@@ -1654,7 +1654,7 @@
         function buildRowDetailFieldsHTML(rowId) {
             const suitHTML = `<div class="row-detail-fieldset hidden" data-fieldset-type="suit">
                 ${buildSizeEditToggleHTML('suit', rowId)}
-                <div id="measure-wrap-suit-${rowId}" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
+                <div id="measure-wrap-suit-${rowId}" class="grid grid-cols-1 gap-4 mb-3">
                     <div>
                         <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="arm-wrap-${rowId}">แขน <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px; margin-left:6px;"></i></button>
                         <div id="arm-wrap-${rowId}" style="display:none;" class="mt-2"><div class="flex items-center gap-4 flex-wrap">
