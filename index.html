@@ -2799,15 +2799,15 @@
             }
         }
 
-        const ADJUST_SLIDER_MIN = -2, ADJUST_SLIDER_MAX = 2, ADJUST_SLIDER_STEP = 0.5;
+        const ADJUST_SLIDER_MIN = -2, ADJUST_SLIDER_MAX = 2, ADJUST_SLIDER_STEP = 0.25;
         function formatAdjustValue(v) {
-            const n = Math.round(v * 10) / 10;
+            const n = Math.round(v * 100) / 100;
             if (n === 0) return '0';
             return (n > 0 ? '+ ' : '- ') + Math.abs(n);
         }
 
         function formatAdjustChipValue(v) {
-            const n = Math.round(v * 10) / 10;
+            const n = Math.round(v * 100) / 100;
             if (n === 0) return 'ไม่แก้ขนาด';
             return (n > 0 ? 'ขยายออก ' : 'เอาเข้า ') + Math.abs(n);
         }
@@ -2818,7 +2818,7 @@
             opts = opts || {};
             let v = Math.max(ADJUST_SLIDER_MIN, Math.min(ADJUST_SLIDER_MAX, rawValue));
             v = Math.round(v / ADJUST_SLIDER_STEP) * ADJUST_SLIDER_STEP;
-            v = Math.round(v * 10) / 10;
+            v = Math.round(v * 100) / 100;
             const targetId = wrap.dataset.target;
             const input = document.getElementById(targetId);
             if (!input) return;
