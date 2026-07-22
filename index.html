@@ -1545,7 +1545,7 @@
                 <input type="hidden" id="${id}" value="0">
                 <div class="flex items-center gap-2 flex-wrap">
                     <button type="button" class="adjust-toggle-label adjust-toggle-label-fixed${usePillToggle ? ' hidden' : ''}" data-target="${id}">${label}</button>
-                    ${usePillToggle ? `<div class="inline-flex rounded-full bg-gray-100 p-1 gap-1">
+                    ${usePillToggle ? `<span class="adjust-toggle-label">${label}</span><div class="inline-flex rounded-full bg-gray-100 p-1 gap-1">
                         <button type="button" id="${id}-toggle-yes" onclick="setSectionPillState('${id}', true)" class="px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors text-cube-gray hover:text-cube-black">แก้ไข</button>
                         <button type="button" id="${id}-toggle-no" onclick="setSectionPillState('${id}', false)" class="px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors bg-cube-gold text-white shadow-sm">ไม่แก้ไข</button>
                     </div>` : ''}
@@ -1694,6 +1694,7 @@
                 <div id="measure-wrap-suit-${rowId}" class="grid grid-cols-1 gap-4 mb-3">
                     <div>
                         <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle hidden" data-target="arm-wrap-${rowId}">ความยาวแขน <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px; margin-left:6px;"></i></button>
+                    <span class="adjust-toggle-label">ความยาวแขน</span>
                         <div class="inline-flex rounded-full bg-gray-100 p-1 gap-1">
                             <button type="button" id="arm-wrap-${rowId}-toggle-yes" onclick="setSectionPillState('arm-wrap-${rowId}', true)" class="px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors text-cube-gray hover:text-cube-black">แก้ไข</button>
                             <button type="button" id="arm-wrap-${rowId}-toggle-no" onclick="setSectionPillState('arm-wrap-${rowId}', false)" class="px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors bg-cube-gold text-white shadow-sm">ไม่แก้ไข</button>
@@ -1705,6 +1706,7 @@
                     </div>
                     <div>
                         <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle hidden" data-target="body-wrap-${rowId}">ความยาวเสื้อ <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px; margin-left:6px;"></i></button>
+                    <span class="adjust-toggle-label">ความยาวเสื้อ</span>
                         <div class="inline-flex rounded-full bg-gray-100 p-1 gap-1">
                             <button type="button" id="body-wrap-${rowId}-toggle-yes" onclick="setSectionPillState('body-wrap-${rowId}', true)" class="px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors text-cube-gray hover:text-cube-black">แก้ไข</button>
                             <button type="button" id="body-wrap-${rowId}-toggle-no" onclick="setSectionPillState('body-wrap-${rowId}', false)" class="px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors bg-cube-gold text-white shadow-sm">ไม่แก้ไข</button>
