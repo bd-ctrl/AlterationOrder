@@ -1514,7 +1514,7 @@
                 const isExpanded = hiddenBtn.classList.contains('expanded');
                 if (isExpanded !== wantEdit) hiddenBtn.click();
             }
-            syncSectionPillClasses(wrapId, wantEdit);
+            syncSectionPillClasses(wrapId, wantEdit); const unitEl = document.querySelector(`.adjust-unit-suffix[data-target="${wrapId}"]`); if (unitEl) unitEl.style.display = wantEdit ? '' : 'none';
         }
 
         function expandSectionMeasureIfSet(wrapId, ids) {
@@ -2835,7 +2835,7 @@
             if (v === 0) {
                 if (chip) chip.textContent = 'ไม่แก้ขนาด';
                 if (chipEl) chipEl.classList.add('adjust-toggle-chip-unchanged');
-                if (unitEl) unitEl.style.display = 'none';
+                if (unitEl) unitEl.style.display = '';
             } else {
                 if (chip) chip.textContent = formatAdjustChipValue(v);
                 if (chipEl) chipEl.classList.remove('adjust-toggle-chip-unchanged');
