@@ -1522,7 +1522,7 @@
             if (hasValue) {
                 const wrap = document.getElementById(wrapId);
                 const btn = document.querySelector(`.notes-toggle-btn[data-target="${wrapId}"]`);
-                if (wrap) wrap.style.display = 'block';
+                if (wrap) { wrap.style.display = 'inline-flex'; wrap.style.verticalAlign = 'middle'; wrap.style.alignItems = 'center'; }
                 if (btn) btn.classList.add('expanded');
                 syncSectionPillClasses(wrapId, true);
             }
@@ -1535,7 +1535,7 @@
             if (hasValue) {
                 const wrap = document.getElementById(`leg-wrap-${rowId}`);
                 const btn = document.querySelector(`.notes-toggle-btn[data-target="leg-wrap-${rowId}"]`);
-                if (wrap) wrap.style.display = 'block';
+                if (wrap) { wrap.style.display = 'inline-flex'; wrap.style.verticalAlign = 'middle'; wrap.style.alignItems = 'center'; }
                 if (btn) btn.classList.add('expanded');
             }
         }
@@ -1699,7 +1699,7 @@
                             <button type="button" id="arm-wrap-${rowId}-toggle-yes" onclick="setSectionPillState('arm-wrap-${rowId}', true)" class="px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors text-cube-gray hover:text-cube-black">แก้ไข</button>
                             <button type="button" id="arm-wrap-${rowId}-toggle-no" onclick="setSectionPillState('arm-wrap-${rowId}', false)" class="px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors bg-cube-gold text-white shadow-sm">ไม่แก้ไข</button>
                         </div>
-                        <div id="arm-wrap-${rowId}" style="display:none;" class="mt-2"><div class="flex items-center gap-16 flex-wrap">
+                        <div id="arm-wrap-${rowId}" style="display:none;" class=""><div class="flex items-center gap-16 flex-wrap">
                             ${buildPlainPillMeasureFieldHTML(`val-sleeve-length-${rowId}`, 'ยาวแขน')}
                             ${buildPlainPillMeasureFieldHTML(`val-arm-upper-${rowId}`, 'ต้นแขน')}
                         </div></div>
@@ -1711,7 +1711,7 @@
                             <button type="button" id="body-wrap-${rowId}-toggle-yes" onclick="setSectionPillState('body-wrap-${rowId}', true)" class="px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors text-cube-gray hover:text-cube-black">แก้ไข</button>
                             <button type="button" id="body-wrap-${rowId}-toggle-no" onclick="setSectionPillState('body-wrap-${rowId}', false)" class="px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors bg-cube-gold text-white shadow-sm">ไม่แก้ไข</button>
                         </div>
-                        <div id="body-wrap-${rowId}" style="display:none;" class="mt-2"><div class="flex items-center gap-16 flex-wrap">
+                        <div id="body-wrap-${rowId}" style="display:none;" class=""><div class="flex items-center gap-16 flex-wrap">
                             ${buildPlainPillMeasureFieldHTML(`val-suit-front-length-${rowId}`, 'ความยาวหน้า')}
                             ${buildPlainPillMeasureFieldHTML(`val-suit-back-length-${rowId}`, 'ความยาวหลัง')}
                         </div></div>
@@ -1733,7 +1733,7 @@
                 ${buildSizeEditToggleHTML('pants', rowId)}
                 <div>
                         <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="leg-wrap-${rowId}">ขา <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px; margin-left:6px;"></i></button>
-                        <div id="leg-wrap-${rowId}" style="display:none;" class="mt-2">
+                        <div id="leg-wrap-${rowId}" style="display:none;" class="">
                             <div class="grid grid-cols-1 gap-2">
                                 ${buildAdjustSliderFieldHTML(`val-thigh-tighten-${rowId}`, 'โคนขา')}
                                 ${buildAdjustSliderFieldHTML(`val-ankle-tighten-${rowId}`, 'ปลายขา')}
