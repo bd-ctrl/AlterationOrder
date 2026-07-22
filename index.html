@@ -3061,7 +3061,7 @@
             // (ผูก event ไว้ใน addProductTypeRow() อยู่แล้ว ไม่ต้องผูกซ้ำตรงนี้)
 
             // Radio status syncs
-            document.querySelectorAll('input[name="pay-status"]').forEach(radio => {
+            (function(){var radios=document.querySelectorAll('input[name="pay-status"]');if(radios.length>=2){var labels=[].map.call(radios,function(r){return r.closest('label');});if(labels[0]&&labels[0].parentNode){var container=document.createElement('div');container.className='inline-flex rounded-full bg-gray-100 p-1 gap-1';labels[0].parentNode.insertBefore(container,labels[0]);var refreshPayPill=function(){labels.forEach(function(lbl,i){var on=radios[i].checked;lbl.className='px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors cursor-pointer '+(on?'bg-cube-gold text-white shadow-sm':'text-cube-gray hover:text-cube-black');var circle=lbl.querySelector('span.relative');if(circle)circle.style.display='none';container.appendChild(lbl);});};for(var pi=0;pi<radios.length;pi++){radios[pi].addEventListener('change',refreshPayPill);}refreshPayPill();}}})(); document.querySelectorAll('input[name="pay-status"]').forEach(radio => {
                 radio.addEventListener('change', (e) => {
                     document.getElementById('pv-status-paid').innerText = e.target.value === 'paid' ? '✓' : '';
                     document.getElementById('pv-status-debt').innerText = e.target.value === 'debt' ? '✓' : '';
