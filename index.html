@@ -548,7 +548,7 @@
                 <div class="flex flex-col items-end gap-2">
                     <div class="flex items-center gap-2 flex-wrap">
                         <span class="text-[11px] text-cube-gray self-end mb-1 whitespace-nowrap">เลขที่บิล</span>
-                        <span id="form-header-order-no" class="text-2xl font-medium text-cube-gold tracking-wide whitespace-nowrap">-</span>
+                        <span id="form-header-order-no" class="text-xl font-medium text-cube-gold tracking-wide whitespace-nowrap">-</span>
                         <!-- ไอคอนดูรายการที่บันทึกจริงย้อนหลัง (ไม่ใช่ Draft) -->
                         <button type="button" onclick="toggleHistoryView()" aria-label="ดูรายการที่บันทึกไว้ย้อนหลัง" title="ดูรายการที่บันทึกไว้ย้อนหลัง" class="self-end mb-1 w-6 h-6 flex items-center justify-center text-cube-gray hover:text-cube-gold transition-colors">
                             <i class="fa-solid fa-clock-rotate-left text-sm" aria-hidden="true"></i>
@@ -691,24 +691,17 @@
                                 <div id="shipping-method-wrap" style="display:none" class="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 border-t pt-3 border-gray-200">
                                     <label class="min-h-[36px] flex items-center gap-2 text-xs text-cube-gray cursor-pointer">
                                         <span class="relative w-3.5 h-3.5 rounded-full border border-gray-300 bg-white flex items-center justify-center flex-shrink-0 transition-colors has-[:checked]:bg-cube-gold has-[:checked]:border-cube-gold">
-                                            <input type="radio" name="shipping" value="SPX" class="sr-only">
+                                            <input type="radio" name="shipping" value="Messenger" class="sr-only">
                                             <i class="fa-solid fa-check text-white text-[7px]" aria-hidden="true"></i>
                                         </span>
-                                        <span>SPX</span>
+                                        <span>Messenger</span>
                                     </label>
                                     <label class="min-h-[36px] flex items-center gap-2 text-xs text-cube-gray cursor-pointer">
                                         <span class="relative w-3.5 h-3.5 rounded-full border border-gray-300 bg-white flex items-center justify-center flex-shrink-0 transition-colors has-[:checked]:bg-cube-gold has-[:checked]:border-cube-gold">
-                                            <input type="radio" name="shipping" value="EMS" class="sr-only">
+                                            <input type="radio" name="shipping" value="ขนส่งเอกชน" class="sr-only">
                                             <i class="fa-solid fa-check text-white text-[7px]" aria-hidden="true"></i>
                                         </span>
-                                        <span>EMS</span>
-                                    </label>
-                                    <label class="min-h-[36px] flex items-center gap-2 text-xs text-cube-gray cursor-pointer">
-                                        <span class="relative w-3.5 h-3.5 rounded-full border border-gray-300 bg-white flex items-center justify-center flex-shrink-0 transition-colors has-[:checked]:bg-cube-gold has-[:checked]:border-cube-gold">
-                                            <input type="radio" name="shipping" value="LLM" class="sr-only">
-                                            <i class="fa-solid fa-check text-white text-[7px]" aria-hidden="true"></i>
-                                        </span>
-                                        <span>LLM</span>
+                                        <span>ขนส่งเอกชน</span>
                                     </label>
                                     <!-- Address inline (shown only when a shipping method is selected) -->
                                     <div id="ship-address-wrap" style="display:none" class="flex items-center gap-2 flex-1 min-w-[180px]">
@@ -911,7 +904,7 @@
                             <!-- กรณีรับที่หน้าร้าน -->
                             <span id="pv-pickup-branch-wrap" class="hidden font-semibold">รับที่สาขา <span id="pv-pickup-branch"></span></span>
                             <!-- ช่องทางแบบเก่า (ซ่อนไว้ให้โค้ด sync เดิมเขียนได้) -->
-                            <span class="hidden" aria-hidden="true"><span id="pv-ship-spx"></span><span id="pv-ship-ems"></span><span id="pv-ship-llm"></span></span>
+                            <span class="hidden" aria-hidden="true"><span id="pv-ship-messenger"></span><span id="pv-ship-courier"></span></span>
                         </div>
 
                         <!-- รายละเอียดการรับ -->
@@ -1506,6 +1499,24 @@
             </div>`;
         }
 
+        function syncSectionPillClasses(wrapId, wantEdit) {
+            const yesBtn = document.getElementById(`${wrapId}-toggle-yes`);
+            const noBtn = document.getElementById(`${wrapId}-toggle-no`);
+            const activeCls = ['bg-cube-gold','text-white','shadow-sm'];
+            const inactiveCls = ['text-cube-gray','hover:text-cube-black'];
+            if (yesBtn) { yesBtn.classList.remove(...activeCls, ...inactiveCls); yesBtn.classList.add(...(wantEdit ? activeCls : inactiveCls)); }
+            if (noBtn) { noBtn.classList.remove(...activeCls, ...inactiveCls); noBtn.classList.add(...(!wantEdit ? activeCls : inactiveCls)); }
+        }
+
+        function setSectionPillState(wrapId, wantEdit) {
+            const hiddenBtn = document.querySelector(`.adjust-toggle-label[data-target="${wrapId}"]`);
+            if (hiddenBtn) {
+                const isExpanded = hiddenBtn.classList.contains('expanded');
+                if (isExpanded !== wantEdit) hiddenBtn.click();
+            }
+            syncSectionPillClasses(wrapId, wantEdit);
+        }
+
         function expandSectionMeasureIfSet(wrapId, ids) {
             const hasValue = ids.some(id => { const el = document.getElementById(id); return el && el.value; });
             if (hasValue) {
@@ -1513,6 +1524,7 @@
                 const btn = document.querySelector(`.notes-toggle-btn[data-target="${wrapId}"]`);
                 if (wrap) wrap.style.display = 'block';
                 if (btn) btn.classList.add('expanded');
+                syncSectionPillClasses(wrapId, true);
             }
         }
 
@@ -1528,11 +1540,15 @@
             }
         }
 
-        function buildAdjustSliderFieldHTML(id, label) {
+        function buildAdjustSliderFieldHTML(id, label, usePillToggle) {
             return `<div class="adjust-field-wrap" data-target="${id}">
                 <input type="hidden" id="${id}" value="0">
                 <div class="flex items-center gap-2 flex-wrap">
-                    <button type="button" class="adjust-toggle-label adjust-toggle-label-fixed" data-target="${id}">${label}</button>
+                    <button type="button" class="adjust-toggle-label adjust-toggle-label-fixed${usePillToggle ? ' hidden' : ''}" data-target="${id}">${label}</button>
+                    ${usePillToggle ? `<div class="inline-flex rounded-full bg-gray-100 p-1 gap-1">
+                        <button type="button" id="${id}-toggle-yes" onclick="setSectionPillState('${id}', true)" class="px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors text-cube-gray hover:text-cube-black">แก้ไข</button>
+                        <button type="button" id="${id}-toggle-no" onclick="setSectionPillState('${id}', false)" class="px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors bg-cube-gold text-white shadow-sm">ไม่แก้ไข</button>
+                    </div>` : ''}
                     <span class="adjust-toggle-chip adjust-toggle-chip-unchanged" data-target="${id}">
                         <span class="adjust-toggle-value">ไม่แก้ขนาด</span>
                     </span>
@@ -1546,15 +1562,23 @@
                         </div>
                         <div class="adjust-slider-ticks">
                             <div class="tick2" style="left:0%"></div>
+                            <div class="tick2" style="left:6.25%"></div>
                             <div class="tick2" style="left:12.5%"></div>
+                            <div class="tick2" style="left:18.75%"></div>
                             <div class="tick2" style="left:25%"></div>
+                            <div class="tick2" style="left:31.25%"></div>
                             <div class="tick2" style="left:37.5%"></div>
+                            <div class="tick2" style="left:43.75%"></div>
                             <div class="tick2" style="left:50%"></div>
+                            <div class="tick2" style="left:56.25%"></div>
                             <div class="tick2" style="left:62.5%"></div>
+                            <div class="tick2" style="left:68.75%"></div>
                             <div class="tick2" style="left:75%"></div>
+                            <div class="tick2" style="left:81.25%"></div>
                             <div class="tick2" style="left:87.5%"></div>
+                            <div class="tick2" style="left:93.75%"></div>
                             <div class="tick2" style="left:100%"></div>
-                        </div>
+</div>
                         <div class="adjust-slider-scale">
                             <span data-val="-2" style="left:0%">-2</span>
                             <span data-val="-1.5" style="left:12.5%">-1.5</span>
@@ -1591,15 +1615,23 @@
                         </div>
                         <div class="adjust-slider-ticks">
                             <div class="tick2" style="left:0%"></div>
+                            <div class="tick2" style="left:6.25%"></div>
                             <div class="tick2" style="left:12.5%"></div>
+                            <div class="tick2" style="left:18.75%"></div>
                             <div class="tick2" style="left:25%"></div>
+                            <div class="tick2" style="left:31.25%"></div>
                             <div class="tick2" style="left:37.5%"></div>
+                            <div class="tick2" style="left:43.75%"></div>
                             <div class="tick2" style="left:50%"></div>
+                            <div class="tick2" style="left:56.25%"></div>
                             <div class="tick2" style="left:62.5%"></div>
+                            <div class="tick2" style="left:68.75%"></div>
                             <div class="tick2" style="left:75%"></div>
+                            <div class="tick2" style="left:81.25%"></div>
                             <div class="tick2" style="left:87.5%"></div>
+                            <div class="tick2" style="left:93.75%"></div>
                             <div class="tick2" style="left:100%"></div>
-                        </div>
+</div>
                         <div class="adjust-slider-scale">
                             <span data-val="-2" style="left:0%">-2</span>
                             <span data-val="-1.5" style="left:12.5%">-1.5</span>
@@ -1661,14 +1693,22 @@
                 ${buildSizeEditToggleHTML('suit', rowId)}
                 <div id="measure-wrap-suit-${rowId}" class="grid grid-cols-1 gap-4 mb-3">
                     <div>
-                        <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="arm-wrap-${rowId}">แขน <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px; margin-left:6px;"></i></button>
+                        <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle hidden" data-target="arm-wrap-${rowId}">ความยาวแขน <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px; margin-left:6px;"></i></button>
+                        <div class="inline-flex rounded-full bg-gray-100 p-1 gap-1">
+                            <button type="button" id="arm-wrap-${rowId}-toggle-yes" onclick="setSectionPillState('arm-wrap-${rowId}', true)" class="px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors text-cube-gray hover:text-cube-black">แก้ไข</button>
+                            <button type="button" id="arm-wrap-${rowId}-toggle-no" onclick="setSectionPillState('arm-wrap-${rowId}', false)" class="px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors bg-cube-gold text-white shadow-sm">ไม่แก้ไข</button>
+                        </div>
                         <div id="arm-wrap-${rowId}" style="display:none;" class="mt-2"><div class="flex items-center gap-16 flex-wrap">
                             ${buildPlainPillMeasureFieldHTML(`val-sleeve-length-${rowId}`, 'ยาวแขน')}
                             ${buildPlainPillMeasureFieldHTML(`val-arm-upper-${rowId}`, 'ต้นแขน')}
                         </div></div>
                     </div>
                     <div>
-                        <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle" data-target="body-wrap-${rowId}">ความยาวเสื้อ <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px; margin-left:6px;"></i></button>
+                        <button type="button" class="adjust-toggle-label notes-toggle-btn section-toggle hidden" data-target="body-wrap-${rowId}">ความยาวเสื้อ <i class="fa-solid fa-chevron-down text-cube-gold" style="font-size:10px; margin-left:6px;"></i></button>
+                        <div class="inline-flex rounded-full bg-gray-100 p-1 gap-1">
+                            <button type="button" id="body-wrap-${rowId}-toggle-yes" onclick="setSectionPillState('body-wrap-${rowId}', true)" class="px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors text-cube-gray hover:text-cube-black">แก้ไข</button>
+                            <button type="button" id="body-wrap-${rowId}-toggle-no" onclick="setSectionPillState('body-wrap-${rowId}', false)" class="px-3.5 py-1.5 rounded-full text-xs font-normal transition-colors bg-cube-gold text-white shadow-sm">ไม่แก้ไข</button>
+                        </div>
                         <div id="body-wrap-${rowId}" style="display:none;" class="mt-2"><div class="flex items-center gap-16 flex-wrap">
                             ${buildPlainPillMeasureFieldHTML(`val-suit-front-length-${rowId}`, 'ความยาวหน้า')}
                             ${buildPlainPillMeasureFieldHTML(`val-suit-back-length-${rowId}`, 'ความยาวหลัง')}
@@ -1676,11 +1716,11 @@
                     </div>
                     <div>
                         <div class="grid grid-cols-1 gap-2 sm:gap-3">
-                            ${buildAdjustSliderFieldHTML(`val-chest-${rowId}`, 'อก')}
+                            ${buildAdjustSliderFieldHTML(`val-chest-${rowId}`, 'อก', true)}
                         </div>
                         <div class="grid grid-cols-1 gap-2 sm:gap-3 mt-2">
-                            ${buildAdjustSliderFieldHTML(`val-waist-size-${rowId}`, 'เอว')}
-                            ${buildAdjustSliderFieldHTML(`val-hip-${rowId}`, 'สะโพก')}
+                            ${buildAdjustSliderFieldHTML(`val-waist-size-${rowId}`, 'เอว', true)}
+                            ${buildAdjustSliderFieldHTML(`val-hip-${rowId}`, 'สะโพก', true)}
                         </div>
                     </div>
                 </div>
@@ -1701,6 +1741,7 @@
                     </div>
                     <div id="measure-wrap-pants-${rowId}" class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-3">
                     ${buildDirectionalAdjustSliderFieldHTML(`val-waist-change-${rowId}`, `val-waist-dir-${rowId}`, 'เอว', 'expand', 'tighten')}
+                    ${buildAdjustSliderFieldHTML(`val-pants-hip-${rowId}`, 'สะโพก', true)}
                     ${buildPlainPillMeasureFieldHTML(`val-leg-length-${rowId}`, 'ความยาวขา')}
                 </div>
                 ${buildNotesAndImageHTML('pants', rowId, 'หมายเหตุกางเกง')}
@@ -1913,7 +1954,7 @@
         }
 
         // ส่วน "สถานะและการจัดส่ง" บนใบเสร็จ:
-        // - เลือก SPX/EMS/LLM -> โชว์ช่องทางที่เลือก + สถานที่ส่ง
+        // - เลือก Messenger/ขนส่งเอกชน -> โชว์ช่องทางที่เลือก + สถานที่ส่ง
         // - ไม่เลือก (รับหน้าร้าน) -> โชว์ "รับที่สาขา <สาขาที่นัดรับ>"
         function applyReceiptShippingDisplay(root, shipping, pickupLocation) {
             const methodWrap = root.querySelector('#pv-ship-method-wrap');
@@ -2648,7 +2689,7 @@
 
         // ── สถานที่นัดรับ ─────────────────────────────────────────────────────
         // ดรอปดาวน์สาขา (ชุดเดียวกับสาขาด้านบน) + ตัวเลือก "จัดส่ง"
-        // default ตามสาขาด้านบน; ถ้าเลือกวิธีส่ง SPX/EMS/LLM จะสลับเป็น "จัดส่ง" อัตโนมัติ
+        // default ตามสาขาด้านบน; ถ้าเลือกวิธีส่ง Messenger/ขนส่งเอกชน จะสลับเป็น "จัดส่ง" อัตโนมัติ
         const PICKUP_DELIVERY_VALUE = 'จัดส่ง';
         let _pickupLocationTouched = false; // ผู้ใช้เลือกเองแล้ว จะไม่ตามสาขาด้านบนอัตโนมัติ
         let _shippingLastValue = null; // ค่าช่องทางจัดส่งล่าสุด — ใช้ตรวจการกดซ้ำเพื่อติ๊กออก
@@ -2680,14 +2721,14 @@
             updateShippingMethodRowVisibility();
         }
 
-        // เลือก SPX/EMS/LLM -> สถานที่นัดรับเป็น "จัดส่ง"
+        // เลือก Messenger/ขนส่งเอกชน -> สถานที่นัดรับเป็น "จัดส่ง"
         function setPickupLocationToDelivery() {
             const sel = document.getElementById('pickup-location');
             if (sel) sel.value = PICKUP_DELIVERY_VALUE;
             updateShippingMethodRowVisibility();
         }
 
-        // ต้องเลือก "สาขาที่นัดรับ" ก่อน ถึงจะแสดงตัวเลือกช่องทางจัดส่ง SPX/EMS/LLM ให้เลือก
+        // ต้องเลือก "สาขาที่นัดรับ" ก่อน ถึงจะแสดงตัวเลือกช่องทางจัดส่ง Messenger/ขนส่งเอกชน ให้เลือก
         function updateShippingMethodRowVisibility() {
             const sel = document.getElementById('pickup-location');
             const wrap = document.getElementById('shipping-method-wrap');
@@ -3028,7 +3069,7 @@
             });
             document.getElementById('debt-amount').addEventListener('input', syncDebtAmountPreview);
 
-            // SPX/EMS/LLM: กดซ้ำที่อันที่เลือกอยู่ = ติ๊กออก (ยกเลิกการจัดส่ง กลับเป็นรับที่สาขา)
+            // Messenger/ขนส่งเอกชน: กดซ้ำที่อันที่เลือกอยู่ = ติ๊กออก (ยกเลิกการจัดส่ง กลับเป็นรับที่สาขา)
             document.querySelectorAll('input[name="shipping"]').forEach(radio => {
                 radio.addEventListener('click', () => {
                     if (_shippingLastValue === radio.value) {
@@ -3043,9 +3084,8 @@
                 });
                 radio.addEventListener('change', () => {
                     const val = document.querySelector('input[name="shipping"]:checked')?.value || '';
-                    document.getElementById('pv-ship-spx').innerText = val === 'SPX' ? '✓' : '';
-                    document.getElementById('pv-ship-ems').innerText = val === 'EMS' ? '✓' : '';
-                    document.getElementById('pv-ship-llm').innerText = val === 'LLM' ? '✓' : '';
+                    document.getElementById('pv-ship-messenger').innerText = val === 'Messenger' ? '✓' : '';
+                    document.getElementById('pv-ship-courier').innerText = val === 'ขนส่งเอกชน' ? '✓' : '';
                     updateShippingAddressVisibility();
                 });
             });
@@ -4301,6 +4341,8 @@
             document.querySelectorAll('.adjust-slider-wrap').forEach(w => { syncAdjustSliderVisual(w.dataset.target); w.style.display = 'none'; });
             document.querySelectorAll('.adjust-toggle-chip').forEach(c => { c.classList.remove('expanded'); c.style.display = ''; });
             document.querySelectorAll('.adjust-toggle-label').forEach(l => l.classList.remove('expanded'));
+            document.querySelectorAll('[id$="-toggle-yes"]').forEach(b => { b.classList.remove('bg-cube-gold','text-white','shadow-sm'); b.classList.add('text-cube-gray','hover:text-cube-black'); });
+            document.querySelectorAll('[id$="-toggle-no"]').forEach(b => { b.classList.remove('text-cube-gray','hover:text-cube-black'); b.classList.add('bg-cube-gold','text-white','shadow-sm'); });
             document.querySelectorAll('.adjust-field-wrap').forEach(f => f.classList.remove('adjust-field-expanded'));
             document.querySelectorAll('.notes-toggle-btn').forEach(b => { b.classList.remove('expanded'); const w = document.getElementById(b.dataset.target); if (w) w.style.display = 'none'; });
 
@@ -4332,9 +4374,8 @@
             syncDebtAmountPreview();
 
             document.querySelectorAll('input[name="shipping"]').forEach(r => r.checked = false);
-            document.getElementById('pv-ship-spx').innerText = '';
-            document.getElementById('pv-ship-ems').innerText = '';
-            document.getElementById('pv-ship-llm').innerText = '';
+            document.getElementById('pv-ship-messenger').innerText = '';
+            document.getElementById('pv-ship-courier').innerText = '';
             updateShippingAddressVisibility();
 
             // สถานที่นัดรับ กลับไป default ตามสาขาด้านบน
@@ -4540,9 +4581,8 @@
             clone.querySelector('#pv-status-debt').innerText = order.payment === 'debt' ? '✓' : '';
             clone.querySelector('#pv-debt-amount').innerText = (order.payment === 'debt' && order.debtAmount) ? ` (฿${order.debtAmount})` : '';
 
-            clone.querySelector('#pv-ship-spx').innerText = order.shipping === 'SPX' ? '✓' : '';
-            clone.querySelector('#pv-ship-ems').innerText = order.shipping === 'EMS' ? '✓' : '';
-            clone.querySelector('#pv-ship-llm').innerText = order.shipping === 'LLM' ? '✓' : '';
+            clone.querySelector('#pv-ship-messenger').innerText = order.shipping === 'Messenger' ? '✓' : '';
+            clone.querySelector('#pv-ship-courier').innerText = order.shipping === 'ขนส่งเอกชน' ? '✓' : '';
 
             {
                 // รายการเก่าก่อนรวม "คลังออฟฟิศ" เข้าสาขา OFFICE อาจไม่มี branchName แต่มี officeDetail เดิม
