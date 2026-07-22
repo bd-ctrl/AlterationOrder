@@ -724,25 +724,22 @@
                 <!-- Pickup location / date / time — outside the form sections, visible at all times -->
                 <div id="pickup-fields-grid" class="mt-3 no-print">
                     <div id="urgent-pickup-flag" class="hidden text-xl font-normal italic text-red-600 leading-none mb-1">งานด่วน</div>
-                    <div class="flex items-center justify-between gap-3">
-                        <button type="button" onclick="resetForm()" aria-label="ล้างข้อมูล" title="ล้างข้อมูล" class="min-h-[52px] min-w-[52px] text-red-500 hover:text-red-700 transition-colors active:scale-[0.97] flex items-center justify-center shrink-0">
-                            <i class="fa-solid fa-trash-can text-base" aria-hidden="true"></i>
-                        </button>
-                        <div class="flex items-center justify-center flex-wrap gap-x-6 gap-y-2 flex-1">
-                            <div class="flex items-center gap-2">
-                                <label for="date-pickup" class="text-xs font-normal text-cube-gray whitespace-nowrap">วันที่นัดรับ <span class="text-red-500">*</span></label>
-                                <input type="date" id="date-pickup" required aria-required="true" class="sku-input flex-none min-w-0" style="width:140px;">
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <label for="time-pickup" class="text-xs font-normal text-cube-gray whitespace-nowrap">เวลานัดรับ</label>
-                                <input type="time" id="time-pickup" class="sku-input flex-none min-w-0" style="width:120px;">
-                            </div>
+                    <div class="flex items-center flex-wrap gap-x-6 gap-y-2">
+                        <div class="flex items-center gap-2">
+                            <label for="date-pickup" class="text-xs font-normal text-cube-gray whitespace-nowrap">วันที่นัดรับ <span class="text-red-500">*</span></label>
+                            <input type="date" id="date-pickup" required aria-required="true" class="sku-input flex-none min-w-0" style="width:140px;">
                         </div>
-                        <div class="min-w-[52px] shrink-0"></div>
+                        <div class="flex items-center gap-2">
+                            <label for="time-pickup" class="text-xs font-normal text-cube-gray whitespace-nowrap">เวลานัดรับ</label>
+                            <input type="time" id="time-pickup" class="sku-input flex-none min-w-0" style="width:120px;">
+                        </div>
                     </div>
                 </div>
                     <!-- Buttons — sticky to viewport bottom -->
-                <div class="mt-4 flex items-center justify-end gap-3 no-print pb-4">
+                <div class="mt-4 flex items-center justify-between gap-3 no-print pb-4">
+                    <button type="button" onclick="resetForm()" aria-label="ล้างข้อมูล" title="ล้างข้อมูล" class="min-h-[52px] min-w-[52px] text-red-500 hover:text-red-700 transition-colors active:scale-[0.97] flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-trash-can text-base" aria-hidden="true"></i>
+                    </button>
                     <div class="flex items-center gap-3">
                         <!-- ⚠️ เอาวงกลม/กรอบล้อมออกแล้วตามที่ขอ เหลือแค่ไอคอนเซฟเปล่าๆ (ยังกดได้ตามปกติ) -->
                         <button type="button" id="btn-draft-save" onclick="handleDraftSaveClick(event)" aria-label="บันทึกร่าง (Draft)" title="บันทึกร่าง (Draft) — ยังไม่ส่งเข้า Lark" class="min-h-[44px] min-w-[44px] text-cube-gold-dark hover:text-cube-gold transition-colors flex items-center justify-center active:scale-[0.98] px-2">
