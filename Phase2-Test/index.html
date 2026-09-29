@@ -494,9 +494,8 @@
   /* history popover */
   .histcard{width:min(640px,94vw);display:flex;flex-direction:column;max-height:82vh}
 
-  /* ── [ใหม่ Phase 2] บันทึกงานแก้ซ้ำ (สินค้านำกลับมาแก้ ที่ไม่ใช่ครั้งแรก) ── */
-  .racard{width:min(560px,94vw);display:flex;flex-direction:column;max-height:86vh}
-  .ra-body{overflow:auto;padding-top:4px}
+  /* ── [ใหม่ Phase 2 · v2 2026-09-29] สินค้านำกลับมาแก้ (ไม่ใช่ครั้งแรก) — หน้าตาตาม mockup v3.21 · คลาสทั้งหมดขึ้นต้น ra2- กันชนกับแอปหลัก ── */
+  /* แบนเนอร์ทางเข้าในแท็บประวัติ (คงของเดิม) */
   .ra-shortcut{display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid var(--gold);border-radius:14px;padding:13px 15px;margin:0 0 10px}
   .ra-shortcut-icon{width:36px;height:36px;border-radius:10px;background:rgba(201,162,75,.14);color:var(--goldink);flex:0 0 auto;display:flex;align-items:center;justify-content:center}
   .ra-shortcut-icon svg{width:19px;height:19px}
@@ -505,50 +504,314 @@
   .ra-shortcut-sub{font-size:11.5px;color:var(--t2);margin-top:2px;line-height:1.4}
   .ra-shortcut-btn{font-family:inherit;font-weight:600;font-size:12.5px;color:#fff;background:var(--goldink);border:none;border-radius:999px;padding:9px 15px;white-space:nowrap;flex:0 0 auto;cursor:pointer;display:flex;align-items:center;gap:6px}
   .ra-shortcut-btn svg{width:14px;height:14px}
-  .ra-scene{display:none}
-  .ra-scene.on{display:block}
-  .ra-panel{background:#fff;border:1px solid var(--rule);border-radius:14px;overflow:hidden}
-  .ra-note{font-size:12px;color:var(--t2);margin:0 0 10px;line-height:1.6}
-  .ra-item-row{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--rule2);cursor:pointer;background:none;border-left:none;border-right:none;border-top:none;width:100%;text-align:left;font-family:inherit}
-  .ra-item-row:last-child{border-bottom:none}
-  .ra-item-row:hover{background:var(--paper)}
-  .ra-item-icon{width:34px;height:34px;border-radius:10px;background:var(--rule2);flex:0 0 auto;display:flex;align-items:center;justify-content:center;color:var(--goldink)}
-  .ra-item-icon svg{width:17px;height:17px}
-  .ra-item-main{flex:1;min-width:0}
-  .ra-item-name{font-size:14px;font-weight:600;color:var(--ink)}
-  .ra-item-sub{font-size:11.5px;color:var(--t3);font-family:'Barlow',sans-serif;margin-top:2px}
-  .ra-item-badge{font-size:10.5px;font-weight:600;color:var(--goldink);background:rgba(201,162,75,.12);border-radius:999px;padding:3px 9px;flex:0 0 auto;white-space:nowrap}
-  .ra-item-badge.zero{color:var(--t3);background:var(--rule2)}
-  .ra-order-label{padding:9px 16px;font-size:11px;color:var(--t3);background:var(--paper);border-bottom:1px solid var(--rule2)}
-  .ra-scanresult{padding:20px;text-align:center;border-bottom:1px solid var(--rule2)}
-  .ra-scanresult .pidlabel{font-size:10.5px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
-  .ra-scanresult .pidbig{font-family:'Barlow',sans-serif;font-weight:700;font-size:34px;color:var(--ink);line-height:1.1}
-  .ra-scanresult .pidsub{font-size:12px;color:var(--t2);margin-top:5px}
-  .ra-scanresult .roundbadge{display:inline-flex;align-items:center;gap:6px;margin-top:9px;font-size:11px;font-weight:600;color:var(--goldink);background:rgba(201,162,75,.12);border-radius:999px;padding:4px 11px}
-  .ra-ctx-strip{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--paper);border-bottom:1px solid var(--rule2)}
-  .ra-ctx-strip .ra-item-name{color:var(--ink)}
-  .ra-round-tag{margin-left:auto;font-family:'Barlow',sans-serif;font-weight:700;font-size:13px;color:var(--green);white-space:nowrap}
-  .ra-auto-row{padding:10px 16px;background:var(--paper);display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--t2);border-bottom:1px solid var(--rule2)}
-  .ra-auto-row svg{width:13px;height:13px;flex:0 0 auto;color:var(--t3)}
-  .ra-frow{padding:13px 16px;border-bottom:1px solid var(--rule2)}
-  .ra-frow .k{display:block;font-size:11.5px;color:var(--t3);margin-bottom:6px}
-  .ra-frow select.frowsel{width:100%;border:none;background:transparent;font-family:inherit;font-size:14px;font-weight:500;color:var(--ink);outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;padding-right:22px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23a9a290' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right center}
-  .ra-readonly-field{display:flex;align-items:center;justify-content:space-between;background:var(--paper);border:1px solid var(--rule2);border-radius:9px;padding:9px 11px}
-  .ra-readonly-field .v{font-weight:500;font-size:14px}
-  .ra-readonly-field .src{font-size:10px;color:var(--t3)}
-  .ra-date-input{border:1.5px solid var(--rule);border-radius:9px;padding:9px 11px;font-family:inherit;font-size:14px;color:var(--ink);width:100%}
-  .ra-details-box{border:1.5px solid var(--rule);border-radius:10px;padding:11px 13px;font-size:14px;line-height:1.6;min-height:76px;color:var(--ink);background:var(--paper);width:100%;font-family:inherit;resize:vertical}
-  .ra-details-foot{display:flex;justify-content:flex-end;margin-top:5px}
-  .ra-details-count{font-size:10.5px;color:var(--t3);font-family:'Barlow',sans-serif;font-weight:600}
-  .ra-details-count b{color:var(--goldink)}
-  .ra-save-row{padding:15px 16px;display:flex;justify-content:flex-end}
-  .ra-save-btn{font-family:inherit;font-weight:600;font-size:14px;color:var(--ink);background:var(--gold);border:none;border-radius:999px;padding:10px 22px;cursor:pointer}
-  .ra-save-btn:disabled{opacity:.55;cursor:default}
-  .ra-receipt-wrap{display:flex;justify-content:center;padding:18px;background:var(--paper);border-radius:14px}
-  .ra-receipt-wrap img{max-width:240px;border-radius:6px;box-shadow:0 6px 20px rgba(0,0,0,.12)}
-  .ra-done-row{padding:16px 0 0;display:flex;justify-content:center}
-  .ra-state{padding:30px 16px;text-align:center;font-size:13px;color:var(--t2)}
-  .ra-back{background:none;border:none;color:var(--goldink);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;padding:0;display:flex;align-items:center;gap:4px;margin-bottom:10px}
+  /* ป๊อปอัป */
+  .ra2-pop{--t2:#7b7567;--t3:#958f7f;--goldink:#90712e;--rule:#c1bbab;--rule2:#cac5b9;--green:#537148;--red:#9f4f37;--soft:#efebe1;
+    position:fixed;inset:0;z-index:88;display:none;align-items:center;justify-content:center;background:rgba(20,18,14,.32);font-family:'Prompt',-apple-system,sans-serif;color:var(--ink)}
+  .ra2-pop.show{display:flex}
+  :where(.ra2-pop) .ra2-i{width:1em;height:1em;display:block;flex:0 0 auto}
+  .ra2-card{position:relative;width:min(820px,96vw);height:min(760px,94vh);height:min(760px,94dvh);background:#fffdf8;border-radius:18px;box-shadow:0 24px 60px rgba(0,0,0,.3);display:flex;flex-direction:column;overflow:hidden;padding:0 28px}
+  .ra2-top{display:flex;align-items:center;gap:12px;margin:0 -28px 6px;padding:12px 14px 12px 28px;background:rgba(201,162,75,.14);border-bottom:1px solid rgba(201,162,75,.28);flex:0 0 auto}
+  .ra2-hic{flex:0 0 40px;width:40px;height:40px;border-radius:12px;background:rgba(201,162,75,.18);color:var(--goldink);display:flex;align-items:center;justify-content:center}
+  .ra2-hic svg{width:22px;height:22px}
+  .ra2-ht{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+  .ra2-title{margin:0;font-size:19px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ra2-sub{font-size:14px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ra2-x{flex:0 0 auto;width:44px;height:44px;border:none;border-radius:50%;background:transparent;color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .ra2-x svg{width:22px;height:22px}
+  .ra2-x:focus-visible{background:rgba(201,162,75,.2);outline:none}
+  /* ขั้นตอน */
+  .ra2-steps{display:flex;align-items:center;gap:12px;padding:10px 0 14px;flex:0 0 auto}
+  .ra2-step{display:flex;align-items:center;justify-content:center;gap:9px;flex:1;border:none;background:none;font-family:inherit;padding:0}
+  .ra2-step .no{font-family:'Antic Slab',serif;font-size:14px;width:26px;height:26px;border-radius:50%;flex:0 0 26px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--rule);color:var(--t3);position:relative}
+  .ra2-step .nm{font-size:14px;color:var(--t3);white-space:nowrap}
+  .ra2-step .ck{display:none;position:absolute;width:13px;height:13px;color:var(--gold)}
+  .ra2-step.done{cursor:pointer}
+  .ra2-step.done .no{color:transparent;border-color:var(--gold)}
+  .ra2-step.done .no .ck{display:block}
+  .ra2-step.done .nm{color:var(--t2)}
+  .ra2-step.on{background:rgba(201,162,75,.12);border-radius:999px;padding:5px 16px 5px 5px;margin:-5px 0}
+  .ra2-step.on .no{background:var(--gold);border-color:var(--gold);color:#fff;font-weight:700}
+  .ra2-step.on .nm{color:var(--ink);font-weight:600}
+  .ra2-arrow{color:var(--rule);display:flex;align-items:center;flex:0 0 auto}
+  .ra2-arrow svg{width:15px;height:15px}
+  .ra2-body{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:0 2px 18px;margin:0 -2px}
+  .ra2-scene{display:none}
+  .ra2-scene.on{display:block}
+  /* ค้นหา */
+  .ra2-klabel{font-size:14px;color:var(--t2);margin-bottom:8px}
+  .ra2-klabel b{color:var(--ink);font-weight:600;font-size:15px}
+  .ra2-hero{display:flex;gap:10px;align-items:stretch}
+  .ra2-field{flex:1;min-width:0;display:flex;align-items:center;gap:10px;background:#fff;border:2px solid var(--rule);border-radius:14px;padding:0 4px 0 10px;height:60px}
+  .ra2-field:focus-within{border-color:var(--gold);box-shadow:0 0 0 4px rgba(201,162,75,.14)}
+  .ra2-mode{appearance:none;-webkit-appearance:none;border:none;outline:none;cursor:pointer;font-family:'Barlow',sans-serif;font-size:18px;font-weight:700;line-height:1.2;color:var(--goldink);border-radius:10px;padding:8px 30px 8px 11px;background:rgba(201,162,75,.16) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23866a2a' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center/15px}
+  .ra2-mode:focus-visible{box-shadow:0 0 0 3px rgba(201,162,75,.35)}
+  .ra2-input{flex:1;min-width:0;border:none;outline:none;background:transparent;font-family:'Barlow',sans-serif;font-weight:600;font-size:26px;letter-spacing:.02em;color:var(--ink);padding:0}
+  .ra2-input::placeholder{color:var(--t3);font-weight:500}
+  .ra2-clear{flex:0 0 auto;width:44px;height:44px;border-radius:50%;border:none;background:transparent;color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .ra2-clear svg{width:22px;height:22px}
+  .ra2-clear[hidden]{display:none}
+  .ra2-scan{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:60px;border:none;border-radius:14px;padding:0 16px;background:var(--goldink);color:#fff;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer}
+  .ra2-scan svg{width:22px;height:22px}
+  .ra2-alt{min-height:22px;margin-top:10px;font-size:14px}
+  .ra2-searching{display:inline-flex;align-items:center;gap:8px;color:var(--goldink);font-weight:600}
+  .ra2-spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(201,162,75,.3);border-top-color:var(--goldink);border-radius:50%;animation:ra2spin .7s linear infinite;flex:0 0 auto}
+  @keyframes ra2spin{to{transform:rotate(360deg)}}
+  .ra2-result{margin-top:12px}
+  .ra2-idle{font-size:14px;color:var(--t2);line-height:1.7;background:var(--paper);border-radius:12px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+  .ra2-idle svg{width:20px;height:20px;color:var(--goldink);margin-top:3px}
+  .ra2-idle b{color:var(--ink)}
+  .ra2-empty{text-align:center;padding:30px 18px;background:#fff;border:1px dashed var(--rule);border-radius:16px}
+  .ra2-empty .ic{width:64px;height:64px;border-radius:50%;background:rgba(181,87,59,.10);color:#9a4a32;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+  .ra2-empty .ic svg{width:32px;height:32px}
+  .ra2-empty .t{font-size:17px;font-weight:600}
+  .ra2-empty .q{font-size:15px;color:var(--t2);margin-top:2px}
+  .ra2-empty .q b{font-family:'Barlow',sans-serif;font-weight:700;color:var(--goldink)}
+  .ra2-empty .s{font-size:14px;color:var(--t2);margin-top:6px;line-height:1.6}
+  .ra2-empty .acts{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .ra2-swap{display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:14px;font-weight:600;color:var(--goldink);background:#fff;border:1.5px solid var(--gold);border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap}
+  .ra2-swap svg{width:16px;height:16px}
+  .ra2-empty.err .ic{background:#fbeeea}
+  /* แถบกู้คืนร่าง */
+  .ra2-draft{display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;background:rgba(201,162,75,.12);border:1px solid rgba(201,162,75,.35);border-radius:12px;padding:8px 12px;margin:0 0 12px;font-size:14px;color:var(--ink)}
+  .ra2-draft>svg{width:16px;height:16px;color:var(--goldink)}
+  .ra2-draft .m{flex:1 1 180px;min-width:0}
+  .ra2-draft .acts{display:inline-flex;align-items:center;gap:6px;margin-left:auto;white-space:nowrap}
+  .ra2-draft .db{border:none;background:none;padding:6px 2px;min-height:36px;font-family:inherit;font-size:14px;font-weight:600;color:var(--goldink);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+  .ra2-draft .db.muted{color:var(--t2);font-weight:500}
+  .ra2-draft .sep{color:var(--t3)}
+  /* การ์ดผลค้นหา */
+  .ra2-res{background:#fff;border:1px solid var(--rule2);border-radius:16px;padding:16px 18px;box-shadow:0 1px 2px rgba(35,34,32,.05)}
+  .ra2-top19{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+  .ra2-top19.only{justify-content:flex-start}
+  .ra2-pidb{min-width:0}
+  .ra2-pid{font-family:'Barlow',sans-serif;font-weight:700;font-size:25px;line-height:1.1;display:inline-flex;align-items:center;color:var(--ink);white-space:nowrap}
+  .ra2-pid.bad{color:var(--red)}
+  .ra2-okic{display:inline-flex;margin-left:6px;color:var(--green)}
+  .ra2-okic svg{width:18px;height:18px}
+  .ra2-sku{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:5px;font-family:'Barlow',sans-serif;font-size:15px;color:var(--t2)}
+  .ra2-pill{font-family:'Prompt',sans-serif;font-size:14px;color:var(--t2);background:rgba(35,34,32,.06);border-radius:6px;padding:1px 8px;line-height:1.5}
+  .ra2-cust{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--rule2);border-radius:12px;padding:8px 14px 8px 8px;background:#fff;min-width:0}
+  .ra2-cust .av{width:36px;height:36px;flex:0 0 36px;border-radius:50%;background:rgba(35,34,32,.06);display:flex;align-items:center;justify-content:center}
+  .ra2-cust .av svg{width:19px;height:19px}
+  .ra2-cust .cm{display:flex;flex-direction:column;line-height:1.35;min-width:0}
+  .ra2-cust .cn{font-weight:600;color:var(--goldink);font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ra2-cust .cp{display:inline-flex;align-items:center;gap:5px;font-size:14px;color:var(--t2);white-space:nowrap}
+  .ra2-cust .cp svg{width:14px;height:14px}
+  .ra2-stats{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--rule2);border-radius:12px;background:#fff;overflow:hidden;margin-top:14px}
+  .ra2-stat{padding:10px 14px;display:flex;flex-direction:column;gap:3px;min-width:0}
+  .ra2-stat+.ra2-stat{border-left:1px solid var(--rule2)}
+  .ra2-stat .l{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--t2)}
+  .ra2-stat .l svg{width:16px;height:16px}
+  .ra2-stat .v{font-size:17px;font-weight:600;color:var(--ink);min-width:0}
+  .ra2-stat .v.num{font-family:'Barlow',sans-serif}
+  .ra2-stat .x{font-size:12.5px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ra2-edit{display:inline-flex;align-items:center;gap:2px;margin-top:10px;padding:8px 0;min-height:44px;background:none;border:none;font-family:inherit;font-size:15px;font-weight:600;color:var(--goldink);cursor:pointer}
+  .ra2-edit svg{width:17px;height:17px}
+  .ra2-why{display:flex;gap:6px;align-items:flex-start;margin-top:12px;font-size:14px;color:var(--red);font-weight:500;line-height:1.5}
+  .ra2-why svg{width:16px;height:16px;margin-top:3px}
+  .ra2-hr{border-top:1px solid var(--rule2);margin:12px 0}
+  .ra2-ref{display:flex;align-items:center;gap:6px;flex-wrap:wrap;color:var(--t2);font-size:14px}
+  .ra2-ref svg{width:16px;height:16px}
+  .ra2-ref b{font-family:'Barlow',sans-serif;font-weight:500;color:var(--ink)}
+  .ra2-others{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px 10px;font-size:11.5px;color:var(--t3);margin-top:4px;line-height:1.5}
+  .ra2-others .nw{white-space:nowrap;font-family:'Barlow',sans-serif}
+  .ra2-chg{display:inline-flex;align-items:center;gap:4px;padding:2px 0;border:none;background:none;font-family:inherit;font-size:11.5px;font-weight:500;color:var(--t2);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+  .ra2-chg svg{width:12px;height:12px}
+  .ra2-foot19{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--t2);margin-top:12px}
+  .ra2-foot19 span{display:inline-flex;align-items:center;gap:5px}
+  .ra2-foot19 svg{width:15px;height:15px}
+  .ra2-foot19 .pay{color:var(--green);font-weight:600}
+  /* กล่องเลือกสินค้า (ค้นด้วยบิล/Order) */
+  .ra2-head{font-size:16px;font-weight:600;color:var(--ink);margin:12px 0 10px}
+  .ra2-bill+.ra2-bill{margin-top:14px;padding-top:12px;border-top:1px dashed var(--rule)}
+  .ra2-bsub{display:flex;justify-content:space-between;align-items:baseline;gap:4px 10px;flex-wrap:wrap;font-size:14px;font-weight:300;color:var(--t2);margin:0 0 10px}
+  .ra2-bsub .num{font-family:'Barlow',sans-serif;font-weight:400;font-size:15px}
+  .ra2-bsub .pay{font-weight:600;color:var(--green)}
+  .ra2-items{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .ra2-it{display:flex;flex-direction:column;border:1px solid var(--rule2);border-radius:14px;padding:12px 14px;background:#fff;text-align:left;font-family:inherit;color:var(--ink);width:100%}
+  .ra2-it.pk{cursor:pointer}
+  .ra2-it.pk:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(201,162,75,.45)}
+  .ra2-it.dis{background:var(--paper);border-style:dashed;cursor:not-allowed}
+  .ra2-it .c1{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .ra2-it .c1 .p{font-family:'Barlow',sans-serif;font-size:20px;font-weight:700;white-space:nowrap}
+  .ra2-it .c1 .p.bad{color:var(--red)}
+  .ra2-it .tag{font-size:14px;font-weight:500;color:var(--t2);white-space:nowrap}
+  .ra2-it .c2{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px;font-family:'Barlow',sans-serif;font-size:14px;color:var(--t2)}
+  .ra2-it .ra2-why{margin-top:6px;font-size:13.5px}
+  /* แถบล่าง */
+  .ra2-foot{flex:0 0 auto;display:flex;align-items:center;gap:16px;border-top:1px solid var(--rule2);padding:12px 0 14px;background:#fffdf8}
+  .ra2-fsum{flex:1;min-width:0;font-size:14px;color:var(--t2);line-height:1.4}
+  .ra2-fsum b{display:block;color:var(--ink);font-size:15px;font-weight:600}
+  .ra2-fsum .p{font-family:'Barlow',sans-serif;font-weight:700;color:var(--green)}
+  .ra2-nb{flex:0 0 auto;display:flex;align-items:center;justify-content:center;min-width:64px;padding:2px;border:none;background:none;font-family:inherit;cursor:pointer;border-radius:14px}
+  .ra2-nb .c{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff}
+  .ra2-nb .c svg{width:26px;height:26px}
+  .ra2-nb.back .c{background:#fff;border:2px solid #a37f30;color:#a37f30}
+  .ra2-nb.next .c{background:#C9A24B}
+  .ra2-nb:focus-visible{outline:none}
+  .ra2-nb:focus-visible .c{box-shadow:0 0 0 3px #fffdf8,0 0 0 6px rgba(144,113,46,.55)}
+  .ra2-nb:active .c{transform:scale(.95)}
+  .ra2-sp{flex:0 0 64px}
+  .ra2-submit{flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 22px;border:none;border-radius:999px;background:var(--gold);color:var(--ink);font-family:'Prompt',sans-serif;font-weight:600;font-size:15px;cursor:pointer;white-space:nowrap}
+  .ra2-submit:disabled{background:var(--rule2);color:var(--t2);cursor:default}
+  .ra2-submit:focus-visible{outline:none;box-shadow:0 0 0 3px #fffdf8,0 0 0 6px rgba(144,113,46,.55)}
+  /* ฟอร์ม (ขั้น 03) — ส่วนวัดตัวใช้ .seclabel/.toptoggle/.mitem ของแอปหลักตรงๆ */
+  .ra2-ctx{padding:2px 0 14px;border-bottom:1px solid var(--rule2)}
+  .ra2-ctx .l1{display:flex;align-items:baseline;gap:6px 14px;flex-wrap:wrap}
+  .ra2-ctx .ty{font-size:19px;font-weight:600;color:var(--ink)}
+  .ra2-ctx .ty .p{font-family:'Barlow',sans-serif;font-weight:600}
+  .ra2-ctx .rd{font-size:15px;font-weight:600;color:var(--goldink)}
+  .ra2-ctx .l2{margin-top:3px;font-size:14px;color:var(--t2)}
+  .ra2-ctx .l2 .nw{white-space:nowrap;font-family:'Barlow',sans-serif}
+  .ra2-sec{padding-top:16px}
+  .ra2-sec .seclabel .t{font-size:14px;letter-spacing:.12em}
+  .ra2-sec .toptoggle button{font-size:14px}
+  .ra2-off{font-size:14px;color:var(--t2);padding:10px 2px 14px;border-bottom:1px solid var(--rule2)}
+  .ra2-measure:not(.hidden)+.ra2-off{display:none}
+  .ra2-pv{margin:6px 0 0;font-size:14px;font-style:italic;font-weight:400;color:#b5573b;line-height:1.4}
+  .ra2-pv b{font-family:'Barlow',sans-serif;font-weight:400}
+  .ra2-frow{display:flex;align-items:center;gap:14px;padding:15px 2px;border-bottom:1px solid var(--rule2)}
+  .ra2-frow>.k{font-size:15px;color:var(--ink);flex:0 1 auto}
+  .ra2-frow .req{color:var(--red)}
+  .ra2-frow.note{align-items:flex-start;border:none}
+  .ra2-nwrap{margin-left:auto;width:60%;position:relative}
+  .ra2-nwrap textarea.note-input{width:100%;margin:0;padding:2px 72px 2px 0;border:none;background:transparent;font-family:inherit;font-size:15px;color:var(--ink);outline:none;resize:none;line-height:1.5;min-height:49px;overflow:hidden}
+  .ra2-cnt{position:absolute;right:0;top:4px;font-family:'Barlow',sans-serif;font-size:14px;font-weight:500;color:var(--t3);pointer-events:none}
+  .ra2-cnt b{color:var(--t2);font-weight:600}
+  .ra2-cnt.over,.ra2-cnt.over b{color:var(--red)}
+  .ra2-sel{margin-left:auto;border:none;background:transparent;font-family:'Barlow',sans-serif;font-weight:600;font-size:17px;color:var(--ink);outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;text-align:right;text-align-last:right;padding:6px 22px 6px 6px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23958f7f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 0 center}
+  .ra2-date{margin-left:auto;display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:6px 14px;border:1.5px solid var(--rule);border-radius:999px;background:#fff;font-family:'Prompt',sans-serif;font-weight:600;font-size:16px;color:var(--ink);cursor:pointer}
+  .ra2-date svg{width:14px;height:14px;color:var(--t2)}
+  .ra2-date[aria-expanded="true"] svg{transform:rotate(180deg)}
+  .ra2-date.empty{color:var(--t2);font-weight:500}
+  .ra2-cal{background:#fff;border:1px solid var(--rule);border-radius:16px;box-shadow:0 10px 28px rgba(40,30,10,.12);padding:14px 16px 16px;margin:0 0 12px auto;max-width:340px}
+  .ra2-cal[hidden]{display:none}
+  .ra2-cal .h{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .ra2-cal .nav{background:none;border:none;color:var(--goldink);font-family:'Prompt',sans-serif;font-size:14px;cursor:pointer;padding:8px 4px;min-height:40px;display:flex;align-items:center;gap:4px}
+  .ra2-cal .nav svg{width:14px;height:14px}
+  .ra2-cal .nav:disabled{color:var(--t3);opacity:.4;cursor:default}
+  .ra2-cal .ti{font-weight:600;font-size:15px}
+  .ra2-cal .dow{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:14px;color:var(--t3);margin-bottom:4px}
+  .ra2-cal .grid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:2px}
+  .ra2-cal .d{aspect-ratio:1;min-height:36px;display:flex;align-items:center;justify-content:center;font-family:'Barlow',sans-serif;font-size:15px;color:var(--ink);border-radius:50%;cursor:pointer;border:none;background:none;padding:0}
+  .ra2-cal .d.today{box-shadow:inset 0 0 0 1.5px var(--gold)}
+  .ra2-cal .d.sel{background:var(--gold);color:#fff;font-weight:700}
+  .ra2-cal .d:disabled{color:var(--t3);opacity:.38;cursor:not-allowed}
+  .ra2-cal .d.e{visibility:hidden}
+  .ra2-frow.insp{flex-wrap:wrap;row-gap:8px}
+  .ra2-insp{margin-left:auto;font-family:'Prompt',sans-serif;font-weight:300;font-size:12.5px;color:var(--ink);background:#fff;border:1px solid var(--rule);border-radius:999px;padding:4px 10px;outline:none;width:96px;min-width:96px;max-width:100%;text-align:center;text-overflow:ellipsis;box-sizing:border-box}
+  .ra2-insp::placeholder{font-weight:300;color:var(--t2)}
+  .ra2-insp:focus{border-color:var(--t2)}
+  .ra2-insp.bad{border-color:var(--red)}
+  .ra2-isug{margin:-6px 0 10px auto;max-width:330px;background:#fff;border:1px solid var(--rule);border-radius:12px;box-shadow:0 10px 26px rgba(40,30,10,.12);overflow:hidden}
+  .ra2-isug[hidden]{display:none}
+  .ra2-isug .s{display:flex;align-items:center;gap:10px;padding:12px 16px;min-height:44px;cursor:pointer;border-bottom:1px solid var(--rule2)}
+  .ra2-isug .s:last-child{border-bottom:none}
+  .ra2-isug .s svg{width:16px;height:16px}
+  .ra2-isug .s b{font-family:'Barlow',sans-serif;font-weight:600;font-size:15px}
+  .ra2-isug .nf{padding:12px 16px;font-size:14px;color:var(--t2)}
+  /* ส่วนที่ Worker ตอนนี้ยังบันทึกไม่ได้ — แสดงไว้ให้เห็นแต่ใช้ไม่ได้ */
+  .ra2-wait{display:inline-block;font-size:11px;font-weight:500;color:var(--t3);border:1px solid var(--rule2);border-radius:999px;padding:0 7px;margin-left:6px;vertical-align:1px;white-space:nowrap}
+  .ra2-dim{opacity:.5}
+  .ra2-dim button{cursor:not-allowed}
+  .ra2-phbtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+  .ra2-phbtn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border:1.5px solid var(--rule);border-radius:999px;background:#fff;font-family:inherit;font-size:15px;color:var(--ink)}
+  .ra2-phbtn svg{width:18px;height:18px}
+  .ra2-chip{margin-left:auto;display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:7px 16px;border-radius:999px;font-family:inherit;font-size:14px;font-weight:600;border:1.5px solid var(--rule);color:var(--t2);background:transparent}
+  .ra2-chip .dot{width:7px;height:7px;border-radius:50%;background:var(--t3)}
+  /* หน้ายืนยัน */
+  .ra2-sheet-bg{position:absolute;inset:0;background:rgba(35,34,32,.38);z-index:7}
+  .ra2-sheet{position:absolute;z-index:8;left:50%;top:50%;transform:translate(-50%,-50%);width:min(600px,calc(100% - 32px));max-height:calc(100% - 40px);overflow:auto;background:#fffdf8;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.3);padding:20px 22px}
+  .ra2-sheet .t{font-size:18px;font-weight:600;line-height:1.45}
+  .ra2-sheet .s{font-size:14px;color:var(--t2);margin-top:2px}
+  .ra2-sheet .s .nw{white-space:nowrap}
+  .ra2-tbl{width:100%;border-collapse:collapse;margin-top:10px;font-size:15px}
+  .ra2-tbl th,.ra2-tbl td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--rule2);vertical-align:top}
+  .ra2-tbl thead th{font-size:14px;font-weight:600;color:var(--t2);border-bottom:1px solid var(--rule)}
+  .ra2-tbl thead th.n{color:var(--goldink)}
+  .ra2-tbl tbody th{font-weight:500;color:var(--ink);padding-left:0;width:38%}
+  .ra2-tbl td.o{color:var(--t2);font-family:'Barlow','Prompt',sans-serif}
+  .ra2-tbl td.n{color:var(--ink);font-weight:600;font-family:'Barlow','Prompt',sans-serif}
+  .ra2-tbl tr.sep th,.ra2-tbl tr.sep td{border-top:1px solid var(--rule)}
+  .ra2-txt{display:flex;flex-wrap:wrap;gap:2px 10px;margin-top:12px;padding:10px 12px;background:var(--paper);border-radius:10px;font-size:14px;line-height:1.5}
+  .ra2-txt .k{color:var(--t2);flex-basis:100%}
+  .ra2-txt .v{flex:1;min-width:0;word-break:break-word}
+  .ra2-txt .c{margin-left:auto;font-family:'Barlow',sans-serif;color:var(--t2);align-self:flex-end}
+  .ra2-txt .c b{color:var(--goldink)}
+  .ra2-err{display:flex;gap:8px;align-items:flex-start;margin-top:12px;padding:10px 12px;border-radius:10px;font-size:14px;line-height:1.5;background:#fbeeea;color:var(--red)}
+  .ra2-err svg{width:16px;height:16px;margin-top:3px}
+  .ra2-btns{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+  .ra2-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 22px;border:none;border-radius:999px;background:var(--gold);color:var(--ink);font-family:inherit;font-weight:600;font-size:15px;cursor:pointer}
+  .ra2-btn.ghost{background:#fff;border:1.5px solid var(--rule);font-weight:500}
+  .ra2-btn:disabled{opacity:.55;cursor:default}
+  .ra2-btn .ra2-spin{border-color:rgba(35,34,32,.25);border-top-color:var(--ink)}
+  /* บันทึกแล้ว */
+  .ra2-done{text-align:center;padding:18px 0 16px;border-bottom:1px solid var(--rule2)}
+  .ra2-done .ic{width:56px;height:56px;border-radius:50%;background:rgba(92,127,79,.14);color:var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+  .ra2-done .ic svg{width:28px;height:28px}
+  .ra2-done .t{font-size:19px;font-weight:600}
+  .ra2-done .s{font-size:15px;color:var(--t2);margin-top:2px}
+  .ra2-sum{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:11px 22px;padding:16px 2px;font-size:15px;line-height:1.5}
+  .ra2-sum .k{color:var(--t2);display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+  .ra2-sum .k svg{width:16px;height:16px}
+  .ra2-sum .v{font-weight:500;word-break:break-word}
+  .ra2-rc{padding:14px 0 6px;border-top:1px solid var(--rule2)}
+  .ra2-rc .h{font-size:15px;font-weight:600;margin-bottom:10px}
+  .ra2-rcw{display:flex;justify-content:center;background:var(--paper);border-radius:12px;padding:14px;min-height:80px;align-items:center}
+  .ra2-rcw img{width:288px;max-width:100%;background:#fff;box-shadow:0 4px 16px rgba(35,34,32,.14)}
+  .ra2-rcw .ld{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--goldink)}
+  .ra2-dl{display:flex;align-items:center;justify-content:center;gap:8px;margin:12px auto 0;width:max-content;min-height:44px;padding:0 22px;border-radius:999px;background:var(--gold);color:var(--ink);font-weight:600;font-size:15px;text-decoration:none}
+  .ra2-dl svg{width:18px;height:18px}
+  .ra2-dl.off{opacity:.45;pointer-events:none}
+  .ra2-toast{position:absolute;left:50%;bottom:92px;transform:translateX(-50%) translateY(16px);background:var(--goldink);color:#fff;font-size:14px;font-weight:500;border-radius:999px;padding:11px 20px;box-shadow:0 10px 30px rgba(35,34,32,.25);opacity:0;pointer-events:none;transition:.25s;z-index:20;max-width:calc(100% - 32px);text-align:center}
+  .ra2-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  /* มือถือ: ป๊อปอัปเต็มจอ · การ์ดลูกค้าอยู่แถวเดียวกับ P# · แถบ 3 ช่องเรียงลง */
+  @media (max-width:600px){
+    .ra2-pop{align-items:stretch}
+    .ra2-card{width:100%;height:100%;height:100dvh;border-radius:0;padding:0 16px}
+    .ra2-top{margin:0 -16px 4px;padding:8px 6px 8px 16px;gap:10px}
+    .ra2-title{font-size:17px}
+    .ra2-steps{gap:4px;padding:8px 0 12px}
+    .ra2-step{gap:6px}
+    .ra2-step .nm{font-size:12.5px}
+    .ra2-step.on{padding:4px 10px 4px 4px}
+    .ra2-arrow svg{width:12px;height:12px}
+    .ra2-hero{flex-wrap:nowrap}
+    .ra2-field{height:54px;gap:8px}
+    .ra2-mode{font-size:17px;padding:6px 26px 6px 9px}
+    .ra2-input{font-size:21px;letter-spacing:0}
+    .ra2-scan{height:54px;width:54px;padding:0;font-size:0}
+    .ra2-res{background:transparent;border:none;box-shadow:none;padding:0}
+    .ra2-top19:not(.only){flex-wrap:nowrap;gap:8px}
+    .ra2-top19:not(.only) .ra2-pidb{flex:1 1 auto;min-width:0}
+    .ra2-top19:not(.only) .ra2-pid{font-size:21px}
+    .ra2-top19:not(.only) .ra2-sku{font-size:13px;gap:6px}
+    .ra2-top19:not(.only) .ra2-pill{font-size:12px;padding:0 6px}
+    .ra2-top19:not(.only) .ra2-cust{flex:0 1 auto;max-width:52%;gap:7px;padding:6px 10px 6px 6px;border-radius:10px}
+    .ra2-top19:not(.only) .ra2-cust .av{width:26px;height:26px;flex-basis:26px}
+    .ra2-top19:not(.only) .ra2-cust .av svg{width:15px;height:15px}
+    .ra2-top19:not(.only) .ra2-cust .cn{font-size:13.5px}
+    .ra2-top19:not(.only) .ra2-cust .cp{font-size:12.5px}
+    .ra2-stats{grid-template-columns:1fr}
+    .ra2-stat{flex-direction:row;justify-content:space-between;align-items:center;flex-wrap:wrap}
+    .ra2-stat .x{flex-basis:100%;text-align:right}
+    .ra2-stat+.ra2-stat{border-left:none;border-top:1px solid var(--rule2)}
+    .ra2-items{grid-template-columns:1fr}
+    .ra2-foot{margin:0 -16px;padding:10px 16px calc(12px + env(safe-area-inset-bottom));gap:10px;box-shadow:0 -6px 16px rgba(35,34,32,.06)}
+    .ra2-nb{min-width:56px}
+    .ra2-nb .c{width:52px;height:52px}
+    .ra2-sp{flex-basis:56px}
+    .ra2-frow.note{flex-direction:column;align-items:stretch;gap:6px}
+    .ra2-nwrap{width:100%}
+    .ra2-insp{padding-top:9px;padding-bottom:9px}
+    .ra2-cal,.ra2-isug{max-width:none;margin-left:0}
+    .ra2-sheet{left:0;right:0;top:auto;bottom:0;transform:none;width:auto;max-height:92%;border-radius:18px 18px 0 0}
+    .ra2-btns .ra2-btn{flex:1;padding:0 12px}
+    .ra2-tbl{font-size:14px}
+    .ra2-tbl th,.ra2-tbl td{padding:8px 5px}
+    .ra2-sum{grid-template-columns:1fr;gap:2px}
+    .ra2-sum .v{margin-bottom:10px}
+  }
   .hist-tabs{display:flex;gap:8px;margin-bottom:12px;flex:0 0 auto;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .hist-tabs::-webkit-scrollbar{display:none}
   .hist-tab{border:none;background:none;font-family:'Prompt',sans-serif;font-size:13.5px;color:var(--t3);padding:6px 14px;border-radius:999px;cursor:pointer;position:relative;transition:.15s;white-space:nowrap;flex:0 0 auto}
@@ -823,6 +1086,8 @@
   /* [แก้บั๊ก] .r-notelabel/.r-noteline (ใช้กับส่วน "หมายเหตุ" ท้ายใบ) ไม่เคยมี CSS มาก่อนเลยตั้งแต่แรก — พิมพ์ด้วยขนาดตัวอักษร default ของเบราว์เซอร์เฉยๆ ไม่ตรงกับส่วนอื่นของใบสรุปที่ตั้งขนาดไว้ชัดเจน เพิ่มให้เข้าชุดเดียวกัน */
   .r-notelabel{font-size:17px;font-weight:700;color:#777;margin-top:6px;margin-bottom:2px}
   .r-noteline{font-size:15px;font-weight:700;color:#000;line-height:1.4}
+  /* [แก้บั๊ก 2026-09-29] ที่อยู่จัดส่งใต้ "ที่ Messenger/ขนส่งเอกชน" — ตัดขึ้นบรรทัดใหม่ได้ ไม่ล้นขอบกระดาษ */
+  .r-addrline{font-size:15px;font-weight:700;color:#000;line-height:1.4;text-align:center;overflow-wrap:anywhere;margin-top:2px}
   /* [ใหม่ตามที่ขอ] พื้นที่ว่าง ~5 ซม. ท้ายใบสรุป — .receipt-page กว้าง 302px ~= 80mm จริง เทียบสัดส่วนแล้ว 5cm ~= 189px ที่สเกลนี้ */
   .r-blank{height:189px}
   @media print{
@@ -1006,7 +1271,7 @@
         <div class="ra-shortcut-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="4" height="4"/><rect x="13" y="7" width="4" height="4"/><rect x="7" y="13" width="4" height="4"/></svg></div>
         <div class="ra-shortcut-body">
           <div class="ra-shortcut-title">สินค้านำกลับมาแก้ (ไม่ใช่ครั้งแรก)</div>
-          <div class="ra-shortcut-sub">ลูกค้าลองใส่แล้วไม่พอ ต้องการปรับแก้อีกรอบ — สแกน QR บนใบสรุปตัวจริง หรือค้นด้วยเบอร์โทร</div>
+          <div class="ra-shortcut-sub">ค้นหาด้วย P# / O# / เลขที่บิล แล้วบันทึกการแก้ครั้งถัดไป</div>
         </div>
         <button class="ra-shortcut-btn" id="raOpenBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>เริ่ม</button>
       </div>
@@ -1097,77 +1362,33 @@
     </div>
   </div>
 
-  <!-- [ใหม่ Phase 2] สินค้านำกลับมาแก้ (ไม่ใช่ครั้งแรก) — เงื่อนไข: Product ต้องถูกสร้างใน Salesforce แล้วเท่านั้น -->
-  <div class="infopop" id="repeatAltPop">
-    <div class="infocard racard">
-      <h3>สินค้านำกลับมาแก้<span class="x" id="raClose">&times;</span></h3>
-      <div class="ra-body">
-        <div class="ra-scene on" id="raSceneSearch">
-          <div class="steps" id="raSteps">
-            <div class="step on" data-ra-step="1"><span class="no serif">01<svg class="ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span><span class="nm">ค้นหาบิล</span></div>
-            <div class="steps-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
-            <div class="step" data-ra-step="2"><span class="no serif">02<svg class="ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span><span class="nm">เลือกชิ้น</span></div>
-            <div class="steps-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></div>
-            <div class="step" data-ra-step="3"><span class="no serif">03<svg class="ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span><span class="nm">บันทึกแก้ไข</span></div>
-          </div>
-          <p class="ra-note">สแกน QR บนใบสรุปตัวจริง ข้ามไปเลือกชิ้นได้เลย หรือค้นด้วยเบอร์โทรลูกค้าด้านล่าง</p>
-          <button class="ra-shortcut-btn" id="raScanBtn" style="margin-bottom:14px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="4" height="4"/><rect x="13" y="7" width="4" height="4"/><rect x="7" y="13" width="4" height="4"/></svg>สแกน QR งาน</button>
-          <div class="hist-search" style="margin-bottom:0">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-            <input id="raPhoneInput" placeholder="ค้นหาจากเบอร์โทรศัพท์…" autocomplete="off" inputmode="tel">
-          </div>
-          <div id="raSearchResult" style="margin-top:14px"></div>
-        </div>
-
-        <div class="ra-scene" id="raScenePick">
-          <button class="ra-back" id="raBackToSearch"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>ย้อนกลับ</button>
-          <div id="raPickBody"></div>
-        </div>
-
-        <div class="ra-scene" id="raSceneForm">
-          <div class="ra-panel">
-            <div class="ra-ctx-strip">
-              <div class="ra-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4a1.5 1.5 0 1 1 1.5 1.5"/><path d="M12 5.5v2.5"/><path d="M12 8l8 5.5a1.8 1.8 0 0 1-1 3.3H5a1.8 1.8 0 0 1-1-3.3L12 8Z"/></svg></div>
-              <div class="ra-item-main">
-                <div class="ra-item-name" id="raFormItemName">—</div>
-                <div class="ra-item-sub" id="raFormItemSub">—</div>
-              </div>
-              <div class="ra-round-tag" id="raFormRoundTag">—</div>
-            </div>
-            <div class="ra-auto-row">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-              <span id="raFormTimestamp">บันทึกเมื่อ —</span> — ระบบประทับเวลาให้อัตโนมัติ
-            </div>
-            <div class="ra-frow">
-              <span class="k" id="raFormInspectorLabel">ชื่อพนักงานตรวจสอบประจำสาขา</span>
-              <div class="ra-readonly-field"><span class="v" id="raFormInspectorName">—</span><span class="src">= พนักงานขายที่เลือกไว้ด้านบน</span></div>
-            </div>
-            <div class="ra-frow">
-              <span class="k">สาขาที่รับ</span>
-              <select class="frowsel" id="raFormBranch">
-                <option>R3</option><option>T21</option><option>SQ1</option><option>PM</option><option>SC</option><option>CM</option><option>FP</option><option>KR</option><option>SL</option><option>NW</option><option>CC</option><option>BP</option><option>RCD</option><option>KK</option><option>PK</option><option>MG</option><option>CTW</option><option>WG</option>
-              </select>
-            </div>
-            <div class="ra-frow">
-              <span class="k" id="raFormPickupLabel">วันที่นัดรับสินค้าแก้</span>
-              <input type="date" class="ra-date-input" id="raFormPickupDate">
-            </div>
-            <div class="ra-frow" style="border-bottom:none">
-              <span class="k" id="raFormDetailLabel">รายละเอียดการแก้ไข</span>
-              <textarea class="ra-details-box" id="raFormDetail" maxlength="255" placeholder="เช่น เก็บเอวเพิ่ม 1/2 นิ้ว"></textarea>
-              <div class="ra-details-foot"><div class="ra-details-count"><b id="raFormDetailCount">0</b> / 255</div></div>
-            </div>
-            <div class="ra-save-row"><button class="ra-save-btn" id="raSaveBtn">บันทึกแก้ไขงาน</button></div>
-          </div>
-          <div id="raFormError" style="color:var(--red);font-size:12.5px;margin-top:10px"></div>
-        </div>
-
-        <div class="ra-scene" id="raSceneReceipt">
-          <p class="ra-note" id="raReceiptNote">บันทึกสำเร็จ — รอพนักงานลงข้อมูลที่ตรวจสอบยืนยันเข้า Salesforce อีกครั้ง</p>
-          <div class="ra-receipt-wrap"><img id="raReceiptImg" alt="ใบยืนยันงานแก้ซ้ำ"></div>
-          <div class="ra-done-row"><button class="ra-save-btn" id="raDoneBtn">เสร็จสิ้น</button></div>
-        </div>
+  <!-- [ใหม่ Phase 2 · v2 2026-09-29] สินค้านำกลับมาแก้ (ไม่ใช่ครั้งแรก) — หน้าตาตาม mockup v3.21 · ค้นด้วย P# / O# / เลขที่บิล · เนื้อหาในป๊อปอัปสร้างด้วย JS (wireRepeatAlterationV2) -->
+  <div class="ra2-pop" id="ra2Pop" aria-hidden="true">
+    <div class="ra2-card" role="dialog" aria-modal="true" aria-labelledby="ra2Title">
+      <div class="ra2-top">
+        <span class="ra2-hic" aria-hidden="true"><svg class="ra2-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></span>
+        <div class="ra2-ht"><h3 class="ra2-title" id="ra2Title">สินค้านำกลับมาแก้</h3><div class="ra2-sub">ค้นด้วย P#, O# หรือเลขที่บิล · แก้ซ้ำได้สูงสุด 5 ครั้ง</div></div>
+        <button type="button" class="ra2-x" data-ra2="close" aria-label="ปิด" title="ปิด"><svg class="ra2-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
       </div>
+      <div class="ra2-steps" data-ra2-steps></div>
+      <div class="ra2-body" data-ra2-body>
+        <div class="ra2-scene on" data-ra2-scene="search">
+          <div class="ra2-klabel" data-ra2-klabel></div>
+          <div class="ra2-hero">
+            <label class="ra2-field"><select class="ra2-mode" data-ra2-mode aria-label="ค้นหาด้วย"><option value="pid">P#</option><option value="order">O#</option><option value="bill">Bill</option></select>
+              <input class="ra2-input" data-ra2-input autocomplete="off" enterkeyhint="search" aria-label="คำค้นหา">
+              <button type="button" class="ra2-clear" data-ra2="clear" aria-label="ล้างคำค้น" title="ล้าง" hidden><svg class="ra2-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+            </label>
+            <button type="button" class="ra2-scan" data-ra2="scan" aria-label="สแกน QR บนใบสรุป"><svg class="ra2-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="4" height="4"/><rect x="13" y="7" width="4" height="4"/><rect x="7" y="13" width="4" height="4"/><path d="M14 14h3v3"/></svg>สแกน QR</button>
+          </div>
+          <div class="ra2-alt" data-ra2-alt></div>
+          <div class="ra2-result" data-ra2-result></div>
+        </div>
+        <div class="ra2-scene" data-ra2-scene="form"></div>
+      </div>
+      <div class="ra2-foot" data-ra2-foot></div>
+      <div data-ra2-sheet></div>
+      <div class="ra2-toast" data-ra2-toast role="status" aria-live="polite"></div>
     </div>
   </div>
 
@@ -1520,7 +1741,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-09-29-1-phase2';
+  const APP_VERSION = '2026-09-29-2-phase2-19';
 
   let currentView=1;
   function updateIdx(){
@@ -2638,241 +2859,672 @@
   if(confirmCancelBtn) confirmCancelBtn.addEventListener('click',()=>_settleConfirm(false));
   if(confirmPop) confirmPop.addEventListener('click', e=>{ if(e.target===confirmPop) _settleConfirm(false); });
 
-  // ── [ใหม่ Phase 2] สินค้านำกลับมาแก้ (ไม่ใช่ครั้งแรก) — เงื่อนไข: Product ต้องถูกสร้างใน Salesforce แล้วเท่านั้น
-  // ทางเข้า 2 แบบ: (1) สแกน QR บนใบสรุปตัวจริง → รู้ Product ทันที ข้ามค้นหา/เลือกชิ้น (2) ค้นด้วยเบอร์โทร → เลือกบิล/ชิ้น
-  // ใช้ openScanner()/confirmDialog() ตัวเดียวกับที่แอปหลักใช้อยู่แล้ว ไม่สร้างกลไกสแกน/ยืนยันซ้ำ
-  (function wireRepeatAlteration(){
-    const pop=document.getElementById('repeatAltPop');
+  // ── [ใหม่ Phase 2 · v2 2026-09-29] สินค้านำกลับมาแก้ (ไม่ใช่ครั้งแรก) — หน้าตา/ขั้นตอนตาม mockup v3.21 ต่อกับ Worker ตัวที่ใช้อยู่ (ไม่แก้ Worker)
+  // ขั้นตอน: 01 ค้นหา (P# / O# / เลขที่บิล) → 02 แก้ไขสินค้า (การ์ดสินค้า) → 03 บันทึกแก้ไข (ฟอร์ม → ยืนยัน → บันทึก → ใบสรุป)
+  // ข้อมูลจริง: /list-orders (บิลที่ลงผ่านแอป ทุกสาขา) · POST /product-status (Status__c สด) · /repeat-alteration-product (รอบ + SF Id)
+  //            /product-latest (ค่าวัดปัจจุบันใน Salesforce) · /list-staff (ผ่าน STAFF_LIST ของแอป) · บันทึก = POST /repeat-alteration-submit
+  // Worker ตอนนี้บันทึกได้แค่: รายละเอียดการแก้ไข (≤255) · ผู้ตรวจ · สาขาที่นัดรับ (รหัสสาขา) · วันที่นัดรับ · ครั้งที่ → รูป/งานด่วน/จัดส่ง แสดงไว้แต่ปิดไว้ ("รอ Worker")
+  // ใช้ของเดิมของแอป: buildMitemHtml/wireMeasureItems (ช่องวัดตัว) · renderReceiptCanvasBase64 (ใบสรุป) · openScanner (สแกน QR) · STAFF_LIST
+  (function wireRepeatAlterationV2(){
+    const pop=document.getElementById('ra2Pop');
     if(!pop) return;
-    const scenes={
-      search: document.getElementById('raSceneSearch'),
-      pick:   document.getElementById('raScenePick'),
-      form:   document.getElementById('raSceneForm'),
-      receipt:document.getElementById('raSceneReceipt'),
+    const REQ_STATUS='ตรวจสอบสินค้าที่สาขา', MAX_ROUND=5, LIMIT=255;
+    const DRAFT_KEY='suitcube_ra2_drafts_v1';
+    const q=s=>pop.querySelector(s);
+    const els={steps:q('[data-ra2-steps]'), body:q('[data-ra2-body]'), klabel:q('[data-ra2-klabel]'), mode:q('[data-ra2-mode]'), input:q('[data-ra2-input]'),
+      clear:q('[data-ra2="clear"]'), alt:q('[data-ra2-alt]'), result:q('[data-ra2-result]'), sSearch:q('[data-ra2-scene="search"]'), sForm:q('[data-ra2-scene="form"]'),
+      foot:q('[data-ra2-foot]'), sheet:q('[data-ra2-sheet]'), toast:q('[data-ra2-toast]')};
+    const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const sv=d=>'<svg class="ra2-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg>';
+    const IC={
+      ck:'<svg class="ra2-i ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>',
+      chev:sv('<path d="M9 6l6 6-6 6"/>'), chevL:sv('<path d="M15 18l-6-6 6-6"/>'), down:sv('<path d="M6 9l6 6 6-6"/>'),
+      right:sv('<path d="M5 12h14M13 6l6 6-6 6"/>'), left:sv('<path d="M19 12H5M11 6l-6 6 6 6"/>'),
+      store:sv('<path d="M3.5 9.5 5 4h14l1.5 5.5"/><path d="M3.5 9.5h17a2.8 2.8 0 0 1-5.6 0 2.8 2.8 0 0 1-5.8 0 2.8 2.8 0 0 1-5.6 0z"/><path d="M5 12.5V20h14v-7.5"/><path d="M10 20v-4.5h4V20"/>'),
+      storeOk:'<svg class="ra2-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9"/><path d="M9 20v-5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5"/><path d="M4 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/></svg>',
+      pin:sv('<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>'),
+      truck:sv('<path d="M3 6h11v10H3z"/><path d="M14 9h4l3 3v4h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>'),
+      cal:sv('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/>'),
+      user:sv('<circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/>'),
+      phone:sv('<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.9.6 2.8.7a2 2 0 0 1 1.7 2Z"/>'),
+      doc:sv('<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/>'),
+      clock:sv('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>'),
+      paid:sv('<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 12h.01M18 12h.01"/>'),
+      warn:sv('<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4.5M12 17h.01"/>'),
+      info:sv('<circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/>'),
+      search:sv('<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>'),
+      list:sv('<path d="M8 6h13M8 12h13M8 18h13"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01"/>'),
+      tick:sv('<path d="M5 13l4 4L19 7"/>'),
+      dl:sv('<path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 20h14"/>'),
+      camera:sv('<path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/>'),
+      clip:sv('<path d="M21 11.5 12.5 20a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7L10.2 17.7a1.7 1.7 0 0 1-2.4-2.4l7.6-7.6"/>'),
+      notFound:sv('<circle cx="9" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/><path d="m17 8 5 5"/><path d="m22 8-5 5"/>'),
+      retry:sv('<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>'),
+      receipt:sv('<path d="M5 3h14v18l-2.3-1.5L14.3 21 12 19.5 9.7 21l-2.4-1.5L5 21z"/><path d="M9 8h6M9 12h6M9 16h3.5"/>'),
     };
-    const stepEls=[...pop.querySelectorAll('#raSteps .step')];
-    let _raProduct=null;
+    const WAIT='<span class="ra2-wait">รอ Worker</span>';
+    const MODES={pid:{label:'Product ID',ph:'เช่น 396241',im:'numeric'},order:{label:'Order ID',ph:'เช่น 187959',im:'numeric'},bill:{label:'เลขที่บิล',ph:'เช่น R326090804',im:'text'}};
+    const S={mode:'pid',query:'',searching:false,token:0,result:null,sel:null,searched:null,scene:'search',form:null,confirm:false,sending:false,saveErr:'',saved:null,restoreKey:''};
 
-    function showScene(name){
-      Object.values(scenes).forEach(el=>el.classList.remove('on'));
-      scenes[name].classList.add('on');
-      const stepMap={search:1, pick:2, form:3, receipt:3};
-      const cur=stepMap[name];
-      stepEls.forEach(el=>{
-        const n=+el.dataset.raStep;
-        el.classList.toggle('on', n===cur);
-        el.classList.toggle('done', n<cur);
-      });
+    // ---------- ข้อมูลจาก Worker ----------
+    async function getJSON(url,opts,ms){
+      const ac=new AbortController(); const t=setTimeout(()=>ac.abort(),ms||20000);
+      try{
+        const res=await fetch(url,Object.assign({signal:ac.signal},opts||{}));
+        let j=null; try{ j=await res.json(); }catch(e){ throw new Error('ระบบตอบกลับผิดรูปแบบ (HTTP '+res.status+')'); }
+        return j;
+      }catch(e){ if(e&&e.name==='AbortError') throw new Error('เชื่อมต่อนานเกินไป'); throw e; }
+      finally{ clearTimeout(t); }
     }
-    function openRepeatAlt(){
-      _raProduct=null;
-      document.getElementById('raPhoneInput').value='';
-      document.getElementById('raSearchResult').innerHTML='';
-      document.getElementById('raFormError').textContent='';
-      showScene('search');
-      pop.classList.add('show');
+    let ORDERS=null, ordersP=null, ITEMS=[];
+    const INFO={};
+    const normCode=v=>'P# '+String(v).replace(/\D/g,'');
+    const oCodeOf=o=>{ const c=extractCode((o&&o.orderCode)||''); const m=String(c).match(/O#\s*(\d+)/); return m?'O# '+m[1]:''; };
+    const createdKey=o=>((o&&o.dates&&o.dates.created)||'')+' '+((o&&o.dates&&o.dates.createdTime)||'');
+    function orderItems(o){
+      const codes=(String(o.productCode||'').match(/P#\s*\d+/g)||[]).map(normCode);
+      const sd=Array.isArray(o.skuDetails)?o.skuDetails:[];
+      const n=Math.max(codes.length,sd.length);
+      const out=[]; for(let i=0;i<n;i++){ const d=sd[i]||{}; out.push({code:codes[i]||'',order:o,idx:i,type:d.type||'',sku:d.sku||'',size:d.size||''}); }
+      return out;
     }
-    function closeRepeatAlt(){ pop.classList.remove('show'); }
-    document.getElementById('raOpenBtn').addEventListener('click', openRepeatAlt);
-    document.getElementById('raClose').addEventListener('click', closeRepeatAlt);
-    pop.addEventListener('click', e=>{ if(e.target===pop) closeRepeatAlt(); });
-    document.getElementById('raDoneBtn').addEventListener('click', closeRepeatAlt);
-    document.getElementById('raBackToSearch').addEventListener('click', ()=>showScene('search'));
+    function loadOrders(){
+      if(ordersP) return ordersP;
+      ordersP=getJSON(WORKER+'/list-orders?branch=').then(j=>{
+        if(!j||!j.success||!Array.isArray(j.orders)) throw new Error((j&&j.error)||'โหลดรายการบิลไม่สำเร็จ');
+        ORDERS=j.orders.filter(o=>o&&!o.cancelled&&!o.isDraft);
+        ITEMS=[]; ORDERS.forEach(o=>orderItems(o).forEach(it=>{ if(it.code) ITEMS.push(it); }));
+        return ORDERS;
+      }).catch(e=>{ ordersP=null; throw e; });
+      return ordersP;
+    }
+    // สถานะ (ครั้งเดียวทั้งชุด) + รอบ/SF Id (ทีละชิ้น พร้อมกัน) + ค่าวัดปัจจุบัน (ครั้งเดียวทั้งชุด)
+    async function enrich(items){
+      const codes=[...new Set(items.map(i=>i.code).filter(Boolean))];
+      codes.forEach(c=>{ INFO[c]=INFO[c]||{}; });
+      const needS=codes.filter(c=>!('status' in INFO[c]));
+      if(needS.length){
+        const j=await getJSON(WORKER+'/product-status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({codes:needS})});
+        if(!j||!j.success) throw new Error((j&&j.error)||'ดึงสถานะสินค้าจาก Salesforce ไม่สำเร็จ');
+        needS.forEach(c=>{ INFO[c].status=(j.statuses&&j.statuses[c])||null; });
+      }
+      await Promise.all(codes.filter(c=>!INFO[c].prodDone).map(async c=>{
+        const j=await getJSON(WORKER+'/repeat-alteration-product?code='+encodeURIComponent(c));
+        INFO[c].prod=(j&&j.success&&j.product)?j.product:null; INFO[c].prodMsg=(j&&j.error)||''; INFO[c].prodDone=true;
+      }));
+      const needL=codes.filter(c=>INFO[c].prod&&!INFO[c].latestDone);
+      if(needL.length){
+        try{ const j=await getJSON(WORKER+'/product-latest?codes='+encodeURIComponent(needL.join(',')));
+          ((j&&j.items)||[]).forEach(x=>{ if(x&&INFO[x.code]) INFO[x.code].latest=x; }); }catch(e){ /* ไม่มีค่าเดิมก็ยังแก้ได้ */ }
+        needL.forEach(c=>{ INFO[c].latestDone=true; });
+      }
+    }
+    // กติกา: มีใน Salesforce · แก้ซ้ำยังไม่ครบ 5 ครั้ง · สถานะ = "ตรวจสอบสินค้าที่สาขา"
+    function itemState(it){
+      if(!it||!it.code) return {ok:false,why:'nosf',badge:'ยังไม่มี P#',reason:'ยังไม่ได้สร้างใน Salesforce — ยังปรับแก้ซ้ำไม่ได้'};
+      const inf=INFO[it.code]||{};
+      if(!inf.prod) return {ok:false,why:'nosf',badge:'ไม่พบใน SF',reason:'ไม่พบสินค้านี้ใน Salesforce — ยังปรับแก้ซ้ำไม่ได้'};
+      const rc=+inf.prod.roundCount||0, next=+inf.prod.nextRound||(rc+1);
+      if(rc>=MAX_ROUND) return {ok:false,why:'max',badge:'ครบ '+MAX_ROUND+' ครั้ง',reason:'แก้ซ้ำครบ '+MAX_ROUND+' ครั้งแล้ว — ปรับแก้ต่อไม่ได้'};
+      if(inf.status!==REQ_STATUS) return {ok:false,why:'status',badge:'สถานะยังไม่พร้อม',
+        reason:inf.status?"สถานะต้องเป็น '"+REQ_STATUS+"' ก่อน — ตอนนี้: อยู่ระหว่างขั้นตอน"+inf.status:'ไม่พบสถานะสินค้าใน Salesforce — ยังปรับแก้ซ้ำไม่ได้'};
+      return {ok:true,next,rc,badge:'ครั้งที่ '+next};
+    }
 
-    function itemIcon(){
-      return '<div class="ra-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4a1.5 1.5 0 1 1 1.5 1.5"/><path d="M12 5.5v2.5"/><path d="M12 8l8 5.5a1.8 1.8 0 0 1-1 3.3H5a1.8 1.8 0 0 1-1-3.3L12 8Z"/></svg></div>';
+    // ---------- ตัวช่วยแสดงผล ----------
+    const typeShort=t=>{ t=String(t||''); return t?shortTypeLabel(t):'สินค้า'; };
+    const skuText=it=>(it.sku?it.sku+(it.size?'-'+it.size:''):'—');
+    const fmtPhone=p=>{ const d=String(p||'').replace(/\D/g,''); return d.length===10?d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6):(p||''); };
+    function custOf(it){
+      const o=it&&it.order;
+      if(o&&o.customer){ const c=o.customer; const nm=[c.firstname,c.lastname].filter(Boolean).join(' ');
+        return {name:(nm||'—')+(c.nickname?' ('+c.nickname+')':''),plain:nm,phone:c.phone||''}; }
+      const p=(it&&INFO[it.code]&&INFO[it.code].prod)||{};
+      return {name:p.custName||'—',plain:p.custName||'',phone:p.custPhone||''};
     }
-    function itemDisplayName(p){
-      const t=String(p.type||'').replace(/\s*\(สำเร็จรูป\)\s*$/,'');
-      return t+(p.sku?(' — SKU '+p.sku+(p.size?(' ไซส์ '+p.size):'')):'');
+    function pickupOf(o){
+      const raw=String((o&&o.pickupBranch)||'').trim();
+      const m=raw.match(/^(Messenger|ขนส่งเอกชน)\s*[–-]?\s*(.*)$/);
+      return m?{deliv:true,method:m[1],addr:m[2]||''}:{deliv:false,code:raw};
     }
+    const isoLocal=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    const isoPlus=n=>{ const d=new Date(); d.setDate(d.getDate()+n); return isoLocal(d); };
+    const dayText=iso=>(iso&&toThaiDateWithDay(iso))||'—';
+    const nowText=()=>{ const d=new Date(); return isoLocal(d)+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+' น.'; };
+    const custCard=c=>'<div class="ra2-cust"><span class="av">'+IC.user+'</span><span class="cm"><span class="cn">'+esc(c.name)+'</span>'
+      +(c.phone?'<span class="cp">'+IC.phone+esc(fmtPhone(c.phone))+'</span>':'')+'</span></div>';
+    function statsHtml(o){
+      const pk=pickupOf(o);
+      const cell=(ic,l,v,num,extra,title)=>'<div class="ra2-stat"'+(title?' title="'+esc(title)+'"':'')+'><span class="l">'+ic+esc(l)+'</span><span class="v'+(num?' num':'')+'">'+esc(v)+'</span>'+(extra?'<span class="x">'+esc(extra)+'</span>':'')+'</div>';
+      return '<div class="ra2-stats">'
+        + cell(IC.store,'สาขาขาย',(o&&o.branch)||'—',true)
+        + (pk.deliv?cell(IC.truck,'วิธีรับสินค้า',pk.method,false,pk.addr,pk.method+' – '+pk.addr):cell(IC.pin,'สาขานัดรับ',pk.code||'—',true))
+        + cell(IC.cal,'วันนัดรับ',o?dayText(o.dates&&o.dates.pickup):'—',false)
+        + '</div>';
+    }
+    const foot19=o=>o?'<div class="ra2-foot19"><span class="pay">'+IC.paid+esc(o.payStatus||'—')+'</span>'
+      +'<span>'+IC.clock+'ส่งข้อมูลเข้า Lark: '+esc(((o.dates&&o.dates.created)||'—')+(o.dates&&o.dates.createdTime?' '+o.dates.createdTime+' น.':''))+'</span>'
+      +(o.staffTake?'<span>'+IC.user+esc(o.staffTake)+'</span>':'')+'</div>':'';
+    const okIcon=it=>(INFO[it.code]&&INFO[it.code].status===REQ_STATUS)?'<span class="ra2-okic" role="img" title="'+REQ_STATUS+'" aria-label="'+REQ_STATUS+'">'+IC.storeOk+'</span>':'';
+    const badPid=it=>{ const s=INFO[it.code]&&INFO[it.code].status; return !!(s&&s!==REQ_STATUS); };
+    const whyHtml=t=>'<div class="ra2-why">'+IC.warn+'<span>'+esc(t)+'</span></div>';
+    function resCard(it,changeable){
+      const st=itemState(it), o=it.order, c=custOf(it), inf=INFO[it.code]||{};
+      const oc=o?oCodeOf(o):(inf.prod&&inf.prod.orderCode)||'';
+      const otherBills=(o&&oc)?ORDERS.filter(x=>x!==o&&oCodeOf(x)===oc).map(x=>x.orderNo):[];
+      return '<div class="ra2-res">'
+        + '<div class="ra2-top19"><div class="ra2-pidb"><div class="ra2-pid'+(badPid(it)?' bad':'')+'">'+esc(it.code)+okIcon(it)+'</div>'
+          + '<div class="ra2-sku"><span>'+esc(skuText(it))+'</span><span class="ra2-pill">'+esc(typeShort(it.type))+'</span></div></div>'+custCard(c)+'</div>'
+        + statsHtml(o)
+        + (st.ok?'<button type="button" class="ra2-edit" data-ra2="edit" data-code="'+esc(it.code)+'">แก้ไขสินค้าชิ้นนี้'+IC.chev+'</button>':whyHtml(st.reason))
+        + '<div class="ra2-hr"></div>'
+        + '<div class="ra2-ref">'+IC.doc+(oc?'Order <b>'+esc(oc)+'</b> · ':'')+'บิล <b>'+esc(o?o.orderNo:'—')+'</b>'+(o?'':' <span>(บิลนี้ไม่ได้ลงผ่านแอป)</span>')+'</div>'
+        + ((otherBills.length||changeable)?'<div class="ra2-others">'
+            + (otherBills.length?'<span>Order นี้มีบิลอื่นอีก: '+otherBills.map(b=>'<span class="nw">'+esc(b)+'</span>').join(' · ')+'</span>':'<span></span>')
+            + (changeable?'<button type="button" class="ra2-chg" data-ra2="unpick">'+IC.list+'เปลี่ยนชิ้น</button>':'')+'</div>':'')
+        + foot19(o)+'</div>';
+    }
+    function boxHtml(it){
+      const st=itemState(it);
+      return '<div class="ra2-it'+(st.ok?' pk':' dis')+'"'+(st.ok?' role="button" tabindex="0" data-ra2="pick" data-code="'+esc(it.code)+'" aria-label="เลือก '+esc(it.code)+'"':' aria-disabled="true"')+'>'
+        + '<div class="c1"><span class="p'+(it.code&&badPid(it)?' bad':'')+'">'+(it.code?esc(it.code)+okIcon(it):'ยังไม่มี P#')+'</span>'+(it.code?'<span class="tag">'+esc(st.badge)+'</span>':'')+'</div>'
+        + '<div class="c2"><span>'+esc(skuText(it))+'</span><span class="ra2-pill">'+esc(typeShort(it.type))+'</span></div>'
+        + (st.ok?'':whyHtml(st.reason))+'</div>';
+    }
+    function pickHtml(bills,items,oid){
+      const c=custOf(items[0]||{order:bills[0]});
+      const n=items.length;
+      return '<div class="ra2-res"><div class="ra2-top19 only">'+custCard(c)+'</div>'
+        + '<div class="ra2-ref" style="margin-top:12px">'+IC.doc+(oid?'Order <b>'+esc(oid)+'</b> · ':'')+(bills.length>1?bills.length+' บิล · ':'บิล <b>'+esc(bills[0].orderNo)+'</b> · ')+n+' ชิ้น</div>'
+        + '<div class="ra2-head">เลือกสินค้าที่ต้องการนำกลับมาแก้</div>'
+        + bills.map(b=>'<div class="ra2-bill">'+(bills.length>1?'<div class="ra2-bsub"><span>บิล <span class="num">'+esc(b.orderNo)+'</span></span><span class="pay">'+esc(b.payStatus||'')+'</span></div>':'')
+            + '<div class="ra2-items">'+items.filter(i=>i.order===b).map(boxHtml).join('')+'</div></div>').join('')
+        + foot19(bills[0])+'</div>';
+    }
+    function resultHtml(){
+      const R=S.result;
+      if(!R){ return S.searching?'':'<div class="ra2-idle">'+IC.info+'<div><b>พิมพ์ Product ID 6 หลัก หรือสแกน QR บนใบสรุป</b><br>ระบบค้นให้เองเมื่อพิมพ์ครบ · ถ้าไม่มีใบสรุป เลือก O# หรือ Bill แล้วค้นด้วยเลข Order / เลขที่บิลได้<br>นำกลับมาแก้ได้เฉพาะชิ้นที่สถานะ “'+REQ_STATUS+'”</div></div>'; }
+      if(R.kind==='error') return '<div class="ra2-empty err"><div class="ic">'+IC.warn+'</div><div class="t">เชื่อมต่อระบบไม่สำเร็จ</div><div class="s">'+esc(R.msg)+'<br>ตรวจอินเทอร์เน็ตแล้วลองอีกครั้ง</div>'
+        + '<div class="acts"><button type="button" class="ra2-swap" data-ra2="retry">'+IC.retry+'ลองอีกครั้ง</button></div></div>';
+      if(R.kind==='none'){
+        const others=['pid','order','bill'].filter(m=>m!==R.mode);
+        return '<div class="ra2-empty"><div class="ic">'+IC.notFound+'</div><div class="t">ไม่พบรายชื่อลูกค้า</div><div class="q">จาก <b>'+esc(R.label)+'</b></div>'
+          + '<div class="s">ตรวจเลขอีกครั้ง หรือลองค้นด้วยเลขที่บิลหรือ Order<br>(เลขที่บิลอยู่หัวใบเสร็จ · O# อยู่บนใบสรุป)</div>'
+          + '<div class="acts">'+others.map(m=>'<button type="button" class="ra2-swap" data-ra2="mode" data-mode="'+m+'">'+IC.search+'ค้นด้วย'+MODES[m].label+'</button>').join('')
+          + '<button type="button" class="ra2-swap" data-ra2="scan">'+IC.receipt+'สแกน QR</button></div></div>';
+      }
+      if(R.kind==='pid') return resCard(R.item,false);
+      const sel=S.sel&&R.items.find(i=>i.code===S.sel);
+      if(sel) return resCard(sel,true);
+      return pickHtml(R.bills,R.items,R.kind==='order'?R.oid:'');
+    }
+    function selectedItem(){ const R=S.result; if(!R||!S.sel) return null; if(R.kind==='pid') return R.item.code===S.sel?R.item:null; return (R.items||[]).find(i=>i.code===S.sel)||null; }
 
-    // ── ทางเข้า 1: สแกน QR บนใบสรุปตัวจริง — ดึง Salesforce Id จาก URL แล้วค้นหาสินค้าทันที ──
-    document.getElementById('raScanBtn').addEventListener('click', ()=>{
-      openScanner(async(raw)=>{
-        // URL จริงบนใบสรุป: https://.../lightning/r/Suitcube_Product__c/<Id>/view — ดึงเฉพาะ Id ออกมา (เผื่อสแกนได้ path เต็มหรือพิมพ์แค่ Id เองก็ได้ทั้งคู่)
-        const m=String(raw||'').match(/Suitcube_Product__c\/([a-zA-Z0-9]{15,18})/);
-        const idOrCode=m?m[1]:raw;
-        document.getElementById('raSearchResult').innerHTML='<div class="ra-state">กำลังค้นหา…</div>';
-        showScene('search');
-        try{
-          const res=await fetch(WORKER+'/repeat-alteration-product?id='+encodeURIComponent(idOrCode));
-          const j=await res.json();
-          if(!j.success) throw new Error(j.error||'ไม่พบสินค้า');
-          showScanResult(j.product);
-        }catch(e){
-          document.getElementById('raSearchResult').innerHTML='<div class="ra-state" style="color:var(--red)">'+escapeHtml(e.message)+'</div>';
+    // ---------- ค้นหา ----------
+    const clean=v=>String(v||'').trim().toUpperCase().replace(/\s+/g,'');
+    function autoReady(v){ v=clean(v); if(S.mode==='pid') return /^(P#?)?\d{6}$/.test(v); if(S.mode==='order') return /^(O#?)?\d{6}$/.test(v); return /^[A-Z]{2,3}\d{8}$/.test(v); }
+    let _searchT=null;
+    function startSearch(v){ clearTimeout(_searchT); if(!clean(v)){ doSearch(''); return; } S.searching=true; render(); _searchT=setTimeout(()=>doSearch(v),350); }
+    async function doSearch(raw){
+      clearTimeout(_searchT);
+      const s=clean(raw);
+      const tk=++S.token;
+      S.sel=null; S.searched=null; S.scene='search'; S.confirm=false;
+      if(!s){ S.result=null; S.searching=false; S.query=''; render(); return; }
+      let kind=S.mode, key=s;
+      if(/^O#?\d+$/.test(s)&&(S.mode==='order'||s.startsWith('O'))){ kind='order'; key=s.replace(/^O#?/,''); }
+      else if(/^P#?\d+$/.test(s)){ kind=S.mode==='order'&&/^\d+$/.test(s)?'order':'pid'; key=s.replace(/^P#?/,''); }
+      else if(/^[A-Z]{2,3}\d{6,}$/.test(s)){ kind='bill'; }
+      S.mode=kind; S.query=kind==='bill'?key:key.replace(/\D/g,'');
+      S.searching=true; S.result=null; render();
+      let res;
+      try{
+        await loadOrders();
+        if(kind==='pid'){
+          const code=normCode(key);
+          let it=ITEMS.filter(i=>i.code===code).sort((a,b)=>createdKey(b.order).localeCompare(createdKey(a.order)))[0];
+          if(!it){ // บิลเก่าก่อนมีแอป → หาใน Salesforce ตรง (เช็คสถานะก่อน — P# ที่ไม่มีจริง Worker ไม่ส่งสถานะกลับมา จะได้ไม่ต้องยิง /repeat-alteration-product ที่ตอบ 500 เมื่อไม่พบ)
+            const js=await getJSON(WORKER+'/product-status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({codes:[code]})});
+            if(!js||!js.success) throw new Error((js&&js.error)||'ดึงสถานะสินค้าจาก Salesforce ไม่สำเร็จ');
+            const stv=js.statuses&&js.statuses[code];
+            const j=stv?await getJSON(WORKER+'/repeat-alteration-product?code='+encodeURIComponent(code)):null;
+            if(stv) INFO[code]=Object.assign(INFO[code]||{},{status:stv});
+            if(j&&j.success&&j.product){ INFO[code]=Object.assign(INFO[code]||{},{prod:j.product,prodDone:true}); it={code,order:null,idx:0,type:j.product.type||'',sku:j.product.sku||'',size:j.product.size||''}; }
+          }
+          if(!it) res={kind:'none',mode:'pid',label:code};
+          else { await enrich([it]); res={kind:'pid',code,item:it}; }
+        }else if(kind==='order'){
+          const oc='O# '+key.replace(/\D/g,'');
+          const bills=ORDERS.filter(o=>oCodeOf(o)===oc).sort((a,b)=>String(a.orderNo).localeCompare(String(b.orderNo)));
+          if(!bills.length) res={kind:'none',mode:'order',label:oc};
+          else { const items=bills.flatMap(orderItems); await enrich(items); res={kind:'order',oid:oc,bills,items}; }
+        }else{
+          const bills=ORDERS.filter(o=>String(o.orderNo||'').toUpperCase()===key);
+          if(!bills.length) res={kind:'none',mode:'bill',label:'บิล '+key};
+          else { const items=bills.flatMap(orderItems); await enrich(items); res={kind:'bill',bills,items}; }
         }
+      }catch(e){ res={kind:'error',msg:(e&&e.message)||String(e),raw:s}; }
+      if(tk!==S.token) return;
+      S.result=res; S.searching=false;
+      if(res.kind==='pid'){ S.searched=res.code; if(itemState(res.item).ok) S.sel=res.code; }
+      else if(res.items){ const ok=res.items.filter(i=>itemState(i).ok); if(ok.length===1&&res.items.length===1) S.sel=ok[0].code; }
+      render(); els.body.scrollTop=0;
+      if(S.restoreKey){ const k=S.restoreKey; S.restoreKey=''; const it=selectedItem(); if(it&&itemState(it).ok){ goForm(it.code); const d=readDrafts()[k]; if(d&&S.form&&draftKeyOf(S.form)===k) applyDraft(d); } }
+    }
+    function scan(){
+      if(typeof openScanner!=='function') return;
+      openScanner(async raw=>{
+        const s=String(raw||'').trim();
+        const pm=s.match(/P#\s*(\d{6})/i)||s.match(/^(\d{6})$/);
+        if(pm){ S.mode='pid'; doSearch(pm[1]); return; }
+        const m=s.match(/Suitcube_Product__c\/([a-zA-Z0-9]{15,18})/);
+        const tk=++S.token; S.searching=true; S.result=null; render();
+        try{
+          const j=await getJSON(WORKER+'/repeat-alteration-product?id='+encodeURIComponent(m?m[1]:s));
+          if(tk!==S.token) return;
+          if(!j||!j.success||!j.product) throw new Error((j&&j.error)||'ไม่พบสินค้าจาก QR นี้');
+          S.mode='pid'; doSearch(j.product.code);
+        }catch(e){ if(tk!==S.token) return; S.searching=false; S.result={kind:'none',mode:'pid',label:'QR ที่สแกน'}; render(); }
       });
-    });
-    function showScanResult(p){
-      const pickBody=document.getElementById('raPickBody');
-      const roundText = p.roundCount>0 ? ('แก้ไปแล้ว '+p.roundCount+' ครั้ง → รอบนี้คือครั้งที่ '+p.nextRound) : ('ยังไม่เคยแก้มาก่อน → รอบนี้คือครั้งที่ 1');
-      const panel=document.createElement('div'); panel.className='ra-panel';
-      panel.innerHTML =
-        '<div class="ra-scanresult">'+
-          '<div class="pidlabel">สแกนสำเร็จ — Product ID</div>'+
-          '<div class="pidbig">'+escapeHtml(p.code)+'</div>'+
-          '<div class="pidsub">'+escapeHtml(itemDisplayName(p))+(p.custName?(' · '+escapeHtml(p.custName)):'')+'</div>'+
-          '<div class="roundbadge">'+escapeHtml(roundText)+'</div>'+
-        '</div>'+
-        '<button class="ra-item-row" type="button" id="raScanResultPick">'+itemIcon()+
-          '<div class="ra-item-main"><div class="ra-item-name">บิล '+escapeHtml(p.orderCode||'-')+'</div>'+
-          '<div class="ra-item-sub">กดเพื่อไปกรอกฟอร์มครั้งที่ '+p.nextRound+'</div></div>'+
-        '</button>';
-      pickBody.innerHTML=''; pickBody.appendChild(panel);
-      document.getElementById('raScanResultPick').addEventListener('click', ()=>openForm(p));
-      showScene('pick');
     }
 
-    // ── ทางเข้า 2: ค้นหาด้วยเบอร์โทร ──
-    const phoneInput=document.getElementById('raPhoneInput');
-    let _raSearchTimer=null;
-    phoneInput.addEventListener('input', ()=>{
-      clearTimeout(_raSearchTimer);
-      const v=phoneInput.value.trim();
-      if(v.replace(/\D/g,'').length<9){ document.getElementById('raSearchResult').innerHTML=''; return; }
-      _raSearchTimer=setTimeout(()=>runPhoneSearch(v), 500);
-    });
-    async function runPhoneSearch(phone){
-      const statusBox=document.getElementById('raSearchResult');
-      statusBox.innerHTML='<div class="ra-state">กำลังค้นหา…</div>';
+    // ---------- ฟอร์ม (ขั้น 03) ----------
+    let _formSeq=0;
+    const typeCfg=t=>{ const k=formatProductType(t); return (typeof MEASURE_CONFIG!=='undefined'&&MEASURE_CONFIG[k])||{noteLabel:'หมายเหตุ',items:[]}; };
+    function branchOptions(){
+      const sel=document.getElementById('branchPickup'), out=[];
+      if(sel) [...sel.options].forEach(op=>{ const v=String(op.value||op.textContent||'').trim(); if(v&&!/Messenger|ขนส่ง/.test(v)&&!out.includes(v)) out.push(v); });
+      return out.length?out:['R3','T21','SQ1','PM','SC','CM','FP','KR','SL','NW','CC','BP','RCD','KK','PK','MG','CTW','WG'];
+    }
+    function newForm(it){
+      const st=itemState(it), inf=INFO[it.code]||{}, o=it.order, pk=pickupOf(o), br=branchOptions();
+      let branch='';
+      if(o&&!pk.deliv&&br.includes(pk.code)) branch=pk.code;
+      else if(o&&br.includes(o.branch)) branch=o.branch;
+      else { const top=document.getElementById('branchTop'); if(top&&br.includes(top.value)) branch=top.value; }
+      const staffEl=document.getElementById('staffInput');
+      return {id:++_formSeq,it,code:it.code,round:st.next,prod:inf.prod,mv:(inf.latest&&inf.latest.mv)||{},top:0,note:'',branch,date:isoPlus(7),
+        inspector:(staffEl&&staffEl.value.trim())||'',restored:false};
+    }
+    function prevText(label,dir){
+      const n=parseFloat(S.form&&S.form.mv?S.form.mv[label]:NaN);
+      if(isNaN(n)||!n) return '';
+      return dir?(n<0?'เก็บเข้า ':'ขยายออก ')+fmtInch(Math.abs(n)):fmtInch(n);
+    }
+    function formHtml(){
+      const f=S.form, it=f.it, cfg=typeCfg(it.type), o=it.order, oc=o?oCodeOf(o):((f.prod&&f.prod.orderCode)||'');
+      const hasM=cfg.items.length>0;
+      const br=branchOptions();
+      return '<div data-ra2-draftbar></div>'
+        + '<div class="ra2-ctx"><div class="l1"><span class="ty">'+esc(typeShort(it.type))+' · <span class="p">'+esc(it.code)+'</span></span><span class="rd">แก้ซ้ำครั้งที่ '+f.round+'</span></div>'
+          + '<div class="l2"><span class="nw">SKU '+esc(skuText(it))+'</span>'+(o?' · <span class="nw">บิล '+esc(o.orderNo)+'</span>':'')+(oc?' · <span class="nw">'+esc(oc)+'</span>':'')+'</div></div>'
+        + '<div class="ra2-sec"><div class="seclabel"><span class="n serif">01</span><span class="t">รายละเอียด</span>'
+          + (hasM?'<div class="toptoggle"><button type="button" class="on">แก้ไขขนาดสินค้า</button><button type="button">ไม่แก้ไขขนาดสินค้า</button></div>':'')+'</div>'
+          + (hasM?'<div class="measure-list ra2-measure">'+cfg.items.map(buildMitemHtml).join('')+'</div><div class="ra2-off">ไม่แก้ขนาด — กด “แก้ไขขนาดสินค้า” เพื่อเลือกจุด</div>'
+                 :'<div class="ra2-off">สินค้าประเภทนี้ไม่มีจุดวัดให้เลือก — เขียนรายละเอียดในหมายเหตุ</div>')
+          + '<div class="ra2-frow note"><span class="k">'+esc(cfg.noteLabel)+'</span><div class="ra2-nwrap"><textarea class="note-input" data-ra2-note rows="2" maxlength="'+LIMIT+'" placeholder="เพิ่มหมายเหตุ" aria-label="'+esc(cfg.noteLabel)+'"></textarea><span class="ra2-cnt" data-ra2-cnt></span></div></div>'
+          + '<div class="ra2-frow ra2-dim" aria-disabled="true"><span class="k">รูปประกอบการแก้'+WAIT+'</span><div class="ra2-phbtns" style="margin-left:auto"><button type="button" class="ra2-phbtn" disabled>'+IC.camera+'ถ่ายรูป</button><button type="button" class="ra2-phbtn" disabled>'+IC.clip+'แนบไฟล์</button></div></div>'
+        + '</div>'
+        + '<div class="ra2-sec"><div class="seclabel"><span class="n serif">02</span><span class="t">นัดรับ</span></div>'
+          + '<div class="ra2-frow"><span class="k">สาขาที่นัดรับ <span class="req">*</span></span><select class="ra2-sel" data-ra2-branch aria-label="สาขาที่นัดรับ"><option value="">เลือก…</option>'+br.map(b=>'<option'+(b===f.branch?' selected':'')+'>'+esc(b)+'</option>').join('')+'</select></div>'
+          + '<div class="ra2-frow ra2-dim" aria-disabled="true"><span class="k">Messenger / ขนส่งเอกชน · สถานที่ส่ง'+WAIT+'</span><button type="button" class="ra2-chip" disabled>'+IC.truck+'ส่งถึงลูกค้า</button></div>'
+          + '<div class="ra2-frow"><span class="k">วันที่นัดรับ <span class="req">*</span></span><button type="button" class="ra2-date" data-ra2="date" aria-expanded="false"><span data-ra2-dth></span>'+IC.down+'</button></div>'
+          + '<div class="ra2-cal" data-ra2-cal hidden></div>'
+          + '<div class="ra2-frow ra2-dim" aria-disabled="true" style="border:none"><span class="k">งานด่วน'+WAIT+'</span><button type="button" class="ra2-chip" disabled><span class="dot"></span>ไม่ด่วน</button></div>'
+          + '<div class="ra2-frow insp"><span class="k">ชื่อพนักงานตรวจสอบประจำสาขา <span class="req">*</span></span><input class="ra2-insp" data-ra2-insp value="'+esc(f.inspector)+'" placeholder="พิมพ์ชื่อพนักงาน" autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-label="ชื่อพนักงานตรวจสอบประจำสาขา"></div>'
+          + '<div class="ra2-isug" data-ra2-isug hidden role="listbox"></div>'
+        + '</div>';
+    }
+    function wireForm(){
+      const root=els.sForm, f=S.form;
+      const list=root.querySelector('.ra2-measure');
+      if(list){
+        wireMeasureItems(root); // ใช้ตัวต่อสายของฟอร์มหลักตรงๆ (แก้ไข/ไม่แก้ไข · +/− ทีละ 0.25 · เก็บเข้า · FB/NB/HB)
+        const tg=root.querySelector('.toptoggle');
+        if(tg) wireSimpleToggle(tg,i=>{ list.classList.toggle('hidden',i===1); f.top=i; changed(); });
+        // ค่าปัจจุบันใน Salesforce ใต้ชื่อจุดวัด (ตัวเอียงสีแดง) — ข้อมูลรอบก่อนๆ ทีละครั้ง Worker ยังไม่มีให้
+        const defs=typeCfg(f.it.type).items.filter(x=>x.kind!=='legStyle'&&x.kind!=='group');
+        [...list.querySelectorAll('.mitem')].forEach((m,i)=>{ const d=defs[i]; if(!d) return;
+          const parts=[]; const p=prevText(d.label,!!d.dir); if(p) parts.push('<b>'+esc(p)+'</b> นิ้ว');
+          if(d.takeIn){ const t=prevText(d.label+' เก็บเข้า',false); if(t) parts.push('เก็บเข้า <b>'+esc(t)+'</b> นิ้ว'); }
+          if(parts.length){ const el=document.createElement('div'); el.className='ra2-pv'; el.innerHTML='ค่าปัจจุบันใน Salesforce: '+parts.join(' · '); m.appendChild(el); } });
+      }
+      const ta=root.querySelector('[data-ra2-note]'); ta.value=f.note||''; resizeNoteInput(ta);
+      fitInsp(root.querySelector('[data-ra2-insp]'));
+      updateLive();
+    }
+    // อ่านจุดที่แก้จากช่องวัดตัว → [{label, prev, now, dir}]
+    function readChanges(){
+      const f=S.form, root=els.sForm, rows=[]; if(!f) return rows;
+      const list=root.querySelector('.ra2-measure'); if(!list||list.classList.contains('hidden')) return rows;
+      const defs=typeCfg(f.it.type).items.filter(x=>x.kind!=='legStyle'&&x.kind!=='group');
+      [...list.querySelectorAll('.mitem')].forEach((m,i)=>{ const d=defs[i]; if(!d||!m.classList.contains('editing')) return;
+        const num=m.querySelector('.numonly:not(.takein-input)'), v=num?getMitemValue(num):0;
+        if(v){ if(d.dir) rows.push({label:d.label,dir:true,now:(v<0?'เก็บเข้า ':'ขยายออก ')+fmtInch(Math.abs(v)),prev:prevText(d.label,true)});
+               else rows.push({label:d.label,dir:false,now:fmtInch(v),prev:prevText(d.label,false)}); }
+        const ti=m.querySelector('.takein-input'), tv=ti?getMitemValue(ti):0;
+        if(tv) rows.push({label:d.label.replace(/\s*\(.*\)$/,'')+' เก็บเข้า',dir:false,now:fmtInch(Math.abs(tv)),prev:prevText(d.label+' เก็บเข้า',false)});
+      });
+      return rows;
+    }
+    // ข้อความ "รายละเอียดการแก้ไข" ที่ส่งเข้า Lark (≤255): "ป้าย ค่าเดิม→ค่าใหม่" (จุดความยาว) · "ป้าย เก็บเข้า/ขยายออก X" (จุดมีทิศทาง) · หมายเหตุท้ายสุด
+    function composeDetail(rows){
+      rows=rows||readChanges();
+      const parts=rows.map(r=>r.dir?r.label+' '+r.now:r.label+' '+(r.prev?r.prev+'→':'')+r.now);
+      const note=String((S.form&&S.form.note)||'').trim(); if(note) parts.push(note);
+      return parts.join(', ');
+    }
+    const staffList=()=>(typeof STAFF_LIST!=='undefined'&&Array.isArray(STAFF_LIST))?STAFF_LIST:[];
+    function inspOk(name){ name=String(name||'').trim(); if(!name) return false; const L=staffList(); return L.length?L.includes(name):true; }
+    function formValid(){ const f=S.form; if(!f) return false; const t=composeDetail(); return t.length>0&&t.length<=LIMIT&&!!f.branch&&!!f.date&&f.date>=isoPlus(0)&&inspOk(f.inspector); }
+    function missingText(){ const f=S.form; if(!f) return ''; const t=composeDetail(); const m=[];
+      if(!t) m.push('จุดที่แก้หรือหมายเหตุ'); if(t.length>LIMIT) m.push('ข้อความยาวเกิน '+LIMIT+' ตัว'); if(!f.branch) m.push('สาขาที่นัดรับ'); if(!f.date) m.push('วันที่นัดรับ');
+      if(!inspOk(f.inspector)) m.push(f.inspector?'ชื่อผู้ตรวจที่อยู่ในรายชื่อ':'ชื่อผู้ตรวจ'); return m.join(' · '); }
+    function updateLive(){
+      const f=S.form, root=els.sForm; if(!f||S.saved) return;
+      const n=composeDetail().length, cnt=root.querySelector('[data-ra2-cnt]');
+      if(cnt){ cnt.innerHTML='<b>'+n+'</b> / '+LIMIT; cnt.classList.toggle('over',n>LIMIT); }
+      const dt=root.querySelector('[data-ra2-dth]'), db=root.querySelector('[data-ra2="date"]');
+      if(dt) dt.textContent=f.date?dayText(f.date):'เลือกวันที่'; if(db) db.classList.toggle('empty',!f.date);
+      const ins=root.querySelector('[data-ra2-insp]'); if(ins) ins.classList.toggle('bad',!!f.inspector&&!inspOk(f.inspector));
+      setFoot();
+    }
+    function changed(){ updateLive(); saveDraftSoon(); }
+    // ช่องผู้ตรวจ: กว้างตามชื่อ (ต่ำสุด 96px) + รายชื่อแนะนำจาก Salesforce
+    let _fitSpan=null;
+    function fitInsp(inp){ if(!inp) return;
+      if(!_fitSpan){ _fitSpan=document.createElement('span'); _fitSpan.setAttribute('aria-hidden','true'); _fitSpan.style.cssText='position:absolute;visibility:hidden;white-space:pre;left:-9999px;top:0'; document.body.appendChild(_fitSpan); }
+      const cs=getComputedStyle(inp); _fitSpan.style.font=cs.font; _fitSpan.textContent=inp.value||inp.placeholder||'';
+      const extra=parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight)+parseFloat(cs.borderLeftWidth)+parseFloat(cs.borderRightWidth)+6;
+      inp.style.width=Math.max(96,Math.ceil(_fitSpan.getBoundingClientRect().width+extra))+'px'; }
+    function showSug(qv){ const box=els.sForm.querySelector('[data-ra2-isug]'), inp=els.sForm.querySelector('[data-ra2-insp]'); if(!box) return;
+      const L=staffList(); qv=String(qv||'').trim().toLowerCase();
+      const hits=qv&&!L.some(n=>n.toLowerCase()===qv)?L.filter(n=>n.toLowerCase().includes(qv)).slice(0,8):L.slice(0,6);
+      box.innerHTML=hits.length?hits.map(n=>'<div class="s" role="option" data-ra2="insp" data-name="'+esc(n)+'">'+IC.user+'<b>'+esc(n)+'</b></div>').join(''):'<div class="nf">'+(L.length?'ไม่พบชื่อพนักงาน':'กำลังโหลดรายชื่อพนักงาน…')+'</div>';
+      box.hidden=false; if(inp) inp.setAttribute('aria-expanded','true'); }
+    function hideSug(){ const box=els.sForm.querySelector('[data-ra2-isug]'), inp=els.sForm.querySelector('[data-ra2-insp]'); if(box) box.hidden=true; if(inp) inp.setAttribute('aria-expanded','false'); }
+    // ปฏิทินนัดรับ (แบบปฏิทินนัดรับของแอป) — วางเป็นแถวใต้ช่อง ไม่ลอยทับ จึงไม่ถูกพื้นที่เลื่อนตัด
+    const TH_MF=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+    const TH_DOW=['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'];
+    function calHtml(y,m,sel){
+      const today=isoPlus(0), first=new Date(y,m,1).getDay(), dim=new Date(y,m+1,0).getDate(), now=new Date();
+      const atMin=(y===now.getFullYear()&&m===now.getMonth());
+      let g=''; for(let i=0;i<first;i++) g+='<span class="d e"></span>';
+      for(let d=1;d<=dim;d++){ const iso=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+        g+='<button type="button" class="d'+(iso===today?' today':'')+(iso===sel?' sel':'')+'" data-ra2="day" data-date="'+iso+'"'+(iso<today?' disabled':'')+'>'+d+'</button>'; }
+      return '<div class="h"><button type="button" class="nav" data-ra2="calnav" data-d="-1"'+(atMin?' disabled':'')+'>'+IC.chevL+'ก่อนหน้า</button><div class="ti">'+TH_MF[m]+' '+(y+543)+'</div><button type="button" class="nav" data-ra2="calnav" data-d="1">ถัดไป'+IC.chev+'</button></div>'
+        + '<div class="dow">'+TH_DOW.map(x=>'<span>'+x+'</span>').join('')+'</div><div class="grid">'+g+'</div>';
+    }
+    function goForm(code){
+      const R=S.result; if(!R) return;
+      const it=R.kind==='pid'?(R.item.code===code?R.item:null):(R.items||[]).find(i=>i.code===code);
+      if(!it||!itemState(it).ok) return;
+      S.sel=code;
+      if(!S.form||S.form.code!==code||S.saved){ S.form=newForm(it); S.saved=null; }
+      S.scene='form'; S.confirm=false; S.saveErr=''; render(); els.body.scrollTop=0;
+    }
+
+    // ---------- ร่าง (เก็บในเครื่อง · เฉพาะข้อความ/ค่าในฟอร์ม) ----------
+    const draftKeyOf=f=>f.code+'#'+f.round;
+    function readDrafts(){ try{ const d=JSON.parse(localStorage.getItem(DRAFT_KEY)||'{}'); return d&&typeof d==='object'?d:{}; }catch(e){ return {}; } }
+    function writeDrafts(d){ try{ localStorage.setItem(DRAFT_KEY,JSON.stringify(d)); }catch(e){} }
+    function snapshot(){
+      const f=S.form, root=els.sForm, list=root.querySelector('.ra2-measure');
+      const ms=list?[...list.querySelectorAll('.mitem')].map(m=>{ const num=m.querySelector('.numonly:not(.takein-input)'), ti=m.querySelector('.takein-input'), sub=m.querySelector('.takein-sub');
+        return {e:m.classList.contains('editing'),v:num?num.value:'',d:num?(num.dataset.dir||''):'',to:!!(sub&&sub.classList.contains('show')),tv:ti?ti.value:'',td:ti?(ti.dataset.dir||''):''}; }):[];
+      const lw=root.querySelector('.legstyle-chips');
+      return {at:Date.now(),code:f.code,round:f.round,top:f.top,ms,leg:lw?(lw.dataset.selected||''):'',note:f.note||'',branch:f.branch,date:f.date,inspector:f.inspector};
+    }
+    const snapDirty=sn=>!!(String(sn.note||'').trim()||sn.leg||(sn.ms||[]).some(m=>m.e&&(parseFloat(m.v)||parseFloat(m.tv))));
+    let _draftT=null;
+    function saveDraftSoon(){ clearTimeout(_draftT); _draftT=setTimeout(saveDraftNow,400); }
+    function saveDraftNow(){ clearTimeout(_draftT); const f=S.form; if(!f||S.saved||S.scene!=='form') return;
+      try{ const sn=snapshot(), d=readDrafts(), k=draftKeyOf(f); if(snapDirty(sn)) d[k]=sn; else delete d[k]; writeDrafts(d); }catch(e){} }
+    function dropDraft(k){ const d=readDrafts(); delete d[k]; writeDrafts(d); }
+    function applyDraft(sn){
+      const f=S.form, root=els.sForm; if(!f||!sn) return;
+      Object.assign(f,{top:sn.top||0,note:sn.note||'',branch:sn.branch||f.branch,date:(sn.date&&sn.date>=isoPlus(0))?sn.date:f.date,inspector:sn.inspector||f.inspector,restored:true});
+      const list=root.querySelector('.ra2-measure');
+      if(list){ setToggleOnIndex(root,'.toptoggle',f.top); list.classList.toggle('hidden',f.top===1);
+        [...list.querySelectorAll('.mitem')].forEach((m,i)=>{ const s=(sn.ms||[])[i]; if(!s) return;
+          setToggleOnIndex(m,'.toggle',s.e?0:1); m.classList.toggle('editing',!!s.e);
+          const num=m.querySelector('.numonly:not(.takein-input)'); if(num){ num.value=s.v||''; if(s.d) num.dataset.dir=s.d; else delete num.dataset.dir; updateDirNum(num); }
+          const sub=m.querySelector('.takein-sub'); if(sub){ sub.classList.toggle('show',!!s.to); const add=sub.previousElementSibling; if(add&&add.classList.contains('takein-add')) add.style.display=s.to?'none':'';
+            const ti=sub.querySelector('.takein-input'); if(ti){ ti.value=s.tv||''; if(s.td) ti.dataset.dir=s.td; else delete ti.dataset.dir; updateDirNum(ti); } } }); }
+      const lw=root.querySelector('.legstyle-chips'); if(lw){ lw.dataset.selected=sn.leg||''; lw.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.val===sn.leg)); }
+      const ta=root.querySelector('[data-ra2-note]'); if(ta){ ta.value=f.note; resizeNoteInput(ta); }
+      const bs=root.querySelector('[data-ra2-branch]'); if(bs) bs.value=f.branch;
+      const ins=root.querySelector('[data-ra2-insp]'); if(ins){ ins.value=f.inspector; fitInsp(ins); }
+      refreshDraftBar(); updateLive(); toast('กู้คืนข้อมูลที่ค้างไว้แล้ว');
+    }
+    function draftBar(sn,where){
+      const msg='มีข้อมูลที่ยังไม่ได้บันทึกของ '+esc(sn.code)+' (แก้ซ้ำครั้งที่ '+esc(sn.round)+')';
+      return '<div class="ra2-draft" role="status">'+IC.info+'<span class="m">'+msg+'</span><span class="acts"><button type="button" class="db" data-ra2="draftrestore" data-key="'+esc(sn.code+'#'+sn.round)+'" data-where="'+where+'">กู้คืน</button><span class="sep">/</span><button type="button" class="db muted" data-ra2="draftdrop" data-key="'+esc(sn.code+'#'+sn.round)+'">ทิ้ง</button></span></div>';
+    }
+    function draftTop(){ if(S.scene!=='search'||S.searching) return ''; const all=Object.values(readDrafts()).filter(x=>x&&x.code).sort((a,b)=>b.at-a.at); return all.length?draftBar(all[0],'top'):''; }
+    function refreshDraftBar(){ const el=els.sForm.querySelector('[data-ra2-draftbar]'); if(!el) return; const f=S.form;
+      const sn=f&&!f.restored&&!S.saved?readDrafts()[draftKeyOf(f)]:null; el.innerHTML=sn?draftBar(sn,'form'):''; }
+
+    // ---------- บันทึก ----------
+    function confirmHtml(){
+      const f=S.form, it=f.it, o=it.order, rows=readChanges(), txt=composeDetail(rows), pk=pickupOf(o);
+      const tr=(k,a,b,cls)=>'<tr'+(cls?' class="'+cls+'"':'')+'><th scope="row">'+k+'</th><td class="o">'+a+'</td><td class="n">'+b+'</td></tr>';
+      const note=String(f.note||'').trim();
+      return '<div class="ra2-sheet-bg" data-ra2="cfback"></div>'
+        + '<div class="ra2-sheet" role="alertdialog" aria-modal="true" aria-labelledby="ra2CfT">'
+          + '<div class="t" id="ra2CfT">ยืนยันการแก้ไขสินค้าครั้งที่ '+f.round+' ตามรายละเอียดนี้หรือไม่</div>'
+          + '<div class="s">'+esc(typeShort(it.type))+' · <span class="nw">'+esc(it.code)+'</span>'+(o?' · <span class="nw">บิล '+esc(o.orderNo)+'</span>':'')+'</div>'
+          + '<table class="ra2-tbl"><thead><tr><th></th><th>ปัจจุบัน</th><th class="n">ครั้งที่ '+f.round+' (ใหม่)</th></tr></thead><tbody>'
+            + (rows.length?rows.map(r=>tr(esc(r.label),r.prev?esc(r.prev)+' นิ้ว':'—',esc(r.now)+' นิ้ว')).join(''):tr('ขนาดสินค้า','—','ไม่แก้ขนาด'))
+            + tr('สาขาที่นัดรับ',esc(o?(pk.deliv?pk.method:(pk.code||'—')):'—'),esc(f.branch),'sep')
+            + tr('วันที่นัดรับ',esc(o?dayText(o.dates&&o.dates.pickup):'—'),esc(dayText(f.date)))
+            + tr('ผู้ตรวจ','—',esc(f.inspector))
+            + tr('หมายเหตุ','—',note?esc(note):'—')
+          + '</tbody></table>'
+          + '<div class="ra2-txt"><span class="k">ข้อความที่บันทึก (รายละเอียดการแก้ไข)</span><span class="v">'+esc(txt)+'</span><span class="c"><b>'+txt.length+'</b> / '+LIMIT+'</span></div>'
+          + (S.saveErr?'<div class="ra2-err" role="alert">'+IC.warn+'<span>'+esc(S.saveErr)+'</span></div>':'')
+          + '<div class="ra2-btns"><button type="button" class="ra2-btn ghost" data-ra2="cfback"'+(S.sending?' disabled':'')+'>กลับไปแก้</button>'
+            + '<button type="button" class="ra2-btn" data-ra2="cfok"'+(S.sending?' disabled':'')+'>'+(S.sending?'<span class="ra2-spin"></span>กำลังบันทึก…':(S.saveErr?'ลองบันทึกอีกครั้ง':'ยืนยันบันทึก'))+'</button></div>'
+        + '</div>';
+    }
+    async function submit(){
+      const f=S.form; if(!f||S.sending||S.saved) return;   // กันกดซ้ำ
+      if(!formValid()){ S.confirm=false; render(); return; }
+      const it=f.it, o=it.order, c=custOf(it), rows=readChanges(), detail=composeDetail(rows);
+      const payload={sfRecordId:f.prod&&f.prod.id, productCode:f.code, orderCode:(f.prod&&f.prod.orderCode)||(o?oCodeOf(o):'')||'',
+        custName:(f.prod&&f.prod.custName)||c.plain||'', detail, inspectorName:String(f.inspector).trim(), branch:f.branch, pickupDate:f.date, round:f.round};
+      if(!payload.sfRecordId){ S.saveErr='ไม่พบรหัสสินค้าใน Salesforce — ค้นหาใหม่อีกครั้ง'; render(); return; }
+      S.sending=true; S.saveErr=''; render();
       try{
-        const res=await fetch(WORKER+'/repeat-alteration-search?phone='+encodeURIComponent(phone));
-        const j=await res.json();
-        if(!j.success) throw new Error(j.error||'ค้นหาไม่สำเร็จ');
-        const orders=j.orders||[];
-        if(!orders.length){ statusBox.innerHTML='<div class="ra-state">ไม่พบสินค้าที่สร้างใน Salesforce แล้วของเบอร์นี้</div>'; return; }
-        statusBox.innerHTML='';
-        renderPickList(orders);
+        const j=await getJSON(WORKER+'/repeat-alteration-submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)},30000);
+        if(!j||j.success!==true) throw new Error((j&&j.error)||'ระบบไม่ยืนยันการบันทึก');
+        S.saved=Object.assign({},payload,{recordId:j.recordId||'',rows,note:String(f.note||'').trim(),at:nowText(),type:it.type,sku:skuText(it),billNo:o?o.orderNo:'',phone:c.phone,custDisplay:c.name});
+        dropDraft(draftKeyOf(f));
+        S.confirm=false; S.sending=false; render(); els.body.scrollTop=0; toast('บันทึกเข้า Lark แล้ว · '+f.code+' ครั้งที่ '+f.round);
+        buildReceipt();
       }catch(e){
-        statusBox.innerHTML='<div class="ra-state" style="color:var(--red)">'+escapeHtml(e.message)+'</div>';
+        S.sending=false; S.saveErr='บันทึกไม่สำเร็จ — '+((e&&e.message)||e)+' · ข้อมูลในฟอร์มยังอยู่ ลองอีกครั้งได้'; render();
       }
     }
-    function renderPickList(orders){
-      const pickBody=document.getElementById('raPickBody');
-      const panel=document.createElement('div'); panel.className='ra-panel';
-      orders.forEach(o=>{
-        const lbl=document.createElement('div'); lbl.className='ra-order-label';
-        lbl.textContent='บิล '+(o.orderCode||'-')+' · '+(o.custName||'-')+(o.pickupDate?(' · นัดรับเดิม '+o.pickupDate):'');
-        panel.appendChild(lbl);
-        o.items.forEach(it=>{
-          const row=document.createElement('button'); row.type='button'; row.className='ra-item-row';
-          const badge = it.roundCount>0 ? ('<span class="ra-item-badge">แก้ไปแล้ว '+it.roundCount+' ครั้ง</span>') : '<span class="ra-item-badge zero">ยังไม่เคยแก้</span>';
-          row.innerHTML = itemIcon()+
-            '<div class="ra-item-main"><div class="ra-item-name">'+escapeHtml(itemDisplayName(it))+'</div>'+
-            '<div class="ra-item-sub">'+escapeHtml(o.orderCode||'-')+' · '+escapeHtml(it.code)+'</div></div>'+badge;
-          row.addEventListener('click', ()=> openForm(Object.assign({}, it, {orderCode:o.orderCode, custName:o.custName, branch:o.branch})));
-          panel.appendChild(row);
-        });
-      });
-      pickBody.innerHTML=''; pickBody.appendChild(panel);
-      showScene('pick');
+    function savedHtml(){
+      const sv=S.saved;
+      return '<div class="ra2-done"><div class="ic">'+IC.tick+'</div><div class="t">บันทึกการแก้ ครั้งที่ '+sv.round+' แล้ว</div><div class="s">'+esc(typeShort(sv.type))+' · '+esc(sv.productCode)+'</div></div>'
+        + '<div class="ra2-sum">'
+          + '<span class="k">'+IC.list+'รายละเอียดการแก้ไข</span><span class="v">'+esc(sv.detail)+' <span style="color:var(--t3);font-family:Barlow,sans-serif">('+sv.detail.length+'/'+LIMIT+')</span></span>'
+          + '<span class="k">'+IC.pin+'สาขาที่นัดรับ</span><span class="v">'+esc(sv.branch)+'</span>'
+          + '<span class="k">'+IC.cal+'วันที่นัดรับ</span><span class="v">'+esc(dayText(sv.pickupDate))+'</span>'
+          + '<span class="k">'+IC.user+'ผู้ตรวจ</span><span class="v">'+esc(sv.inspectorName)+'</span>'
+          + '<span class="k">'+IC.clock+'บันทึกเมื่อ</span><span class="v">'+esc(sv.at)+'</span>'
+        + '</div>'
+        + '<div class="ra2-rc"><div class="h">ใบสรุป</div><div class="ra2-rcw" data-ra2-rcw>'+(sv.rcpt?'<img alt="ใบสรุป สินค้านำกลับมาแก้" src="'+sv.rcpt+'">':'<span class="ld"><span class="ra2-spin"></span>กำลังสร้างใบสรุป…</span>')+'</div>'
+          + '<a class="ra2-dl'+(sv.rcpt?'':' off')+'" data-ra2-dl download="ใบสรุป-'+esc(sv.productCode.replace(/\W+/g,''))+'-ครั้งที่'+sv.round+'.png"'+(sv.rcpt?' href="'+sv.rcpt+'"':'')+'>'+IC.dl+'บันทึกรูป</a></div>'
+        + '<div class="ra2-off" style="border:none">บันทึกเข้า Lark แล้ว — รอพนักงานลงข้อมูลที่ตรวจสอบยืนยันเข้า Salesforce อีกครั้ง</div>';
     }
-
-    // ── ขั้นที่ 3: ฟอร์มบันทึกแก้ไข — เลขรอบคำนวณจาก roundCount ที่ query สดจาก Field249__c ตอนค้นหา (Worker คำนวณรอบจริงอีกทีตอน confirm กันสองรายการชนรอบเดียวกัน) ──
-    function thaiTimestampNow(){
-      const d=new Date();
-      const days=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
-      const months=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-      const be=d.getFullYear()+543;
-      const hh=String(d.getHours()).padStart(2,'0'), mm=String(d.getMinutes()).padStart(2,'0');
-      return days[d.getDay()]+'ที่ '+d.getDate()+' '+months[d.getMonth()]+' '+be+' · '+hh+':'+mm;
-    }
-    function openForm(product){
-      _raProduct=product;
-      const round=product.nextRound||((product.roundCount||0)+1);
-      document.getElementById('raFormItemName').textContent=itemDisplayName(product);
-      document.getElementById('raFormItemSub').textContent=[product.custName, product.orderCode, product.code].filter(Boolean).join(' · ');
-      document.getElementById('raFormRoundTag').textContent='ครั้งที่ '+round;
-      document.getElementById('raFormTimestamp').textContent='บันทึกเมื่อ '+thaiTimestampNow();
-      document.getElementById('raFormInspectorLabel').textContent='ชื่อพนักงานตรวจสอบประจำสาขา ครั้งที่ '+round;
-      const staffInputEl=document.getElementById('staffInput');
-      document.getElementById('raFormInspectorName').textContent=(staffInputEl&&staffInputEl.value.trim())||'(ยังไม่ได้เลือกพนักงานขายด้านบน)';
-      document.getElementById('raFormPickupLabel').textContent='วันที่นัดรับสินค้าแก้ '+round;
-      document.getElementById('raFormDetailLabel').textContent='รายละเอียดการแก้ไขครั้งที่ '+round;
-      const dateInput=document.getElementById('raFormPickupDate');
-      dateInput.min=new Date().toISOString().slice(0,10);
-      dateInput.value='';
-      document.getElementById('raFormDetail').value='';
-      document.getElementById('raFormDetailCount').textContent='0';
-      document.getElementById('raFormError').textContent='';
-      const branchSel=document.getElementById('raFormBranch');
-      if(product.branch) branchSel.value=product.branch;
-      showScene('form');
-    }
-    document.getElementById('raFormDetail').addEventListener('input', function(){
-      document.getElementById('raFormDetailCount').textContent=this.value.length;
-    });
-
-    document.getElementById('raSaveBtn').addEventListener('click', async ()=>{
-      const errBox=document.getElementById('raFormError'); errBox.textContent='';
-      const staffInputEl=document.getElementById('staffInput');
-      const inspectorName=(staffInputEl&&staffInputEl.value.trim())||'';
-      if(!inspectorName){ errBox.textContent='กรุณาเลือก "พนักงานขาย" ที่แถบด้านบนของแอปก่อน'; return; }
-      const pickupDate=document.getElementById('raFormPickupDate').value;
-      if(!pickupDate){ errBox.textContent='กรุณาเลือกวันที่นัดรับสินค้าแก้'; return; }
-      const detail=document.getElementById('raFormDetail').value.trim();
-      if(!detail){ errBox.textContent='กรุณากรอกรายละเอียดการแก้ไข'; return; }
-      const branch=document.getElementById('raFormBranch').value;
-      const round=_raProduct.nextRound||((_raProduct.roundCount||0)+1);
-
-      const ok=await confirmDialog('ยืนยันการส่งรายละเอียดการปรับแก้ครั้งที่ '+round, 'ยืนยัน');
-      if(!ok) return;
-
-      const saveBtn=document.getElementById('raSaveBtn'); saveBtn.disabled=true; saveBtn.textContent='กำลังบันทึก…';
+    async function buildReceipt(){
+      const sv=S.saved; if(!sv) return;
       try{
-        const res=await fetch(WORKER+'/repeat-alteration-submit', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({
-            sfRecordId: _raProduct.id, productCode: _raProduct.code, orderCode: _raProduct.orderCode||'',
-            custName: _raProduct.custName||'', detail, inspectorName, branch, pickupDate, round,
-          }),
-        });
-        const j=await res.json();
-        if(!j.success) throw new Error(j.error||'บันทึกไม่สำเร็จ');
-        await showReceiptScene(_raProduct, {round, branch, pickupDate, detail});
-      }catch(e){
-        errBox.textContent=e.message;
-      }finally{
-        saveBtn.disabled=false; saveBtn.textContent='บันทึกแก้ไขงาน';
-      }
-    });
-
-    // ── ขั้นที่ 4: ใบยืนยันงานแก้ซ้ำ — render ด้วย renderReceiptCanvasBase64 จริง (ฟอนต์/ขนาด/การย่ออัตโนมัติเหมือนใบสรุปจริงทุกจุด) ไม่ใช่วาดมือ ──
-    async function showReceiptScene(product, info){
-      showScene('receipt');
-      const img=document.getElementById('raReceiptImg');
-      img.removeAttribute('src');
-      document.getElementById('raReceiptNote').textContent='กำลังสร้างใบยืนยัน…';
-      try{
-        const typeBig=String(product.type||'').replace(/\s*\(สำเร็จรูป\)\s*$/,'');
         const lines=[
-          {kind:'right', text:(product.orderCode||'-')+' · '+product.code, small:true},
-          {kind:'title', text:'ใบยืนยันงานแก้ซ้ำ'},
-          {kind:'title', text:typeBig, typeBig:true},
+          {kind:'right',text:(sv.orderCode||'-')+' · '+sv.productCode,small:true},
+          {kind:'title',text:'สินค้านำกลับมาแก้ · ใบสรุป'},
+          {kind:'title',text:typeShort(sv.type),typeBig:true},
           {kind:'dash'},
-          {kind:'skuCenter', text:'สินค้านำกลับมาแก้'},
+          {kind:'skuCenter',text:'แก้ซ้ำครั้งที่ '+sv.round},
           {kind:'dash'},
-          {kind:'skuCenter', text:'SKU '+(product.sku||'-')+(product.size?('-'+product.size):'')},
+          {kind:'skuCenter',text:'SKU '+sv.sku},
           {kind:'dash'},
-          {kind:'kv', label:'ลูกค้า', value:product.custName||'-', small:true},
-          {kind:'kv', label:'ครั้งที่', value:String(info.round), small:true},
-          {kind:'kv', label:'สาขาที่รับ', value:info.branch||'-', small:true},
+          {kind:'kv',label:'ลูกค้า',value:sv.custDisplay||sv.custName||'-',small:true},
+          {kind:'kv',label:'เบอร์โทร',value:fmtPhone(sv.phone)||'-',small:true},
+          {kind:'kv',label:'บิล',value:sv.billNo||'-',small:true},
+          {kind:'kv',label:'สาขาที่นัดรับ',value:sv.branch||'-',small:true},
+          {kind:'kv',label:'ผู้ตรวจ',value:sv.inspectorName||'-',small:true},
           {kind:'dash'},
-          {kind:'noteLabel', text:'รายละเอียดการแก้ไขครั้งที่ '+info.round},
-          {kind:'noteLine', text:info.detail},
+          {kind:'noteLabel',text:'รายละเอียดการแก้ไขครั้งที่ '+sv.round},
+          {kind:'noteLine',text:sv.detail},
           {kind:'dash'},
-          {kind:'center', text:'นัดรับ'},
-          {kind:'centerBig', text: toThaiDateWithDay(info.pickupDate), xl:true},
+          {kind:'center',text:'นัดรับ'},
+          {kind:'centerBig',text:toThaiDateWithDay(sv.pickupDate),xl:true},
         ];
         const b64=await renderReceiptCanvasBase64(lines);
-        img.src='data:image/png;base64,'+b64;
-        document.getElementById('raReceiptNote').textContent='บันทึกสำเร็จ — รอพนักงานลงข้อมูลที่ตรวจสอบยืนยันเข้า Salesforce อีกครั้ง';
-      }catch(e){
-        document.getElementById('raReceiptNote').textContent='บันทึกสำเร็จ (สร้างรูปตัวอย่างไม่สำเร็จ: '+e.message+')';
-      }
+        if(S.saved!==sv) return;
+        sv.rcpt='data:image/png;base64,'+b64;
+      }catch(e){ if(S.saved!==sv) return; sv.rcptErr=(e&&e.message)||String(e); }
+      const w=els.sForm.querySelector('[data-ra2-rcw]'), a=els.sForm.querySelector('[data-ra2-dl]');
+      if(w) w.innerHTML=sv.rcpt?'<img alt="ใบสรุป สินค้านำกลับมาแก้" src="'+sv.rcpt+'">':'<span class="ld">สร้างรูปใบสรุปไม่สำเร็จ ('+esc(sv.rcptErr)+') — ข้อมูลบันทึกแล้ว</span>';
+      if(a&&sv.rcpt){ a.href=sv.rcpt; a.classList.remove('off'); }
     }
+
+    // ---------- วาดหน้า ----------
+    const STEP_NM=['ค้นหา','แก้ไขสินค้า','บันทึกแก้ไข'];
+    function curStep(){ if(S.scene==='form') return S.saved?4:3; return (S.result&&S.result.kind!=='none'&&S.result.kind!=='error')?2:1; }
+    function stepsHtml(){
+      const c=curStep();
+      return STEP_NM.map((n,i)=>{ const k=i+1, st=k<c?'done':(k===c?'on':''), click=st==='done'&&k<3;
+        return (click?'<button type="button"':'<div')+' class="ra2-step '+st+'"'+(click?' data-ra2="gostep" data-step="'+k+'" title="ย้อนกลับไปขั้นนี้"':'')+'><span class="no">0'+k+IC.ck+'</span><span class="nm">'+n+'</span>'+(click?'</button>':'</div>'); })
+        .join('<div class="ra2-arrow" aria-hidden="true">'+IC.chev+'</div>');
+    }
+    const nbBack='<button type="button" class="ra2-nb back" data-ra2="prev" aria-label="ย้อนกลับขั้นก่อนหน้า" title="ย้อนกลับ"><span class="c">'+IC.left+'</span></button>';
+    const nbNext=(act,ic,label)=>'<button type="button" class="ra2-nb next" data-ra2="'+act+'" aria-label="'+esc(label)+'" title="'+esc(label)+'"><span class="c">'+ic+'</span></button>';
+    const SP='<span class="ra2-sp" aria-hidden="true"></span>';
+    const fsum=it=>'<div class="ra2-fsum"><b>'+esc(typeShort(it.type))+' · <span class="p">'+esc(it.code)+'</span></b></div>';
+    function footHtml(){
+      if(S.scene==='form'&&S.form){
+        const it=S.form.it;
+        if(S.saved) return SP+fsum(it)+nbNext('newsearch',IC.search,'ค้นชิ้นถัดไป');
+        const ok=formValid();
+        return nbBack+fsum(it)+'<button type="button" class="ra2-submit" data-ra2="save"'+(ok?'':' disabled title="ยังขาด: '+esc(missingText())+'"')+'>บันทึกข้อมูล</button>';
+      }
+      const it=selectedItem();
+      if(it&&itemState(it).ok) return nbBack+fsum(it)+nbNext('go',IC.right,'ไปบันทึกการแก้ ครั้งที่ '+itemState(it).next);
+      const has=S.result&&S.result.kind!=='none'&&S.result.kind!=='error';
+      return (has?nbBack:SP)+'<div class="ra2-fsum"></div>'+SP;
+    }
+    function setFoot(){ const nh=footHtml(); if(els.foot._html!==nh){ els.foot.innerHTML=nh; els.foot._html=nh; } }
+    function render(){
+      els.steps.innerHTML=stepsHtml();
+      els.klabel.innerHTML='ค้นด้วย <b>'+MODES[S.mode].label+'</b>';
+      if(els.mode.value!==S.mode) els.mode.value=S.mode;
+      els.input.placeholder=MODES[S.mode].ph; els.input.inputMode=MODES[S.mode].im;
+      if(els.input.value!==S.query) els.input.value=S.query;
+      els.clear.hidden=!S.query;
+      els.alt.innerHTML=S.searching?'<span class="ra2-searching"><span class="ra2-spin"></span>กำลังค้นหา…</span>':'';
+      els.result.innerHTML=draftTop()+resultHtml();
+      els.sSearch.classList.toggle('on',S.scene==='search');
+      els.sForm.classList.toggle('on',S.scene==='form');
+      if(S.scene==='form'&&S.form){
+        const key=S.form.id+(S.saved?'s':'');
+        if(els.sForm.dataset.key!==key){ els.sForm.dataset.key=key; if(S.saved) els.sForm.innerHTML=savedHtml(); else { els.sForm.innerHTML=formHtml(); wireForm(); } }
+      } else if(els.sForm.dataset.key){ els.sForm.innerHTML=''; els.sForm.dataset.key=''; }
+      setFoot();
+      els.sheet.innerHTML=S.confirm&&S.form&&!S.saved?confirmHtml():'';
+      if(S.scene==='form') refreshDraftBar();
+    }
+    let _tt=null;
+    function toast(m){ els.toast.textContent=m; els.toast.classList.add('show'); clearTimeout(_tt); _tt=setTimeout(()=>els.toast.classList.remove('show'),2600); }
+
+    // ---------- เปิด/ปิด ----------
+    function open(){
+      Object.keys(INFO).forEach(k=>delete INFO[k]); ORDERS=null; ordersP=null; ITEMS=[];   // สถานะเปลี่ยนได้ตลอด — โหลดใหม่ทุกครั้งที่เปิด
+      Object.assign(S,{mode:'pid',query:'',searching:false,result:null,sel:null,searched:null,scene:'search',form:null,confirm:false,sending:false,saveErr:'',saved:null,restoreKey:''});
+      // ซ่อนป๊อปอัปประวัติไว้ก่อนระหว่างใช้งาน (ป๊อปอัปนี้อยู่ชั้นต่ำกว่า .infopop เพื่อให้กล้องสแกน/ยืนยันของแอปขึ้นทับได้) แล้วคืนตอนปิด
+      const hp=document.getElementById('histPop'); S.histWasOpen=!!(hp&&hp.classList.contains('show')); if(S.histWasOpen) hp.classList.remove('show');
+      pop.classList.add('show'); pop.setAttribute('aria-hidden','false');
+      render(); loadOrders().catch(()=>{});
+      setTimeout(()=>{ try{ els.input.focus({preventScroll:true}); }catch(e){} },60);
+    }
+    function close(){
+      if(S.sending){ toast('กำลังบันทึก — รอสักครู่'); return; }
+      saveDraftNow();
+      pop.classList.remove('show'); pop.setAttribute('aria-hidden','true');
+      if(S.histWasOpen){ const hp=document.getElementById('histPop'); if(hp) hp.classList.add('show'); S.histWasOpen=false; }
+    }
+    const opener=document.getElementById('raOpenBtn');
+    if(opener) opener.addEventListener('click',open);
+
+    // ---------- เหตุการณ์ ----------
+    // กันเหตุการณ์ในป๊อปอัปไปปลุก autosave ของฟอร์มหลัก (document input/change)
+    pop.addEventListener('input',e=>{
+      e.stopPropagation();
+      const t=e.target;
+      if(t===els.input){ let v=t.value; if(S.mode!=='bill') v=v.replace(/[^\dA-Za-z#\s]/g,''); S.query=v; els.clear.hidden=!v; if(autoReady(v)) startSearch(v); return; }
+      if(S.scene!=='form'||!S.form) return;
+      if(t.matches('[data-ra2-note]')){ S.form.note=t.value; resizeNoteInput(t); changed(); return; }
+      if(t.matches('[data-ra2-insp]')){ S.form.inspector=t.value; fitInsp(t); showSug(t.value); changed(); return; }
+      if(t.closest('.ra2-measure')) changed();
+    });
+    pop.addEventListener('change',e=>{
+      e.stopPropagation();
+      const t=e.target;
+      if(t===els.mode){ S.mode=t.value; S.query=''; S.result=null; S.sel=null; S.searched=null; S.scene='search'; render(); try{ els.input.focus({preventScroll:true}); }catch(x){} return; }
+      if(S.form&&t.matches('[data-ra2-branch]')){ S.form.branch=t.value; changed(); }
+    });
+    els.input.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); startSearch(els.input.value); } });
+    pop.addEventListener('focusin',e=>{ if(e.target.matches&&e.target.matches('[data-ra2-insp]')){ e.target.select(); showSug(''); } });
+    pop.addEventListener('focusout',e=>{
+      if(e.target.matches&&e.target.matches('[data-ra2-insp]')) setTimeout(()=>{ const a=document.activeElement; if(!a||!a.matches||!a.matches('[data-ra2-insp]')) hideSug(); },150);
+      if(S.scene==='form') setTimeout(()=>{ if(S.form&&!S.saved) changed(); },0);
+    });
+    pop.addEventListener('pointerdown',e=>{ if(e.target.closest('[data-ra2-isug]')) e.preventDefault(); });
+    pop.addEventListener('keydown',e=>{
+      const t=e.target;
+      if((e.key==='Enter'||e.key===' ')&&t.matches&&t.matches('.ra2-it[role="button"]')){ e.preventDefault(); t.click(); return; }
+      if(e.key==='Escape'){ e.stopPropagation();
+        const cal=els.sForm.querySelector('[data-ra2-cal]'); const sug=els.sForm.querySelector('[data-ra2-isug]');
+        if(sug&&!sug.hidden){ hideSug(); return; } if(cal&&!cal.hidden){ cal.hidden=true; return; }
+        if(S.confirm&&!S.sending){ S.confirm=false; S.saveErr=''; render(); return; }
+        close(); }
+    });
+    pop.addEventListener('click',e=>{
+      if(e.target===pop){ close(); return; }
+      // ช่องวัดตัว (ของแอปหลัก) เปลี่ยน → อัปเดตตัวนับ/ปุ่มบันทึก/ร่าง
+      if(S.scene==='form'&&S.form&&!S.saved&&e.target.closest('.ra2-measure')) setTimeout(changed,0);
+      const t=e.target.closest('[data-ra2]'); if(!t||!pop.contains(t)) return;
+      const a=t.dataset.ra2;
+      if(a==='close') close();
+      else if(a==='clear'){ S.token++; S.query=''; S.result=null; S.sel=null; S.searched=null; S.searching=false; render(); try{ els.input.focus({preventScroll:true}); }catch(x){} }
+      else if(a==='scan') scan();
+      else if(a==='retry'){ const r=S.result&&S.result.raw; ordersP=null; doSearch(r||S.query); }
+      else if(a==='mode'){ S.mode=t.dataset.mode; S.query=''; S.result=null; S.sel=null; render(); try{ els.input.focus({preventScroll:true}); }catch(x){} }
+      else if(a==='pick'){ S.sel=t.dataset.code; render(); }
+      else if(a==='unpick'){ S.sel=null; render(); }
+      else if(a==='edit'||a==='go'){ goForm(a==='edit'?t.dataset.code:S.sel); }
+      else if(a==='gostep'){ const k=+t.dataset.step; S.scene='search'; S.confirm=false; if(k===1){ S.result=null; S.sel=null; S.searched=null; } render(); if(k===1) try{ els.input.focus({preventScroll:true}); }catch(x){} }
+      else if(a==='prev'){ const c=curStep(); S.confirm=false;
+        if(c===3){ saveDraftNow(); S.scene='search'; render(); }
+        else if(c===2){ S.scene='search'; S.result=null; S.sel=null; S.searched=null; render(); try{ els.input.focus({preventScroll:true}); }catch(x){} } }
+      else if(a==='save'){ if(!formValid()){ toast('ยังขาด: '+missingText()); return; } S.confirm=true; S.saveErr=''; render(); const b=els.sheet.querySelector('[data-ra2="cfok"]'); try{ b&&b.focus({preventScroll:true}); }catch(x){} }
+      else if(a==='cfback'){ if(S.sending) return; S.confirm=false; S.saveErr=''; render(); }
+      else if(a==='cfok') submit();
+      else if(a==='newsearch'){ Object.assign(S,{query:'',result:null,sel:null,searched:null,scene:'search',form:null,saved:null,confirm:false}); render(); try{ els.input.focus({preventScroll:true}); }catch(x){} }
+      else if(a==='date'){ const cal=els.sForm.querySelector('[data-ra2-cal]'); if(!cal) return; const opening=cal.hidden; cal.hidden=!opening; t.setAttribute('aria-expanded',String(opening));
+        if(opening){ const d=new Date((S.form.date||isoPlus(0))+'T00:00:00'); cal.dataset.y=d.getFullYear(); cal.dataset.m=d.getMonth(); cal.innerHTML=calHtml(d.getFullYear(),d.getMonth(),S.form.date); } }
+      else if(a==='calnav'){ const cal=els.sForm.querySelector('[data-ra2-cal]'); if(!cal||t.disabled) return; let y=+cal.dataset.y, m=+cal.dataset.m+ +t.dataset.d; if(m<0){ m=11; y--; } if(m>11){ m=0; y++; } cal.dataset.y=y; cal.dataset.m=m; cal.innerHTML=calHtml(y,m,S.form.date); }
+      else if(a==='day'){ if(t.disabled) return; S.form.date=t.dataset.date; const cal=els.sForm.querySelector('[data-ra2-cal]'); if(cal) cal.hidden=true; const db=els.sForm.querySelector('[data-ra2="date"]'); if(db) db.setAttribute('aria-expanded','false'); changed(); }
+      else if(a==='insp'){ const inp=els.sForm.querySelector('[data-ra2-insp]'); inp.value=t.dataset.name; S.form.inspector=t.dataset.name; hideSug(); fitInsp(inp); changed(); }
+      else if(a==='draftdrop'){ dropDraft(t.dataset.key); render(); refreshDraftBar(); toast('ทิ้งข้อมูลที่ค้างไว้แล้ว'); }
+      else if(a==='draftrestore'){ const k=t.dataset.key, sn=readDrafts()[k]; if(!sn) return;
+        if(t.dataset.where==='form'&&S.form&&draftKeyOf(S.form)===k){ applyDraft(sn); return; }
+        S.restoreKey=k; S.mode='pid'; doSearch(sn.code); }
+    });
   })();
   // ── ช่องพิมพ์ "ชื่อผู้แก้ไข" ในป็อปอัปยืนยันแก้ไขบิล — พิมพ์แล้ว suggest เหมือน "พนักงานขาย"/"ชื่อผู้แก้ไข" ในฟอร์ม (ใช้ STAFF_LIST ตัวเดียวกัน ประกาศทีหลังด้านล่าง จึงอ้างอิงสดตอนเรียกใช้งานจริง) ──
   (function wireConfirmEditorNameInput(){
@@ -4634,6 +5286,17 @@
     });
     return parts.join(', ');
   }
+  // [แก้ 2026-09-29 ตามที่ขอ] Worker ต่อท้ายหมายเหตุใน Salesforce (Field20__c) ด้วย "อก: เก็บเข้า 2 นิ้ว" / "เอว: ..." / "สะโพก: ..." / "ต้นแขน: เก็บเข้า ..." / "ต่ำเข่า: ..."
+  // (ให้ช่างเห็นทิศทางในใบงาน เพราะฟิลด์ค่าวัดเป็นตัวเลขล้วนใส่คำไม่ได้ — ฝั่ง Salesforce ยังต้องมีเหมือนเดิม) แต่ใบสรุปพิมพ์ซ้ำ/ดึงข้อมูลล่าสุด/?auto=1 ดึงหมายเหตุนี้มาทั้งก้อน
+  // เลยซ้ำกับแถวค่าวัดด้านบนของใบ (เจอจริง R326092601) — ตัดเฉพาะท่อนที่มีแถวเดียวกันอยู่ด้านบนแล้ว (ชื่อจุดวัด+ทิศทาง+ตัวเลขตรงกันทุกอย่าง) ท่อนที่ไม่ตรง/ข้อความอื่นเก็บไว้ครบ
+  function stripNoteDupMeasures(note, rows){
+    if(!note || !rows || !rows.length) return note;
+    const have=new Set(rows.map(r=>String(r.label).trim()+'|'+parseFloat(r.value)));
+    return String(note)
+      .replace(/(อก|เอว|สะโพก|ต้นแขน|ต่ำเข่า)\s*:\s*(?:(เก็บเข้า|ขยายออก)\s*)?(\d+(?:\.\d+)?)\s*นิ้ว/g,
+        (m,label,dir,num)=> have.has((dir?label+' '+dir:label)+'|'+parseFloat(num)) ? '' : m)
+      .split('\n').map(s=>s.replace(/\s{2,}/g,' ').trim()).filter(Boolean).join('\n');
+  }
   function buildReceiptLines(order, item, opts){
     const lines=[];
     // [แก้ตามที่ขอ] เลขที่บิล ชิดขวา — ต่อท้าย "(N ชิ้น)" เสมอทุกกรณี (เดิมโชว์แค่บิลที่มีหลายชิ้น บิลชิ้นเดียวไม่มีข้อความนี้เลย ทำให้ดูไม่สม่ำเสมอ ตอนนี้โชว์ "(1 ชิ้น)" ด้วยเช่นกัน)
@@ -4683,7 +5346,7 @@
     lines.push({kind:'dash'});
     // [แก้ตามที่ขอ] ย้าย "หมายเหตุ" ขึ้นมาไว้เหนือสถานะการชำระเงิน/วันนัดรับ + ใส่เส้นประคั่นท้ายหมายเหตุ (ก่อนหน้านี้ย้ายแล้วแต่ลืมใส่เส้นคั่น เนื้อหาเลยเบียดกับ "ชำระเงินแล้ว")
     // ส่ง noteLine เป็นข้อความดิบก้อนเดียว ไม่ตัดบรรทัดล่วงหน้าแบบนับตัวอักษร — renderReceiptCanvasBase64 จะตัดบรรทัดตามความกว้างจริงของกระดาษเอง (วัดด้วย ctx.measureText)
-    const noteText=String(item.note||'').trim();
+    const noteText=String(stripNoteDupMeasures(String(item.note||''), item.measureRows)||'').trim();
     if(noteText){
       lines.push({kind:'noteLabel', text:'หมายเหตุ'});
       lines.push({kind:'noteLine', text:noteText});
@@ -4699,7 +5362,18 @@
     // [แก้บั๊ก] "ที่สาขา..." เดิมขึ้นตายตัวเสมอ ทั้งที่ pickupLabel อาจเป็นวิธีจัดส่ง (Messenger/ขนส่งเอกชน+สถานที่) ไม่ใช่สาขาก็ได้ — "ที่สาขาขนส่งเอกชน – ตึกเกสร ชิดลม" อ่านแล้วงงว่าสาขาอะไร ตัดคำว่า "สาขา" ออกเฉพาะเคสจัดส่ง
     const isDeliveryPickup=/Messenger|ขนส่งเอกชน/.test(order.pickupLabel||'');
     // [แก้ตามที่ขอ] สาขานัดรับ ตัวใหญ่เท่าวันที่นัดรับ — เพิ่ม xl:true ให้เท่ากับบรรทัดวันที่ด้านบน (เดิมเล็กกว่า F(23) vs F(33))
-    lines.push({kind:'centerBig', text:(isDeliveryPickup?'ที่':'ที่สาขา')+(order.pickupLabel||'-'), xl:true});
+    // [แก้บั๊ก 2026-09-29] เคสจัดส่ง ที่อยู่ยาวๆ (เช่น R326092601 "Messenger – คุณนีรมน บ้านเลขที่ 24 ... กทม.10150" 77 ตัวอักษร) เดิมต่อท้ายไว้ในบรรทัดใหญ่บรรทัดเดียว
+    // ย่อฟอนต์ได้ถึงแค่ F(20) แล้วยังยาวเกินกระดาษ ~2.85 เท่า เลยขาดหัวท้ายทั้ง 2 ข้าง — แยกเป็น: บรรทัดใหญ่ = วิธีจัดส่งอย่างเดียว + ที่อยู่เป็นบรรทัดกลางตัดคำตามความกว้างกระดาษ (addrLine)
+    // ที่อยู่มาได้ 2 ทาง: order.deliveryPlace (ใบแรกตอนบันทึก — buildAllReceipts ส่งมาแยก) หรือส่วนหลัง " – " ใน pickupLabel (พิมพ์ซ้ำ/ดึงข้อมูลล่าสุด/?auto=1 — Worker รวมมาให้เป็นก้อนเดียว)
+    if(isDeliveryPickup){
+      const label=String(order.pickupLabel||''), sepIdx=label.indexOf(' – ');
+      const method=(sepIdx>=0 ? label.slice(0,sepIdx) : label).trim();
+      const place=String(order.deliveryPlace || (sepIdx>=0 ? label.slice(sepIdx+3) : '')).trim();
+      lines.push({kind:'centerBig', text:(/^[A-Za-z]/.test(method)?'ที่ ':'ที่')+method, xl:true});
+      if(place) lines.push({kind:'addrLine', text:place});
+    } else {
+      lines.push({kind:'centerBig', text:'ที่สาขา'+(order.pickupLabel||'-'), xl:true});
+    }
     // [แก้ตามที่ขอ] ไม่มีข้อมูลเวลานัดรับ (ว่าง หรือ "00:00" ที่แปลว่า "ไม่ระบุ") ไม่ต้องมีบรรทัดนี้เลย — เดิมโชว์ "เวลานัดรับ -" เสมอแม้ไม่มีข้อมูลจริง
     if(order.pickupTime && order.pickupTime!=='00:00') lines.push({kind:'centerSmall', text:'เวลานัดรับ '+order.pickupTime});
     // [แก้ 2026-09-24 ตามที่ขอ] เอา QR code ออกจากใบสรุปทั้งหมดแล้ว (เดิมต่อท้ายล่างสุดของใบเมื่อมี item.qrUrl) — โค้ดวาด QR (kind:'qr' + ไลบรารี qrcode-generator ด้านบน) ยังค้างอยู่เฉยๆ ไม่มีใครส่งบรรทัดนี้เข้ามาแล้ว ถ้าจะเอากลับมาใช้แค่ใส่ qrUrl ใน regenerateReceiptsFromLatest + บรรทัด lines.push({kind:'qr', text:item.qrUrl}) ตรงนี้
@@ -4733,6 +5407,7 @@
       if(l.kind==='branchCenter') return '<div class="r-branchcenter">'+escapeHtml(l.text)+'</div>';
       if(l.kind==='noteLabel') return '<div class="r-notelabel">'+escapeHtml(l.text)+'</div>';
       if(l.kind==='noteLine') return '<div class="r-noteline">'+escapeHtml(l.text)+'</div>';
+      if(l.kind==='addrLine') return '<div class="r-addrline">'+escapeHtml(l.text)+'</div>';
       if(l.kind==='blank') return '<div class="r-blank"></div>';
       return '';
     }).join('');
@@ -4777,14 +5452,18 @@
       const mC=document.createElement('canvas').getContext('2d');
       mC.font='400 '+F(19)+'px '+RFONT; mC.letterSpacing=LS;
       const noteMaxW=W-padX*2;
+      // [แก้บั๊ก 2026-09-29] ที่อยู่จัดส่ง (addrLine) ตัดบรรทัดแบบเดียวกัน แต่วัดด้วยฟอนต์ของมันเอง F(21) — กันที่อยู่ยาวล้นขอบกระดาษ
+      const aC=document.createElement('canvas').getContext('2d');
+      aC.font='400 '+F(21)+'px '+RFONT; aC.letterSpacing=LS;
       lines=lines.reduce((acc,l)=>{
         if(l.kind==='noteLine') wrapTextByWidth(mC, l.text, noteMaxW).forEach(t=>acc.push({kind:'noteLine', text:t}));
+        else if(l.kind==='addrLine') wrapTextByWidth(aC, l.text, noteMaxW).forEach(t=>acc.push({kind:'addrLine', text:t}));
         else acc.push(l);
         return acc;
       },[]);
     }
     // [แก้ตามที่ขอ] titleBig = ประเภทสินค้าตัวใหญ่, centerBigXl = วันนัดรับตัวใหญ่, kvSmall/kv2Small = ลูกค้า/เบอร์/พนักงานขาย ตัวเล็กบรรทัดเดียว
-    const HEIGHTS={right:F(35),rightBig:F(28),title:F(44),titleBig:F(58),center:F(30),spacer:F(14),leftLabelValue:F(22),leftLabelValueBig:F(28),skuRow:F(30),leftSmall:F(20),measure:F(38),centerBig:F(38),centerBigXl:F(52),centerBigBoxed:F(52),centerSmall:F(22),dash:F(20),kv:F(72),kvSmall:F(32),kv2:F(40),kv2Small:F(30),skuCenter:F(38),branchCenter:F(28),noteLabel:F(28),noteLine:F(30),
+    const HEIGHTS={right:F(35),rightBig:F(28),title:F(44),titleBig:F(58),center:F(30),spacer:F(14),leftLabelValue:F(22),leftLabelValueBig:F(28),skuRow:F(30),leftSmall:F(20),measure:F(38),centerBig:F(38),centerBigXl:F(52),centerBigBoxed:F(52),centerSmall:F(22),dash:F(20),kv:F(72),kvSmall:F(32),kv2:F(40),kv2Small:F(30),skuCenter:F(38),branchCenter:F(28),noteLabel:F(28),noteLine:F(30),addrLine:F(32),
       qr:F(320), // [แก้ตามที่ขอ] QR code บนสุดของใบสรุป — ขยายมาเรื่อยๆ F(150)→F(220)→F(260)→F(280)→F(300) — โมดูล QR เป็นสเต็ปไม่ต่อเนื่อง (ต้องลงพิกเซลเต็มจำนวนคูณ SS) ขั้นถัดไปจาก F(280) (61.3mm, ชิดพอดีกับ padX ปกติของใบเสร็จ) คือ F(300) ทันที (67.4mm) — กว้างกว่าเดิมแต่ขอบเหลือน้อยลงกว่าระยะขอบข้อความปกติเล็กน้อย (~2.3mm ต่อข้าง แทน ~3.6mm) ยังไม่ชิดขอบกระดาษ ความสูงนี้ขยับตามให้พอดี F(300) ตัว QR เอง + เผื่อระยะห่างบน-ล่างจากบรรทัดข้างเคียง
       blank:400*SS};
     // เลือกคีย์ HEIGHTS + ขนาดฟอนต์ตาม flag (big/typeBig/xl/small) — ใช้ทั้งตอนคำนวณความสูงรวมและตอนวาดจริง ให้ตรงกันเป๊ะ
@@ -4935,6 +5614,8 @@
         ctx.font='400 '+F(20)+'px '+RFONT; ctx.fillStyle='#777'; ctx.textAlign='left'; ctx.fillText(l.text, padX, y);
       } else if(l.kind==='noteLine'){
         ctx.font='400 '+F(19)+'px '+RFONT; ctx.fillStyle='#000'; ctx.textAlign='left'; ctx.fillText(l.text, padX, y);
+      } else if(l.kind==='addrLine'){
+        ctx.font='400 '+F(21)+'px '+RFONT; ctx.fillStyle='#000'; ctx.textAlign='center'; ctx.fillText(l.text, W/2, y);
       }
       y+=h/2;
     });
@@ -4976,6 +5657,8 @@
       billNo:data['เลขที่บิล'], sentDate:data['วันที่ส่งแก้'],
       custName:data['ชื่อลูกค้า'], phone:data['เบอร์โทรศัพท์'], nickname:data['ชื่อเล่น'], staff:data['พนักงานขาย'],
       payStatus:data['สถานะการชำระเงิน'], pickupLabel:data['การจัดส่ง']||data['สาขาที่นัดรับสินค้า'],
+      // [แก้บั๊ก 2026-09-29] ใบแรกตอนบันทึกเดิมไม่มีที่อยู่จัดส่งเลย (ขึ้นแค่ "ที่Messenger") — ส่งสถานที่ส่งไปด้วย ให้ตรงกับใบพิมพ์ซ้ำ
+      deliveryPlace:data['การจัดส่ง'] ? (data['สถานที่ส่ง']||'') : '',
       pickupDate:data['วันที่นัดรับ'], pickupTime:data['เวลาที่นัดรับ'],
       urgent:!!data['งานด่วน'], urgentApprover:data['ชื่อผู้อนุมัติงานด่วน']||'',
       branch:data['สาขา']||'', // [ใหม่ตามที่ขอ] สาขาที่ซื้อ — ใช้เทียบว่า "ใช้สินค้าจาก" เป็น "หน้าร้าน" หรือสาขาอื่น
