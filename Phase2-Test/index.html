@@ -1539,7 +1539,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-09-29-2-phase2-23';
+  const APP_VERSION = '2026-09-29-2-phase2-24';
 
   let currentView=1;
   function updateIdx(){
@@ -2885,11 +2885,15 @@
       }
       return out+tail;
     }
-    // ข้อความจากเครื่องยิง/กล้อง: ลิงก์ …/Suitcube_Product__c/<Id>/view → ขอ P# จาก Salesforce · "P# 399665" หรือเลข 6 หลัก → ใช้ตรงๆ
+    // ข้อความจากเครื่องยิง/กล้อง: ลิงก์ที่มี Salesforce Id ของสินค้า → ขอ P# จาก Salesforce · "P# 399665" หรือเลข 6 หลัก → ใช้ตรงๆ
+    //  · QR บนใบสรุป: https://d6f000002yqrnuao.lightning.force.com/lightning/r/Suitcube_Product__c/<Id>/view
+    //  · QR ป้ายงาน (ปุ่ม "Print QR" หน้า Suitcube Product ใน Salesforce): https://d6f000002yqrnuao--c.vf.force.com/<Id>
+    // [แก้ 2026-09-30 รอบ 2] เดิมรู้จักแค่แบบใบสรุป ยิง QR ป้ายงานแล้วขึ้น "ไม่ใช่ QR บนใบสรุป" → หา Id 15/18 ตัวที่เป็นท่อนหนึ่งของลิงก์ (ตามหลัง / หรือ =) ด้วย
+    const SFID_PART=/(?:^|[\/=])([a-z0-9]{15}(?:[a-z0-9]{3})?)(?=$|[\/?&#])/i;
     async function applyScan(raw){
       raw=String(raw||'').trim(); if(!raw) return;
       const tk=++S.scanTk;
-      const direct=raw.match(/^(?:P#\s*)?(\d{6})$/i), m=raw.match(/Suitcube_Product__c\/([a-z0-9]{15,18})/i);
+      const direct=raw.match(/^(?:P#\s*)?(\d{6})$/i), m=raw.match(/Suitcube_Product__c\/([a-z0-9]{15,18})/i)||raw.match(SFID_PART);
       if(direct){ setQuery(direct[1]); return; }
       setQuery('');
       // อ่านไม่ออก → โชว์ข้อความที่เครื่องอ่านได้ (ไม่เกิน 40 ตัว) ด้วย จะได้รู้ว่าเครื่องยิง/กล้องส่งอะไรมา
