@@ -662,9 +662,10 @@
   .hist-pid-sample{font-family:'Barlow',sans-serif;font-weight:700;font-size:13px;color:var(--green)}
   .hist-pid-sample.notarrived{color:var(--red)}
   /* [แก้ตามที่ขอ] แท็บในป็อปอัพ "ประวัติใบสั่งแก้" เปลี่ยนจากปุ่มยาแคปซูลแยกกัน เป็นแท่งเดียวแบ่งช่องเท่ากัน (segmented control) — สีเหมือนของเดิม แค่เปลี่ยนทรง ไม่กระทบแท็บของป็อปอัพคู่มือ (#infoTabs ยังเป็นแบบเดิม) */
-  #histTabs{background:var(--rule2);border-radius:12px;padding:4px;gap:2px;overflow-x:visible}
-  #histTabs .hist-tab{flex:1 1 0;background:none;color:var(--t2);padding:9px 6px;border-radius:9px;text-align:center}
-  #histTabs .hist-tab.on{background:var(--gold);color:#fff;font-weight:700;box-shadow:0 2px 6px rgba(201,162,75,.35)}
+  /* [แก้ 2026-09-30 ตามที่ขอ] แท็บ "แบบ 2" จาก mockup design-demos/history-card-tabs: แคปซูลขาว ขอบบาง บนรางสีครีม ไม่มีเงา (เดิมแท็บที่เลือกเป็นสีทองทึบมีเงา) */
+  #histTabs{background:var(--rule2);border-radius:999px;padding:4px;gap:2px;overflow-x:visible}
+  #histTabs .hist-tab{flex:1 1 0;background:none;color:var(--t2);padding:8px 6px;border:1px solid transparent;border-radius:999px;text-align:center}
+  #histTabs .hist-tab.on{background:#fff;border-color:var(--rule);color:var(--ink);font-weight:600;box-shadow:none}
   .draft-row{cursor:pointer}
   .draft-row:hover .hist-ordercard{background:var(--paper)}
   .draft-del{margin-left:auto;background:none;border:none;color:var(--t3);font-size:18px;line-height:1;cursor:pointer;padding:0 2px}
@@ -1539,7 +1540,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-09-29-2-phase2-24';
+  const APP_VERSION = '2026-09-29-2-phase2-25';
 
   let currentView=1;
   function updateIdx(){
