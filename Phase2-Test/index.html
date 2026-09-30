@@ -582,6 +582,14 @@
   .ra2-cal .d.sel{background:var(--gold);color:#fff;font-weight:700}
   .ra2-cal .d:disabled{color:var(--t3);opacity:.38;cursor:not-allowed}
   .ra2-cal .d.e{visibility:hidden}
+  .ra2-frow[hidden]{display:none}
+  /* งานด่วน + ผู้อนุมัติ — ใช้ .urgent-chip / .type-picker.approver-picker ของฟอร์มหลักตรงๆ · เมนูชื่อชิดขวา (แถวนี้อยู่ขอบขวา ไม่ให้ล้นกรอบ) */
+  .ra2-view .approver-picker{margin-left:auto}
+  .ra2-view [data-ra2-apprrow]{flex-wrap:wrap;row-gap:8px}
+  .ra2-view .approver-picker .type-picker-btn{white-space:nowrap}
+  .ra2-view .approver-picker .type-picker-menu{left:auto;right:0}
+  .ra2-hint{font-size:12.5px;color:var(--red);line-height:1.5;padding:0 2px 10px}
+  .ra2-hint[hidden]{display:none}
   .ra2-frow.insp{flex-wrap:wrap;row-gap:8px;border:none}
   .ra2-insp{margin-left:auto;font-family:'Prompt',sans-serif;font-weight:300;font-size:12.5px;color:var(--ink);background:#fff;border:1px solid var(--rule);border-radius:999px;padding:4px 10px;outline:none;width:96px;min-width:96px;max-width:100%;text-align:center;text-overflow:ellipsis;box-sizing:border-box}
   .ra2-insp::placeholder{font-weight:300;color:var(--t2)}
@@ -1156,7 +1164,7 @@
         <!-- [ใหม่ Phase 2 · 2026-09-30] สินค้านำกลับมาแก้ — ช่องค้น P# ใต้ "สาขาที่นัดรับ" (ค้นทุกวันที่/ทุกสาขา · ยิงเครื่องสแกนที่ QR บนใบสรุปในช่องนี้ได้) ต่อสายใน wireRepeatAlterationPickup -->
         <div class="ra2-hero">
           <label class="ra2-field"><span class="ra2-pfx" aria-hidden="true">P#</span>
-            <input class="ra2-input" id="ra2PidInput" autocomplete="off" enterkeyhint="search" inputmode="numeric" placeholder="เช่น 399665" aria-label="P# ที่นำกลับมาแก้">
+            <input class="ra2-input" id="ra2PidInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" lang="en" enterkeyhint="search" inputmode="numeric" placeholder="เช่น 399665" aria-label="P# ที่นำกลับมาแก้">
             <button type="button" class="ra2-clear" id="ra2PidClear" aria-label="ล้างคำค้น" hidden>&times;</button>
           </label>
           <button type="button" class="ra2-qr" id="ra2PidScan" title="สแกน QR บนใบสรุป" aria-label="สแกน QR บนใบสรุป"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><rect x="7" y="7" width="4" height="4"/><rect x="13" y="7" width="4" height="4"/><rect x="7" y="13" width="4" height="4"/><path d="M14 14h3v3"/></svg>สแกน QR</button>
@@ -1531,7 +1539,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-09-29-2-phase2-20';
+  const APP_VERSION = '2026-09-29-2-phase2-21';
 
   let currentView=1;
   function updateIdx(){
@@ -2656,6 +2664,8 @@
   //   P# แดง แตะแล้วบอกสถานะตอนนี้ใต้บรรทัด — ป้าย/ปุ่มเติมหลังการ์ดถูกวาด (MutationObserver บน #histList) ไม่แก้ buildHistRowHtml/renderPickupRangeList ของแอปหลัก
   // · แตะป้าย → ฟอร์มในป๊อปอัปนี้ (แทนที่รายการ) → "บันทึกข้อมูล" = POST /repeat-alteration-submit ทันที (ไม่มีหน้ายืนยัน) → รูปใบสรุป (buildReceiptLines + renderReceiptCanvasBase64 · ไม่อัปโหลดที่ไหน)
   // ข้อจำกัด Worker ตอนนี้: roundCount ใน Salesforce ขยับหลังยืนยันเข้า Salesforce เท่านั้น — หลังบันทึก เลข N ขยับให้ในหน้านี้จนกว่าจะรีโหลดหน้า (กันบันทึกครั้งเดิมซ้ำ)
+  // [phase2-21 ตามที่ขอ] งานด่วน + ชื่อผู้อนุมัติ (หน้าตา/ชื่อ/พฤติกรรมเดียวกับฟอร์มหลัก) — Worker ยังไม่มีช่องงานด่วนของงานแก้ซ้ำ จึงขึ้นต้นรายละเอียดด้วย "!! งานด่วน !! (อนุมัติ: ชื่อ) "
+  //   · ช่อง P#: เครื่องยิง/คีย์บอร์ดที่พิมพ์ตอนเครื่องอยู่โหมดภาษาไทย ได้อักษรไทยแบบเกษมณี → แปลงกลับเป็นปุ่มภาษาอังกฤษให้เอง (หน้าเว็บบังคับภาษาแป้นพิมพ์ไม่ได้)
   (function wireRepeatAlterationPickup(){
     const card=histPop?histPop.querySelector('.histcard'):null;
     const input=document.getElementById('ra2PidInput'), view=document.getElementById('ra2View');
@@ -2668,7 +2678,7 @@
       warn:sv('<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4.5M12 17h.01"/>'),
       tick:sv('<path d="M5 12.5l4.5 4.5L19 7.5"/>'), user:sv('<circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/>'), dl:sv('<path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 20h14"/>'),
       phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'};
-    const S={q:'',tk:0,scanTk:0,why:{},view:'list',form:null,done:null,sending:false,err:'',listTop:0};
+    const S={q:'',tk:0,scanTk:0,why:{},view:'list',form:null,done:null,sending:false,err:'',listTop:0,kbTh:false};
     let ALL=null, allP=null;          // บิลทุกสาขา/ทุกวันที่ (ไม่รวมยกเลิก/ร่าง) — โหลดครั้งเดียวต่อการเปิดป๊อปอัป
     const PROD={};                    // 'P# 396241' → {p: ข้อมูลจาก /repeat-alteration-product, pr: กำลังโหลด, fail}
     const LATEST={};                  // 'P# …' → ค่าวัดปัจจุบันใน Salesforce (/product-latest) · null = กำลังโหลด · false = ไม่มี
@@ -2701,6 +2711,15 @@
     const baseFindHistOrder=findHistOrder;
     findHistOrder=id=>baseFindHistOrder(id)||(ALL||[]).find(o=>o.id===id)||null;
     function setCap(msg,kind){ if(!msg){ cap.className='ra2-cap'; cap.innerHTML=CAP_HTML; return; } cap.className='ra2-cap '+(kind||''); cap.textContent=msg; }
+    // แป้นพิมพ์โหมดไทย (เกษมณี) → ปุ่มภาษาอังกฤษ: ตารางเรียงตามแป้น [ปุ่มอังกฤษ, ตัวที่ออกในโหมดไทย] แถวไม่กด Shift 4 แถว + กด Shift 4 แถว แล้วกลับด้านเป็นตาราง ไทย → อังกฤษ
+    // แปลงเมื่อข้อความมีอักษรไทย (U+0E00–U+0E7F) อย่างน้อย 1 ตัว และแปลง "ทุกตัว" — ในโหมดไทย "/" มาจากปุ่ม 2, "-" จากปุ่ม 3, "." จาก Shift+' ฯลฯ (เช่น 396241 → "-ตุ/ภๅ")
+    const KEDMANEE=[
+      ['`1234567890-=','_ๅ/-ภถุึคตจขช'], ['qwertyuiop[]\\','ๆไำพะัีรนยบลฃ'], ["asdfghjkl;'",'ฟหกดเ้่าสวง'], ['zxcvbnm,./','ผปแอิืทมใฝ'],
+      ['~!@#$%^&*()_+','%+๑๒๓๔ู฿๕๖๗๘๙'], ['QWERTYUIOP{}|','๐"ฎฑธํ๊ณฯญฐ,ฅ'], ['ASDFGHJKL:"','ฤฆฏโฌ็๋ษศซ.'], ['ZXCVBNM<>?','()ฉฮฺ์?ฒฬฦ']];
+    const TH2EN={}; KEDMANEE.forEach(([en,th])=>{ const t=[...th]; [...en].forEach((k,i)=>{ TH2EN[t[i]]=k; }); });
+    const hasThai=s=>/[\u0E00-\u0E7F]/.test(s);
+    const mapThai=s=>[...s].map(c=>TH2EN[c]!==undefined?TH2EN[c]:c).join('');
+    const thaiToEn=s=>{ s=String(s==null?'':s); return hasThai(s)?mapThai(s):s; };
 
     // ---------- ข้อมูลจาก Worker ----------
     function loadAll(){
@@ -2834,8 +2853,16 @@
             + (ok?'<span class="hist-pid-icon" aria-label="ถึงสาขาแล้ว">'+HIST_STORE_ICON_SVG+'</span>':'')+'</div>'
         + '</div></div>';
     }
+    // ช่องนี้กำลังพิมพ์ด้วยแป้นโหมดไทยอยู่ไหม — จำไว้ เพราะพอเขียนเลขอังกฤษกลับลงช่องแล้ว ปุ่ม 2/3 ที่กดต่อในโหมดไทยจะออกมาเป็น "/" "-" (ไม่มีอักษรไทยให้เห็น)
+    // เลิกจำเมื่อช่องว่าง / เจอลิงก์ภาษาอังกฤษ (ยิงตอนโหมดอังกฤษ) / ระบบใส่ค่าให้เอง
+    const toEnglish=raw=>(S.kbTh||hasThai(raw))?mapThai(raw):raw;
     function onInput(){
-      const raw=input.value;
+      let raw=input.value;
+      if(!raw) S.kbTh=false; else if(hasThai(raw)) S.kbTh=true; else if(/https?:|Suitcube_Product__c/i.test(raw)) S.kbTh=false;
+      const en=toEnglish(raw);   // พิมพ์/ยิงตอนเครื่องอยู่โหมดไทย → ใช้ข้อความที่แปลงเป็นปุ่มภาษาอังกฤษแล้วก่อนกรอง
+      // ได้เป็นเลข P# → เขียนกลับลงช่องเป็นภาษาอังกฤษเลย (ลิงก์ที่เครื่องยิงยังพิมพ์ไม่จบ ปล่อยไว้ก่อน รอ Enter)
+      if(en!==raw&&/^[\dp#\s]*$/i.test(en)){ const pos=input.selectionStart; input.value=en; try{ if(pos!=null) input.setSelectionRange(pos,pos); }catch(e){} }
+      raw=en;
       clearBtn.hidden=!raw;
       if(cap.className!=='ra2-cap') setCap();
       if(/https?:|Suitcube_Product__c/i.test(raw)) return;   // เครื่องยิงกำลังพิมพ์ลิงก์ใน QR — รอ Enter ค่อยแปลงเป็น P#
@@ -2844,7 +2871,7 @@
       S.q=q; S.why={};
       if(q) renderSearch(); else if(_histTab==='pickup'&&S.view==='list') renderPickupRangeList();
     }
-    function setQuery(v){ input.value=v; onInput(); }
+    function setQuery(v){ S.kbTh=false; input.value=v; onInput(); }
     // ข้อความจากเครื่องยิง/กล้อง: ลิงก์ …/Suitcube_Product__c/<Id>/view → ขอ P# จาก Salesforce · "P# 399665" หรือเลข 6 หลัก → ใช้ตรงๆ
     async function applyScan(raw){
       raw=String(raw||'').trim(); if(!raw) return;
@@ -2882,7 +2909,8 @@
       let branch=''; if(o&&br.includes(pk)) branch=pk; else if(o&&br.includes(o.branch)) branch=o.branch; else { const t=document.getElementById('branchTop'); if(t&&br.includes(t.value)) branch=t.value; }
       const staffEl=document.getElementById('staffInput');
       S.form={code,o,p,rc,n:rc+2,type:p.type||d.type||'',sku:p.sku||d.sku||'',size:p.size||d.size||'',custName:nm||p.custName||'',custShow:(nm||p.custName||'—')+(c.nickname?' ('+c.nickname+')':''),
-        nick:c.nickname||'',phone:c.phone||p.custPhone||'',billNo:o?(o.orderNo||''):'',orderCode:p.orderCode||oCodeOf(o)||'',branch,date:isoPlus(7),inspector:(staffEl&&staffEl.value.trim())||''};
+        nick:c.nickname||'',phone:c.phone||p.custPhone||'',billNo:o?(o.orderNo||''):'',orderCode:p.orderCode||oCodeOf(o)||'',branch,date:isoPlus(7),inspector:(staffEl&&staffEl.value.trim())||'',
+        urgent:false,approver:'',urgentManual:false};
       S.err=''; S.listTop=histList.scrollTop;
       setView('form'); view.innerHTML=formHtml(); wireForm(); loadLatest(code);
     }
@@ -2898,11 +2926,16 @@
             + (hasM?'<div class="measure-list ra2-measure">'+cfg.items.map(buildMitemHtml).join('')+'</div><div class="ra2-off">ไม่แก้ขนาด — กด “แก้ไขขนาด” เพื่อเลือกจุด</div>'
                    :'<div class="ra2-off">สินค้าประเภทนี้ไม่มีจุดวัด — เขียนรายละเอียดในหมายเหตุ</div>')
             + '<div class="ra2-frow note"><span class="k">หมายเหตุ'+(hasM?'':' <span class="req">*</span>')+'</span><div class="ra2-nwrap"><textarea class="note-input" data-ra2-note rows="2" maxlength="'+LIMIT+'" placeholder="เพิ่มหมายเหตุ" aria-label="หมายเหตุ"></textarea><span class="ra2-cnt" data-ra2-cnt></span></div></div>'
+            + '<div class="ra2-hint" data-ra2-over role="alert" hidden></div>'
           + '</div>'
           + '<div class="ra2-sec"><div class="seclabel"><span class="n serif">02</span><span class="t">นัดรับ</span></div>'
             + '<div class="ra2-frow"><span class="k">สาขาที่นัดรับ <span class="req">*</span></span><select class="ra2-sel" data-ra2-branch aria-label="สาขาที่นัดรับ"><option value="">เลือก…</option>'+br.map(b=>'<option'+(b===f.branch?' selected':'')+'>'+esc(b)+'</option>').join('')+'</select></div>'
             + '<div class="ra2-frow"><span class="k">วันที่นัดรับ <span class="req">*</span></span><button type="button" class="ra2-date" data-ra2="date" aria-expanded="false"><span data-ra2-dth></span>'+IC.down+'</button></div>'
             + '<div class="ra2-cal" data-ra2-cal hidden></div>'
+            + '<div class="ra2-frow"><span class="k">งานด่วน</span><button type="button" class="urgent-chip" data-ra2="urgent" aria-pressed="false"><span class="dot"></span><span data-ra2-ulabel>ไม่ด่วน</span></button></div>'
+            + '<div class="ra2-frow" data-ra2-apprrow hidden><span class="k">ชื่อผู้อนุมัติงานด่วน <span class="req">*</span></span>'
+              + '<div class="type-picker approver-picker" data-ra2-appr><button type="button" class="type-picker-btn" data-ra2="apprbtn" aria-haspopup="listbox" aria-expanded="false"><span class="type-picker-label">เลือกผู้อนุมัติ</span><svg class="type-picker-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>'
+              + '<div class="type-picker-menu" role="listbox">'+approverNames().map(n=>'<div class="type-picker-opt" role="option" data-ra2="appr" data-value="'+esc(n)+'">'+esc(n)+'</div>').join('')+'</div></div></div>'
             + '<div class="ra2-frow insp"><span class="k">ชื่อพนักงานตรวจสอบประจำสาขา <span class="req">*</span></span><input class="ra2-insp" data-ra2-insp value="'+esc(f.inspector)+'" placeholder="พิมพ์ชื่อพนักงาน" autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-label="ชื่อพนักงานตรวจสอบประจำสาขา"></div>'
             + '<div class="ra2-isug" data-ra2-isug hidden role="listbox"></div>'
           + '</div>'
@@ -2952,23 +2985,44 @@
       return rows;
     }
     // "รายละเอียดการแก้ไข" ที่ส่งเข้า Lark (≤255) แบบเดียวกับ phase2-19: "ป้าย ค่าเดิม→ค่าใหม่" · "ป้าย เก็บเข้า/ขยายออก X" · หมายเหตุท้ายสุด
-    function composeDetail(rows){
+    function composeBody(rows){
       const parts=(rows||readChanges()).map(r=>r.dir?r.label+' '+r.now:r.label+' '+(r.prev?r.prev+'→':'')+r.now);
       const note=noteVal().trim(); if(note) parts.push(note);
       return parts.join(', ');
     }
+    // งานด่วน: Worker ยังไม่มีช่องงานด่วนของงานแก้ซ้ำ → ขึ้นต้นรายละเอียดด้วยป้ายแบบเดียวกับที่ flow หลักแปะในหมายเหตุ Salesforce (นับรวมใน 255 ตัว)
+    const urgentPrefix=()=>{ const f=S.form; return f&&f.urgent?'!! งานด่วน !!'+(f.approver?' (อนุมัติ: '+f.approver+')':'')+' ':''; };
+    function composeDetail(rows){ const b=composeBody(rows); return b?urgentPrefix()+b:''; }
+    const detailLen=()=>urgentPrefix().length+composeBody().length;
+    // ชื่อผู้อนุมัติ = รายชื่อ/ลำดับเดียวกับฟอร์มหลัก (อ่านจากเมนูของฟอร์มหลักในหน้านี้ · ไม่มีค่อยใช้ชุดเดียวกันที่เขียนไว้)
+    const approverNames=()=>{ const l=[...document.querySelectorAll('#urgentApproverPicker .type-picker-opt')].map(o=>o.dataset.value).filter(Boolean); return l.length?l:['Benz Sale Mng.','Aor','Saipahn','Emm']; };
+    function setUrgent(on){
+      const f=S.form; if(!f) return; f.urgent=!!on;
+      const chip=view.querySelector('[data-ra2="urgent"]');
+      if(chip){ chip.classList.toggle('on',f.urgent); chip.setAttribute('aria-pressed',String(f.urgent)); const l=chip.querySelector('[data-ra2-ulabel]'); if(l) l.textContent=f.urgent?'ด่วน':'ไม่ด่วน'; }
+      const row=view.querySelector('[data-ra2-apprrow]'); if(row) row.hidden=!f.urgent;
+      if(!f.urgent) closeApprover();
+      changed();
+    }
+    function paintApprover(){ const pk=view.querySelector('[data-ra2-appr]'); if(!pk||!S.form) return; const v=S.form.approver;
+      const l=pk.querySelector('.type-picker-label'); if(l) l.textContent=v||'เลือกผู้อนุมัติ';
+      pk.querySelectorAll('.type-picker-opt').forEach(o=>o.classList.toggle('on',o.dataset.value===v)); }
+    function closeApprover(){ const pk=view.querySelector('[data-ra2-appr]'); if(!pk) return; pk.classList.remove('open'); const b=pk.querySelector('[data-ra2="apprbtn"]'); if(b) b.setAttribute('aria-expanded','false'); }
     const staffList=()=>(typeof STAFF_LIST!=='undefined'&&Array.isArray(STAFF_LIST))?STAFF_LIST:[];
     function inspOk(name){ name=String(name||'').trim(); if(!name) return false; const L=staffList(); return L.length?L.includes(name):true; }
-    function formValid(){ const f=S.form; if(!f) return false; const t=composeDetail(); return t.length>0&&t.length<=LIMIT&&!!f.branch&&!!f.date&&f.date>=isoPlus(0)&&inspOk(f.inspector); }
-    function missingText(){ const f=S.form; if(!f) return ''; const t=composeDetail(), m=[];
-      if(!t) m.push(typeCfg(f.type).items.length?'จุดที่แก้หรือหมายเหตุ':'หมายเหตุ'); if(t.length>LIMIT) m.push('ข้อความยาวเกิน '+LIMIT+' ตัว');
-      if(!f.branch) m.push('สาขาที่นัดรับ'); if(!f.date) m.push('วันที่นัดรับ'); if(!inspOk(f.inspector)) m.push(f.inspector?'ชื่อผู้ตรวจที่อยู่ในรายชื่อ':'ชื่อผู้ตรวจ'); return m.join(' · '); }
+    function formValid(){ const f=S.form; if(!f) return false; const b=composeBody();
+      return b.length>0&&detailLen()<=LIMIT&&!!f.branch&&!!f.date&&f.date>=isoPlus(0)&&inspOk(f.inspector)&&(!f.urgent||!!f.approver); }
+    function missingText(){ const f=S.form; if(!f) return ''; const b=composeBody(), m=[];
+      if(!b) m.push(typeCfg(f.type).items.length?'จุดที่แก้หรือหมายเหตุ':'หมายเหตุ'); if(b&&detailLen()>LIMIT) m.push('ข้อความยาวเกิน '+LIMIT+' ตัว'+(f.urgent?' (รวมป้ายงานด่วน)':''));
+      if(!f.branch) m.push('สาขาที่นัดรับ'); if(!f.date) m.push('วันที่นัดรับ'); if(f.urgent&&!f.approver) m.push('ชื่อผู้อนุมัติงานด่วน');
+      if(!inspOk(f.inspector)) m.push(f.inspector?'ชื่อผู้ตรวจที่อยู่ในรายชื่อ':'ชื่อผู้ตรวจ'); return m.join(' · '); }
     function showErr(t){ const el=view.querySelector('[data-ra2-err]'); if(!el) return; el.hidden=!t; el.innerHTML=t?IC.warn+'<span>'+esc(t)+'</span>':''; }
     // อัปเดตตัวนับ/วันที่/ปุ่มบันทึกในที่เดิม (ไม่วาดแถบล่างใหม่ — กันคลิกแรกหายตอนช่องเสียโฟกัส)
     function changed(){
       const f=S.form; if(!f||S.view!=='form') return;
-      const n=composeDetail().length, cnt=view.querySelector('[data-ra2-cnt]');
+      const n=detailLen(), cnt=view.querySelector('[data-ra2-cnt]'), over=view.querySelector('[data-ra2-over]');
       if(cnt){ cnt.innerHTML='<b>'+n+'</b> / '+LIMIT; cnt.classList.toggle('over',n>LIMIT); }
+      if(over){ over.hidden=n<=LIMIT; over.textContent=n>LIMIT?'ข้อความที่จะบันทึกยาว '+n+' ตัว เกิน '+LIMIT+' — ลดหมายเหตุลงอีก '+(n-LIMIT)+' ตัว'+(f.urgent?' (ป้ายงานด่วนใช้ '+urgentPrefix().length+' ตัว)':'')+' ถึงจะบันทึกได้':''; }
       const dt=view.querySelector('[data-ra2-dth]'), db=view.querySelector('[data-ra2="date"]');
       if(dt) dt.textContent=f.date?dayText(f.date):'เลือกวันที่'; if(db) db.classList.toggle('empty',!f.date);
       const ins=view.querySelector('[data-ra2-insp]'); if(ins) ins.classList.toggle('bad',!!f.inspector&&!inspOk(f.inspector));
@@ -3036,7 +3090,7 @@
     async function buildReceipt(d){
       const f=d.f, o=f.o, lt=LATEST[f.code]||{};
       try{
-        const order={billNo:f.billNo||'-', sentDate:isoPlus(0), custName:f.custName||'-', phone:f.phone, nickname:f.nick, staff:f.inspector, payStatus:'',
+        const order={billNo:f.billNo||'-', sentDate:isoPlus(0), custName:f.custName||'-', phone:f.phone, nickname:f.nick, staff:f.inspector, payStatus:'', urgent:!!f.urgent,
           pickupLabel:f.branch, pickupDate:f.date, branch:(o&&o.branch)||''};
         const item={type:f.type||'สินค้า', sku:f.sku, size:f.size, measureRows:d.rows.map(r=>({label:r.rl,value:r.rv})), orderCode:f.orderCode, productCode:f.code,
           branch:lt.stockBranch||(o&&o.branch)||'', note:d.note, itemIndex:1, itemTotal:1};
@@ -3060,9 +3114,9 @@
     input.addEventListener('input',e=>{ e.stopPropagation(); onInput(); });
     input.addEventListener('change',e=>e.stopPropagation());
     input.addEventListener('focus',()=>{ loadAll().catch(()=>{}); });   // โหลดรายการทุกสาขาล่วงหน้าตอนแตะช่อง
-    input.addEventListener('keydown',e=>{ if(e.key!=='Enter') return; e.preventDefault(); const v=input.value.trim(); if(/https?:|Suitcube_Product__c|^P#/i.test(v)) applyScan(v); });
+    input.addEventListener('keydown',e=>{ if(e.key!=='Enter') return; e.preventDefault(); const v=toEnglish(input.value.trim()); if(/https?:|Suitcube_Product__c|^P#/i.test(v)) applyScan(v); });
     clearBtn.addEventListener('click',()=>{ S.scanTk++; setQuery(''); setCap(); try{ input.focus({preventScroll:true}); }catch(x){} });
-    scanBtn.addEventListener('click',()=>{ if(typeof openScanner==='function') openScanner(v=>applyScan(v)); });
+    scanBtn.addEventListener('click',()=>{ if(typeof openScanner==='function') openScanner(v=>applyScan(thaiToEn(v))); });
     histList.addEventListener('click',async e=>{
       const w=e.target.closest('[data-ra2-why]');
       if(w&&histList.contains(w)){ const code=w.dataset.ra2Why, st=_pickupStatusMap[code]; toggleWhy(w,code,{t:st?'ยังไม่ถึงสาขา · ตอนนี้: '+st:'ยังไม่ถึงสาขา'}); return; }
@@ -3088,8 +3142,8 @@
     view.addEventListener('focusin',e=>{ if(e.target.matches&&e.target.matches('[data-ra2-insp]')){ e.target.select(); showSug(''); } });
     view.addEventListener('focusout',e=>{ if(e.target.matches&&e.target.matches('[data-ra2-insp]')) setTimeout(()=>{ const a=document.activeElement; if(!a||!a.matches||!a.matches('[data-ra2-insp]')) hideSug(); },150); });
     view.addEventListener('pointerdown',e=>{ if(e.target.closest('[data-ra2-isug]')) e.preventDefault(); });
-    view.addEventListener('keydown',e=>{ if(e.key!=='Escape') return; const sug=view.querySelector('[data-ra2-isug]'), cal=view.querySelector('[data-ra2-cal]');
-      if(sug&&!sug.hidden){ e.stopPropagation(); hideSug(); } else if(cal&&!cal.hidden){ e.stopPropagation(); cal.hidden=true; } });
+    view.addEventListener('keydown',e=>{ if(e.key!=='Escape') return; const sug=view.querySelector('[data-ra2-isug]'), cal=view.querySelector('[data-ra2-cal]'), pk=view.querySelector('[data-ra2-appr].open');
+      if(pk){ e.stopPropagation(); closeApprover(); } else if(sug&&!sug.hidden){ e.stopPropagation(); hideSug(); } else if(cal&&!cal.hidden){ e.stopPropagation(); cal.hidden=true; } });
     view.addEventListener('click',e=>{
       // ช่องวัดตัว (ตัวต่อสายของแอปหลัก) เปลี่ยน/เลือก FB·NB·HB ลงหมายเหตุ → อัปเดตตัวนับ/ปุ่มบันทึก
       if(S.view==='form'&&e.target.closest('.ra2-measure')) setTimeout(changed,0);
@@ -3101,7 +3155,15 @@
       else if(a==='date'&&f){ const cal=view.querySelector('[data-ra2-cal]'); if(!cal) return; const opening=cal.hidden; cal.hidden=!opening; t.setAttribute('aria-expanded',String(opening));
         if(opening){ const d=new Date((f.date||isoPlus(0))+'T00:00:00'); cal.dataset.y=d.getFullYear(); cal.dataset.m=d.getMonth(); cal.innerHTML=calHtml(d.getFullYear(),d.getMonth(),f.date); } }
       else if(a==='calnav'&&f){ const cal=view.querySelector('[data-ra2-cal]'); if(!cal||t.disabled) return; let y=+cal.dataset.y, m=+cal.dataset.m+ +t.dataset.d; if(m<0){ m=11; y--; } if(m>11){ m=0; y++; } cal.dataset.y=y; cal.dataset.m=m; cal.innerHTML=calHtml(y,m,f.date); }
-      else if(a==='day'&&f){ if(t.disabled) return; f.date=t.dataset.date; const cal=view.querySelector('[data-ra2-cal]'); if(cal) cal.hidden=true; const db=view.querySelector('[data-ra2="date"]'); if(db) db.setAttribute('aria-expanded','false'); changed(); }
+      else if(a==='day'&&f){ if(t.disabled) return; f.date=t.dataset.date; const cal=view.querySelector('[data-ra2-cal]'); if(cal) cal.hidden=true; const db=view.querySelector('[data-ra2="date"]'); if(db) db.setAttribute('aria-expanded','false');
+        if(!f.urgentManual){ const d0=new Date(); d0.setHours(0,0,0,0); const diff=Math.round((new Date(f.date+'T00:00:00')-d0)/86400000); setUrgent(diff>=0&&diff<7); }   // เหมือน updateUrgentDefault ของฟอร์มหลัก
+        changed(); }
+      else if(a==='urgent'&&f){ f.urgentManual=true; setUrgent(!f.urgent); }
+      else if(a==='apprbtn'&&f){ const pk=t.closest('.type-picker'), open=!pk.classList.contains('open');
+        document.querySelectorAll('.type-picker.open').forEach(x=>{ if(x!==pk) x.classList.remove('open'); });
+        pk.classList.toggle('open',open); t.setAttribute('aria-expanded',String(open));
+        if(open){ const m=pk.querySelector('.type-picker-menu'); try{ if(m) m.scrollIntoView({block:'nearest'}); }catch(x){} } }
+      else if(a==='appr'&&f){ f.approver=t.dataset.value||''; paintApprover(); closeApprover(); changed(); }
       else if(a==='insp'&&f){ const inp=view.querySelector('[data-ra2-insp]'); inp.value=t.dataset.name; f.inspector=t.dataset.name; hideSug(); fitInsp(inp); changed(); }
     });
     // เปิดป๊อปอัปใหม่ = เริ่มใหม่ (สถานะ/รอบเปลี่ยนได้ตลอด — โหลดใหม่ทุกครั้งที่เปิด)
@@ -3109,7 +3171,7 @@
       S.tk++; S.scanTk++; clearTimeout(_stT); S.q=''; S.why={}; S.err='';
       ALL=null; allP=null; STATUS_DONE.clear(); QUEUE.length=0;
       Object.keys(PROD).forEach(k=>delete PROD[k]); Object.keys(LATEST).forEach(k=>delete LATEST[k]);
-      input.value=''; clearBtn.hidden=true; setCap(); S.form=null; S.done=null; setView('list');
+      input.value=''; S.kbTh=false; clearBtn.hidden=true; setCap(); S.form=null; S.done=null; setView('list');
     },true);
     // สลับแท็บระหว่างอยู่ในฟอร์ม/ผลบันทึก → กลับสู่รายการก่อน · ระหว่างกำลังบันทึก ห้ามสลับแท็บ/ปิดป๊อปอัป
     const tabsEl=document.getElementById('histTabs');
