@@ -516,7 +516,7 @@
   .ra2-qr svg{width:22px;height:22px}
   .ra2-cap{margin:-2px 2px 0;font-size:11px;color:var(--t3);font-style:italic;line-height:1.4}
   .ra2-cap b{font-family:'Barlow',sans-serif;font-style:normal;color:var(--goldink)}
-  .ra2-cap.busy,.ra2-cap.ok,.ra2-cap.bad{font-style:normal;font-size:12px;color:var(--goldink)}
+  .ra2-cap.busy,.ra2-cap.ok,.ra2-cap.bad{font-style:normal;font-size:12px;color:var(--goldink);overflow-wrap:anywhere}
   .ra2-cap.bad{color:var(--red)}
   /* ผลค้นหา + ป้ายบนการ์ด */
   .ra2-count{font-size:12px;color:var(--t2);padding:0 2px}
@@ -1539,7 +1539,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-09-29-2-phase2-22';
+  const APP_VERSION = '2026-09-29-2-phase2-23';
 
   let currentView=1;
   function updateIdx(){
@@ -2872,17 +2872,31 @@
       if(q) renderSearch(); else if(_histTab==='pickup'&&S.view==='list') renderPickupRangeList();
     }
     function setQuery(v){ S.kbTh=false; input.value=v; onInput(); }
+    // [แก้ 2026-09-30] เปิด Caps Lock ค้าง หรือตั้งเครื่องยิงให้พิมพ์ตัวใหญ่ทั้งหมด → ลิงก์ใน QR ใบสรุปมาแบบตัวพิมพ์สลับ (HTTPS://…/sUITCUBE_pRODUCT__C/A04tl…)
+    // เดิมหาคำ Suitcube_Product__c แบบตัวพิมพ์ต้องตรง เลยขึ้น "ไม่ใช่ QR บนใบสรุป" ทั้งที่ใช่ · และ Salesforce Id ถือตัวพิมพ์ (a04TL… กับ A04TL… คนละตัว Worker หาไม่เจอ)
+    // 3 ตัวท้ายของ Id 18 หลักบอกไว้ว่า 15 ตัวแรกตัวไหนเป็นตัวใหญ่ (ตัวละ 5 ตัวอักษร) → คืนตัวพิมพ์ที่ถูกได้เสมอ · Id 15 หลักไม่มีตัวบอก ใช้ตามที่อ่านได้
+    const SFID_TAIL='ABCDEFGHIJKLMNOPQRSTUVWXYZ012345';
+    function sfIdFixCase(id){
+      if(!/^[a-z0-9]{18}$/i.test(id)) return id;
+      const tail=id.slice(15).toUpperCase(); let out='';
+      for(let c=0;c<3;c++){
+        const n=SFID_TAIL.indexOf(tail[c]); if(n<0) return id;
+        for(let k=0;k<5;k++){ const ch=id[c*5+k]; out+=((n>>k)&1)?ch.toUpperCase():ch.toLowerCase(); }
+      }
+      return out+tail;
+    }
     // ข้อความจากเครื่องยิง/กล้อง: ลิงก์ …/Suitcube_Product__c/<Id>/view → ขอ P# จาก Salesforce · "P# 399665" หรือเลข 6 หลัก → ใช้ตรงๆ
     async function applyScan(raw){
       raw=String(raw||'').trim(); if(!raw) return;
       const tk=++S.scanTk;
-      const direct=raw.match(/^(?:P#\s*)?(\d{6})$/i), m=raw.match(/Suitcube_Product__c\/([a-zA-Z0-9]{15,18})/);
+      const direct=raw.match(/^(?:P#\s*)?(\d{6})$/i), m=raw.match(/Suitcube_Product__c\/([a-z0-9]{15,18})/i);
       if(direct){ setQuery(direct[1]); return; }
       setQuery('');
-      if(!m){ setCap('อ่านได้ แต่ไม่ใช่ QR บนใบสรุป — พิมพ์ P# 6 หลักแทน','bad'); return; }
+      // อ่านไม่ออก → โชว์ข้อความที่เครื่องอ่านได้ (ไม่เกิน 40 ตัว) ด้วย จะได้รู้ว่าเครื่องยิง/กล้องส่งอะไรมา
+      if(!m){ setCap('อ่านได้ "'+(raw.length>40?raw.slice(0,40)+'…':raw)+'" แต่ไม่ใช่ QR บนใบสรุป — พิมพ์ P# 6 หลักแทน','bad'); return; }
       setCap('อ่าน QR ได้ · กำลังหา P# จาก Salesforce…','busy');
       try{
-        const j=await getJSON(WORKER+'/repeat-alteration-product?id='+encodeURIComponent(m[1]));
+        const j=await getJSON(WORKER+'/repeat-alteration-product?id='+encodeURIComponent(sfIdFixCase(m[1])));
         if(tk!==S.scanTk) return;
         if(!j||!j.success||!j.product||!j.product.code) throw new Error('ไม่พบ');
         const code=normCode(j.product.code); (PROD[code]=PROD[code]||{}).p=j.product;   // ได้ข้อมูลรอบมาด้วยแล้ว ไม่ต้องยิงซ้ำ
