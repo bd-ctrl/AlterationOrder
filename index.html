@@ -244,6 +244,19 @@
   /* [แก้ตามที่ขอ] เดิมแค่เปลี่ยนสีกรอบ/ตัวหนังสือ พื้นในยังขาว — เปลี่ยนเป็นเติมพื้นในเต็มกล่องไปเลย ตัวหนังสือเป็นสีขาวให้อ่านง่ายบนพื้นสี */
   .numstep .numonly.neg{background:var(--red);border-color:var(--red);color:#fff}
   .numstep .numonly.pos{background:var(--blue);border-color:var(--blue);color:#fff}
+  /* [ใหม่ 2026-09-29 ตามที่ขอ] ความยาวขาน้อยกว่า 32 นิ้ว — ถามใต้ช่องทันทีที่กรอกเสร็จ (mockup แบบ B) · ตอบ "แน่ใจ" แล้วเหลือบรรทัดยืนยันสีเขียว */
+  .numstep .numonly.leg-warn{border-color:var(--orange);box-shadow:0 0 0 3px rgba(217,119,46,.18)}
+  .numstep .numonly.leg-ok{border-color:var(--green)}
+  .leg-confirm{margin:10px 0 0;border-radius:12px;background:rgba(217,119,46,.08);border:1px solid rgba(217,119,46,.35);padding:11px 12px}
+  .leg-confirm .t{display:flex;gap:8px;font-size:14px;font-weight:600;line-height:1.5;color:var(--ink)}
+  .leg-confirm .t svg{width:18px;height:18px;color:var(--orange);flex:0 0 auto;margin-top:2px}
+  .leg-confirm .acts{display:flex;gap:8px;margin-top:10px;padding-left:26px}
+  .leg-confirm .acts button{height:36px;padding:0 18px;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer}
+  .leg-confirm .leg-yes{border:none;background:var(--gold);color:var(--ink);font-weight:600}
+  .leg-confirm .leg-no{border:1.5px solid var(--rule);background:#fff;color:var(--ink)}
+  .leg-confirm-ok{display:flex;align-items:center;gap:6px;margin:8px 0 0;font-size:13px;color:var(--green)}
+  .leg-confirm-ok svg{width:15px;height:15px;flex:0 0 auto}
+  .leg-confirm-ok button{margin-left:auto;border:none;background:none;color:var(--t2);font-family:inherit;font-size:12.5px;text-decoration:underline;cursor:pointer;padding:0}
   /* [แก้ตามที่ขอ] ย้ายคำ "นิ้ว/เก็บเข้า/ขยายออก" กลับไปอยู่หลังช่องตัวเลขแบบเดิม (เคยย้ายมาไว้หน้าช่อง ตอนนี้ขอกลับ) — เลิกทำตัวหนาแล้ว (คำว่า "นิ้ว" ขอเป็นตัวบาง เหมือน .unit ปกติ เพราะตอนนี้พื้นสีฟ้า/แดงเต็มกล่องของช่องตัวเลขเน้นทิศทางให้เห็นชัดอยู่แล้ว ไม่ต้องพึ่งตัวหนาอีก) */
   .numstep .dirword{margin-left:10px}
   .numstep .dirword.pos{color:var(--blue)}
@@ -517,9 +530,10 @@
   .hist-pid-sample{font-family:'Barlow',sans-serif;font-weight:700;font-size:13px;color:var(--green)}
   .hist-pid-sample.notarrived{color:var(--red)}
   /* [แก้ตามที่ขอ] แท็บในป็อปอัพ "ประวัติใบสั่งแก้" เปลี่ยนจากปุ่มยาแคปซูลแยกกัน เป็นแท่งเดียวแบ่งช่องเท่ากัน (segmented control) — สีเหมือนของเดิม แค่เปลี่ยนทรง ไม่กระทบแท็บของป็อปอัพคู่มือ (#infoTabs ยังเป็นแบบเดิม) */
-  #histTabs{background:var(--rule2);border-radius:12px;padding:4px;gap:2px;overflow-x:visible}
-  #histTabs .hist-tab{flex:1 1 0;background:none;color:var(--t2);padding:9px 6px;border-radius:9px;text-align:center}
-  #histTabs .hist-tab.on{background:var(--gold);color:#fff;font-weight:700;box-shadow:0 2px 6px rgba(201,162,75,.35)}
+  /* [แก้ 2026-09-30 ตามที่ขอ] แท็บ "แบบ 2" จาก mockup design-demos/history-card-tabs: แคปซูลขาว ขอบบาง บนรางสีครีม ไม่มีเงา (เดิมแท็บที่เลือกเป็นสีทองทึบมีเงา) */
+  #histTabs{background:var(--rule2);border-radius:999px;padding:4px;gap:2px;overflow-x:visible}
+  #histTabs .hist-tab{flex:1 1 0;background:none;color:var(--t2);padding:8px 6px;border:1px solid transparent;border-radius:999px;text-align:center}
+  #histTabs .hist-tab.on{background:#fff;border-color:var(--rule);color:var(--ink);font-weight:600;box-shadow:none}
   .draft-row{cursor:pointer}
   .draft-row:hover .hist-ordercard{background:var(--paper)}
   .draft-del{margin-left:auto;background:none;border:none;color:var(--t3);font-size:18px;line-height:1;cursor:pointer;padding:0 2px}
@@ -1383,7 +1397,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-09-29-2';
+  const APP_VERSION = '2026-09-30-6';
 
   let currentView=1;
   function updateIdx(){
@@ -3154,6 +3168,89 @@
     wireStitchCheckbox(block);
     wireUsedCheckbox(block);
   }
+  // [ใหม่ 2026-09-29 ตามที่ขอ] ความยาวขา (กางเกง) น้อยกว่า 32 นิ้ว → ถามใต้ช่องทันทีที่กรอกเสร็จ (mockup แบบ B):
+  // "แน่ใจหรือเปล่าที่จะบันทึกข้อมูลความยาวขาเท่ากับ X นิ้ว" [แน่ใจ] [ไม่แน่ใจ] — ไม่มีข้อความบอกเกณฑ์ 32 ตามที่ขอ
+  // ตอบ "แน่ใจ" = จำค่าที่ยืนยันไว้ที่ช่อง (data-leg-ok) แล้วเหลือบรรทัดยืนยันสีเขียว · "ไม่แน่ใจ" = กลับไปที่ช่องให้แก้
+  // ตอนกดบันทึก ถ้ายังมีช่องที่ < 32 แต่ยังไม่ได้ตอบ (รวมค่าที่โหลดมาจากร่าง/บิลเดิม ซึ่งไม่ผ่าน event change) → พากลับหน้า 2 ไปที่กล่องคำถาม ไม่บันทึก
+  // กล่องอยู่ "ข้างใน" .mitem เอง (ต่อท้าย .mtop) — renderMeasureSection สร้าง .mitem ใหม่เมื่อไหร่ กล่องก็หายไปพร้อมกัน ไม่ค้าง
+  const LEG_LABEL='ความยาวขา', LEG_MIN=32;
+  const LEG_WARN_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4.5M12 17h.01"/></svg>';
+  const LEG_OK_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  function isLegMitem(m){ return !!m && !m.classList.contains('group-toggle-row') && (m.querySelector('.k')?.textContent||'').trim()===LEG_LABEL; }
+  function legInputOf(m){ return m.querySelector('.numonly:not(.takein-input)'); }
+  function legEditing(m){ return !!m.querySelector('.toggle button')?.classList.contains('on'); }
+  // คืนค่าความยาวขาที่ต้องถาม (0 < ค่า < 32 และกำลังเลือก "แก้ไข") ไม่งั้นคืน null
+  function legLowValue(m){
+    if(!isLegMitem(m) || !legEditing(m)) return null;
+    const inp=legInputOf(m); if(!inp) return null;
+    const v=Math.abs(getMitemValue(inp));
+    return (v>0 && v<LEG_MIN) ? v : null;
+  }
+  function refreshLegConfirm(m){
+    if(!isLegMitem(m)) return;
+    m.querySelectorAll('.leg-confirm,.leg-confirm-ok').forEach(el=>el.remove());
+    const inp=legInputOf(m); if(!inp) return;
+    const v=legLowValue(m);
+    inp.classList.remove('leg-warn','leg-ok');
+    if(v==null) return;
+    const txt=String(v);
+    if(inp.dataset.legOk===txt){
+      inp.classList.add('leg-ok');
+      m.insertAdjacentHTML('beforeend','<div class="leg-confirm-ok">'+LEG_OK_SVG+'ยืนยันความยาวขา '+txt+' นิ้วแล้ว<button type="button" class="leg-change">เปลี่ยน</button></div>');
+      return;
+    }
+    inp.classList.add('leg-warn');
+    m.insertAdjacentHTML('beforeend','<div class="leg-confirm" role="group" aria-label="ยืนยันความยาวขา"><div class="t">'+LEG_WARN_SVG+'<span>แน่ใจหรือเปล่าที่จะบันทึกข้อมูลความยาวขาเท่ากับ '+txt+' นิ้ว</span></div>'
+      + '<div class="acts"><button type="button" class="leg-yes">แน่ใจ</button><button type="button" class="leg-no">ไม่แน่ใจ</button></div></div>');
+  }
+  function focusLegInput(m){ const inp=legInputOf(m); if(!inp) return; inp.scrollIntoView({block:'center',behavior:'smooth'}); setTimeout(()=>{ try{ inp.focus(); inp.select(); }catch(e){} },250); }
+  // ช่องความยาวขาที่ยังต้องตอบก่อนบันทึก (ทุกก้อนสินค้าในฟอร์ม)
+  function findPendingLegConfirms(){
+    return [...document.querySelectorAll('#productsWrap .mitem')].filter(m=>{ const v=legLowValue(m); return v!=null && legInputOf(m).dataset.legOk!==String(v); });
+  }
+  function showPendingLegConfirm(list){
+    list.forEach(refreshLegConfirm);
+    goTo(2);
+    // ค่าวัดตัวถูกส่งไปบันทึกแม้ส่วนวัดตัวถูกซ่อนด้วย "ไม่แก้ไขขนาดสินค้า" (readMeasureValues ไม่ได้ดู toptoggle) — เปิดส่วนนั้นให้เห็นกล่องคำถามก่อน
+    list.forEach(m=>{ const ml=m.closest('.measure-list'); if(ml && ml.classList.contains('hidden')){ const first=m.closest('.product-block')?.querySelector('.toptoggle button'); if(first) first.click(); } });
+    const box=list[0].querySelector('.leg-confirm');
+    setTimeout(()=>{ if(!box) return; box.scrollIntoView({block:'center',behavior:'smooth'});
+      if(box.animate) box.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:320,delay:250}); },60);
+  }
+  // กรอกเสร็จ (change = ออกจากช่อง/กด Enter/ปุ่ม "เสร็จ" บนคีย์บอร์ดมือถือ) → ถามทันที · ค่าเปลี่ยนจากที่ยืนยันไว้ = ถามใหม่
+  // [แก้ 2026-09-30-4] ออกจากช่องเพราะ "แตะปุ่มอื่น" (เช่น FB/NB/HB ที่อยู่ใต้ความยาวขา) → change เกิดระหว่างการแตะนั้น
+  // ถ้าแทรกกล่องทันที ปุ่มที่กำลังแตะถูกดันลงก่อนปล่อยนิ้ว แตะเลยหายเงียบๆ (เจอตอนทดสอบก่อน push) → รอให้แตะนั้นจบ (click) ก่อนค่อยแสดงกล่อง
+  // ไม่มี click ตามมา (ลากจอ/กดค้าง) = แสดงหลังปล่อยนิ้ว ~0.4 วินาที · ออกจากช่องด้วยคีย์บอร์ด (Enter/Tab/ปุ่ม "เสร็จ") = แสดงทันทีเหมือนเดิม
+  // (บนจอสัมผัส ช่องหลุดโฟกัส "หลัง" ปล่อยนิ้ว จึงนับว่าเป็นการแตะถ้าเพิ่งปล่อยนิ้วไม่เกิน 0.5 วินาที และแตะ "ที่อื่น" ไม่ใช่แตะเข้าช่องนี้เอง)
+  let legPtrDown=false, legPtrUpAt=-1e9, legPtrTarget=null, legEnterBlur=false;
+  document.addEventListener('pointerdown',e=>{ legPtrDown=true; legPtrTarget=e.target; },true);
+  ['pointerup','pointercancel'].forEach(t=>document.addEventListener(t,()=>{ legPtrDown=false; legPtrUpAt=performance.now(); },true));
+  function refreshLegAfterTap(m){
+    let done=false;
+    const run=()=>{ if(done) return; done=true; document.removeEventListener('click',run,true); setTimeout(()=>refreshLegConfirm(m),0); };
+    document.addEventListener('click',run,true);
+    const fallback=()=>setTimeout(run,400);
+    if(legPtrDown) document.addEventListener('pointerup',fallback,{capture:true,once:true}); else fallback();
+  }
+  document.addEventListener('change', e=>{
+    const inp=e.target; if(!inp.matches || !inp.matches('.mitem .numonly:not(.takein-input)')) return;
+    const m=inp.closest('.mitem'); if(!isLegMitem(m)) return;
+    const byTap=!legEnterBlur && (legPtrDown || performance.now()-legPtrUpAt<500) && !(legPtrTarget && inp.contains(legPtrTarget));
+    legEnterBlur=false;
+    if(byTap) refreshLegAfterTap(m); else refreshLegConfirm(m);
+  });
+  document.addEventListener('keydown', e=>{
+    if(e.key!=='Enter') return; const inp=e.target;
+    if(inp.matches && inp.matches('.mitem .numonly:not(.takein-input)') && isLegMitem(inp.closest('.mitem'))){ e.preventDefault(); legEnterBlur=true; inp.blur(); setTimeout(()=>{ legEnterBlur=false; },0); }
+  });
+  document.addEventListener('click', e=>{
+    const t=e.target.closest && e.target.closest('.leg-yes,.leg-no,.leg-change,.mitem .toggle button');
+    if(!t) return; const m=t.closest('.mitem'); if(!isLegMitem(m)) return;
+    if(t.classList.contains('leg-yes')){ const v=legLowValue(m); if(v!=null) legInputOf(m).dataset.legOk=String(v); refreshLegConfirm(m); }
+    else if(t.classList.contains('leg-no')){ focusLegInput(m); }
+    else if(t.classList.contains('leg-change')){ delete legInputOf(m).dataset.legOk; refreshLegConfirm(m); focusLegInput(m); }
+    else setTimeout(()=>refreshLegConfirm(m),0); // สลับ แก้ไข/ไม่แก้ไข
+  });
   // [ใหม่ตามที่ขอ] ทรงขากางเกง FB/NB/HB — เลือกได้ทีละอัน กดซ้ำเพื่อยกเลิก ค่าที่เลือกเติม/ลบออกจากช่องหมายเหตุกางเกงให้เองอัตโนมัติ
   // เก็บค่าที่เพิ่งเติมไว้ใน data-selected ของกล่องเอง เวลาสลับ/ยกเลิกจะได้รู้ว่าต้องลบคำไหนออกจากหมายเหตุ (กันคำค้าง/ซ้ำ ไม่ว่าจะสลับกี่รอบ)
   function wireLegStyleChips(block){
@@ -5162,6 +5259,9 @@
       goTo(missing[0].page);
       return;
     }
+    // [ใหม่ 2026-09-29 ตามที่ขอ] ความยาวขา < 32 นิ้วที่ยังไม่ได้ตอบ "แน่ใจ" → พากลับไปที่กล่องคำถามใต้ช่อง ยังไม่บันทึก
+    const legPending=findPendingLegConfirms();
+    if(legPending.length){ showPendingLegConfirm(legPending); return; }
     const isEditing=!!_editingRecordId;
     // [ใหม่ตามที่ขอ] บิลใหม่ที่มีสินค้าเกิน "แกน" (เสื้อสูท+กางเกง) — ถามก่อนว่าจะรวมหรือแยกบิล (แก้ไขบิลเก่าไม่ถาม)
     if(!isEditing){
