@@ -1539,7 +1539,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-09-29-2-phase2-21';
+  const APP_VERSION = '2026-09-29-2-phase2-22';
 
   let currentView=1;
   function updateIdx(){
@@ -2959,7 +2959,7 @@
     const mvOf=()=>(S.form&&LATEST[S.form.code]&&LATEST[S.form.code].mv)||{};
     function prevText(label,dir){ const n=parseFloat(mvOf()[label]); if(isNaN(n)||!n) return ''; return dir?(n<0?'เก็บเข้า ':'ขยายออก ')+fmtInch(Math.abs(n)):fmtInch(n); }
     const measureDefs=()=>typeCfg(S.form.type).items.filter(x=>x.kind!=='legStyle'&&x.kind!=='group');
-    // ค่าปัจจุบันใน Salesforce ใต้ชื่อจุดวัด (ตัวเอียงสีแดง) — มาจาก /product-latest
+    // [แก้ 2026-09-30 ตามที่ขอ] ป้าย "ค่าปัจจุบันใน Salesforce:" → "แก้ไขครั้งที่ 1:" (ค่าวัดใน Salesforce = ค่าที่สั่งแก้ในบิลแรก) ใต้ชื่อจุดวัด (ตัวเอียงสีแดง) — มาจาก /product-latest
     function paintPv(){
       const list=view.querySelector('.ra2-measure'); if(!list||!S.form) return;
       list.querySelectorAll('.ra2-pv').forEach(x=>x.remove());
@@ -2967,7 +2967,7 @@
       [...list.querySelectorAll('.mitem')].forEach((m,i)=>{ const d=defs[i]; if(!d) return;
         const parts=[]; const p=prevText(d.label,!!d.dir); if(p) parts.push('<b>'+esc(p)+'</b> นิ้ว');
         if(d.takeIn){ const t=prevText(d.label+' เก็บเข้า',false); if(t) parts.push('เก็บเข้า <b>'+esc(t)+'</b> นิ้ว'); }
-        if(parts.length) m.insertAdjacentHTML('beforeend','<div class="ra2-pv">ค่าปัจจุบันใน Salesforce: '+parts.join(' · ')+'</div>'); });
+        if(parts.length) m.insertAdjacentHTML('beforeend','<div class="ra2-pv">แก้ไขครั้งที่ 1: '+parts.join(' · ')+'</div>'); });
     }
     const noteVal=()=>{ const t=view.querySelector('[data-ra2-note]'); return t?t.value:''; };
     // จุดที่แก้ → [{label, dir, now, prev, rl, rv}] (rl/rv = แถวบนใบสรุป: ความยาว = ค่าใหม่ · จุดมีทิศทาง = "อก เก็บเข้า" 0.5)
