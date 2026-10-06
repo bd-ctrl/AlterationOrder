@@ -170,6 +170,7 @@
   /* รายชื่อที่เจอในเบอร์เดียวกัน (เผื่อเบอร์เดียวใช้สะสมแต้มร่วมกันหลายคน) — ให้พนักงานเลือกว่าจะใช้ชื่อไหน */
   .phone-suggest{display:none;position:absolute;top:calc(100% - 4px);left:0;right:0;z-index:30;background:#fff;border:1px solid var(--rule);border-radius:12px;box-shadow:0 12px 34px rgba(40,30,10,.16);overflow:hidden}
   .phone-suggest.show{display:block}
+  .phone-suggest.passthru{pointer-events:none}   /* [2026-10-06] กล่อง "ไม่พบลูกค้า" ไม่ต้องกด — แตะทะลุไปที่ช่องชื่อ/นามสกุลข้างใต้ได้ (เดิมกล่องบังช่องและขวางการแตะ) */
   .phone-suggest .hint{padding:9px 16px 3px;font-size:11.5px;color:var(--t2)}
   .phone-suggest .s{display:flex;flex-direction:column;gap:1px;padding:10px 16px;cursor:pointer;border-bottom:1px solid var(--rule2)}
   .phone-suggest .s:last-child{border-bottom:none}.phone-suggest .s:hover{background:var(--paper)}
@@ -538,6 +539,11 @@
   .draft-row:hover .hist-ordercard{background:var(--paper)}
   .draft-del{margin-left:auto;background:none;border:none;color:var(--t3);font-size:18px;line-height:1;cursor:pointer;padding:0 2px}
   .draft-del:hover{color:var(--red)}
+  /* [ใหม่ 2026-10-06] ร่างข้ามเครื่อง: ป้ายบอกว่าร่างนี้ยังอยู่แค่ในเครื่อง (ยังไม่ซิงก์) + บรรทัดสถานะการโหลดจากเซิร์ฟเวอร์ */
+  .draft-local{color:var(--red);font-weight:600}
+  .draft-sync-line{font-size:12.5px;color:var(--t2);padding:2px 4px 8px}
+  .draft-sync-line.bad{color:var(--red)}
+  .hdrsel.draft-need-branch{box-shadow:0 0 0 2px var(--red)}
   .hist-row .notes{font-family:'Prompt',sans-serif;font-size:11.5px;color:var(--t2);line-height:1.5}
   .measure-adj{background:var(--paper);border-radius:10px;padding:8px 12px;margin-top:2px}
   .measure-adj+.measure-adj{margin-top:8px}
@@ -606,7 +612,13 @@
   .hist-status-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
   .hist-branch-tag{font-family:'Prompt',sans-serif;font-weight:600;font-size:13px;color:var(--goldink);background:rgba(201,162,75,.14);border-radius:999px;padding:3px 11px;margin-left:auto;margin-right:10px}
   /* [แก้บั๊ก] แท็บ "ร่างที่บันทึกไว้" ไม่มีค่าสาขาให้ป้ายนี้ ทำให้โชว์เป็นก้อนวงรีว่างๆ ดูเหมือน loading — ไม่มีข้อความให้ซ่อนไปเลย */
-  .hist-branch-tag:empty{display:none}
+  .hist-branch-tag:empty,.hist-branch-tag.empty{display:none}
+  /* [ใหม่ 2026-10-06 ตามที่ขอ] ป้ายสาขากดเปลี่ยนสาขาได้ — มี select โปร่งใสทับป้าย (แตะแล้วเด้งตัวเลือกของเครื่องเอง) · แท็บ "ร่างที่บันทึกไว้" ใช้สาขาจากแถบบนจึงเป็นป้ายอย่างเดียว (.static) */
+  .hist-branch-tag{position:relative;cursor:pointer}
+  .hist-branch-tag:not(.static)::after{content:'\25BE';margin-left:5px;font-size:11px}
+  .hist-branch-tag.static{cursor:default}
+  .hist-branch-tag select{position:absolute;left:0;top:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:16px;border:0;padding:0;margin:0}
+  .hist-branch-tag.static select{display:none}
   .hist-search{display:flex;align-items:center;gap:10px;border:1.5px solid var(--rule);border-radius:12px;padding:10px 14px;margin-bottom:14px;flex:0 0 auto}
   .hist-search svg{width:16px;height:16px;color:var(--goldink);flex:0 0 auto}
   .hist-search input{flex:1;border:none;outline:none;background:transparent;font-family:inherit;font-size:14px;color:var(--ink)}
@@ -675,7 +687,9 @@
   .hist-row .created{font-family:'Prompt',sans-serif;font-size:11.5px;color:var(--t3)}
 
   /* ===== responsive: เต็มจอ ทั้งแนวตั้ง/แนวนอน ทุกขนาด ===== */
-  @media (max-width:960px){
+  /* [แก้ 2026-10-06 ตามที่ขอ] เส้นแบ่งแบบคอลัมน์เดียวลดจาก 960px เป็น 880px — เปิดใน Lark บนไอแพดมีแถบเมนู Lark กินที่ซ้าย ~230px เหลือหน้าต่างราว 930-950px
+     เดิมต่ำกว่า 960 เลยตกเป็นคอลัมน์เดียว ส่วน "รายละเอียด" (ค่าวัดตัว) ไปอยู่ใต้ปุ่ม เพิ่มสินค้า ต้องเลื่อนลงไปหา ไม่เห็นเหมือนใน Safari — ไอแพดแนวตั้ง (~820) ยังเป็นคอลัมน์เดียวเหมือนเดิม */
+  @media (max-width:880px){
     .mast{padding:8px 18px;flex-wrap:wrap;gap:8px 16px}
     /* จอแคบ: ชื่อแอปยาวจนตกลงมาเต็มบรรทัดแรกอยู่แล้ว แถบข้อมูล (เลขบิล/สาขา/พนักงานขาย/ประวัติ) เลยควรชิดซ้ายให้เข้าชุดกับหัวข้อด้านบน แทนที่จะลอยชิดขวาเหลือช่องว่างซ้ายโล่งๆ — ทุกรายการเกาะกลุ่มกันแน่น ไม่มีตัวไหนถูกดันแยกออกไปอีก */
     .mast .meta{width:100%;gap:10px 14px;flex-wrap:wrap;justify-content:flex-start}
@@ -699,6 +713,14 @@
     .tape-wrap{gap:14px}
     .readout{width:auto;min-width:64px}
     .readout b{font-size:30px}
+  }
+  @media (min-width:881px) and (max-width:1100px){
+    .colL{padding-right:24px}
+    .colR{padding-left:24px}
+    .frow.codewrap{flex-wrap:nowrap}
+    .frow.codewrap input.sku-input{flex:1 1 auto;min-width:0;width:auto}
+    .frow.codewrap>.k{white-space:nowrap;flex:0 0 auto}
+    .mtop{grid-template-columns:170px minmax(0,1fr)}   /* ป้ายชื่อ 190→170px: ที่ ~881px คอลัมน์ขวากว้างแค่ ~471px ตัวปรับ +/- กว้างคงที่ 280px ล้นจนปุ่ม ไม่แก้ไข โดนตัด */
   }
   @media (max-width:560px){
     .mast .meta{gap:12px}
@@ -944,7 +966,7 @@
 
   <div class="infopop" id="histPop">
     <div class="infocard histcard">
-      <h3>ประวัติใบสั่งแก้สำเร็จรูป <span class="hist-branch-tag" id="histBranchTag"></span><span class="x" id="histClose">&times;</span></h3>
+      <h3>ประวัติใบสั่งแก้สำเร็จรูป <span class="hist-branch-tag" id="histBranchTag"><span id="histBranchTagText"></span><select id="histBranchTagSel" aria-label="เปลี่ยนสาขา"></select></span><span class="x" id="histClose">&times;</span></h3>
       <!-- [แก้ตามที่ขอ] เรียงลำดับใหม่: รายการที่นัดรับ (ซ้ายสุด) / ประวัติ (กลาง) / ร่างที่บันทึกไว้ (ขวาสุด) — เดิม on อยู่ที่ "ประวัติ" ย้ายไปไว้ที่ "รายการที่นัดรับ" เพราะเป็นแท็บ default ใหม่ (ดู openHistory()) -->
       <div class="hist-tabs" id="histTabs">
         <button class="hist-tab on" data-tab="pickup">รายการที่นัดรับ</button>
@@ -1242,6 +1264,8 @@
         <div class="frow stitch-row" style="border:none"><label class="stitchlbl"><input type="checkbox" class="stitch-check"><span class="k">เย็บย้ำกระดุม</span></label></div>
         <!-- [ใหม่ 2026-09-23 ตามที่ขอ] ติ๊ก "ลูกค้าใช้งานก่อนปรับแก้" เหนือหมายเหตุ — กลไกเดียวกับ "เย็บย้ำกระดุม" ทุกอย่าง (ติ๊กแล้วเติมคำนี้ลงหมายเหตุอัตโนมัติ) ต่างกันแค่ไม่จำกัดประเภทสินค้า (ใช้ได้ทุกประเภท ไม่ใช่แค่เสื้อสูท/กางเกง) ดู wireUsedCheckbox -->
         <div class="frow used-row" style="border:none"><label class="stitchlbl"><input type="checkbox" class="used-check"><span class="k">ลูกค้าใช้งานก่อนปรับแก้</span></label></div>
+        <!-- [ใหม่ 2026-10-06 ตามที่ขอ] ติ๊ก "งานทีม" เหนือหมายเหตุ — กลไกเดียวกับ "เย็บย้ำกระดุม" (ติ๊กแล้วเติมคำนี้ลงหมายเหตุอัตโนมัติ เอาติ๊กออกแล้วลบคำนี้) ต่างแค่โชว์ทุกประเภทสินค้า (พิมพ์ชื่อทีมต่อท้ายในหมายเหตุได้เอง เช่น "งานทีม K.Wind") -->
+        <div class="frow team-row" style="border:none"><label class="stitchlbl"><input type="checkbox" class="team-check"><span class="k">งานทีม</span></label></div>
         <div class="frow" style="border:none;align-items:flex-start"><span class="k note-label">หมายเหตุเสื้อสูท</span><textarea class="note-input" placeholder="เพิ่มหมายเหตุ" rows="2"></textarea></div>
         <!-- คำแนะนำเพิ่มเติมใต้ช่องหมายเหตุ — โชว์เฉพาะประเภทสินค้าที่เกี่ยวข้อง (คุมด้วย JS ตาม type-select) -->
         <div class="note-hint" data-hint-for="เสื้อกั๊ก (สำเร็จรูป)" style="display:none">ถ้าต้องการเย็บ/ย้ำกระดุม ระบุในช่องหมายเหตุด้านบน</div>
@@ -1397,7 +1421,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-09-30-6';
+  const APP_VERSION = '2026-10-06-13';
 
   let currentView=1;
   function updateIdx(){
@@ -1738,7 +1762,7 @@
 
   // ── ประวัติ: ดึงข้อมูลจริงจาก Lark Base ผ่าน Worker (/list-orders?branch=) ──
   const histBtn=document.getElementById('histBtn'), histPop=document.getElementById('histPop'), histClose=document.getElementById('histClose');
-  const histList=document.getElementById('histList'), histSearchInput=document.getElementById('histSearchInput'), histBranchTag=document.getElementById('histBranchTag');
+  const histList=document.getElementById('histList'), histSearchInput=document.getElementById('histSearchInput'), histBranchTag=document.getElementById('histBranchTag'), histBranchTagText=document.getElementById('histBranchTagText'), histBranchTagSel=document.getElementById('histBranchTagSel');
   let _histOrders=null, _histLoading=false, _histLoadedBranch='';
 
   function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -2085,7 +2109,6 @@
   function openHistory(){
     histPop.classList.add('show');
     const branch=document.getElementById('branchTop')?.value||'';
-    histBranchTag.textContent=branch ? ('สาขา '+branch) : '';
     histSearchInput.value='';
     // ค่าเริ่มต้นแท็บ "ประวัติ" และแท็บ "รายการที่นัดรับ" = สาขาเดียวกับแถบหัวก่อน แต่เลือกเปลี่ยนเป็นสาขาอื่นได้อิสระในแต่ละแท็บ
     const liveBranchSel=document.getElementById('histLiveBranch');
@@ -2165,11 +2188,11 @@
   });
   const histLiveBranchEl=document.getElementById('histLiveBranch');
   if(histLiveBranchEl) histLiveBranchEl.addEventListener('change', ()=>{
-    histBranchTag.textContent = histLiveBranchEl.value ? ('สาขา '+histLiveBranchEl.value) : '';
+    refreshHistBranchTag();
     loadLiveOrders(histLiveBranchEl.value);
   });
   const histPickupBranchEl=document.getElementById('histPickupBranch');
-  if(histPickupBranchEl) histPickupBranchEl.addEventListener('change', ()=>{ loadPickupOrders(histPickupBranchEl.value); });
+  if(histPickupBranchEl) histPickupBranchEl.addEventListener('change', ()=>{ refreshHistBranchTag(); loadPickupOrders(histPickupBranchEl.value); });
   const histPickupBranchFilterEl=document.getElementById('histPickupBranchFilter');
   if(histPickupBranchFilterEl) histPickupBranchFilterEl.addEventListener('change', renderPickupRangeList);
   if(histFromDateEl) histFromDateEl.addEventListener('change',()=>{ updateTodayHint(histFromDateEl, histFromToday); updateHistDateDisplay(histFromDateEl, histFromDisplay); updateHistRangeSummary(); renderPickupRangeList(); });
@@ -2402,61 +2425,241 @@
     if(kept.length !== list.length) saveDrafts(kept); // มีร่างหมดอายุถูกตัดออก เขียนกลับให้ localStorage สะอาดจริง ไม่ใช่แค่กรองตอนแสดงผล
     return kept;
   }
-  function saveDrafts(list){ try{ localStorage.setItem(DRAFTS_KEY, JSON.stringify(list)); }catch(e){} }
+  function saveDrafts(list){ try{ localStorage.setItem(DRAFTS_KEY, JSON.stringify(list)); return true; }catch(e){ return false; } }
   // [แก้บั๊ก] เจอจริง — เดิมกด "บันทึกร่าง" ทีไร สร้างร่างใหม่ทุกครั้งไม่มีเว้น ต่อให้เป็นบิลเดียวกันที่เพิ่งกดไปเมื่อกี้เอง (ลูกค้าคนเดิม เบอร์เดิม) ก็ยังได้ร่างซ้อนกันเพิ่มอีกอัน
   // กด 7 ครั้งระหว่างกรอกบิลเดียวกัน (เช่น กันลืมเป็นระยะ) ได้ร่างซ้ำ 7 อัน รกลิสต์ + กินโควตา 30 ร่างเปล่าๆ — ตอนนี้เช็คก่อนว่ามีร่างของเบอร์นี้อยู่แล้วหรือยัง
   // ถ้ามี ให้ "อัปเดตทับ" ร่างเดิม (ย้ายขึ้นบนสุดในฐานะร่างล่าสุด) แทนที่จะสร้างซ้อนใหม่ — จับคู่ด้วยเบอร์โทรศัพท์ (ตามที่ขอ: ชื่อ/เบอร์/รายละเอียดเดิมหมด = ควรเป็นร่างเดียวกัน)
-  function saveDraftNow(){
+  // ── [ใหม่ 2026-10-06 ตามที่ขอ] ร่างข้ามเครื่อง: "บันทึกร่าง" เก็บในเครื่องนี้ก่อน (เหมือนเดิม) แล้วส่งขึ้นเซิร์ฟเวอร์ (Worker /draft-save → ตาราง Lark "ร่างบิล")
+  // จัดกลุ่มตาม "สาขา" ที่แถบบน — ไอแพดเครื่องอื่นเลือกสาขาเดียวกันแล้วเห็นร่างชุดเดียวกัน · ต้องเลือกสาขาก่อนถึงจะบันทึกร่างได้
+  // ส่งขึ้นเซิร์ฟเวอร์ไม่สำเร็จ (เน็ตหลุด/ยังไม่ตั้งสิทธิ์ตาราง) → ร่างยังอยู่ในเครื่อง ติดป้าย "ยังไม่ซิงก์" แล้วลองส่งซ้ำตอนเปิดแท็บร่าง
+  // [รอบแก้จากผู้ตรวจอิสระ] ไม่ให้คำตอบเก่าทับของใหม่ (สลับสาขา/แท็บเร็วๆ) · ส่งซ้ำแถวเดียวพร้อมกันไม่ได้ · ร่างในเครื่องที่ใหม่กว่าไม่ถูกทับ/ไม่ถูกส่งทับร่างที่ใหม่กว่าบนเซิร์ฟเวอร์ ·
+  // คำสั่งลบหลังบันทึกบิลรอให้จบก่อนล้างฟอร์ม (ล้างฟอร์มรีโหลดหน้า) · ทุกคำขอมีเวลาหมด 12 วินาที
+  const DRAFT_SYNC={ list:[], ok:null, loading:false, err:'', notice:'', seq:0 };   // list = ร่างของสาขานี้จากเซิร์ฟเวอร์ · ok: null=ยังไม่เคยโหลด / true / false
+  let _openedDraft=null;   // ร่างที่เปิดมาแก้อยู่ {id (ในเครื่อง), srvId, phone} — ลบทิ้งเมื่อบันทึกบิลสำเร็จ (เฉพาะเมื่อบิลเป็นของลูกค้าเบอร์เดียวกัน)
+  const draftBranchNow=()=>(document.getElementById('branchTop')?.value||'').trim();
+  const DRAFT_API_TIMEOUT_MS=12000;
+  async function draftApi(pathAndQuery, body){
+    const ac=typeof AbortController!=='undefined' ? new AbortController() : null;
+    const timer=ac ? setTimeout(()=>ac.abort(), DRAFT_API_TIMEOUT_MS) : null;
+    try{
+      const init=body ? {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)} : {};
+      if(ac) init.signal=ac.signal;
+      const res=await fetch(WORKER+pathAndQuery, init);
+      let j; try{ j=await res.json(); }catch(e){ throw new Error('เซิร์ฟเวอร์ตอบกลับไม่ถูกต้อง — Worker อาจยังไม่ได้อัปเดตให้รองรับร่างข้ามเครื่อง'); }
+      if(!j||!j.success) throw new Error((j&&j.error)||'ไม่ทราบสาเหตุ');
+      return j;
+    }catch(e){ if(e && e.name==='AbortError') throw new Error('หมดเวลารอเซิร์ฟเวอร์'); throw e; }
+    finally{ if(timer) clearTimeout(timer); }
+  }
+  const draftBranchOf=d=>String((d&&d.branch)||(d&&d.state&&d.state.branchTop)||'').trim();
+  // คำสั่งลบบนเซิร์ฟเวอร์ที่ส่งไม่สำเร็จ (เน็ตหลุด) จดไว้ในเครื่อง ลองส่งใหม่ทุกครั้งที่โหลดรายการร่าง — ไม่งั้นร่างที่ลบไปแล้วจะโผล่กลับมาหลังต่อเน็ตได้
+  const DRAFT_DEL_KEY='suitcube_draft_deletes_v1';
+  const loadDraftDeletes=()=>{ try{ const l=JSON.parse(localStorage.getItem(DRAFT_DEL_KEY)||'[]'); return Array.isArray(l)?l:[]; }catch(e){ return []; } };
+  const saveDraftDeletes=l=>{ try{ localStorage.setItem(DRAFT_DEL_KEY, JSON.stringify(l.slice(-50))); }catch(e){} };
+  const queueDraftDelete=body=>{ const l=loadDraftDeletes(); if(!l.some(x=>JSON.stringify(x)===JSON.stringify(body))) l.push(body); saveDraftDeletes(l); };
+  async function flushDraftDeletes(){
+    const l=loadDraftDeletes(); if(!l.length) return;
+    const keep=l.slice(5); for(const body of l.slice(0,5)){ try{ await draftApi('/draft-delete',body); }catch(e){ keep.push(body); } }   // รอบละไม่เกิน 5 คำสั่ง (ถ้าเซิร์ฟเวอร์ช้า ไม่ให้โหลดรายการร่างช้าเกินไป)
+    saveDraftDeletes(keep);
+  }
+  const _draftPushing=new Map();   // ร่างเดียวกัน (id + เวลาบันทึกเดียวกัน) กำลังส่งอยู่ → ใช้คำขอเดิม ไม่ส่งซ้ำ (กันแถวซ้ำบนเซิร์ฟเวอร์)
+  function pushDraftToServer(d){
+    const key=d.id+':'+d.savedAt;
+    if(_draftPushing.has(key)) return _draftPushing.get(key);
+    const p=(async()=>{
+      const st=d.state||{};
+      const j=await draftApi('/draft-save',{ id:d.srvId||undefined, branch:draftBranchOf(d), phone:String(st.custPhone||'').trim(), summary:d.summary||'', staff:d.staff||st.staffInput||'', state:st });
+      const all=loadDrafts(), cur=all.find(x=>x.id===d.id);
+      if(cur){ cur.srvId=j.id; cur.branch=draftBranchOf(d); if(cur.savedAt===d.savedAt) cur.synced=true; saveDrafts(all); }   // แก้ร่างต่อระหว่างรอ → ยังไม่นับว่าซิงก์ (รอบหน้าส่งเนื้อหาล่าสุดอีกครั้ง)
+      return j;
+    })().finally(()=>_draftPushing.delete(key));
+    _draftPushing.set(key,p); return p;
+  }
+  async function saveDraftNow(){
+    const branch=draftBranchNow();
     const state=collectFormState();
     const drafts=loadDrafts();
     const summary=(state.custName||'ไม่ระบุชื่อลูกค้า')+(state.custPhone?(' · '+state.custPhone):'');
     const phone=String(state.custPhone||'').trim();
     const existingIdx = phone ? drafts.findIndex(d=>String(d.state?.custPhone||'').trim()===phone) : -1;
+    let draft;
     if(existingIdx!==-1){
-      // อัปเดตร่างเดิมทับ เก็บ id เดิมไว้ (เผื่อมีที่อื่นอ้างอิง id นี้ค้างอยู่) แค่รีเฟรชเนื้อหา+เวลา แล้วย้ายขึ้นบนสุด
-      const [existing]=drafts.splice(existingIdx,1);
-      existing.savedAt=Date.now(); existing.summary=summary; existing.state=state;
-      drafts.unshift(existing);
+      // อัปเดตร่างเดิมทับ เก็บ id เดิมไว้ (เผื่อมีที่อื่นอ้างอิง id นี้ค้างอยู่) แค่รีเฟรชเวลา+เนื้อหา แล้วย้ายขึ้นบนสุดในฐานะร่างล่าสุด
+      [draft]=drafts.splice(existingIdx,1);
+      draft.savedAt=Date.now(); draft.summary=summary; draft.state=state;
+      if(draft.branch && draft.branch!==branch) draft.srvId=undefined;   // ย้ายสาขา → เป็นแถวใหม่ของสาขาใหม่ (แถวเก่าบนเซิร์ฟเวอร์หมดอายุเองใน 7 วัน)
+      drafts.unshift(draft);
     } else {
-      drafts.unshift({ id:'d'+Date.now(), savedAt:Date.now(), summary, state });
+      draft={ id:'d'+Date.now(), savedAt:Date.now(), summary, state };
+      drafts.unshift(draft);
     }
+    draft.branch=branch; draft.staff=state.staffInput||''; draft.synced=false;
     if(drafts.length>30) drafts.length=30;
-    saveDrafts(drafts);
-    return drafts.length;
+    const localOk=saveDrafts(drafts);
+    try{
+      const j=await pushDraftToServer(draft);
+      const entry={ id:j.id, branch, summary, phone, staff:draft.staff, savedAt:j.savedAt||Date.now(), state };
+      DRAFT_SYNC.list=[entry].concat(DRAFT_SYNC.list.filter(x=>x.id!==j.id && (!phone || x.phone!==phone)));   // ให้โผล่ในแท็บร่างทันที ไม่ต้องรอโหลดรอบถัดไป
+      return { synced:true, localOk };
+    }catch(e){ return { synced:false, localOk, error:e.message }; }
+  }
+  // ส่งร่างในเครื่องที่ยังไม่ซิงก์ของสาขานี้ขึ้นเซิร์ฟเวอร์ (รวมร่างเก่าที่บันทึกไว้ก่อนมีระบบซิงก์ — ใช้สาขาที่ติดอยู่ในร่าง)
+  // เทียบกับรายการบนเซิร์ฟเวอร์ก่อน: ลูกค้าเบอร์เดียวกันที่บนเซิร์ฟเวอร์ "ใหม่กว่า" (บันทึกจากเครื่องอื่น) → ไม่ส่งทับ ให้ร่างบนเซิร์ฟเวอร์ชนะ
+  const draftIsPushing=d=>[..._draftPushing.keys()].some(k=>k.startsWith(d.id+':'));
+  async function syncLocalDrafts(branch, serverList, t0){
+    let pushed=0; const failures=[];
+    for(const d of loadDrafts().filter(x=>x.synced!==true && draftBranchOf(x)===branch)){
+      if(draftIsPushing(d)) continue;                           // กำลังส่งอยู่แล้ว — ไม่ส่งซ้ำ ไม่ตัดสินว่าหาย
+      if(d.srvId && serverList && d.savedAt<t0 && !serverList.some(x=>x.id===d.srvId)){
+        saveDrafts(loadDrafts().filter(x=>x.id!==d.id));        // เคยซิงก์แล้ว แต่บนเซิร์ฟเวอร์ไม่มีแล้ว (ลูกค้าถูกทำบิล/ลบจากเครื่องอื่น) → ไม่ส่งการแก้ที่ค้างอยู่ขึ้นไปใหม่ (กันร่างผีของลูกค้าที่จบงานไปแล้ว)
+        continue;
+      }
+      const ph=String(d.state?.custPhone||'').trim();
+      const sv=ph ? (serverList||[]).find(x=>x.phone===ph) : null;
+      if(sv && sv.savedAt>d.savedAt){
+        const all=loadDrafts(), cur=all.find(x=>x.id===d.id);
+        if(cur){ cur.srvId=sv.id; cur.synced=true; cur.branch=branch; saveDrafts(all); }
+        continue;
+      }
+      try{ await pushDraftToServer(d); pushed++; }catch(e){ failures.push(e); }   // ตัวไหนส่งไม่ได้ ข้ามไปตัวถัดไป (ไม่ให้ตัวเดียวบล็อกทั้งหมด)
+    }
+    return { pushed, failures };
+  }
+  function updateDraftCount(){
+    const n=mergedDrafts().length, dc=document.getElementById('draftCount'); if(dc) dc.textContent = n ? ('('+n+')') : '';
+  }
+  // รายการที่แสดง = ร่างจากเซิร์ฟเวอร์ของสาขาที่เลือก + ร่างในเครื่องที่ยังไม่ซิงก์ของสาขานั้น (หรือไม่มีข้อมูลสาขา) · ยังไม่เลือกสาขา = ร่างในเครื่องทั้งหมดเหมือนเดิม
+  function mergedDrafts(){
+    const branch=draftBranchNow(), out=[], byServerId=new Map();
+    const asLocal=d=>({ id:d.id, localId:d.id, srvId:d.srvId||null, savedAt:d.savedAt, summary:d.summary, staff:d.staff||d.state?.staffInput||'', state:d.state, branch:draftBranchOf(d), localOnly:d.synced!==true });
+    if(branch){
+      DRAFT_SYNC.list.forEach(sv=>{ const e={ id:'s:'+sv.id, localId:null, srvId:sv.id, savedAt:sv.savedAt, summary:sv.summary, staff:sv.staff, state:sv.state, branch:sv.branch, localOnly:false }; byServerId.set(sv.id,e); out.push(e); });
+      loadDrafts().forEach(d=>{
+        const b=draftBranchOf(d);
+        if(b && b!==branch) return;                           // ร่างของสาขาอื่น ไม่แสดงตอนเลือกสาขานี้
+        const e=d.srvId ? byServerId.get(d.srvId) : null;
+        if(e){ if(d.synced!==true && d.savedAt>e.savedAt) Object.assign(e, asLocal(d)); return; }   // มีบนเซิร์ฟเวอร์แล้ว แสดงตัวเซิร์ฟเวอร์ — ยกเว้นในเครื่องแก้ใหม่กว่าและยังไม่ซิงก์ (แก้ตอนออฟไลน์)
+        if(d.synced===true && DRAFT_SYNC.ok===true) return;  // เคยซิงก์แล้วแต่ไม่อยู่ในรายการเซิร์ฟเวอร์ = ถูกลบจากเครื่องอื่นแล้ว
+        out.push(asLocal(d));
+      });
+    } else loadDrafts().forEach(d=>out.push(asLocal(d)));
+    return out.sort((x,y)=>y.savedAt-x.savedAt);
+  }
+  function renderDraftsIfOpen(){ if(_histTab==='draft' && histPop.classList.contains('show')) renderDraftsList(draftSearchInput ? draftSearchInput.value : ''); }
+  async function refreshDraftsFromServer(){
+    const branch=draftBranchNow();
+    if(!branch){ DRAFT_SYNC.seq++; DRAFT_SYNC.ok=null; DRAFT_SYNC.list=[]; DRAFT_SYNC.loading=false; DRAFT_SYNC.err=''; return; }
+    const seq=++DRAFT_SYNC.seq, t0=Date.now(); DRAFT_SYNC.loading=true; DRAFT_SYNC.err=''; renderDraftsIfOpen();
+    const stale=()=>seq!==DRAFT_SYNC.seq || branch!==draftBranchNow();   // มีการโหลดรอบใหม่/เปลี่ยนสาขาไปแล้ว → ทิ้งผลรอบนี้
+    try{
+      let j;
+      await flushDraftDeletes(); if(stale()) return;           // คำสั่งลบที่ส่งไม่สำเร็จครั้งก่อน (ออฟไลน์) ลองส่งใหม่ก่อนโหลดรายการ
+      j=await draftApi('/draft-list?branch='+encodeURIComponent(branch)); if(stale()) return;
+      DRAFT_SYNC.list=j.drafts||[]; DRAFT_SYNC.ok=true; DRAFT_SYNC.loading=false; renderDraftsIfOpen(); updateDraftCount();   // โชว์ร่างจากเซิร์ฟเวอร์ทันที ไม่รอการส่งร่างค้างในเครื่องขึ้นไป (ที่อาจช้า)
+      const sync=await syncLocalDrafts(branch, j.drafts||[], t0); if(stale()) return;
+      if(sync.pushed){ j=await draftApi('/draft-list?branch='+encodeURIComponent(branch)); if(stale()) return; }   // ส่งร่างขึ้นไปแล้ว ดึงรายการใหม่ให้ตรงกับเซิร์ฟเวอร์
+      DRAFT_SYNC.list=j.drafts||[]; DRAFT_SYNC.ok=true;
+      const ids=new Set(DRAFT_SYNC.list.map(x=>x.id));       // เก็บกวาดร่างในเครื่องที่เคยซิงก์แล้วแต่ถูกลบจากเครื่องอื่น (เฉพาะร่างที่บันทึกก่อนเริ่มโหลดรอบนี้)
+      saveDrafts(loadDrafts().filter(d=>!(d.synced===true && draftBranchOf(d)===branch && !ids.has(d.srvId) && d.savedAt<t0)));
+    }catch(e){ if(stale()) return; DRAFT_SYNC.ok=false; DRAFT_SYNC.err=e.message; DRAFT_SYNC.list=[]; }
+    if(!stale()) DRAFT_SYNC.loading=false;
+    renderDraftsIfOpen(); updateDraftCount();
+  }
+  // บันทึกบิลสำเร็จ → ลบร่างของลูกค้าคนนี้ (เบอร์เดียวกัน) + ร่างที่เปิดมาแก้ ทั้งในเครื่องและบนเซิร์ฟเวอร์
+  // คืน Promise ที่รอคำสั่งลบบนเซิร์ฟเวอร์ (ไม่เกิน 3 วินาที) — ผู้เรียกรอก่อนล้างฟอร์ม เพราะล้างฟอร์มแล้วหน้าจะรีโหลด คำสั่งที่ค้างอยู่จะถูกตัด
+  function draftsAfterBillSaved(phone, branch){
+    let job=Promise.resolve();
+    try{
+      phone=String(phone||'').trim(); let od=_openedDraft; _openedDraft=null;
+      // ร่างที่เปิดมาแก้ ลบเฉพาะเมื่อบิลที่บันทึกเป็นของลูกค้าคนเดียวกัน (เบอร์ตรงกัน) — กันกรณีเปิดร่างแล้วกดถังขยะล้างฟอร์มไปกรอกลูกค้าคนอื่น แล้วบันทึกบิลใหม่ ร่างของคนแรกถูกลบผิด
+      if(od && od.phone && od.phone!==phone) od=null;
+      const srvIds=new Set(), localIds=new Set();
+      loadDrafts().forEach(d=>{ const ph=String(d.state?.custPhone||'').trim(); if((phone && ph===phone) || (od && od.id && d.id===od.id)){ localIds.add(d.id); if(d.srvId) srvIds.add(d.srvId); } });
+      if(od && od.srvId) srvIds.add(od.srvId);
+      if(localIds.size) saveDrafts(loadDrafts().filter(d=>!localIds.has(d.id)));
+      DRAFT_SYNC.list=DRAFT_SYNC.list.filter(x=>!srvIds.has(x.id) && (!phone || x.phone!==phone));
+      updateDraftCount();
+      const ids=[...srvIds];
+      // Worker ลบร่างของลูกค้าเบอร์เดียวกันในสาขาเดียวกันให้ด้วยในคำสั่งเดียว · ส่งทีละคำสั่ง (Lark ห้ามเขียนตารางเดียวกันพร้อมกัน)
+      job=(async()=>{
+        for(const id of ids){ const body=(phone&&branch)?{id,branch,phone}:{id}; try{ await draftApi('/draft-delete', body); }catch(e){ queueDraftDelete(body); } }
+        if(!ids.length && phone && branch){ const body={branch,phone}; try{ await draftApi('/draft-delete', body); }catch(e){ queueDraftDelete(body); } }
+      })();
+    }catch(e){ /* ล้างร่างไม่สำเร็จ ไม่กระทบการบันทึกบิล */ }
+    return Promise.race([job, new Promise(r=>setTimeout(r,3000))]);
   }
   document.querySelectorAll('.draft').forEach(btn=>{
     const original=btn.innerHTML;
-    btn.addEventListener('click',()=>{
-      saveDraftNow();
-      btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>บันทึกแล้ว';
-      setTimeout(()=>{ btn.innerHTML=original; }, 1400);
+    const tick='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>';
+    btn.addEventListener('click',async ()=>{
+      if(btn.disabled) return;
+      if(!draftBranchNow()){
+        // ต้องเลือกสาขาก่อน — ร่างถูกจัดกลุ่มตามสาขา (ไอแพดเครื่องอื่นเลือกสาขาเดียวกันถึงจะเห็น)
+        const bt=document.getElementById('branchTop');
+        btn.innerHTML='เลือกสาขาที่แถบบนก่อน';
+        if(bt){ bt.classList.add('draft-need-branch'); try{ bt.scrollIntoView({block:'nearest'}); bt.focus({preventScroll:true}); }catch(e){} setTimeout(()=>bt.classList.remove('draft-need-branch'),2200); }
+        setTimeout(()=>{ btn.innerHTML=original; }, 2200);
+        return;
+      }
+      btn.disabled=true; btn.innerHTML='กำลังบันทึก…';
+      let r={ synced:false, localOk:false };
+      try{ r=await saveDraftNow(); }catch(e){ /* ไม่ควรเกิด — กันปุ่มค้าง */ }
+      finally{ btn.disabled=false; }
+      btn.innerHTML = r.synced ? (tick+'บันทึกแล้ว') : (r.localOk ? (tick+'บันทึกในเครื่องแล้ว · ยังไม่ซิงก์') : 'บันทึกร่างไม่สำเร็จ');
+      setTimeout(()=>{ btn.innerHTML=original; }, r.synced?1400:3200);
+      updateDraftCount();
     });
   });
 
   // [ใหม่ตามที่ขอ] รับคำค้นหา (เบอร์โทรศัพท์) เป็นทางเลือกได้ — กรองเฉพาะร่างที่เบอร์โทรมีเลขที่พิมพ์ค้นอยู่ในนั้น (contains ไม่ต้องพิมพ์ครบ) กันร่างเยอะแล้วต้องไล่สายตาหาเอง
   function renderDraftsList(query){
     const q=String(query||'').trim();
-    const all=loadDrafts(); // ใหม่สุดอยู่หน้าสุดเสมออยู่แล้ว (saveDraftNow ใช้ unshift ไม่ใช่ push) — เรียงตามที่บันทึกล่าสุดถูกต้องตั้งแต่แรก ไม่ต้อง sort เพิ่ม
+    const branch=draftBranchNow();
+    const all=mergedDrafts(); // ใหม่สุดอยู่หน้าสุด (เรียงตามเวลาบันทึก)
     const drafts = q ? all.filter(d=>String(d.state?.custPhone||'').includes(q)) : all;
     const countEl=document.getElementById('draftCount'); if(countEl) countEl.textContent = all.length?('('+all.length+')'):'';
-    if(!all.length){ histList.innerHTML='<div class="hist-state">ยังไม่มีร่างที่บันทึกไว้ในเครื่องนี้</div>'; return; }
-    if(!drafts.length){ histList.innerHTML='<div class="hist-state">ไม่พบร่างที่เบอร์โทรตรงกับ "'+escapeHtml(q)+'"</div>'; return; }
-    // บอกจำนวนร่างทั้งหมดไว้บนสุดของรายการด้วย (นอกจากตัวเลขเล็กๆ ข้างชื่อแท็บ) ให้เห็นชัดเจนขึ้นตามที่ขอ — ถ้ากำลังค้นหาอยู่ โชว์จำนวนที่กรองได้แทน
-  const countLine='<div class="draft-count-line">'+(q?('พบ '+drafts.length+' ร่างที่ตรงกับเบอร์โทร'):('มีร่างที่บันทึกไว้ทั้งหมด '+drafts.length+' รายการ (ร่างที่เก็บไว้เกิน 7 วันจะถูกลบอัตโนมัติ)'))+'</div>';
-    histList.innerHTML=countLine+drafts.map(d=>{
+    // บรรทัดสถานะการซิงก์กับเซิร์ฟเวอร์ (แสดงเหนือรายการเสมอเมื่อเลือกสาขาแล้ว)
+    let syncLine='';
+    if(!branch) syncLine='<div class="draft-sync-line">เลือกสาขาที่แถบบน เพื่อดูร่างที่ใช้ร่วมกันทุกเครื่องของสาขานั้น (ตอนนี้แสดงเฉพาะร่างในเครื่องนี้)</div>';
+    else if(DRAFT_SYNC.loading) syncLine='<div class="draft-sync-line">กำลังโหลดร่างของสาขา '+escapeHtml(branch)+' จากเซิร์ฟเวอร์…</div>';
+    else if(DRAFT_SYNC.ok===false) syncLine='<div class="draft-sync-line bad">เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ — แสดงเฉพาะร่างในเครื่องนี้ ('+escapeHtml(DRAFT_SYNC.err||'ไม่ทราบสาเหตุ')+')</div>';
+    if(DRAFT_SYNC.notice) syncLine+='<div class="draft-sync-line bad">'+escapeHtml(DRAFT_SYNC.notice)+'</div>';
+    if(!all.length){ histList.innerHTML=syncLine+'<div class="hist-state">'+(branch?('ยังไม่มีร่างที่บันทึกไว้ของสาขา '+escapeHtml(branch)):'ยังไม่มีร่างที่บันทึกไว้ในเครื่องนี้')+'</div>'; return; }
+    if(!drafts.length){ histList.innerHTML=syncLine+'<div class="hist-state">ไม่พบร่างที่เบอร์โทรตรงกับ "'+escapeHtml(q)+'"</div>'; return; }
+    // บอกจำนวนร่างทั้งหมดไว้บนสุดของรายการด้วย (นอกจากตัวเลขเล็กๆ ข้างชื่อแท็บ) ให้รู้ว่ามีกี่ร่าง
+    const countLine='<div class="draft-count-line">'+(q?('พบ '+drafts.length+' ร่างที่ตรงกับเบอร์โทร'):((branch?('ร่างของสาขา '+escapeHtml(branch)+' ทั้งหมด '):'มีร่างที่บันทึกไว้ทั้งหมด ')+all.length+' ร่าง'))+'</div>';
+    histList.innerHTML=syncLine+countLine+drafts.map(d=>{
       const dt=new Date(d.savedAt);
       const when=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0')+' '+String(dt.getHours()).padStart(2,'0')+':'+String(dt.getMinutes()).padStart(2,'0');
-      // [แก้ตามที่ขอ] .hist-row ไม่มีสไตล์การ์ดของตัวเองแล้ว (ย้ายไปที่ .hist-ordercard) — ร่างก็ต้องห่อด้วย .hist-ordercard เหมือนกันถึงจะมีกรอบ/เงา
-      return '<div class="hist-row draft-row" data-id="'+d.id+'"><div class="hist-ordercard">'
+      // [แก้ตามที่ขอ] .hist-row ไม่มีสไตล์การ์ดของตัวเองแล้ว (ย้ายไปที่ .hist-ordercard) — ร่างก็ต้องห่อด้วย .hist-ordercard เหมือนกัน
+      return '<div class="hist-row draft-row" data-id="'+escapeHtml(d.id)+'"><div class="hist-ordercard">'
         + '<div class="hist-top"><div class="draft-title">'+escapeHtml(d.summary||'ร่างที่บันทึกไว้')+'</div>'
-        + '<button class="draft-del" data-id="'+d.id+'" title="ลบร่างนี้">&times;</button></div>'
-        + '<div class="created">บันทึกเมื่อ '+when+' น.</div>'
+        + '<button class="draft-del" data-id="'+escapeHtml(d.id)+'" title="ลบร่างนี้">&times;</button></div>'
+        + '<div class="created">บันทึกเมื่อ '+when+' น.'+(d.staff?(' · '+escapeHtml(d.staff)):'')+(d.localOnly&&branch?' · <span class="draft-local">ในเครื่องนี้ ยังไม่ซิงก์</span>':'')+'</div>'
         + '</div></div>';
     }).join('');
   }
   let _histTab='live';
+  // [ใหม่ 2026-10-06 ตามที่ขอ] ป้ายสาขาหัวป๊อปอัป = สาขาหลักของแท็บที่เปิดอยู่ และกดเปลี่ยนได้: "ประวัติ" → สาขาที่นัดรับ · "รายการที่นัดรับ" → สาขาที่ซื้อ · "ร่างที่บันทึกไว้" → สาขาจากแถบบน (ป้ายอย่างเดียว)
+  function refreshHistBranchTag(){
+    const liveSel=document.getElementById('histLiveBranch'), pickSel=document.getElementById('histPickupBranch');
+    const top=document.getElementById('branchTop')?.value||'';
+    const src=_histTab==='live'?liveSel:(_histTab==='pickup'?pickSel:null);
+    const b=src?src.value:top;
+    histBranchTagText.textContent=b?('สาขา '+b):'';
+    histBranchTag.classList.toggle('empty', !b);
+    histBranchTag.classList.toggle('static', !src);
+    histBranchTagSel.innerHTML='';
+    if(src){ [...src.options].forEach(o=>histBranchTagSel.appendChild(new Option(o.text,o.value))); histBranchTagSel.value=b; }
+  }
+  histBranchTagSel.addEventListener('change',()=>{
+    const src=_histTab==='live'?document.getElementById('histLiveBranch'):(_histTab==='pickup'?document.getElementById('histPickupBranch'):null);
+    const v=histBranchTagSel.value; if(!src||!v||src.value===v) return;
+    src.value=v; src.dispatchEvent(new Event('change',{bubbles:true}));   // เรียกตัวจัดการเดิมของ dropdown แท็บนั้น (โหลดรายการใหม่ + รีเฟรชป้าย)
+  });
   function switchHistTab(tab){
     _histTab=tab;
+    refreshHistBranchTag();
     document.querySelectorAll('#histTabs .hist-tab').forEach(b=>b.classList.toggle('on', b.dataset.tab===tab));
     // 3 แท็บแยกกันชัดเจนตามที่ขอ: "ประวัติ" = ค้นหาอย่างเดียว, "รายการที่นัดรับ" = กรองช่วงวันที่อย่างเดียว, "ร่างที่บันทึกไว้" = ไม่มีทั้งคู่
     const searchRowEl=document.getElementById('histSearchRow'); if(searchRowEl) searchRowEl.style.display = tab==='live' ? 'flex' : 'none';
@@ -2474,10 +2677,12 @@
       else renderHistList(_histOrders, histSearchInput.value);
     }
     else if(tab==='pickup'){ renderPickupRangeList(); }
-    else renderDraftsList(draftSearchInput ? draftSearchInput.value : '');
+    else { DRAFT_SYNC.notice=''; renderDraftsList(draftSearchInput ? draftSearchInput.value : ''); refreshDraftsFromServer(); }   // [2026-10-06] แสดงของในเครื่องก่อนทันที แล้วโหลดร่างของสาขาจากเซิร์ฟเวอร์
   }
   document.querySelectorAll('#histTabs .hist-tab').forEach(b=>b.addEventListener('click',()=>switchHistTab(b.dataset.tab)));
   // [ใหม่ตามที่ขอ] พิมพ์ค้นหาร่างจากเบอร์โทร — กรองสดขณะพิมพ์เหมือนช่องค้นหาแท็บ "ประวัติ"
+  // [2026-10-06] เปลี่ยนสาขาที่แถบบนขณะเปิดแท็บ "ร่างที่บันทึกไว้" อยู่ → โหลดร่างของสาขาใหม่ทันที
+  branchTopListeners.push(()=>{ DRAFT_SYNC.seq++; DRAFT_SYNC.list=[]; DRAFT_SYNC.ok=null; DRAFT_SYNC.loading=false; DRAFT_SYNC.err=''; DRAFT_SYNC.notice=''; if(_histTab==='draft' && histPop.classList.contains('show')){ renderDraftsList(draftSearchInput ? draftSearchInput.value : ''); refreshDraftsFromServer(); } else updateDraftCount(); });
   const draftSearchInput=document.getElementById('draftSearchInput');
   if(draftSearchInput) draftSearchInput.addEventListener('input',()=>{ renderDraftsList(draftSearchInput.value); });
   // ── ป็อปอัพยืนยัน (ใช้ทั่วไป เช่น ยืนยันลบร่าง) ──
@@ -2569,8 +2774,8 @@
       const itemIndex=trueIdx>=0 ? trueIdx+1 : ii+1; // fallback เผื่อหา P# ไม่เจอใน codes จริงๆ (ไม่ควรเกิด)
       // [แก้บั๊ก+ตามที่ขอ] เดิมไม่ส่ง note มาด้วยเลย ใบสรุปตอนพิมพ์ซ้ำ/ดึงข้อมูลล่าสุดเลยไม่มีหมายเหตุติดไปเลย (รวมถึงทรงขา FB/NB/HB ที่เก็บอยู่ในหมายเหตุตัวเดียวกัน) — ตอนนี้ Worker ดึง Field20__c มาให้แล้ว (it.note)
       // หมายเหตุ: ตอนพิมพ์ซ้ำจาก Salesforce ไม่มีข้อมูล "สาขาที่เบิก/จองกับ" รายชิ้น (Salesforce ไม่ได้เก็บแยกช่อง) — 2 บรรทัดนั้นเลยไม่ขึ้นบนใบพิมพ์ซ้ำ
-      // [แก้ 2026-09-24 ตามที่ขอ] เอา QR code ออกจากใบสรุปทุกทาง (ปุ่มพิมพ์ซ้ำ/ดึงข้อมูลล่าสุด + หน้า ?auto=1) — ไม่ส่ง qrUrl เข้า buildReceiptLines อีกแล้ว (Worker ยังส่ง recordUrl มาให้เหมือนเดิม แค่ไม่ได้ใช้)
-      const item={ type:it.type||'สินค้า', sku:it.sku, size:it.size, measureRows:mvRows, orderCode:extractCode(o.orderCode), productCode:it.code, branch:it.stockBranch||'', contact:it.contact||'', note:it.note||'', itemIndex, itemTotal:items.length, typeCodesLine };
+      // [ใหม่ 2026-10-06 ตามที่ขอ] ใส่ QR กลับบนใบสรุป (เดิมเอาออกเมื่อ 2026-09-24) — QR = ลิงก์หน้า Suitcube Product ใน Salesforce (Worker ส่ง recordUrl มากับ /product-latest ทุกชิ้น) ใช้กับปุ่มพิมพ์ซ้ำ/ดึงข้อมูลล่าสุด + หน้า ?auto=1 · ใบสรุปตอนบันทึกครั้งแรกยังไม่มี QR เพราะตอนนั้นยังไม่มี Salesforce Id
+      const item={ type:it.type||'สินค้า', sku:it.sku, size:it.size, measureRows:mvRows, orderCode:extractCode(o.orderCode), productCode:it.code, branch:it.stockBranch||'', contact:it.contact||'', note:it.note||'', itemIndex, itemTotal:items.length, typeCodesLine, qrUrl:it.recordUrl||'' };
       const lines=buildReceiptLines(order,item);
       // [ใหม่ตามที่ขอ] เก็บ lines ไว้ด้วย (ไม่ใช่แค่รูป) — ให้เอาไปพิมพ์ตรงจากเบราว์เซอร์ได้ทันที (window.print()) ไม่ต้องรอ print-agent
       // [ใหม่ตามที่ขอ] เก็บ productCode (จาก it.code เช่น "P# 396242") ไว้ด้วย — จุดนี้รู้แน่ชัดว่าใบสรุปนี้เป็นของสินค้าชิ้นไหนจริงๆ (ต่างจากตอนบันทึกครั้งแรกที่ยังไม่มี Salesforce ID) ใช้แนบไฟล์เข้า Suitcube_Product__c ให้ตรงชิ้นใน attachReceiptImages
@@ -2668,16 +2873,28 @@
     const delBtn=e.target.closest('.draft-del');
     if(delBtn){
       e.stopPropagation();
+      const dm0=mergedDrafts().find(x=>x.id===delBtn.dataset.id);   // จับตอนกด × (ก่อนถามยืนยัน) — ระหว่างรอตอบ รายการอาจถูกซิงก์/เรนเดอร์ใหม่
       const ok=await confirmDialog('ยืนยันการลบร่างที่เคยบันทึกไว้');
       if(!ok) return;
-      saveDrafts(loadDrafts().filter(d=>d.id!==delBtn.dataset.id));
+      const loc=(dm0&&dm0.localId) ? loadDrafts().find(d=>d.id===dm0.localId) : null;
+      const srvId=(dm0&&dm0.srvId)||(loc&&loc.srvId)||null;   // ร่างในเครื่องที่เพิ่งถูกซิงก์ระหว่างรอยืนยัน มี srvId แล้ว
+      saveDrafts(loadDrafts().filter(d=>d.id!==delBtn.dataset.id && !(dm0&&dm0.localId&&d.id===dm0.localId) && !(srvId&&d.srvId===srvId)));
+      if(srvId){
+        DRAFT_SYNC.list=DRAFT_SYNC.list.filter(x=>x.id!==srvId);
+        const ph=String(dm0&&dm0.state&&dm0.state.custPhone||'').trim(), br=(dm0&&dm0.branch)||draftBranchNow();
+        const delBody=(ph&&br)?{id:srvId,branch:br,phone:ph}:{id:srvId};
+        draftApi('/draft-delete', delBody).catch(()=>{ queueDraftDelete(delBody); DRAFT_SYNC.notice='ลบร่างบนเซิร์ฟเวอร์ไม่สำเร็จ — ระบบจะลองลบให้ใหม่ตอนเชื่อมต่อได้'; refreshDraftsFromServer(); });
+      }
       renderDraftsList(draftSearchInput ? draftSearchInput.value : ''); // คงคำค้นหาเดิมไว้ ไม่รีเซ็ตช่องค้นหาตอนลบ
       return;
     }
     const row=e.target.closest('.draft-row');
     if(row){
-      const d=loadDrafts().find(x=>x.id===row.dataset.id);
-      if(d){ applyFormState(d.state); histPop.classList.remove('show'); goTo(1); }
+      const d=mergedDrafts().find(x=>x.id===row.dataset.id);
+      if(d){
+        _openedDraft={ id:d.localId||null, srvId:d.srvId||null, phone:String(d.state?.custPhone||'').trim() };
+        applyFormState(d.state); histPop.classList.remove('show'); goTo(1);
+      }
     }
   });
 
@@ -2777,8 +2994,26 @@
     setCustFields('custName',c.firstName); setCustFields('custLastName',c.lastName); setCustFields('custNick',c.nickname); setCustFields('custEmail',c.email);
     origCustName=c.firstName||''; origCustLastName=c.lastName||''; origCustNick=c.nickname||'';
     hideNameConfirm('name'); hideNameConfirm('nick');
+    _autoFilledSnap=custSnapshot();
   }
-  function hidePhoneSuggest(){ if(phoneSuggest){ phoneSuggest.classList.remove('show'); phoneSuggest.innerHTML=''; } }
+  // [แก้ 2026-10-06 ตามที่ขอ] ค้นลูกค้าจากเบอร์ต้อง "ไม่ล้าง/ไม่ทับ" สิ่งที่พนักงานกรอกไว้เอง (ชื่อ นามสกุล ชื่อเล่น อีเมล) — เดิมพิมพ์ชื่อ-นามสกุลก่อนแล้วค่อยใส่เบอร์ ถ้าไม่เจอ/เจอหลายชื่อ ช่องชื่อถูกล้างเกลี้ยง
+  // (ถ้าเจอ 1 ชื่อ ก็ถูกทับด้วยชื่อในระบบ) · ระบบเติม/ล้างช่องได้เฉพาะตอนช่องว่าง หรือยังเป็นค่าที่ระบบเติมให้จากการค้นรอบก่อนและพนักงานไม่ได้แก้ · ล้างจริงๆ ได้ทางปุ่มถังขยะ (ล้างข้อมูลทั้งงาน) หรือปุ่ม + New Contact เท่านั้น
+  const CUST_FIELD_IDS=['custName','custLastName','custNick','custEmail'];
+  const custSnapshot=()=>CUST_FIELD_IDS.map(id=>(document.getElementById(id)?.value)||'');
+  let _autoFilledSnap=null;   // ค่าทั้งสี่ช่องตอนที่ระบบเติมให้ (ถ้ายังตรงกันอยู่ = พนักงานไม่ได้แตะ ล้าง/แทนที่ได้)
+  function custHasTypedData(){
+    const cur=custSnapshot();
+    if(cur.every(v=>!String(v).trim())) return false;
+    return !(_autoFilledSnap && cur.every((v,i)=>v===_autoFilledSnap[i]));
+  }
+  function resetCustSnapshot(){ _autoFilledSnap=null; }
+  // เบอร์นี้ไม่มีในระบบ/ต้องเลือกเอง: ล้างช่องเฉพาะเมื่อไม่มีข้อมูลที่พนักงานกรอกเอง (ว่างอยู่ หรือเป็นค่าที่ระบบเติมจากเบอร์เดิม)
+  function clearAutoFilledCustomer(){
+    if(!custHasTypedData()){ CUST_FIELD_IDS.forEach(id=>setCustFields(id,'')); }
+    origCustName=''; origCustLastName=''; origCustNick=''; _autoFilledSnap=null;
+  }
+  let _phoneSuggestTimer=null;
+  function hidePhoneSuggest(){ clearTimeout(_phoneSuggestTimer); if(phoneSuggest){ phoneSuggest.classList.remove('show','passthru'); phoneSuggest.innerHTML=''; } }
   // [ใหม่ตามที่ขอ mockup "ปรับ UI ฟอร์มกรอกบิล"] ปุ่ม "+ ต้องการสร้างรายชื่อใหม่ของเบอร์โทรศัพท์นี้" — โชว์เฉพาะตอนเบอร์นี้ค้นเจอพอดี 1 ชื่อ (auto-fill ไปแล้ว) เผื่อจริงๆ เป็นคนละคนที่ใช้เบอร์เดียวกัน
   const newContactSuggestBtn=document.getElementById('newContactSuggestBtn');
   function showNewContactSuggest(){ if(newContactSuggestBtn) newContactSuggestBtn.classList.add('show'); }
@@ -2786,7 +3021,7 @@
   // กดแล้วเคลียร์ชื่อ/นามสกุล/ชื่อเล่น/อีเมลที่ auto-fill ไว้ ให้พนักงานกรอกข้อมูลลูกค้าใหม่เอง (ตรรกะเดียวกับตัวเลือก "+ New Contact" ตอนเจอ 2+ ชื่อ — ดู data-new handler ด้านล่าง)
   if(newContactSuggestBtn) newContactSuggestBtn.addEventListener('click', ()=>{
     setCustFields('custName',''); setCustFields('custLastName',''); setCustFields('custNick',''); setCustFields('custEmail','');
-    origCustName=''; origCustLastName=''; origCustNick='';
+    origCustName=''; origCustLastName=''; origCustNick=''; resetCustSnapshot();
     hideNewContactSuggest();
     const nameInp=document.getElementById('custName'); if(nameInp) nameInp.focus();
   });
@@ -2816,12 +3051,13 @@
       if(seq!==_phoneSearchSeq) return; // มีการค้นใหม่แซงไปแล้ว ผลรอบนี้ตกไป
       const matches=(d&&d.success&&Array.isArray(d.matches))?d.matches:[];
       hideNewContactSuggest(); // ผลค้นใหม่มาแล้ว เคลียร์สถานะปุ่มจากรอบก่อนหน้าก่อนเสมอ (โชว์ใหม่เฉพาะกรณีเจอพอดี 1 ชื่อด้านล่าง)
+      const typedBefore=custHasTypedData();   // [2026-10-06] พนักงานกรอกชื่อ/นามสกุล/ชื่อเล่น/อีเมลไว้เองก่อนที่ผลค้นจะมาไหม — ถ้าใช่ ห้ามล้าง/ทับ
       if(matches.length>1){
         // เบอร์เดียวกันเจอมากกว่า 1 ชื่อ (เช่นสะสมแต้มรวมกันทั้งครอบครัว) — ให้พนักงานเลือกเองว่าจะใช้ชื่อไหน ไม่เดาให้อัตโนมัติ
-        setCustFields('custName',''); setCustFields('custLastName',''); setCustFields('custNick',''); setCustFields('custEmail','');
-        origCustName=''; origCustLastName=''; origCustNick='';
+        clearAutoFilledCustomer();   // ล้างเฉพาะค่าที่ระบบเติมให้เองจากเบอร์เดิม — สิ่งที่พนักงานพิมพ์ไว้ไม่แตะ
         if(phoneSuggest){
-          phoneSuggest.innerHTML = '<div class="hint">เบอร์นี้เจอ '+matches.length+' ชื่อ — เลือกคนที่ใช้บริการครั้งนี้</div>'
+          phoneSuggest.classList.remove('passthru');
+          phoneSuggest.innerHTML = '<div class="hint">เบอร์นี้เจอ '+matches.length+' ชื่อ — เลือกคนที่ใช้บริการครั้งนี้'+(typedBefore?' (หรือกรอกต่อเองได้เลย ข้อมูลที่กรอกไว้ไม่หาย)':'')+'</div>'
             + matches.map((c,i)=>{
                 const full=[c.firstName,c.lastName].filter(Boolean).join(' ')||'(ไม่มีชื่อ)';
                 return '<div class="s" data-i="'+i+'"><b>'+full+'</b>'+(c.nickname?('<small>ชื่อเล่น: '+c.nickname+'</small>'):'')+'</div>';
@@ -2834,7 +3070,7 @@
               if(el.dataset.new){
                 // เคลียร์ชื่อ/นามสกุล/ชื่อเล่น/อีเมล ให้พนักงานกรอกข้อมูลลูกค้าใหม่เองทั้งหมด (เบอร์โทรศัพท์ที่กรอกไว้แล้วยังคงอยู่)
                 setCustFields('custName',''); setCustFields('custLastName',''); setCustFields('custNick',''); setCustFields('custEmail','');
-                origCustName=''; origCustLastName=''; origCustNick='';
+                origCustName=''; origCustLastName=''; origCustNick=''; resetCustSnapshot();
                 hidePhoneSuggest();
                 const nameInp=document.getElementById('custName'); if(nameInp) nameInp.focus();
                 return;
@@ -2846,13 +3082,31 @@
         hideNameConfirm('name'); hideNameConfirm('nick');
       } else if(matches.length===1){
         hidePhoneSuggest();
-        applyFoundCustomer(matches[0]);
-        showNewContactSuggest(); // เจอพอดี 1 ชื่อ เติมให้อัตโนมัติแล้ว — เผื่อจริงๆ เป็นคนละคนที่ใช้เบอร์เดียวกัน (เบอร์บ้าน/เบอร์ครอบครัว)
+        const mf=matches[0];
+        if(!typedBefore){
+          applyFoundCustomer(mf);
+          showNewContactSuggest(); // เจอพอดี 1 ชื่อ เติมให้อัตโนมัติแล้ว — เผื่อจริงๆ เป็นคนละคนที่ใช้เบอร์เดียวกัน (เบอร์บ้าน/เบอร์ครอบครัว)
+        } else if(fullNameOf(document.getElementById('custName').value, document.getElementById('custLastName').value)===fullNameOf(mf.firstName, mf.lastName)){
+          // พิมพ์ชื่อ-นามสกุลไว้ตรงกับลูกค้าที่เจอพอดี — ไม่มีอะไรหาย: จำชื่อเดิมไว้เทียบตอนแก้ภายหลัง และเติมเฉพาะช่องที่ยังว่าง (ชื่อเล่น/อีเมล)
+          origCustName=mf.firstName||''; origCustLastName=mf.lastName||''; origCustNick=mf.nickname||''; hideNameConfirm('name'); hideNameConfirm('nick');
+          if(!document.getElementById('custNick').value.trim()) setCustFields('custNick',mf.nickname);
+          if(!document.getElementById('custEmail').value.trim()) setCustFields('custEmail',mf.email);
+          _autoFilledSnap=null; showNewContactSuggest();
+        } else if(phoneSuggest){
+          // กรอกชื่ออื่นไว้เองก่อนแล้ว — ไม่ทับ: โชว์ตัวเลือก "พบลูกค้าเดิม" ให้พนักงานกดใช้เองถ้าต้องการ
+          const full=[mf.firstName,mf.lastName].filter(Boolean).join(' ')||'(ไม่มีชื่อ)';
+          clearAutoFilledCustomer();
+          phoneSuggest.classList.remove('passthru');
+          phoneSuggest.innerHTML='<div class="hint">เบอร์นี้มีในระบบ — ข้อมูลที่กรอกไว้ยังอยู่ ไม่ถูกทับ</div><div class="s" data-use="1"><b>'+full.replace(/</g,'&lt;')+'</b><small>กดเพื่อใช้ข้อมูลลูกค้าเดิม (แทนที่ที่กรอกไว้)</small></div>';
+          phoneSuggest.classList.add('show');
+          phoneSuggest.querySelector('.s').addEventListener('click',()=>{ applyFoundCustomer(mf); hidePhoneSuggest(); showNewContactSuggest(); });
+          clearTimeout(_phoneSuggestTimer); _phoneSuggestTimer=setTimeout(hidePhoneSuggest, 6000);
+        }
       } else {
         // [ใหม่] เดิมเบอร์ที่ไม่เจอในระบบจะไม่ขึ้นอะไรเลย (เงียบๆ) พนักงานไม่รู้ว่าค้นจบแล้วหรือยังกำลังค้นอยู่ — เพิ่มข้อความ+ไอคอนคนกอดอกกากบาทน่ารักๆ บอกชัดเจนว่าค้นแล้วแต่ไม่เจอ ให้กรอกข้อมูลลูกค้าใหม่เองได้เลย
-        setCustFields('custName',''); setCustFields('custLastName',''); setCustFields('custNick',''); setCustFields('custEmail','');
-        origCustName=''; origCustLastName=''; origCustNick='';
+        clearAutoFilledCustomer();   // ไม่ล้างสิ่งที่พนักงานกรอกเอง (เดิมล้างเกลี้ยง)
         if(phoneSuggest){
+          phoneSuggest.classList.add('passthru');   // ไม่ต้องกด — แตะทะลุไปที่ช่องข้างใต้ได้
           phoneSuggest.innerHTML =
             '<div class="nomatch">'
             + '<img class="nomatch-icon" src="data:image/png;base64,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" alt="ไม่พบลูกค้า">'
@@ -2860,6 +3114,8 @@
             + '<div class="nomatch-sub">ยังไม่มีข้อมูลลูกค้า กรุณากรอกข้อมูลด้านล่างเพื่อเพิ่มลูกค้าใหม่</div>'
             + '</div>';
           phoneSuggest.classList.add('show');
+          clearTimeout(_phoneSuggestTimer);
+          if(typedBefore) _phoneSuggestTimer=setTimeout(hidePhoneSuggest, 2200);   // มีข้อมูลที่กรอกไว้ใต้กล่อง — หุบกล่องเองเร็วๆ ให้เห็นข้อมูลที่กรอกไว้ครบ
         }
         hideNameConfirm('name'); hideNameConfirm('nick');
       }
@@ -2932,7 +3188,7 @@
   // [แก้บั๊ก] เพิ่ม FW-ZD2202-H1-BK — เจอจริงบิล RD26091001: รหัสเต็ม "FW-ZD2202-H1-BK-46" (18 ตัวอักษร) ไม่ถูกตัดไซซ์ออก เพราะยังไม่เคยอยู่ในรายการนี้
   // ส่งเต็มไปตรงๆ ยาวเกินขีดจำกัดฟิลด์ "รหัสสินค้า" ฝั่ง Salesforce (15 ตัวอักษร) สร้าง Product ไม่สำเร็จ — รหัสฐาน "FW-ZD2202-H1-BK" ยาวพอดี 15 ตัวอักษร
   const HARDCODED_SHOE_BASE_SKUS = new Set([
-    'C292-Y06-CF','FS6618-2-BLK','FS6618-2-BRO','FW-ZD2202-H1-BK',
+    'C292-Y06-CF','FS6618-2-BLK','FS6618-2-BRO','FW-ZD2202-H1-BK','FW-ZD2202-H1-BR','FW-ZD2202-H1-CF',
   ].map(s=>s.toUpperCase()));
   // [แก้บั๊ก] เจอจริงบิล RD26091308: รหัส "SH200-Beige-WHT-54" (19 ตัวอักษร) เป็นเสื้อเชิ้ต ไม่ใช่ Accessory/รองเท้า — เอาเข้า HARDCODED_SHOE_BASE_SKUS ไม่ได้ เพราะรายการนั้นบังคับ type เป็น "Accessory อื่นๆ" เสมอ จะทำให้ประเภทที่พนักงานเลือกไว้ถูกต้อง ("เสื้อเชิ้ต") ถูกเขียนทับผิดเป็น Accessory ไปด้วย
   // รหัสรูปแบบนี้ (ตัวรุ่นสินค้าฝัง "SH" ไว้ข้างในเช่น "SH200" ไม่ใช่ "SH" โดดๆ) จับประเภทอัตโนมัติไม่ได้อยู่แล้วตามปกติ (ไม่ตรง TYPE_MAP เป๊ะ) พนักงานเลือกประเภทเองอยู่แล้วเป็นปกติ — set นี้เลยแค่ "ตัดไซซ์ท้ายรหัสออก" อย่างเดียว ไม่ไปยุ่งกับ type เลย (คืน type:null ปล่อยให้พนักงานเลือกเองเหมือนเดิม)
@@ -3167,6 +3423,7 @@
     wireLegStyleChips(block);
     wireStitchCheckbox(block);
     wireUsedCheckbox(block);
+    wireTeamCheckbox(block);
   }
   // [ใหม่ 2026-09-29 ตามที่ขอ] ความยาวขา (กางเกง) น้อยกว่า 32 นิ้ว → ถามใต้ช่องทันทีที่กรอกเสร็จ (mockup แบบ B):
   // "แน่ใจหรือเปล่าที่จะบันทึกข้อมูลความยาวขาเท่ากับ X นิ้ว" [แน่ใจ] [ไม่แน่ใจ] — ไม่มีข้อความบอกเกณฑ์ 32 ตามที่ขอ
@@ -3182,6 +3439,7 @@
   // คืนค่าความยาวขาที่ต้องถาม (0 < ค่า < 32 และกำลังเลือก "แก้ไข") ไม่งั้นคืน null
   function legLowValue(m){
     if(!isLegMitem(m) || !legEditing(m)) return null;
+    const ml=m.closest('.measure-list'); if(ml && ml.classList.contains('hidden')) return null;   // [2026-10-06] ส่วนวัดตัวถูกซ่อน (ไม่แก้ไขขนาดสินค้า) = ค่านี้ไม่ถูกส่ง ไม่ต้องถามยืนยัน
     const inp=legInputOf(m); if(!inp) return null;
     const v=Math.abs(getMitemValue(inp));
     return (v>0 && v<LEG_MIN) ? v : null;
@@ -3311,11 +3569,26 @@
       resizeNoteInput(noteInput);
     });
   }
+  // [ใหม่ 2026-10-06 ตามที่ขอ] ติ๊ก "งานทีม" เติม/ลบคำนี้ในหมายเหตุอัตโนมัติ — โครงเดียวกับ wireStitchCheckbox/wireUsedCheckbox ทุกอย่าง
+  function wireTeamCheckbox(block){
+    const cb=block.querySelector('.team-check');
+    if(!cb || cb.dataset.wired) return;
+    cb.dataset.wired='1';
+    cb.addEventListener('change', ()=>{
+      const noteInput=block.querySelector('.note-input');
+      if(!noteInput) return;
+      let words=noteInput.value.split(/\s+/).filter(Boolean).filter(w=>w!=='งานทีม');
+      if(cb.checked) words.push('งานทีม');
+      noteInput.value=words.join(' ');
+      resizeNoteInput(noteInput);
+    });
+  }
   // [แก้บั๊ก 2026-09-24] ตอนโหลดร่าง/โหลดบิลเดิมมาแก้ ช่องติ๊ก (เย็บย้ำกระดุม/ลูกค้าใช้งานก่อนปรับแก้) ต้องตรงกับหมายเหตุที่โหลดเข้ามา — เดิมไม่แตะเลย ติ๊กที่ค้างจากก่อนหน้าเลยโชว์ติ๊กอยู่ทั้งที่หมายเหตุไม่มีคำนั้น (หรือกลับกัน)
   function syncNoteCheckboxes(block){
     const words=(block.querySelector('.note-input')?.value||'').split(/\s+/).filter(Boolean);
     const st=block.querySelector('.stitch-check'); if(st) st.checked=words.includes('เย็บย้ำกระดุม');
     const us=block.querySelector('.used-check'); if(us) us.checked=words.includes('ลูกค้าใช้งานก่อนปรับแก้');
+    const tm=block.querySelector('.team-check'); if(tm) tm.checked=words.includes('งานทีม');
   }
   function renderMeasureSection(block, typeValue){
     block.dataset.measureRendered=typeValue; // จำประเภทที่ build ช่องวัดตัวไว้ล่าสุด — ให้ applySku รู้ว่าสแกน/พิมพ์รหัสประเภทเดิมซ้ำแล้วไม่ต้อง build ใหม่ทับค่าที่กรอกไว้
@@ -3409,6 +3682,52 @@
     return {type,size,baseCode,typeCode:parts[typeIdx]};
   }
 
+  // [แก้ 2026-10-06 ตามที่ขอ] หมวด "Accessory อื่นๆ": รหัสสินค้า (SKU) ห้ามมีไซซ์ต่อท้าย — ไซซ์ใส่ช่อง Size อย่างเดียว
+  // เช่น "FW-ZD2202-H1-CF-39" → SKU "FW-ZD2202-H1-CF" + Size "39" (เจอจริงบิล R326100307 3 ต.ค.: ส่งรหัสเต็ม 18 ตัวไปตรงๆ ช่อง "รหัสสินค้า" ฝั่ง
+  // Salesforce รับได้ไม่เกิน 15 ตัว → สร้างสินค้าไม่สำเร็จ บิลค้าง "[reconcile] … Product 0 ตัว") — เดิมตัดไซซ์ได้เฉพาะรหัสที่ hardcode ไว้ทีละรหัส
+  // ตัดเฉพาะเมื่อไม่ขัดกับที่พนักงานกรอก: Size ตรงกับตัวเลขท้ายรหัส หรือ Size ยังว่างและรหัสที่ตัดไซซ์แล้วมีอยู่ในรายการสินค้า (รหัสฐานจริง) — ไม่งั้นไม่เดา
+  // [ใหม่ 2026-10-06 ตามที่ขอ] ช่องรหัสสินค้า: ถ้าแป้นพิมพ์ค้างโหมดไทย (หรือเครื่องสแกนยิงตอนแป้นไทย) แปลงตัวอักษรไทยเป็นปุ่มอังกฤษให้เอง — ตารางเดียวกับช่อง P# ของ Phase2
+  // (เกษมณี: แถวไม่กด Shift 4 แถว + กด Shift 4 แถว) แปลงเมื่อมีอักษรไทยอย่างน้อย 1 ตัว และแปลง "ทุกตัว" (ในโหมดไทย "-" มาจากปุ่ม 3, "/" จากปุ่ม 2 ฯลฯ) · รหัสสินค้าเป็นอังกฤษ/ตัวเลขล้วน ไม่กระทบการพิมพ์ปกติ
+  const KEDMANEE_PAIRS=[
+    ['`1234567890-=','_ๅ/-ภถุึคตจขช'], ['qwertyuiop[]\\','ๆไำพะัีรนยบลฃ'], ["asdfghjkl;'",'ฟหกดเ้่าสวง'], ['zxcvbnm,./','ผปแอิืทมใฝ'],
+    ['~!@#$%^&*()_+','%+๑๒๓๔ู฿๕๖๗๘๙'], ['QWERTYUIOP{}|','๐"ฎฑธํ๊ณฯญฐ,ฅ'], ['ASDFGHJKL:"','ฤฆฏโฌ็๋ษศซ.'], ['ZXCVBNM<>?','()ฉฮฺ์?ฒฬฦ']];
+  const TH2EN_KEYS={}; KEDMANEE_PAIRS.forEach(([en,th])=>{ const t=[...th]; [...en].forEach((k,i)=>{ TH2EN_KEYS[t[i]]=k; }); });
+  function thaiKeysToEn(s){ s=String(s==null?'':s); return /[\u0E00-\u0E7F]/.test(s) ? [...s].map(c=>TH2EN_KEYS[c]!==undefined?TH2EN_KEYS[c]:c).join('') : s; }
+  // แปลงทีละตัวตอนพิมพ์: ในโหมดไทยปุ่ม "3" ออกมาเป็น "-" (ASCII) ปะปนกับตัวไทย — ถ้าแปลงทีละตัวแล้วทิ้งต้นฉบับ ขีดที่มาหลังตัวที่แปลงแล้วจะแยกไม่ออกว่าเป็นปุ่ม 3 หรือขีดจริง
+  // จึงจำ "ข้อความดิบ" (el._thRaw) ที่พิมพ์เข้ามาไว้ แล้วแปลงจากต้นฉบับทุกครั้ง (การแปลงเป็น 1 ตัว → 1 ตัว ตำแหน่งตรงกันเสมอ) · เติมท้าย = ต่อต้นฉบับ · ลบท้าย = ตัดต้นฉบับ · แก้กลางข้อความ/วางทับ = ใช้ค่าที่เห็นเป็นต้นฉบับ
+  function fixThaiKeysInInput(el){
+    const v=el.value, prevShown=el._thShown, prevRaw=el._thRaw;
+    let raw=v;
+    if(prevShown!=null && prevRaw!=null && v){
+      if(v.length>prevShown.length && v.startsWith(prevShown)) raw=prevRaw+v.slice(prevShown.length);
+      else if(v.length<prevShown.length && prevShown.startsWith(v)) raw=prevRaw.slice(0,v.length);
+    }
+    const out=thaiKeysToEn(raw), rawHasThai=/[\u0E00-\u0E7F]/.test(raw);
+    if(out!==v){
+      let pos=null; try{ pos=el.selectionStart; }catch(e){}
+      el.value=out;
+      try{ if(pos!=null) el.setSelectionRange(pos,pos); }catch(e){}
+    }
+    el._thRaw=rawHasThai?raw:null; el._thShown=rawHasThai?out:null;
+  }
+  function resetThaiKeysState(el){ el._thRaw=el._thShown=null; }
+  const ACC_TYPE_NAME='Accessory อื่นๆ', SF_SKU_MAX=15;
+  let _skuSetSrc=null, _skuSet=null;
+  function skuInMaster(c){
+    if(_skuSetSrc!==SKU_LIST){ _skuSetSrc=SKU_LIST; _skuSet=new Set(SKU_LIST.map(x=>String(x).trim().toUpperCase())); }
+    return _skuSet.has(String(c).trim().toUpperCase());
+  }
+  function normalizeAccessorySku(block){
+    const chip=block&&block.querySelector('.type-select'), sku=block&&block.querySelector('.sku-input'), sizeEl=block&&block.querySelector('.size-input');
+    if(!chip||!sku||chip.value!==ACC_TYPE_NAME) return false;
+    const m=/^(.+)-(\d{2,3}(?:\.\d)?)$/.exec(sku.value.trim());
+    if(!m) return false;
+    const base=m[1], tail=m[2], cur=sizeEl?sizeEl.value.trim():'';
+    if(cur!==''){ if(!(cur===tail || (Number(cur)===Number(tail) && !isNaN(Number(cur))))) return false; }
+    else if(!skuInMaster(base)) return false;
+    sku.value=base; if(sizeEl && cur==='') sizeEl.value=tail;
+    return true;
+  }
   // [ใหม่ตามที่ขอ] ช่องหมายเหตุขยายสูงขึ้นเองตามความยาวข้อความที่พิมพ์ (ไม่ต้อง scroll ข้างในช่องเล็กๆ อีกต่อไป)
   function resizeNoteInput(ta){
     if(!ta) return;
@@ -3424,10 +3743,11 @@
   function wireProduct(block){
     wireNoteInput(block);
     // [แก้บั๊ก 2026-09-24] ช่องติ๊ก (เย็บย้ำกระดุม/ลูกค้าใช้งานก่อนปรับแก้) เดิมถูกเชื่อมแค่ผ่าน renderMeasureSection→wireMeasureItems ซึ่งก้อนแรกของหน้า (ประเภทเริ่มต้น = เสื้อสูท) ไม่เคยผ่านเลยจนกว่าจะสแกน/เลือกประเภทก่อน — ติ๊กบนก้อนแรกที่ยังไม่ได้แตะอะไรเลยไม่เติมหมายเหตุ (ประเภทอื่นใช้ได้เพราะต้องเลือกประเภท = ผ่าน render แล้ว) เชื่อมตั้งแต่ตอนผูกก้อนเลย (guard dataset.wired กันซ้ำอยู่แล้ว)
-    wireStitchCheckbox(block); wireUsedCheckbox(block);
+    wireStitchCheckbox(block); wireUsedCheckbox(block); wireTeamCheckbox(block);
     const sku=block.querySelector('.sku-input'), sug=block.querySelector('.sku-suggest');
     const sizeInput=block.querySelector('.size-input'), chip=block.querySelector('.type-select');
     function applySku(code){
+      code=thaiKeysToEn(code);
       const {type,size,baseCode,typeCode}=parseSkuMeta(code);
       if(sku) sku.value=baseCode;
       if(size && sizeInput) sizeInput.value=size;
@@ -3478,27 +3798,33 @@
       sug.classList.add('show');
     }
     if(sku){
-      sku.addEventListener('input',()=>showSug(sku.value));
+      sku.addEventListener('input',e=>{ if(!e.isComposing) fixThaiKeysInInput(sku); showSug(sku.value); });
+      sku.addEventListener('focus',()=>resetThaiKeysState(sku));
+      sku.addEventListener('compositionend',()=>{ fixThaiKeysInInput(sku); showSug(sku.value); });
       sku.addEventListener('focus',()=>showSug(sku.value));
-      sug.addEventListener('click',e=>{ const el=e.target.closest('.s'); if(!el)return; applySku(el.dataset.code); sug.classList.remove('show'); });
+      sug.addEventListener('click',e=>{ const el=e.target.closest('.s'); if(!el)return; applySku(el.dataset.code); normalizeAccessorySku(block); sug.classList.remove('show'); });
       // รองรับเครื่องสแกนบาร์โค้ดจริง (USB/บลูทูธ) — เครื่องพวกนี้ทำงานเหมือนพิมพ์คีย์บอร์ดเร็วๆ แล้วกด Enter ปิดท้ายเสมอ
       // แค่คลิกโฟกัสช่องนี้ไว้ก่อนแล้วยิงสแกน ไม่ต้องเปิดกล้องผ่านปุ่มสแกนเลย — ดักคีย์ Enter ตรงนี้เพื่อสั่ง parse รหัส/เติมประเภท-ไซซ์ให้ทันที
       sku.addEventListener('keydown', e=>{
         if(e.key!=='Enter') return;
         e.preventDefault();
+        fixThaiKeysInInput(sku); resetThaiKeysState(sku);
         const code=sku.value.trim();
-        if(code) applySku(code);
+        if(code){ applySku(code); normalizeAccessorySku(block); }
         sug.classList.remove('show');
       });
       sku.addEventListener('change',()=>{
+        fixThaiKeysInInput(sku); resetThaiKeysState(sku);
         const code=sku.value.trim(); if(!code) return;
         const m=parseSkuMeta(code);
         if(m.size && m.baseCode && m.baseCode!==code){ sku.value=m.baseCode; if(sizeInput) sizeInput.value=m.size; }
+        normalizeAccessorySku(block);
       });
     }
     const scanBtn=block.querySelector('.scanbtn');
-    if(scanBtn) scanBtn.addEventListener('click',()=>openScanner(code=>applySku(code)));
-    if(chip) chip.addEventListener('change', ()=> renderMeasureSection(block, chip.value));
+    if(scanBtn) scanBtn.addEventListener('click',()=>openScanner(code=>{ applySku(code); normalizeAccessorySku(block); }));
+    if(chip) chip.addEventListener('change', ()=>{ renderMeasureSection(block, chip.value); normalizeAccessorySku(block); });
+    if(sizeInput) sizeInput.addEventListener('change', ()=>normalizeAccessorySku(block));
     // dropdown ประเภทสินค้าแบบกำหนดเอง (แทน native select เดิม) — เก็บค่าจริงไว้ใน .type-select (hidden) เหมือนเดิมทุกอย่าง แค่เปลี่ยน UI ที่มองเห็น
     const typePicker=block.querySelector('.type-picker'), typeBtn=block.querySelector('.type-picker-btn'), typeMenu=block.querySelector('.type-picker-menu');
     if(typePicker && typeBtn && chip){
@@ -3675,7 +4001,7 @@
     block.querySelector('.branch-prod').value='OFFICE';
     const noteInp=block.querySelector('.note-input'); if(noteInp){ noteInp.value=''; resizeNoteInput(noteInp); }
     // ล้างหมายเหตุแล้วต้องเอาติ๊กออกด้วย (เย็บย้ำกระดุม/ลูกค้าใช้งานก่อนปรับแก้) ไม่งั้นก้อนใหม่ที่โคลนมาจากก้อนที่ติ๊กไว้จะโชว์ติ๊กค้างทั้งที่หมายเหตุว่าง
-    block.querySelectorAll('.stitch-check,.used-check').forEach(cb=>{ cb.checked=false; });
+    block.querySelectorAll('.stitch-check,.used-check,.team-check').forEach(cb=>{ cb.checked=false; });
     const contactInp=block.querySelector('.contact-input'); if(contactInp) contactInp.value='';
     const sugEl=block.querySelector('.sku-suggest'); if(sugEl){ sugEl.classList.remove('show'); sugEl.innerHTML=''; }
     block._attachedImages=[];
@@ -3691,7 +4017,7 @@
     if(block._attachedImages && block._attachedImages.length) return true;
     if(toggleOnIndex(block,'.toptoggle')===0) return true;
     if([...block.querySelectorAll('.measure-list input.numonly')].some(i=>i.value.trim()!=='')) return true;
-    if([...block.querySelectorAll('.stitch-check,.used-check')].some(cb=>cb.checked)) return true;
+    if([...block.querySelectorAll('.stitch-check,.used-check,.team-check')].some(cb=>cb.checked)) return true;
     return false;
   }
   function addEmptyProductBlock(){
@@ -3700,7 +4026,7 @@
     // firstProductBlock มีปุ่ม "เพิ่มสินค้า" อยู่ใน colL ด้วย — cloneNode เลยติดสำเนาปุ่มมาด้วยเสมอ ต้องทิ้งสำเนานี้ทิ้ง (ตัวจริงจะถูกย้ายมาแทนที่ด้วย placeAddProductBtn ด้านล่าง)
     const dupBtn=clone.querySelector('#addProductBtn'); if(dupBtn) dupBtn.remove();
     // [แก้บั๊ก 2026-09-24] cloneNode คัดลอก data-wired="1" ของช่องติ๊ก (เย็บย้ำกระดุม/ลูกค้าใช้งานก่อนปรับแก้) ไปด้วย แต่ไม่คัดลอกตัวฟัง event — ก้อนที่ 2 เป็นต้นไปเลยกดติ๊กแล้วไม่มีอะไรเกิดขึ้นเลย (guard dataset.wired คิดว่าเชื่อมแล้ว) ต้องล้างธงนี้ในสำเนา ให้ wireMeasureItems เชื่อมใหม่
-    clone.querySelectorAll('.stitch-check,.used-check').forEach(cb=>{ delete cb.dataset.wired; });
+    clone.querySelectorAll('.stitch-check,.used-check,.team-check').forEach(cb=>{ delete cb.dataset.wired; });
     resetProductBlockToEmpty(clone);
     wrap.appendChild(clone);
     wireProduct(clone);
@@ -4026,6 +4352,9 @@
   // อ่านค่าจุดวัดตัวที่ "แก้ไข" อยู่ของก้อนสินค้าหนึ่งก้อน คืนเป็น {label:value}
   function readMeasureValues(block){
     const out={};
+    // [แก้บั๊ก 2026-10-06 ตามที่ขอ] เลือก "ไม่แก้ไขขนาดสินค้า" (ส่วนวัดตัวถูกซ่อน) = ไม่อ่าน/ไม่ส่งค่าวัดตัวที่ค้างอยู่ในช่องเลย — เดิมพนักงานกรอกค่าไว้แล้วสลับเป็น "ไม่แก้ไข" ค่านั้นยังถูกส่งไปบันทึก/พิมพ์บนใบสรุป (ค่าในช่องยังอยู่ สลับกลับเป็น "แก้ไข" แล้วเห็นเหมือนเดิม)
+    const hiddenList=block.querySelector('.measure-list');
+    if(hiddenList && hiddenList.classList.contains('hidden')) return out;
     block.querySelectorAll('.mitem:not(.group-toggle-row)').forEach(m=>{
       const label=m.querySelector('.k')?.textContent?.trim();
       const editing=m.querySelector('.toggle button')?.classList.contains('on');
@@ -4047,6 +4376,7 @@
   }
   // [ใหม่ตามที่ขอ] blockIndices (0-based) = เก็บเฉพาะก้อนสินค้าที่ระบุ แล้วเลขใหม่เป็น รายการ1..M ตามลำดับที่ส่งมา — ใช้ตอน "แยกบิล" (1 บิล = สินค้าบางชิ้น) / ไม่ส่ง = เก็บทุกก้อนตามปกติ
   function collectSubmitPayload(blockIndices){
+    document.querySelectorAll('#productsWrap .product-block').forEach(normalizeAccessorySku);   // [แก้ 2026-10-06] Accessory อื่นๆ: SKU ไม่มีไซซ์ต่อท้าย
     const val=id=>document.getElementById(id)?.value?.trim()||'';
     const data={};
     data['เบอร์โทรศัพท์']=val('custPhone');
@@ -4187,6 +4517,8 @@
       if(!type) return;
       const code=data['รายการ'+n+'_รหัส'];
       if(!code) missing.push({page:2,label:'สินค้ารายการที่ '+n+' — รหัสสินค้า'});
+      // [ใหม่ 2026-10-06] ช่อง "รหัสสินค้า" ฝั่ง Salesforce รับได้ไม่เกิน 15 ตัว — ยาวกว่านี้สร้างสินค้าไม่สำเร็จ (บิล R326100307) → กันตั้งแต่ตอนบันทึก
+      else if(code.length>SF_SKU_MAX) missing.push({page:2,label:'สินค้ารายการที่ '+n+' — รหัสสินค้า "'+code+'" ยาว '+code.length+' ตัว (Salesforce รับได้ไม่เกิน '+SF_SKU_MAX+' ตัว) — ไซซ์ที่ต่อท้ายรหัสให้ตัดออกแล้วใส่ช่อง Size แทน'});
       const parsed=code?parseSkuMeta(code):null;
       // [แก้ตามที่ขอ] รหัส Accessory ขึ้นต้น NT/BT/CL ไม่มีไซซ์จริงเลย (แถว Size ถูกซ่อนไปแล้วในหน้าสินค้า) เลยไม่ต้องบังคับกรอก — Accessory รหัสอื่น (เช่น รองเท้า) ยังต้องกรอกไซซ์เหมือนเดิม
       const sizeNotNeeded = parsed && NO_SIZE_TYPE_CODES.has(parsed.typeCode);
@@ -4445,7 +4777,8 @@
     }
     // [แก้ตามที่ขอ] ไม่มีข้อมูลเวลานัดรับ (ว่าง หรือ "00:00" ที่แปลว่า "ไม่ระบุ") ไม่ต้องมีบรรทัดนี้เลย — เดิมโชว์ "เวลานัดรับ -" เสมอแม้ไม่มีข้อมูลจริง
     if(order.pickupTime && order.pickupTime!=='00:00') lines.push({kind:'centerSmall', text:'เวลานัดรับ '+order.pickupTime});
-    // [แก้ 2026-09-24 ตามที่ขอ] เอา QR code ออกจากใบสรุปทั้งหมดแล้ว (เดิมต่อท้ายล่างสุดของใบเมื่อมี item.qrUrl) — โค้ดวาด QR (kind:'qr' + ไลบรารี qrcode-generator ด้านบน) ยังค้างอยู่เฉยๆ ไม่มีใครส่งบรรทัดนี้เข้ามาแล้ว ถ้าจะเอากลับมาใช้แค่ใส่ qrUrl ใน regenerateReceiptsFromLatest + บรรทัด lines.push({kind:'qr', text:item.qrUrl}) ตรงนี้
+    // [ใหม่ 2026-10-06 ตามที่ขอ] QR code กลับมาต่อท้ายล่างสุดของใบ (หลังรวมหมายเหตุ) เมื่อมี item.qrUrl — ส่งมาเฉพาะใบที่สร้างจากข้อมูล Salesforce (regenerateReceiptsFromLatest) · ใบสรุปตอนบันทึกครั้งแรกไม่มี qrUrl เลยไม่มี QR (ยังไม่มี Salesforce Id)
+    if(item && item.qrUrl) lines.push({kind:'qr', text:item.qrUrl});
     // [ใหม่ตามที่ขอ] เว้นพื้นที่ว่าง ~5 ซม. ท้ายสุดของใบ (หลังทุกอย่างรวมหมายเหตุ) — เฉพาะใบสรุปตอนบันทึกจาก index.html เท่านั้น
     // (opts.trailingBlank5cm ส่งมาจาก buildAllReceipts จุดเดียว) ใบสรุปตอน reprint จากประวัติ (regenerateReceiptsFromLatest) ไม่ส่ง opts นี้มา เลยไม่มีพื้นที่ว่างนี้ ตามที่ขอ
     if(opts && opts.trailingBlank5cm) lines.push({kind:'blank'});
@@ -5196,6 +5529,7 @@
   // บันทึกแบบแยกบิล — ยิง /create-order ทีละบิลเรียงกัน (เลขบิลวิ่งต่อกันเอง) แล้วรวมรูปใบสรุปทุกบิลมาโชว์+แนบ
   async function doSplitSave(groups){
     submitBtn.disabled=true; submitBtn.textContent='กำลังบันทึก…';
+    const _draftPhone=(document.getElementById('custPhone')?.value||'').trim(), _draftBranch=draftBranchNow();   // [2026-10-06] จำไว้ก่อนล้างฟอร์ม ใช้ลบร่างของลูกค้าคนนี้เมื่อบันทึกครบทุกบิล
     const allImages=[]; const billNos=[]; const failures=[];
     // [ใหม่ตามที่ขอ] รหัสกลุ่มบิล — ผูกทุกบิลย่อยที่มาจากการแยกบิลครั้งนี้ไว้ด้วยกัน (คนละเลขที่บิล แต่รหัสกลุ่มเดียวกัน)
     // Worker ใช้รหัสนี้ตอน /confirm-order เพื่อเช็คว่ามีบิลพี่น้องยืนยันเข้า Salesforce ไปแล้วหรือยัง ถ้ามีให้ใช้ Order เดิมร่วมกัน ไม่สร้าง Order ใหม่ซ้ำ
@@ -5236,7 +5570,7 @@
           if(_histOrders) _histOrders=null;
           _editingRecordId=null;
           // ล้างฟอร์มให้เฉพาะตอนสำเร็จครบทุกบิล กันข้อมูลหายถ้ายังมีบิลค้าง — ล้างทันทีที่ส่งรูปเสร็จ (ไม่รอกดปิดป๊อปอัป)
-          if(okAll) clearFormAfterSave(msg, allImages);
+          if(okAll){ await draftsAfterBillSaved(_draftPhone, _draftBranch); clearFormAfterSave(msg, allImages); }
         }
       }finally{ setResultBusy(false); }
     }catch(err){
@@ -5284,6 +5618,7 @@
       });
       const json=await res.json();
       if(json && json.success){
+        const draftJob=!isEditing ? draftsAfterBillSaved(data['เบอร์โทรศัพท์'], data['สาขา']) : null;   // [2026-10-06] ลบร่างของลูกค้าคนนี้ (เครื่องนี้ + เซิร์ฟเวอร์) เมื่อบันทึกบิลสำเร็จ — รอให้จบก่อนล้างฟอร์ม (ล้างแล้วรีโหลดหน้า)
         // เลขที่บิลจริงออกฝั่งเซิร์ฟเวอร์ตอนบันทึก (กันชนกัน) — ค่าที่โชว์บนหน้าจอก่อนหน้านี้เป็นแค่ placeholder เท่านั้น ต้องใช้ค่าจริงจาก response แทน
         if(json.billNo) data['เลขที่บิล']=json.billNo;
         let okMsg=(isEditing?'บันทึกการแก้ไขสำเร็จ':'บันทึกข้อมูลสำเร็จ — ส่งเข้าระบบเรียบร้อยแล้ว')+(data['เลขที่บิล']?('\nเลขที่บิล: '+data['เลขที่บิล']):'');
@@ -5303,6 +5638,7 @@
           submitBtn.textContent='บันทึกข้อมูล';
           const editorBannerDone=document.getElementById('editorBanner'); if(editorBannerDone) editorBannerDone.classList.add('hidden');
           if(_histOrders) _histOrders=null; // เคลียร์แคชประวัติ กันโชว์ข้อมูลเก่าค้างถ้าเปิดประวัติอีกครั้ง
+          if(draftJob) await draftJob;
           clearFormAfterSave(okMsg, receiptImages); // [แก้บั๊ก 2026-09-25] วาด+ส่งรูปเสร็จแล้ว ล้างข้อมูลบิลนี้ออกจากฟอร์ม+autosave ทันที (เดิมรอพนักงานกดปิดป๊อปอัป)
         }finally{ setResultBusy(false); }
       } else {
