@@ -1423,7 +1423,7 @@
         <button class="hist-tab" data-tab="live">ประวัติ</button>
         <button class="hist-tab" data-tab="draft">ร่างที่บันทึกไว้ <span id="draftCount"></span></button>
       </div>
-      <div class="frow hist-branch-select-row" id="histLiveBranchRow" style="border:none"><span class="k">สาขาที่นัดรับ</span>
+      <div class="frow hist-branch-select-row" id="histLiveBranchRow" style="border:none"><span class="k">สาขาที่ซื้อ</span>
         <select class="hdrsel" id="histLiveBranch" style="margin-left:auto">
           <option>R3</option><option>T21</option><option>SQ1</option><option>PM</option><option>SC</option><option>CM</option><option>FP</option><option>KR</option><option>SL</option><option>NW</option><option>CC</option><option>BP</option><option>RCD</option><option>KK</option><option>PK</option><option>MG</option><option>CTW</option><option>WG</option>
         </select>
@@ -1878,7 +1878,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-06-13-auth-2';
+  const APP_VERSION = '2026-10-08-2-auth-1';
 
   let currentView=1;
   function updateIdx(){
@@ -2537,8 +2537,8 @@
     histList.innerHTML = filtered.map(o=>buildHistRowHtml(o, true)).join('');
   }
 
-  // แท็บ "ประวัติ" — กรองด้วย "สาขาที่นัดรับ" (ไม่ใช่สาขาที่ซื้อ) เพราะบิลที่ซื้อสาขาหนึ่งแต่นัดรับอีกสาขา ต้องโผล่ในประวัติของสาขาที่รับสินค้า
-  // วิธี: ดึงจาก /list-orders ทุกสาขา (branch ว่าง) แล้วกรองฝั่งหน้าเว็บด้วย o.pickupBranch เทียบกับ dropdown "สาขาที่นัดรับ" ของแท็บนี้
+  // แท็บ "ประวัติ" — [แก้ 2026-10-07 ตามที่ขอ] กรองด้วย "สาขาที่ซื้อ" (สาขาที่บันทึกบิล) ให้ขึ้นเฉพาะสาขาที่เลือก — เดิมกรองด้วยสาขาที่นัดรับ (บิลที่ซื้อสาขาหนึ่งแต่นัดรับอีกสาขาจึงโผล่ในประวัติของสาขาที่รับสินค้า) ผู้ใช้เห็นแล้วงงว่าทำไมมีบิลของสาขาอื่น
+  // วิธี: ดึงจาก /list-orders ทุกสาขา (branch ว่าง) แล้วกรองฝั่งหน้าเว็บด้วย o.branch (สาขาที่ซื้อ) เทียบกับ dropdown "สาขาที่ซื้อ" ของแท็บนี้
   // [แก้ตามที่ขอ] dropdown เลือกสาขาได้ (ค่าเริ่มต้น = สาขาบนแถบหัว เหมือนเดิม / เปลี่ยนดูสาขาอื่นได้ ไม่มีตัวเลือก "ทุกสาขา") — เดิมเคยล็อกตามแถบหัวเปลี่ยนไม่ได้เลย
   async function loadLiveOrders(branch){
     if(_histLoading) return;
@@ -2552,8 +2552,8 @@
       if(d && d.success){
         const all=d.orders||[];
         // กรองเฉพาะบิลที่ "สาขาที่นัดรับ" ตรงกับสาขาบนแถบหัว (branch) เท่านั้น
-        _histOrders = branch ? all.filter(o=>o.pickupBranch===branch) : all;
-        if(!_histOrders.length){ histList.innerHTML='<div class="hist-state">ยังไม่มีประวัติใบสั่งแก้สำเร็จรูปที่นัดรับสาขานี้</div>'; return; }
+        _histOrders = branch ? all.filter(o=>o.branch===branch) : all;   // [แก้ 2026-10-07 ตามที่ขอ] เดิมกรองด้วยสาขาที่นัดรับ ทำให้บิลของสาขาอื่น (ซื้อที่ CTW แต่มารับที่ WG) โผล่ในประวัติ WG — ตอนนี้โชว์เฉพาะบิลที่สาขานี้บันทึกเอง · บิลที่ส่งมารับที่สาขานี้ดูที่แท็บ "รายการที่นัดรับ" (เลือก สาขาที่ซื้อ + สาขาที่นัดรับ)
+        if(!_histOrders.length){ histList.innerHTML='<div class="hist-state">ยังไม่มีประวัติใบสั่งแก้สำเร็จรูปที่สาขานี้บันทึกไว้</div>'; return; }
         renderHistList(_histOrders, histSearchInput.value);
       } else {
         histList.innerHTML='<div class="hist-state">โหลดประวัติไม่สำเร็จ: '+escapeHtml(d&&d.error||'ไม่ทราบสาเหตุ')+'</div>';
@@ -3097,7 +3097,7 @@
     }).join('');
   }
   let _histTab='live';
-  // [ใหม่ 2026-10-06 ตามที่ขอ] ป้ายสาขาหัวป๊อปอัป = สาขาหลักของแท็บที่เปิดอยู่ และกดเปลี่ยนได้: "ประวัติ" → สาขาที่นัดรับ · "รายการที่นัดรับ" → สาขาที่ซื้อ · "ร่างที่บันทึกไว้" → สาขาจากแถบบน (ป้ายอย่างเดียว)
+  // [ใหม่ 2026-10-06 ตามที่ขอ] ป้ายสาขาหัวป๊อปอัป = สาขาหลักของแท็บที่เปิดอยู่ และกดเปลี่ยนได้: "ประวัติ" → สาขาที่ซื้อ · "รายการที่นัดรับ" → สาขาที่ซื้อ · "ร่างที่บันทึกไว้" → สาขาจากแถบบน (ป้ายอย่างเดียว)
   function refreshHistBranchTag(){
     const liveSel=document.getElementById('histLiveBranch'), pickSel=document.getElementById('histPickupBranch');
     const top=document.getElementById('branchTop')?.value||'';
