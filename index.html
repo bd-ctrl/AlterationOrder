@@ -1009,9 +1009,616 @@
      [แก้บั๊กซ้ำ] เจอจริงอีกรอบ — ค่า "6cm" ตัวแรกใน size ที่ตั้งไว้ก่อนหน้า คือความ "กว้าง" ของหน้ากระดาษ (คนละค่ากับ margin 6cm ที่ตั้งใจจะให้เป็นระยะขอบบน) ไปตั้งกว้างแค่ 6cm (แคบกว่ากระดาษจริง ~7cm) และสูงตายตัว 200cm ทำให้ Chrome มองว่าเป็นหน้ากระดาษสูง 2 เมตร มีแค่เนื้อหานิดเดียวอยู่บนสุด ที่เหลือว่างเปล่าทั้งหมด (ตรงกับที่เห็นในรูปพรีวิวพิมพ์) — เปลี่ยนเป็น size:auto ทั้งกว้างและสูง ให้ Chrome ใช้ความกว้างกระดาษตามที่ตั้งไว้ในไดรเวอร์ (เช่น 70mm ที่เลือกไว้ในกล่องพิมพ์) และปรับความสูงหน้ากระดาษตามเนื้อหาจริงแทน ไม่ใช่ค่าตายตัว */
   @page{size:auto; margin:6cm 0 0 0}
 
+  /* ===== [ใหม่ 2026-10-06 ตามที่ขอ] index3 — ด่านเข้าสู่ระบบด้วย Lark + แถบผู้ใช้ + ล็อกช่องสาขา =====
+     ทั้งหมดของส่วนนี้ = CSS ในบล็อกนี้ + สคริปต์ต้นหน้าในส่วนหัว (ตัวคุมด่าน/บัตรผ่าน) + #authGate กับ #authBar ในเนื้อหน้า — ไม่แตะ CSS/โค้ดเดิม
+     หน้าตาตามภาพจำลอง design-demos/lark-login/lark-login-flow.html (โทนสี/ปุ่มทองเดียวกับแอป) */
+  /* ด่าน: เต็มจอ อยู่เหนือทุกอย่าง (ป๊อปอัปเดิมสูงสุด z-index 90, แถบโหมดพิมพ์อัตโนมัติ 2147483000) · ซ่อนเองเมื่อ <html> มี class auth-ok (บัตรผ่านยังไม่หมดอายุ) */
+  #authGate{position:fixed;top:0;left:0;right:0;bottom:0;z-index:2147483646;display:flex;flex-direction:column;background:var(--paper);color:var(--ink);font-family:'Prompt',-apple-system,sans-serif;overflow:auto;-webkit-overflow-scrolling:touch}
+  html.auth-ok #authGate{display:none}
+  /* ยังไม่ผ่านด่าน: ฟอร์ม/แถบอื่นทั้งหมดถูกซ่อนตั้งแต่ก่อนวาดหน้าแรก (กันแวบเห็นฟอร์ม + กันแท็บ/คีย์บอร์ดเข้าถึง) */
+  html:not(.auth-ok) body > *:not(#authGate){visibility:hidden !important}
+  #authGate .ag-mast{flex:0 0 auto;background:var(--header-cream);padding:12px 18px}
+  #authGate .ag-brand{font-family:'Prompt',sans-serif;font-weight:500;font-size:22px;line-height:1.3;color:var(--ink)}
+  #authGate .ag-brand .g{font-weight:700}
+  #authGate .ag-body{flex:1 0 auto;width:100%;max-width:440px;margin:0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;padding:28px 20px 36px}
+  #authGate .ag-ico{width:68px;height:68px;border-radius:50%;background:#fbf3de;border:1.5px solid var(--gold);display:grid;place-items:center;color:var(--goldink);margin-bottom:6px;flex:0 0 auto}
+  #authGate .ag-ico svg{width:30px;height:30px}
+  #authGate .ag-ico.bad{background:#f7e4dc;border-color:var(--red);color:var(--red)}
+  #authGate .ag-ttl{font-size:19px;font-weight:600;line-height:1.35;overflow-wrap:anywhere}
+  #authGate .ag-txt{font-size:14px;color:#6b6657;line-height:1.6;overflow-wrap:anywhere}
+  #authGate .ag-detail{font-size:13px;color:var(--red);line-height:1.5;overflow-wrap:anywhere;background:#fbeee9;border:1px solid #efd2c7;border-radius:10px;padding:8px 12px;width:100%}
+  #authGate .ag-btn{margin-top:8px;width:100%;font-family:inherit;font-size:15px;font-weight:600;background:var(--gold);color:#fff;border:1px solid var(--goldink);border-radius:14px;padding:12px 22px;cursor:pointer;-webkit-appearance:none;appearance:none}
+  #authGate .ag-btn:active{transform:scale(.98)}
+  #authGate .ag-btn:focus-visible{outline:3px solid rgba(201,162,75,.5);outline-offset:2px}
+  #authGate .ag-btn.ghost{background:#fff;color:var(--ink);border-color:var(--rule)}
+  #authGate .ag-note{font-size:12px;color:var(--t2)}
+  #authGate .ag-spin{width:30px;height:30px;border-radius:50%;border:3px solid var(--rule2);border-top-color:var(--gold);animation:agSpin 1s linear infinite;flex:0 0 auto}
+  @keyframes agSpin{to{transform:rotate(360deg)}}
+  @media (min-width:881px){ #authGate .ag-mast{padding:12px 28px} #authGate .ag-body{padding-top:48px} }
+  /* แถบผู้ใช้ท้ายหน้า (ข้างล่างแถบปุ่มของแต่ละหน้า) — "เข้าสู่ระบบด้วย Lark: ชื่อ" + ออกจากระบบ */
+  #authBar{flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:0 8px;min-width:0;padding:5px 16px calc(5px + env(safe-area-inset-bottom,0px));background:#fff;border-top:1px solid var(--rule);font-size:12.5px;line-height:1.4}
+  #authBar[hidden]{display:none}
+  #authBar .ab-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex:0 0 auto}
+  #authBar .ab-txt{min-width:0;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #authBar .ab-txt b{font-weight:600}
+  #authBar .ab-note{min-width:0;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--t2)}
+  #authBar .ab-note[hidden]{display:none}
+  #authBar .ab-out{margin-left:auto;flex:0 0 auto;border:0;background:none;font:inherit;color:var(--t2);text-decoration:underline;cursor:pointer;padding:5px 2px}
+  /* จอแคบ: ชื่อ + ออกจากระบบอยู่บรรทัดแรก · โน้ต (เช่น "เข้าสู่ระบบแล้ว (ไม่ผูกสาขา)") ลงบรรทัดที่ 2 · โน้ตของบัญชีที่ผูกสาขา (ซ้ำกับช่องสาขาที่ล็อกอยู่ข้างบน) ซ่อนไว้ */
+  @media (max-width:640px){
+    #authBar .ab-txt{flex:1 1 0}
+    #authBar .ab-note{order:5;flex:1 1 100%;margin-left:16px;font-size:11.5px;white-space:normal}
+    #authBar .ab-note.opt{display:none}
+  }
+  /* ช่องสาขาที่ล็อกตามบัญชี Lark (ล็อกเฉพาะบัญชีที่ผูกสาขา) — ไม่มีลูกศรเลื่อนลง ไม่ใช่สีจางของ disabled */
+  #branchTop.branch-locked{background-image:none;padding-right:12px;cursor:not-allowed;opacity:1;-webkit-text-fill-color:var(--ink)}
+  /* [แก้ตามรีวิว F2] ป้ายเลขเวอร์ชันในแถบล่าง: เดิม nowrap — เลขของ index3 ยาวกว่า (…-auth-N) จึงดันปุ่มล้นจอมือถือแคบ · ปล่อยให้ตัดบรรทัดได้ (จุดตัด <wbr> หน้า "-auth-N" ใส่โดยสคริปต์ส่วนหัว)
+     จอกว้างพอ = บรรทัดเดียวเท่าเดิม · พื้นที่ไม่พอ = ป้ายหดเหลือกว้างเท่าเลขของหน้าหลัก (2 บรรทัด) แทนที่จะดันปุ่ม */
+  .foot .inner > .app-ver{white-space:normal;text-align:right}
+  .foot .inner > .app-ver .avs{white-space:nowrap}
+  /* [ใหม่ 2026-10-11] แถบเตือนของ "โหมดเตือน" (?auto=1 ใบสรุปอัตโนมัติ / ?noauth=1 สวิตช์ฉุกเฉิน): ยังไม่มีบัตรผ่าน หรือบัตรใกล้หมดอายุ — สคริปต์ส่วนหัวสร้างและเติมข้อความเอง
+     โหมดฉุกเฉิน = อยู่ในแนวหน้า เหนือแถบผู้ใช้ (เหมือน #authBar) · โหมดอัตโนมัติ (.aa-fixed) = ลอยท้ายจอ อยู่เหนือหน้าสถานะ (z-index 2147483000) แต่ต่ำกว่าด่าน (2147483646) */
+  #authAdv{flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;min-width:0;padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px));background:#fff4d6;border-top:2px solid var(--gold);color:var(--ink);font-family:'Prompt',-apple-system,sans-serif;font-size:13.5px;line-height:1.5}
+  #authAdv[hidden]{display:none}
+  #authAdv .aa-dot{width:10px;height:10px;border-radius:50%;background:var(--gold);flex:0 0 auto}
+  #authAdv .aa-txt{flex:1 1 240px;min-width:0;overflow-wrap:anywhere}
+  #authAdv .aa-txt b{font-weight:700}
+  #authAdv .aa-btn{flex:0 0 auto;font:inherit;font-weight:600;background:var(--gold);color:#fff;border:1px solid var(--goldink);border-radius:10px;padding:7px 16px;cursor:pointer;-webkit-appearance:none;appearance:none}
+  #authAdv .aa-btn:focus-visible{outline:3px solid rgba(201,162,75,.5);outline-offset:2px}
+  #authAdv.aa-fixed{position:fixed;left:0;right:0;bottom:0;z-index:2147483640;box-sizing:border-box;padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px));font-size:16px;box-shadow:0 -4px 18px rgba(0,0,0,.35)}
+  #authAdv.aa-soon .aa-dot{background:var(--red)}
+  @media (max-width:640px){ #authAdv{padding-left:12px;padding-right:12px} #authAdv .aa-btn{flex:1 1 100%} }
+  @media print{ #authGate,#authBar,#authAdv{display:none !important} }
 </style>
+<script>
+/* ===== [ใหม่ 2026-10-06 ตามที่ขอ] index3 — เข้าสู่ระบบด้วย Lark (บล็อกสคริปต์ต้นหน้า: ต้องรันก่อนสคริปต์หลัก) =====
+   1) อ่านบัตรผ่านที่เก็บไว้ (localStorage "suitcube_auth_v1") — ยังไม่หมดอายุ (เผื่อ 60 วิ) = ใส่ class "auth-ok" ที่ <html> ด่านไม่โชว์เลย
+      ไม่มี/หมดอายุ = ด่าน #authGate โชว์ทับทุกอย่างตั้งแต่ก่อนวาดหน้าแรก (CSS: html:not(.auth-ok)) — ไม่ถาม /auth/me ตอนเปิดหน้า
+   2) ห่อ window.fetch: คำขอไป Worker (suitcube-sf-rtw-order.ba-bd5.workers.dev) แนบ "Authorization: Bearer <บัตรผ่าน>" (ยกเว้น /auth/login-url และ /auth/login ·
+      โฮสต์อื่นไม่แนบ) · ถ้า Worker ตอบ 401 (no_token / token_invalid / token_expired / token_revoked) → ลบบัตร + โชว์ด่านอีกครั้ง
+      ทุกช่องทางที่แอปคุยกับ Worker ใช้ fetch (ไม่มี XHR / sendBeacon / EventSource / new Image ไป Worker) จึงครอบคลุมครบ
+   3) ล็อกอิน: GET /auth/login-url → ไปหน้า Lark → กลับมาที่หน้านี้พร้อม ?code=&state= → ตรวจ state → POST /auth/login → เก็บบัตร → รีโหลด
+   4) หลังสคริปต์หลักทำงานจบ (DOMContentLoaded): โชว์แถบ "เข้าสู่ระบบด้วย Lark: ชื่อ" + ออกจากระบบ · บัญชีที่ผูกสาขา = ตั้งช่องสาขาแล้วล็อก
+   [แก้ตามรีวิว 10-07 · -auth-2] RET-STALE (ที่อยู่เดิมที่ค้างจากการล็อกอินที่ถูกทิ้ง) · LIVE-CODE-LINGERS (ล้าง ?code= ในแท็บที่มีบัตรแล้ว) · BOOT-GATED-NO-SYNC (ตัวฟัง storage ติดทุกแท็บ) · F1 (ล็อกสาขาไม่ทับสาขาที่นัดรับ) · F2 (ป้ายเลขเวอร์ชันไม่ดันปุ่มแถบล่างล้น)
+   [ใหม่ 2026-10-11 · ด่านชุดเดียวกันนี้ใช้กับหน้าหลัก / Phase2-Test / Index3-Test] (ก) Worker ตอบ 401 รหัส token_revoked (ผู้ดูแลสั่งยกเลิกบัตรผ่านทั้งสาขา) = ปฏิบัติเหมือน token_invalid / token_expired ทุกอย่าง (ลบบัตร + โชว์ด่าน) แต่ขึ้นข้อความของตัวเองว่าบัตรผ่านถูกยกเลิก ต้องเข้าสู่ระบบใหม่
+      (ข) อายุบัตรผ่านเป็น 7 วัน — ด่านไม่ได้ฝังอายุไว้เลย ใช้ expiresAt ที่ Worker ส่งมาเท่านั้น · ข้อความหน้าล็อกอินเลิกบอก "12 ชั่วโมง" (ค่าเดียวที่ตัวเลขอยู่คือ NOTE_TTL ด้านล่าง — ถ้าตั้ง AUTH_TTL_HOURS ใน Worker เปลี่ยน ให้แก้ข้อความนี้ตาม)
+   [ใหม่ 2026-10-11 · รอบแก้ตามรีวิว rollout] "โหมดเตือน" (softMode) — ด่านฝั่งหน้าเว็บ "ไม่ยกขึ้นเอง ไม่บล็อกคำขอในเครื่อง" ใน 2 กรณี ปล่อยให้ Worker เป็นคนตัดสิน (ด่านจริงคือ AUTH_ENFORCE ของ Worker — ด่านฝั่งหน้าเว็บเป็นแค่ตัวช่วยให้ล็อกอิน):
+      (1) เปิดด้วย ?auto=1 (ใบสรุปอัตโนมัติ เปิดทิ้งไว้เครื่องเดียว ไม่มีคนดู · ล็อกอิน Lark เองไม่ได้) — เดิมบัตรหมดอายุ/ถูกยกเลิกแล้วด่านบล็อกคำขอในเครื่องเอง หน้านี้เลยหยุดเงียบๆ ทั้งที่ Worker ยังรับอยู่
+          ตอนนี้: ไม่มีบัตร = ยิงไป Worker ต่อโดยไม่แนบบัตร · แถบเตือนใหญ่ท้ายจอ (ยังไม่ได้เข้าสู่ระบบ / บัตรจะหมดอายุใน N ชม. + ปุ่มเข้าสู่ระบบ) + ชื่อแท็บขึ้น "⚠ ต้องเข้าสู่ระบบ" ·
+          Worker ตอบ 401 จริง (เปิด AUTH_ENFORCE แล้ว) = ยกด่านเต็มจอขึ้นตามปกติ + ถาม /version ทุก 60 วิ ถ้า Worker กลับมาไม่บังคับ (enforce=false) ด่านลงเองแล้วทำงานต่อ
+          ⚠ ยังไม่มีวิธียืนยันตัว "เครื่อง" ที่ไม่ต้องล็อกอินคน (ต้องทำที่ Worker: token ยาวสำหรับเครื่อง) — ถ้าเปิด AUTH_ENFORCE=1 เครื่องใบสรุปต้องเข้าสู่ระบบด้วย Lark ใหม่ทุก 7 วัน
+      (2) สวิตช์ฉุกเฉิน ?noauth=1 — ถ้าที่อยู่หน้าเว็บยังไม่ได้ลงทะเบียนเป็น Redirect URL ในแอป Lark (Lark ปฏิเสธ redirect_uri ทุกสาขาเข้าไม่ได้) ผู้ดูแลบอกให้เปิดหน้าด้วย ...?noauth=1 ชั่วคราว
+          (จำไว้ในแท็บนั้นด้วย sessionStorage · ?noauth=0 = ยกเลิก · ล็อกอินสำเร็จแล้วลบเอง) — เป็นแค่ปิดด่านฝั่งหน้าเว็บ ไม่ใช่ปิดการบังคับของ Worker: ถ้า Worker เปิด AUTH_ENFORCE=1 อยู่ คำขอแรกได้ 401 แล้วด่านขึ้นตามปกติ
+   [ใหม่ 2026-10-11] ล็อกอินแล้วถูกพาไป Lark แต่กลับมาโดยไม่มี ?code (กดย้อนกลับจากหน้าข้อผิดพลาดของ Lark เช่น redirect_uri ไม่ถูกต้อง) = ด่านโชว์คำแนะนำให้แจ้งผู้ดูแลระบบ
+   ไม่แก้โค้ดเดิมของแอป · ชื่อ/ตัวแปรทั้งหมดอยู่ใน IIFE นี้ (ออกมาเฉพาะ window.suitcubeAuth) */
+(function(){
+  'use strict';
+  var WORKER_BASE='https://suitcube-sf-rtw-order.ba-bd5.workers.dev';   // ต้องตรงกับค่า WORKER ในสคริปต์หลัก
+  var WORKER_HOST='suitcube-sf-rtw-order.ba-bd5.workers.dev';
+  var KEY='suitcube_auth_v1';                 // {token, expiresAt(ms), user:{name,branch,role,mapped}}
+  var STATE_KEY='suitcube_auth_state';        // sessionStorage — state ที่สุ่มไว้ก่อนไป Lark
+  var RET_KEY='suitcube_auth_return';         // sessionStorage — ?query/#hash เดิมของหน้า (กลับมาใช้หลังล็อกอิน เช่น #2)
+  var NOAUTO_KEY='suitcube_auth_noauto';      // sessionStorage — กดออกจากระบบแล้ว: ในแอป Lark อย่าพาไปล็อกอินเองซ้ำ
+  var TRIED_KEY='suitcube_auth_autotried';    // sessionStorage — ล็อกอินอัตโนมัติ (ในแอป Lark) ลองไปแล้วรอบหนึ่ง กันวนซ้ำ
+  var OFF_KEY='suitcube_auth_off';            // sessionStorage — สวิตช์ฉุกเฉิน ?noauth=1 (ปิดด่านฝั่งหน้าเว็บชั่วคราวในแท็บนี้)
+  var WENT_KEY='suitcube_auth_went';          // sessionStorage — เคยกดเข้าสู่ระบบแล้วถูกพาไปหน้า Lark (ไว้โชว์คำแนะนำถ้ากลับมาโดยไม่มี ?code)
+  var RENEW_KEY='suitcube_auth_renew';        // sessionStorage — กดเข้าสู่ระบบใหม่ทั้งที่ยังมีบัตรที่ใช้ได้ (ต่ออายุจากแถบเตือนโหมดอัตโนมัติ) → ตอนกลับจาก Lark ให้แลก code จริง ไม่ทิ้งเป็น "code ค้าง"
+  var SKEW_MS=60000, API_TIMEOUT_MS=15000;
+  var AUTO_WARN_MS=24*3600*1000;              // โหมดอัตโนมัติ: เริ่มเตือนล่วงหน้าเมื่อบัตรเหลือน้อยกว่านี้
+  var HEAL_MS=60000;                          // ด่านที่ถูก 401 ยกขึ้นในโหมดเตือน: ถาม /version ทุกกี่ ms ว่า Worker เลิกบังคับแล้วหรือยัง
+  var root=document.documentElement;
+  var rawFetch=(typeof window.fetch==='function') ? window.fetch.bind(window) : null;
+  var TITLE_LOGIN='⚠ ต้องเข้าสู่ระบบ · ', TITLE_SOON='⚠ ต่อบัตรผ่าน · ';
+  var HINT_WENT='ถ้าหน้า Lark แจ้งข้อผิดพลาด (เช่น ที่อยู่ redirect_uri ไม่ถูกต้อง) ให้แจ้งผู้ดูแลระบบ — แก้ที่การตั้งค่าแอป Lark ไม่ใช่ที่เครื่องนี้';
+
+  /* ---------- โหมดเตือน (ดูหัวไฟล์): ?auto=1 หรือสวิตช์ฉุกเฉิน ?noauth=1 — อ่านครั้งเดียวตอนโหลดสคริปต์ ---------- */
+  var qs0=null; try{ qs0=new URLSearchParams(location.search); }catch(e){}
+  var isCallback=!!(qs0 && (qs0.has('code') || qs0.has('error')));   // กลับจาก Lark: ต้องจัดการด้วยด่านตามปกติเสมอ
+  var autoMode=!!(qs0 && qs0.get('auto')==='1');
+  var offSw=false;
+  (function(){
+    var v=qs0 ? qs0.get('noauth') : null;
+    if(v==='1'){ offSw=true; sset('sessionStorage',OFF_KEY,'1'); }
+    else if(v==='0'){ sdel('sessionStorage',OFF_KEY); }
+    else offSw=(sget('sessionStorage',OFF_KEY)==='1');
+  })();
+  function softMode(){ return autoMode || offSw; }
+
+  /* ---------- ที่เก็บข้อมูล (ทุกการอ่าน/เขียนครอบ try/catch — โหมดส่วนตัว/ถูกบล็อกก็ไม่พัง) ---------- */
+  function sget(w,k){ try{ return window[w].getItem(k); }catch(e){ return null; } }
+  function sset(w,k,v){ try{ window[w].setItem(k,v); return window[w].getItem(k)===v; }catch(e){ return false; } }
+  function sdel(w,k){ try{ window[w].removeItem(k); }catch(e){} }
+  function parseStored(raw){
+    if(!raw) return null;
+    try{
+      var o=JSON.parse(raw);
+      if(o && typeof o.token==='string' && o.token && typeof o.expiresAt==='number' && isFinite(o.expiresAt) && o.user && typeof o.user==='object') return o;
+    }catch(e){}
+    return null;
+  }
+  function readStored(){ return parseStored(sget('localStorage',KEY)) || parseStored(sget('sessionStorage',KEY)); }
+  function clearStored(){ sdel('localStorage',KEY); sdel('sessionStorage',KEY); }
+  function isLive(o){ return !!o && o.expiresAt-SKEW_MS>Date.now(); }
+  function liveAuth(){ var o=readStored(); return isLive(o) ? o : null; }
+
+  /* ---------- ตอนเปิดหน้า: เชื่อบัตรในเครื่องจนถึงเวลาหมดอายุ (ไม่ถามเซิร์ฟเวอร์) ---------- */
+  var cur=readStored();
+  var live=isLive(cur);
+  var bootReason=live ? '' : (cur ? 'expired' : 'fresh');
+  if(!live && cur) clearStored();     // บัตรหมดอายุแล้ว — ทิ้ง (กันแนบบัตรเก่าไปกับคำขอ)
+  // โหมดเตือนตอนเปิดหน้า (ไม่มีบัตร + ?auto=1 หรือ ?noauth=1 + ไม่ใช่การกลับจาก Lark): ไม่ขึ้นด่านทับ ใช้ class auth-ok เหมือนมีบัตร (CSS ซ่อนด่าน/เปิดฟอร์ม) + auth-adv บอกว่าไม่มีบัตรจริง
+  var advisory=!live && !isCallback && softMode();
+  if(live || advisory) root.classList.add('auth-ok');
+  if(advisory) root.classList.add('auth-adv');
+  var gate={ on:!(live || advisory), name:'', mounted:false, by401:false, renewing:false };   // by401 = ด่านถูกยกเพราะ Worker ตอบ 401 ในโหมดเตือน (ลงเองได้เมื่อ Worker เลิกบังคับ) · renewing = กำลังแลก code เป็นบัตรใบใหม่ทั้งที่ยังมีบัตรเดิม (ตัวเฝ้าบัตรห้ามรีโหลดกลางทาง)
+  var gateEl=null, bodyEl=null, pending=null;
+
+  /* ---------- ไอคอน (SVG เส้น ตามภาพจำลอง — ไม่ใช้อีโมจิ) ---------- */
+  var ICON={
+    lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+    x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M9 9l6 6M15 9l-6 6"/></svg>',
+    clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v5l3 2"/></svg>',
+    warn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l9.5 16.5h-19z"/><path d="M12 10v4.5M12 17.6v.01"/></svg>'
+  };
+  var BTN_LOGIN='เข้าสู่ระบบด้วย Lark', NOTE_KEEP='ที่กรอกค้างไว้ในฟอร์มยังอยู่ ไม่หาย', NOTE_TTL='ระบบจะจำคุณไว้ในเครื่องนี้สูงสุด 7 วัน';
+  /* ข้อความทุกจอของด่าน (ภาษาไทย) — btn: ปุ่มหลัก (กดแล้วเริ่มล็อกอินใหม่), ghost: ปุ่มสีขาว */
+  var STATES={
+    fresh:      { icon:'lock', title:'เข้าสู่ระบบก่อนใช้งาน', text:'ใช้บัญชี Lark ของบริษัท Suitcube\nยังกรอกฟอร์มไม่ได้จนกว่าจะเข้าสู่ระบบ', btn:BTN_LOGIN, note:NOTE_TTL },
+    expired:    { icon:'clock', bad:true, title:'เข้าสู่ระบบหมดเวลา', text:'บัตรผ่านครบเวลาแล้ว\nกดเข้าสู่ระบบใหม่ได้เลย ใช้เวลาไม่กี่วินาที', btn:BTN_LOGIN, note:NOTE_KEEP },
+    invalid:    { icon:'lock', bad:true, title:'ต้องเข้าสู่ระบบใหม่', text:'ระบบไม่รับบัตรผ่านเดิม (ไม่ถูกต้องหรือถูกยกเลิกแล้ว)\nกดเข้าสู่ระบบใหม่ได้เลย', btn:BTN_LOGIN, note:NOTE_KEEP },
+    revoked:    { icon:'lock', bad:true, title:'บัตรผ่านถูกยกเลิกแล้ว', text:'ผู้ดูแลระบบสั่งยกเลิกบัตรผ่านเดิมของคุณ\nต้องเข้าสู่ระบบด้วย Lark ใหม่อีกครั้งจึงจะใช้งานต่อได้', btn:BTN_LOGIN, note:NOTE_KEEP },
+    redirecting:{ spin:true, title:'กำลังเข้าสู่ระบบด้วย Lark…', text:'รอสักครู่ ระบบจะพาไปหน้าของ Lark' },
+    verifying:  { spin:true, title:'กำลังตรวจสอบ…', text:'กำลังยืนยันบัญชีกับ Lark แล้วออกบัตรผ่านให้' },
+    denied:     { icon:'x', bad:true, title:'บัญชีนี้ไม่มีสิทธิ์ใช้ระบบ', text:'ต้องใช้บัญชี Lark ของบริษัท Suitcube\nถ้าเป็นพนักงานแต่เข้าไม่ได้ ให้แจ้งแอดมิน', btn:'ลองใหม่ด้วยบัญชีอื่น', ghost:true },
+    cancelled:  { icon:'lock', title:'ยกเลิกการเข้าสู่ระบบ', text:'คุณกดยกเลิกที่หน้า Lark\nพร้อมเมื่อไรกดเข้าสู่ระบบอีกครั้งได้เลย', btn:BTN_LOGIN },
+    larkerr:    { icon:'x', bad:true, title:'Lark ไม่ให้เข้าสู่ระบบ', text:'หน้าของ Lark แจ้งว่าเข้าสู่ระบบไม่ได้\nกดลองใหม่อีกครั้ง ถ้ายังไม่ได้ให้แจ้งแอดมิน', btn:'ลองใหม่' },
+    badstate:   { icon:'x', bad:true, title:'เข้าสู่ระบบไม่สำเร็จ', text:'ข้อมูลยืนยันที่ส่งกลับมาจาก Lark ไม่ตรงกับที่ขอไว้\n(ระบบไม่รับเพื่อความปลอดภัย) กดลองใหม่ได้เลย', btn:'ลองใหม่' },
+    codebad:    { icon:'x', bad:true, title:'เข้าสู่ระบบไม่สำเร็จ', text:'รหัสจาก Lark ใช้ไม่ได้แล้ว (หมดอายุหรือถูกใช้ไปแล้ว)\nกดลองใหม่ได้เลย', btn:'ลองใหม่' },
+    badredirect:{ icon:'warn', bad:true, title:'หน้านี้ยังเข้าสู่ระบบไม่ได้', text:'ที่อยู่ของหน้านี้ไม่อยู่ในรายการที่ระบบอนุญาต\nแจ้งผู้ดูแลระบบให้ตรวจการตั้งค่า', btn:'ลองใหม่' },
+    noworker:   { icon:'warn', bad:true, title:'ระบบเข้าสู่ระบบยังไม่พร้อม', text:'Worker ยังไม่ได้อัปเดตเป็นรุ่น R19 (ยังไม่มีเส้นทาง /auth)\nแจ้งผู้ดูแลระบบให้ deploy Worker ก่อน แล้วกดลองใหม่', btn:'ลองใหม่' },
+    neterr:     { icon:'warn', bad:true, title:'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้', text:'ตรวจอินเทอร์เน็ตแล้วลองใหม่\n(ถ้าเพิ่งอัปเดตระบบ อาจเป็นเพราะ Worker ยังไม่ได้อัปเดตเป็นรุ่น R19)', btn:'ลองใหม่' },
+    servererr:  { icon:'warn', bad:true, title:'เข้าสู่ระบบไม่สำเร็จ', text:'ระบบเข้าสู่ระบบขัดข้องชั่วคราว\nรอสักครู่แล้วกดลองใหม่', btn:'ลองใหม่' },
+    storage:    { icon:'warn', bad:true, title:'เก็บข้อมูลเข้าสู่ระบบไม่ได้', text:'เบราว์เซอร์ไม่ยอมให้หน้านี้เก็บข้อมูลในเครื่อง (อาจเปิดโหมดส่วนตัวอยู่)\nปิดโหมดส่วนตัวแล้วลองใหม่', btn:'ลองใหม่' }
+  };
+
+  /* ---------- วาดด่าน (ข้อความจากเซิร์ฟเวอร์ใส่ด้วย textContent เท่านั้น) ---------- */
+  function setLines(el,str){
+    el.textContent='';
+    String(str).split('\n').forEach(function(ln,i){ if(i) el.appendChild(document.createElement('br')); el.appendChild(document.createTextNode(ln)); });
+  }
+  function mk(tag,cls){ var e=document.createElement(tag); if(cls) e.className=cls; return e; }
+  function render(name,detail){
+    var s=STATES[name]||STATES.servererr;
+    gate.name=name;
+    if(gateEl) gateEl.setAttribute('data-state',name);
+    bodyEl.textContent='';
+    if(s.spin){ var sp=mk('div','ag-spin'); sp.setAttribute('aria-hidden','true'); bodyEl.appendChild(sp); }
+    else if(s.icon){ var ic=mk('div','ag-ico'+(s.bad?' bad':'')); ic.setAttribute('aria-hidden','true'); ic.innerHTML=ICON[s.icon]; bodyEl.appendChild(ic); }
+    var t=mk('div','ag-ttl'); t.id='authGateTitle'; t.textContent=s.title; bodyEl.appendChild(t);
+    if(s.text){ var x=mk('div','ag-txt'); setLines(x,s.text); bodyEl.appendChild(x); }
+    if(detail){ var d=mk('div','ag-detail'); d.textContent=String(detail).slice(0,300); bodyEl.appendChild(d); }
+    var b=null;
+    if(s.btn){ b=mk('button','ag-btn'+(s.ghost?' ghost':'')); b.type='button'; b.id='authLoginBtn'; b.textContent=s.btn; b.addEventListener('click',startLogin); bodyEl.appendChild(b); }
+    if(s.note){ var n=mk('div','ag-note'); n.textContent=s.note; bodyEl.appendChild(n); }
+    if(b){ try{ b.focus({preventScroll:true}); }catch(e){} }
+  }
+  function show(name,detail){
+    pending={name:name,detail:detail};
+    if(bodyEl) render(name,detail);
+  }
+  function setInert(on){
+    try{
+      var kids=document.body ? document.body.children : [];
+      for(var i=0;i<kids.length;i++){
+        var el=kids[i]; if(el.id==='authGate' || el.tagName==='SCRIPT') continue;
+        if(on) el.setAttribute('inert',''); else el.removeAttribute('inert');
+      }
+    }catch(e){}
+  }
+  /* โชว์ด่านกลางการใช้งาน (บัตรหมดอายุ/ถูกปฏิเสธ) — ฟอร์มที่กรอกค้างไว้ยังอยู่ใน DOM + autosave เดิม ไม่หาย */
+  function goGate(reason,detail){
+    if(!gate.on){
+      // เก็บฟอร์มที่กรอกค้างไว้ลง autosave ทันที (ปกติหน่วง 0.6 วิ) — ล็อกอินใหม่แล้วรีโหลดจะได้ไม่หาย (saveAutosave เป็นฟังก์ชันเดิมของแอป เรียกเฉยๆ ไม่แก้)
+      try{ if(typeof window.saveAutosave==='function') window.saveAutosave(); }catch(e){}
+      gate.on=true; root.classList.remove('auth-ok'); setInert(true);
+      try{ var ae=document.activeElement; if(ae && ae!==document.body && ae.blur) ae.blur(); }catch(e){}
+    }
+    show(reason,detail);
+    paintAdv();
+  }
+  function unauthorized(code){
+    if(gate.on) return;      // ด่านโชว์อยู่แล้ว (เช่นคำขอที่ค้างมาก่อนหน้านี้) — ไม่ต้องทับข้อความ
+    var had=readStored();
+    clearStored();
+    gate.by401=softMode();   // โหมดเตือน: ด่านถูก Worker ยกขึ้น → เฝ้าดูว่า Worker เลิกบังคับหรือยัง (startHeal)
+    // no_token + ไม่เคยมีบัตรในเครื่อง (โหมดเตือนที่ยิงไป Worker โดยไม่แนบบัตร) = "ยังไม่ได้เข้าสู่ระบบ" ไม่ใช่ "ไม่รับบัตรเดิม"
+    goGate(code==='token_expired' ? 'expired' : (code==='token_revoked' ? 'revoked' : ((code==='no_token' && !had) ? 'fresh' : 'invalid')));
+    if(gate.by401) startHeal();
+  }
+  /* โหมดเตือน: ด่านที่ Worker ยกขึ้น (401) ลงเองเมื่อ Worker บอกว่าเลิกบังคับล็อกอินแล้ว (/version → auth.enforce=false) — เครื่องใบสรุปที่ไม่มีคนดูจะได้ทำงานต่อเองหลังผู้ดูแลถอยการตั้งค่า */
+  var healT=null;
+  function lowerGate(){
+    gate.on=false; gate.by401=false;
+    root.classList.add('auth-ok'); setInert(false);
+    paintAdv();
+  }
+  function startHeal(){
+    if(healT) return;
+    healT=setInterval(function(){
+      if(!(gate.on && gate.by401 && softMode())){ clearInterval(healT); healT=null; return; }
+      api('GET','/version').then(function(r){
+        var j=r && r.json, e=(j && j.auth && typeof j.auth.enforce==='boolean') ? j.auth.enforce : null;
+        if(e===false && gate.on && gate.by401 && softMode()) lowerGate();
+      });
+    },HEAL_MS);
+  }
+
+  /* ---------- ห่อ window.fetch: แนบบัตรผ่านเฉพาะคำขอไป Worker ---------- */
+  function workerUrl(input){
+    try{
+      var u=(typeof input==='string') ? input : ((input && input.url) ? input.url : String(input));
+      var p=new URL(u, location.href);
+      if(p.host===WORKER_HOST) return p;
+    }catch(e){}
+    return null;
+  }
+  function isPublicAuthPath(p){ return p.pathname==='/auth/login-url' || p.pathname==='/auth/login'; }
+  function localBlock(){
+    // ยังไม่ได้เข้าสู่ระบบ: ไม่ยิงไป Worker เลย ตอบ 401 จำลองในเครื่อง (รูปแบบเดียวกับ Worker) แอปเดิมจัดการเป็น "ผิดพลาด" ตามปกติ
+    try{ return Promise.resolve(new Response(JSON.stringify({success:false,code:'no_token',error:'ยังไม่ได้เข้าสู่ระบบ'}),{status:401,headers:{'Content-Type':'application/json'}})); }
+    catch(e){ return Promise.reject(new TypeError('not signed in')); }
+  }
+  function watch401(promise){
+    return promise.then(function(res){
+      try{
+        if(res && res.status===401){
+          res.clone().json().then(function(j){
+            if(j && /^(no_token|token_invalid|token_expired|token_revoked)$/.test(String(j.code))) unauthorized(String(j.code));
+          },function(){});
+        }
+      }catch(e){}
+      return res;
+    });
+  }
+  if(rawFetch){
+    window.fetch=function(input,init){
+      var p=workerUrl(input);
+      if(!p || isPublicAuthPath(p)) return rawFetch(input,init);
+      var a=liveAuth();
+      if(!a){
+        // โหมดเตือน (?auto=1 / ?noauth=1): ไม่บล็อกในเครื่อง — ยิงไป Worker ต่อโดยไม่แนบบัตร ให้ Worker ตัดสินเอง (ยังไม่บังคับ = ทำงานต่อได้ · บังคับแล้ว = 401 → ด่านขึ้นผ่าน watch401)
+        if(softMode()) return watch401(rawFetch(input,init));
+        if(!gate.on){ var had=readStored(); clearStored(); goGate(had ? 'expired' : 'fresh'); }
+        return localBlock();
+      }
+      var auth='Bearer '+a.token;
+      if(typeof Request!=='undefined' && input instanceof Request){
+        var rq=new Request(input,init); if(!rq.headers.has('Authorization')) rq.headers.set('Authorization',auth);
+        return watch401(rawFetch(rq));
+      }
+      var i2={}; if(init){ for(var k in init){ if(Object.prototype.hasOwnProperty.call(init,k)) i2[k]=init[k]; } }
+      var h=new Headers(i2.headers||undefined); if(!h.has('Authorization')) h.set('Authorization',auth); i2.headers=h;
+      return watch401(rawFetch(input,i2));
+    };
+  }
+
+  /* ---------- คุยกับ /auth/* (ใช้ fetch ตัวจริง — ไม่ผ่านตัวห่อ ไม่แนบบัตร) ---------- */
+  function api(method,path,body){
+    if(!rawFetch) return Promise.resolve({net:true});
+    var ac=(typeof AbortController!=='undefined') ? new AbortController() : null;
+    var timer=ac ? setTimeout(function(){ ac.abort(); },API_TIMEOUT_MS) : null;
+    var init={ method:method, cache:'no-store' };
+    if(ac) init.signal=ac.signal;
+    if(body!==undefined){ init.headers={'Content-Type':'application/json'}; init.body=JSON.stringify(body); }
+    return rawFetch(WORKER_BASE+path,init).then(function(res){
+      return res.text().then(function(txt){
+        var j=null; try{ j=JSON.parse(txt); }catch(e){}
+        return { status:res.status, json:(j && typeof j==='object') ? j : null };
+      });
+    }).catch(function(){ return { net:true }; }).then(function(r){ if(timer) clearTimeout(timer); return r; });
+  }
+  // แปลงคำตอบที่ล้มเหลวเป็นหน้าจอของด่าน — 404 หรือไม่ใช่ JSON = Worker ยังไม่ได้อัปเดตเป็น R19
+  function failView(r){
+    if(r.net) return ['neterr'];
+    var j=r.json, code=j && j.code, msg=(j && typeof j.error==='string') ? j.error : '';
+    if(r.status===404 || !j) return ['noworker'];
+    if(code==='lark_code_invalid') return ['codebad'];
+    if(code==='not_mapped' || code==='wrong_tenant') return ['denied',msg];
+    if(code==='bad_redirect_uri') return ['badredirect',msg];
+    return ['servererr',msg];
+  }
+  function randomState(){
+    var c=window.crypto || window.msCrypto;
+    if(!c || !c.getRandomValues) return '';
+    var a=new Uint8Array(32); c.getRandomValues(a);
+    var s=''; for(var i=0;i<a.length;i++) s+=String.fromCharCode(a[i]);
+    return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  }
+  function safeAuthorizeUrl(u){
+    try{ var p=new URL(u); return p.protocol==='https:' && /(^|\.)(larksuite\.com|feishu\.cn)$/i.test(p.hostname); }catch(e){ return false; }
+  }
+
+  /* redirect_uri = origin + pathname (ไม่มี query/hash) · ถ้าเปิดด้วย ".../index.html" ให้ตัดเหลือโฟลเดอร์ ".../" — ที่อยู่ที่ลงทะเบียนไว้ในแอป Lark เป็นแบบโฟลเดอร์ (Index3-Test/) · ใช้ค่าเดียวกันทั้งตอนขอลิงก์และตอนแลกรหัส */
+  function redirectUri(){ return location.origin+location.pathname.replace(/\/index\.html$/i,'/'); }
+
+  /* ---------- เริ่มล็อกอิน: สุ่ม state → ขอลิงก์จาก Worker → ไปหน้า Lark ---------- */
+  var busy=false;
+  function startLogin(){
+    if(busy) return; busy=true;
+    show('redirecting');
+    var state=randomState();
+    if(!state){ busy=false; show('servererr','เบราว์เซอร์นี้สร้างรหัสความปลอดภัยไม่ได้'); return; }
+    if(!sset('sessionStorage',STATE_KEY,state)){ busy=false; show('storage'); return; }
+    if(liveAuth()) sset('sessionStorage',RENEW_KEY,'1'); else sdel('sessionStorage',RENEW_KEY);   // ต่ออายุทั้งที่ยังมีบัตร (ดู RENEW_KEY)
+    // [แก้ตามรีวิว RET-STALE] เขียนทับทุกครั้ง: หน้าเปล่า (ไม่มี ?query/#hash) = ลบค่าที่ค้างจากความพยายามล็อกอินที่ถูกทิ้งกลางทาง (กดย้อนกลับจาก Lark/ปิดแท็บ Lark) — ไม่งั้นล็อกอินครั้งถัดไปในแท็บเดิมจะดึง ?auto=1 / #2 เก่ากลับมา · ผูกกับ state ของครั้งนี้ (st) ให้ตรวจตอนกลับมา
+    if(location.search || location.hash) sset('sessionStorage',RET_KEY,JSON.stringify({s:location.search,h:location.hash,st:state})); else sdel('sessionStorage',RET_KEY);
+    var redirect=redirectUri();
+    api('GET','/auth/login-url?redirect_uri='+encodeURIComponent(redirect)+'&state='+encodeURIComponent(state)).then(function(r){
+      busy=false;
+      var j=r.json;
+      if(!r.net && r.status===200 && j && j.success && typeof j.url==='string' && safeAuthorizeUrl(j.url)){ sset('sessionStorage',WENT_KEY,'1'); location.assign(j.url); return; }
+      if(!r.net && r.status===200 && j && !j.url) { show('noworker'); return; }
+      var v=failView(r); show(v[0],v[1]);
+    });
+  }
+  // ในแอป Lark: ไม่ต้องกดปุ่ม พาไปล็อกอินให้เอง (ครั้งเดียวต่อแท็บ · ออกจากระบบแล้วไม่พาไปซ้ำ)
+  function maybeAutoStart(){
+    if(bootReason!=='fresh') return;
+    if(!/(Lark|Feishu)\//i.test(navigator.userAgent||'')) return;
+    if(sget('sessionStorage',NOAUTO_KEY) || sget('sessionStorage',TRIED_KEY)) return;
+    sset('sessionStorage',TRIED_KEY,'1');
+    startLogin();
+  }
+
+  /* ---------- กลับจาก Lark: ?code=&state= (หรือ ?error=) ---------- */
+  function readReturn(expected){
+    var raw=sget('sessionStorage',RET_KEY); sdel('sessionStorage',RET_KEY);
+    if(!raw || !expected) return '';
+    try{
+      var o=JSON.parse(raw), s=String(o.s||''), h=String(o.h||'');
+      if(o.st!==expected) return '';      // [แก้ตามรีวิว RET-STALE] ต้องเป็นของความพยายามล็อกอินครั้งล่าสุดในแท็บนี้ (state เดียวกัน) — ของค้างจากครั้งที่ถูกทิ้งไม่ถูกดึงกลับมา
+      if(s && s.charAt(0)!=='?') s=''; if(h && h.charAt(0)!=='#') h='';
+      if(s){ var q=new URLSearchParams(s); ['code','state','error','error_description','noauth'].forEach(function(k){ q.delete(k); }); var t=q.toString(); s=t ? ('?'+t) : ''; }   // noauth = สวิตช์ฉุกเฉิน ไม่พากลับมาหลังล็อกอินสำเร็จ
+      return (s.length+h.length>512) ? '' : (s+h);
+    }catch(e){ return ''; }
+  }
+  function decodeExp(token){
+    try{
+      var b=String(token).split('.')[0].replace(/-/g,'+').replace(/_/g,'/'); while(b.length%4) b+='=';
+      var p=JSON.parse(atob(b)); return (p && p.exp) ? p.exp*1000 : 0;
+    }catch(e){ return 0; }
+  }
+  function saveAuth(j){
+    var exp=+j.expiresAt;
+    if(!isFinite(exp) || exp<=0) exp=decodeExp(j.token);
+    else if(exp<1e12) exp=exp*1000;     // เผื่อ Worker ส่งเป็นวินาที
+    if(!exp) return false;
+    var u=j.user || {};
+    var obj={ token:j.token, expiresAt:exp, user:{ name:String(u.name||''), branch:u.branch||null, role:u.role||'user', mapped:!!u.mapped } };
+    var raw=JSON.stringify(obj);
+    if(sset('localStorage',KEY,raw)) return true;
+    return sset('sessionStorage',KEY,raw);      // localStorage ใช้ไม่ได้ → เก็บแค่ในแท็บนี้ (รีโหลดได้ ปิดแท็บแล้วหาย)
+  }
+  function handleCallback(qs){
+    var err=qs.get('error'), code=qs.get('code'), st=qs.get('state');
+    var expected=sget('sessionStorage',STATE_KEY); sdel('sessionStorage',STATE_KEY); sdel('sessionStorage',WENT_KEY); sdel('sessionStorage',RENEW_KEY);
+    // ?query/#hash เดิมของหน้า (เช่น ?auto=1 / #2) ใช้คืนได้เฉพาะเมื่อ state ที่ Lark ส่งกลับ (ถ้ามี) ตรงกับที่แท็บนี้ขอไว้ — ลิงก์ที่ใครส่งมาเองไม่ดึงค่าเก่าที่ค้างกลับมา
+    var ret=readReturn((st ? st===expected : !!err) ? expected : '');
+    try{ history.replaceState(null,'',location.pathname+ret); }catch(e){}      // เอา code/state ออกจาก URL ทันที (code ใช้ได้ครั้งเดียว)
+    if(err){ show(err==='access_denied' ? 'cancelled' : 'larkerr'); return; }
+    if(!expected || !st || st!==expected || !code){ show('badstate'); return; }
+    show('verifying');
+    gate.renewing=true;      // ระหว่างแลก code: ตัวเฝ้าบัตรห้ามรีโหลด (กรณีต่ออายุที่ยังมีบัตรเดิมอยู่) — ปล่อยทันทีที่ได้คำตอบ
+    api('POST','/auth/login',{ code:code, redirect_uri:redirectUri() }).then(function(r){
+      gate.renewing=false;
+      var j=r.json;
+      if(!r.net && r.status===200 && j && j.success && typeof j.token==='string' && j.token){
+        if(!saveAuth(j)){ show('storage'); return; }
+        sdel('sessionStorage',NOAUTO_KEY); sdel('sessionStorage',TRIED_KEY); sdel('sessionStorage',OFF_KEY);   // ล็อกอินสำเร็จแล้ว = สวิตช์ฉุกเฉินหมดหน้าที่
+        location.reload();        // เปิดแอปทั้งหน้าใหม่พร้อมบัตรผ่าน
+        return;
+      }
+      if(!r.net && r.status===200 && j && !j.token){ show('noworker'); return; }
+      var v=failView(r); show(v[0],v[1]);
+    });
+  }
+
+  /* ---------- ติดด่านลงหน้า (เรียกจากสคริปต์เล็กใต้ #authGate ทันทีที่มาร์กอัปด่านถูกอ่าน) ---------- */
+  /* [แก้ตามรีวิว LIVE-CODE-LINGERS] แท็บที่มีบัตรผ่านอยู่แล้วแต่ URL พก ?code=&state= (หรือ ?error=) ของ Lark กลับมา (เช่น ล็อกอินสำเร็จจากอีกแท็บ แล้วแท็บนี้เพิ่งตามกลับมาจากหน้า Lark) —
+     ไม่เอา code ไปแลกบัตร (ใช้ไม่ได้อยู่แล้ว) แต่ต้องล้างออกจากแถบที่อยู่/ประวัติ/บุ๊กมาร์กทันที + ลบ state/ที่อยู่เดิมที่ค้างใน sessionStorage · พารามิเตอร์อื่น (เช่น ?auto=1) และ #hash คงไว้ */
+  function dropOAuthParams(){
+    var qs; try{ qs=new URLSearchParams(location.search); }catch(e){ return; }
+    if(!(qs.has('code') || qs.has('state') || qs.has('error') || qs.has('error_description'))) return;
+    ['code','state','error','error_description'].forEach(function(k){ qs.delete(k); });
+    var t=qs.toString();
+    try{ history.replaceState(history.state,'',location.pathname+(t ? ('?'+t) : '')+location.hash); }catch(e){}
+    sdel('sessionStorage',STATE_KEY); sdel('sessionStorage',RET_KEY);
+  }
+  function mount(){
+    if(gate.mounted) return; gate.mounted=true;
+    gateEl=document.getElementById('authGate'); bodyEl=document.getElementById('authGateBody');
+    if(live){
+      // ต่ออายุบัตร: กดเข้าสู่ระบบจากแถบเตือนทั้งที่บัตรเดิมยังใช้ได้ (startLogin จดไว้ใน RENEW_KEY) → ตอนกลับจาก Lark ต้องแลก code เป็นบัตรใบใหม่ (ไม่ใช่ทิ้งเป็น code ค้างของแท็บที่มีบัตรแล้ว)
+      var rqs=null; try{ rqs=new URLSearchParams(location.search); }catch(e){}
+      if(bodyEl && rqs && (rqs.has('code') || rqs.has('error')) && sget('sessionStorage',RENEW_KEY)==='1'){
+        gate.on=true; root.classList.remove('auth-ok');        // ด่านขึ้นเพื่อโชว์ "กำลังตรวจสอบ…" ระหว่างแลก (afterBoot ใส่ inert ให้)
+        handleCallback(rqs);
+        return;
+      }
+      dropOAuthParams(); return;
+    }
+    if(!bodyEl) return;
+    if(advisory) return;     // โหมดเตือน: ไม่วาดด่าน — ด่านถูกยกทีหลังโดย 401 / การกดปุ่มเข้าสู่ระบบ (ตอนนั้น bodyEl พร้อมแล้ว)
+    var qs=null; try{ qs=new URLSearchParams(location.search); }catch(e){}
+    if(qs && (qs.has('code') || qs.has('error'))){ handleCallback(qs); return; }
+    // เคยกดเข้าสู่ระบบแล้วถูกพาไป Lark แต่กลับมาโดยไม่มี ?code (เช่น กดย้อนกลับจากหน้าข้อผิดพลาดของ Lark) → ใบ้ให้แจ้งผู้ดูแลระบบ
+    var went=!!sget('sessionStorage',WENT_KEY);
+    if(pending) render(pending.name,pending.detail); else { show(bootReason, went ? HINT_WENT : undefined); maybeAutoStart(); }
+  }
+  // กดย้อนกลับจากหน้า Lark (bfcache) แล้วค้างที่ "กำลังพาไป…" → กลับมาเป็นปุ่มเข้าสู่ระบบ
+  window.addEventListener('pageshow',function(e){ if(e.persisted && gate.on && gate.name==='redirecting'){ busy=false; show(bootReason||'fresh', sget('sessionStorage',WENT_KEY) ? HINT_WENT : undefined); } });
+
+  function logout(){
+    clearStored(); sdel('sessionStorage',STATE_KEY); sdel('sessionStorage',WENT_KEY); sset('sessionStorage',NOAUTO_KEY,'1');
+    location.reload();
+  }
+
+  /* ---------- โหมดเตือน: ยกด่านเมื่อกดปุ่มเข้าสู่ระบบจากแถบเตือน (ให้เห็นความคืบหน้า/ข้อผิดพลาดของการล็อกอินบนด่านเต็มจอ) ---------- */
+  function loginFromAdv(){
+    if(!gate.on){ gate.by401=false; goGate(bootReason || 'fresh'); }
+    startLogin();
+  }
+
+  /* ---------- หลังสคริปต์หลักทำงานจบ: แถบผู้ใช้ + ล็อกสาขา + ตัวเฝ้าบัตรหมดอายุ ---------- */
+  function paintBar(user){
+    var bar=document.getElementById('authBar'); if(!bar) return;
+    var nm=document.getElementById('authBarName'); if(nm) nm.textContent=user.name || 'ผู้ใช้ Lark';
+    var out=document.getElementById('authLogoutBtn'); if(out) out.addEventListener('click',logout);
+    bar.hidden=false;
+  }
+  function setNote(text,optional){ var n=document.getElementById('authBarNote'); if(!n) return; n.textContent=text; n.className='ab-note'+(optional?' opt':''); n.hidden=!text; }   // optional = จอแคบซ่อนได้
+  function lockBranch(user){
+    if(!(user && user.mapped && user.branch)){ setNote('เข้าสู่ระบบแล้ว (ไม่ผูกสาขา)'); return; }   // บัญชีที่ไม่ผูกสาขา: เลือกสาขาเองได้ตามเดิม
+    var sel=document.getElementById('branchTop'); if(!sel) return;
+    var found=false; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===user.branch){ found=true; break; } }
+    if(!found){ setNote('สาขา '+user.branch+' ไม่อยู่ในรายการ — เลือกสาขาเอง'); return; }
+    // กำลังแก้บิลเก่า (กู้คืนจาก autosave) = ปล่อยสาขาตามบิลนั้น ไม่ทับ (กันบิลของสาขาอื่นถูกเปลี่ยนสาขาตอนบันทึก) แต่ยังล็อกช่อง
+    var eb=document.getElementById('editorBanner'), editing=!!(eb && !eb.classList.contains('hidden'));
+    sel.classList.add('branch-locked');
+    sel.title='สาขาล็อกตามบัญชี Lark ('+user.branch+')';
+    /* [แก้ตามรีวิว F1] ยิง change เฉพาะเมื่อสาขาเปลี่ยนจริง — ถ้าตรงกับบัญชีอยู่แล้ว (เช่น autosave ของสาขาเดียวกัน) ตัวจัดการเดิมของแอปทำงานไปแล้วตอนกู้คืน ไม่ต้องยิงซ้ำ
+       (ยิงซ้ำ = ตัวจัดการเดิมตั้ง "สาขาที่นัดรับ" = สาขาที่ซื้อ เพราะหลังโหลดหน้าใหม่ธง "ผู้ใช้เลือกเองแล้ว" เป็น false เสมอ → ค่าที่กู้คืน เช่น สาขาอื่น/Messenger/ขนส่งเอกชน ถูกทับเงียบๆ แล้ว autosave เก็บค่าผิดทับ) */
+    if(!editing && sel.value!==user.branch){
+      var bp=document.getElementById('branchPickup'), prevTop=sel.value, prevPick=bp ? bp.value : '';
+      sel.value=user.branch;
+      sel.dispatchEvent(new Event('change',{bubbles:true}));     // เหมือนผู้ใช้เลือกสาขาเอง: ตัวจัดการเดิมของช่องสาขาทำงาน (ปรับความกว้าง + โหลดเลขที่บิล + รีเฟรชร่าง) และ autosave เก็บสาขาใหม่ทันที
+      // สาขาที่นัดรับที่กู้คืนมาแล้วเลือกต่างจากสาขาเดิมของฟอร์ม = ผู้ใช้เลือกเอง → คืนค่าเดิม (สาขาที่นัดรับที่แค่ "ตามสาขา" ยังตามเป็นสาขาของบัญชีตามปกติ)
+      if(bp && prevPick && prevPick!==prevTop && bp.value!==prevPick){ bp.value=prevPick; bp.dispatchEvent(new Event('change',{bubbles:true})); }
+    }
+    sel.disabled=true;
+    setNote('สาขา '+(editing ? sel.value : user.branch)+' · ล็อกตามบัญชี', true);
+  }
+  /* ตัวเฝ้าบัตร (ติดตั้งทุกแท็บตั้งแต่โหลดสคริปต์ — [แก้ตามรีวิว BOOT-GATED-NO-SYNC] เดิมติดตั้งใน afterBoot ซึ่งออกก่อนเมื่อแท็บเปิดมาเจอด่านเลย จึงไม่เห็นว่าอีกแท็บล็อกอินแล้ว)
+     · ด่านโชว์อยู่ + มีบัตรที่ยังไม่หมดอายุอยู่ในเครื่อง (อีกแท็บเพิ่งล็อกอิน) = รีโหลดเข้าแอปด้วยบัตรนั้น
+     · ใช้งานอยู่ + บัตรหมดอายุ/หาย (หมดเวลา หรืออีกแท็บออกจากระบบ) = โชว์ด่าน */
+  function chk(){
+    var o=readStored();
+    if(gate.on){ if(isLive(o) && !gate.renewing) location.reload(); return; }
+    if(!isLive(o)){
+      if(softMode()){ if(o) clearStored(); paintAdv(); return; }   // โหมดเตือน: บัตรหมด/หายกลางทาง ไม่ยกด่านเอง (ไม่บล็อกหน้าเปิดทิ้ง) — บอกผ่านแถบเตือน ให้ Worker ตัดสิน
+      clearStored(); goGate(o ? 'expired' : 'fresh'); return;
+    }
+    if(advisory){ location.reload(); return; }    // เปิดหน้ามาโดยไม่มีบัตร แล้วอีกแท็บเพิ่งล็อกอิน → โหลดใหม่ให้ได้บัตร + ล็อกสาขา
+    paintAdv();                                    // มีบัตร: โหมดอัตโนมัติอาจต้องเตือนล่วงหน้าว่าใกล้หมดอายุ
+  }
+  function watchSync(){
+    setInterval(chk,15000);
+    document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible') chk(); });
+    window.addEventListener('storage',function(e){ if(e.key!==KEY && e.key!==null) return; chk(); });
+  }
+  watchSync();
+  /* [แก้ตามรีวิว F2] เลขเวอร์ชันของ index3 (…-auth-N) ยาวกว่าของหน้าหลัก ดันปุ่มแถบล่างล้นจอมือถือ — ใส่จุดตัดบรรทัดไว้หน้า "-auth-N" ท่อนเดียว (ข้อความเดิมครบ ไม่ถูกตัดออก)
+     จอกว้างพอยังเป็นบรรทัดเดียวเหมือนเดิม · จอแคบที่ล้น ป้ายย่อได้ถึงกว้างเท่าเลขของหน้าหลักแล้วตัดเป็น 2 บรรทัด ไม่ดันปุ่ม (กฎ CSS ใน auth.css) */
+  function splitVersionLabel(){
+    try{
+      var els=document.querySelectorAll('.foot .inner > .app-ver');
+      for(var i=0;i<els.length;i++){
+        var el=els[i]; if(el.querySelector('wbr')) continue;
+        var m=/^(.*?)(-(?:auth|phase2)-\d+)$/.exec(el.textContent||''); if(!m) continue;     // [2026-10-12] เลขของ Phase2-Test (…-phase2-N) ยาวเท่ากันและโดนปัญหาเดียวกัน (ตัดตามขีดทุกจุด สูง 3–4 บรรทัดบนจอแคบ) — ชุดทดสอบ T5 จับได้ตอนรันกับ Phase2 ครั้งแรก
+        el.textContent='';
+        var s1=document.createElement('span'), s2=document.createElement('span'); s1.className='avs'; s2.className='avs'; s1.textContent=m[1]; s2.textContent=m[2];   // แต่ละท่อน nowrap (ไม่งั้นเบราว์เซอร์ตัดตามขีดทุกจุด → ป้ายหดเป็นแท่งสูง 4 บรรทัด)
+        el.appendChild(s1); el.appendChild(document.createElement('wbr')); el.appendChild(s2);
+      }
+    }catch(e){}
+  }
+  /* ---------- โหมดเตือน: แถบเตือนท้ายจอ + ธงที่ชื่อแท็บ (ใช้เฉพาะ ?auto=1 / ?noauth=1) ---------- */
+  var advEl=null, titleObs=null, titlePfx='';
+  function titleApply(){
+    try{
+      var t=document.title||'';
+      if(t.indexOf(TITLE_LOGIN)===0) t=t.slice(TITLE_LOGIN.length); else if(t.indexOf(TITLE_SOON)===0) t=t.slice(TITLE_SOON.length);
+      var want=titlePfx ? titlePfx+t : t;
+      if(want!==document.title) document.title=want;      // ตัวสังเกตชื่อแท็บเรียกซ้ำแต่ไม่เปลี่ยนอะไร (ไม่วน)
+    }catch(e){}
+  }
+  function setTitleFlag(p){
+    titlePfx=p||'';
+    try{
+      if(!titleObs && titlePfx && typeof MutationObserver==='function'){
+        var te=document.querySelector('title');
+        if(te){ titleObs=new MutationObserver(titleApply); titleObs.observe(te,{childList:true,characterData:true,subtree:true}); }   // หน้าโหมดอัตโนมัติเขียนชื่อแท็บใหม่ทุกครั้งที่อัปเดตสถานะ — ใส่ธงกลับให้
+      }
+    }catch(e){}
+    titleApply();
+  }
+  function leftText(ms){ return ms<3600e3 ? (Math.max(1,Math.round(ms/60000))+' นาที') : (Math.ceil(ms/3600e3)+' ชั่วโมง'); }
+  // สถานะที่ต้องเตือน: null = ไม่ต้องเตือน (ไม่ใช่โหมดเตือน / ด่านโชว์อยู่แล้ว / มีบัตรและยังไม่ใกล้หมด)
+  function advState(){
+    if(!softMode() || gate.on) return null;
+    var o=readStored();
+    if(isLive(o)){
+      var left=o.expiresAt-Date.now();
+      return (autoMode && left<AUTO_WARN_MS) ? { k:'soon', left:left } : null;
+    }
+    return { k: autoMode ? 'auto' : 'off' };
+  }
+  function ensureAdv(){
+    if(advEl) return advEl;
+    advEl=mk('div', autoMode ? 'aa-fixed' : ''); advEl.id='authAdv'; advEl.hidden=true; advEl.setAttribute('role','status');
+    advEl.appendChild(mk('span','aa-dot')).setAttribute('aria-hidden','true');
+    advEl.appendChild(mk('span','aa-txt'));
+    var b=mk('button','aa-btn'); b.type='button'; b.id='authAdvBtn'; b.textContent=BTN_LOGIN; b.addEventListener('click',loginFromAdv); advEl.appendChild(b);
+    var bar=document.getElementById('authBar');
+    if(bar && bar.parentNode && !autoMode) bar.parentNode.insertBefore(advEl,bar); else document.body.appendChild(advEl);   // โหมดอัตโนมัติ: ลอยท้ายจอเหนือหน้าสถานะ · โหมดฉุกเฉิน: อยู่ในแนวหน้าเหนือแถบผู้ใช้
+    return advEl;
+  }
+  function paintAdv(){
+    if(!document.body) return;
+    var s=advState();
+    if(!s){
+      if(advEl) advEl.hidden=true;
+      setTitleFlag(autoMode && gate.on ? TITLE_LOGIN : '');      // โหมดอัตโนมัติ + ด่านขึ้น (Worker บังคับแล้ว) → ชื่อแท็บบอกด้วย
+      return;
+    }
+    var el=ensureAdv(), tx=el.querySelector('.aa-txt'), head, rest;
+    if(s.k==='soon'){ head='บัตรผ่านจะหมดอายุในอีก '+leftText(s.left); rest=' — กดเข้าสู่ระบบด้วย Lark ใหม่เพื่อต่ออายุอีก 7 วัน (ถ้าไม่ต่อ เมื่อ Worker เริ่มบังคับล็อกอิน หน้านี้จะหยุดทำงาน)'; }
+    else if(s.k==='auto'){ head='ยังไม่ได้เข้าสู่ระบบด้วย Lark'; rest=' — หน้านี้ยังทำงานต่อได้ตอนนี้ แต่ถ้า Worker เริ่มบังคับล็อกอิน หน้านี้จะหยุดจนกว่าจะเข้าสู่ระบบ · เข้าสู่ระบบบนเครื่องนี้ไว้ก่อนได้เลย (อยู่ได้ 7 วัน)'; }
+    else { head='ปิดด่านเข้าสู่ระบบชั่วคราว (?noauth=1)'; rest=' — ยังไม่ได้เข้าสู่ระบบ ใช้งานต่อได้ · ถ้า Worker บังคับล็อกอิน ระบบจะขึ้นหน้าเข้าสู่ระบบเอง'; }
+    tx.textContent=''; var hb=document.createElement('b'); hb.textContent=head; tx.appendChild(hb); tx.appendChild(document.createTextNode(rest));
+    el.className=(autoMode ? 'aa-fixed' : '')+(s.k==='soon' ? ' aa-soon' : '');
+    el.hidden=false;
+    setTitleFlag(autoMode ? (s.k==='soon' ? TITLE_SOON : TITLE_LOGIN) : '');
+  }
+
+  function afterBoot(){
+    splitVersionLabel();
+    if(gate.on){ setInert(true); paintAdv(); return; }
+    var a=readStored();
+    if(a){ paintBar(a.user); lockBranch(a.user); }
+    paintAdv();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',afterBoot); else afterBoot();
+
+  window.suitcubeAuth={
+    mount:mount, logout:logout, login:startLogin,
+    user:function(){ var o=readStored(); return o ? o.user : null; },
+    gateOn:function(){ return gate.on; }, gateState:function(){ return gate.name; }, storageKey:KEY,
+    softMode:function(){ return autoMode ? 'auto' : (offSw ? 'noauth' : ''); }
+  };
+})();
+</script>
 </head>
 <body>
+<!-- [ใหม่ 2026-10-06 ตามที่ขอ] index3 — ด่านเข้าสู่ระบบด้วย Lark: โชว์ทับทุกอย่างจนกว่าจะมีบัตรผ่านที่ยังไม่หมดอายุ (ซ่อนเองด้วย html.auth-ok · ตัวคุมอยู่ในสคริปต์ส่วนหัว) -->
+<div id="authGate" role="dialog" aria-modal="true" aria-labelledby="authGateTitle">
+  <div class="ag-mast"><div class="ag-brand">สั่งแก้ปรับทรง<span class="g">สำเร็จรูป</span></div></div>
+  <div class="ag-body" id="authGateBody" aria-live="polite">
+    <div class="ag-spin" aria-hidden="true"></div>
+    <div class="ag-ttl" id="authGateTitle">กำลังตรวจสอบ…</div>
+  </div>
+</div>
+<script>if(window.suitcubeAuth&&window.suitcubeAuth.mount){window.suitcubeAuth.mount();}else{document.getElementById('authGateTitle').textContent='โหลดระบบเข้าสู่ระบบไม่สำเร็จ — รีเฟรชหน้านี้อีกครั้ง';}</script>
+
 
 <!-- [ใหม่ตามที่ขอ] แถบเตือนเมื่อมีเวอร์ชันใหม่ (ดู checkForUpdate ท้ายสคริปต์) -->
 <div id="updateBanner" hidden>
@@ -4194,6 +4801,13 @@
     </div></div>
   </div>
 </div>
+<!-- [ใหม่ 2026-10-06 ตามที่ขอ] index3 — แถบผู้ใช้ท้ายหน้า: "เข้าสู่ระบบด้วย Lark: ชื่อ" + ออกจากระบบ (สคริปต์ส่วนหัวเติมชื่อ/โน้ต แล้วเอา hidden ออก) -->
+<div id="authBar" hidden>
+  <span class="ab-dot" aria-hidden="true"></span>
+  <span class="ab-txt">เข้าสู่ระบบด้วย Lark: <b id="authBarName"></b></span>
+  <span class="ab-note" id="authBarNote" hidden></span>
+  <button type="button" class="ab-out" id="authLogoutBtn">ออกจากระบบ</button>
+</div>
 
 <div id="receiptPrintArea"></div>
 
@@ -4218,7 +4832,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-09-1';
+  const APP_VERSION = '2026-10-12-1';
 
   let currentView=1;
   function updateIdx(){
