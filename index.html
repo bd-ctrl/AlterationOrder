@@ -1481,7 +1481,7 @@
     if(!(user && user.mapped && user.branch)){ setNote('เข้าสู่ระบบแล้ว (ไม่ผูกสาขา)'); return; }   // บัญชีที่ไม่ผูกสาขา: เลือกสาขาเองได้ตามเดิม
     var sel=document.getElementById('branchTop'); if(!sel) return;
     var found=false; for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===user.branch){ found=true; break; } }
-    if(!found){ setNote('สาขา '+user.branch+' ไม่อยู่ในรายการ — เลือกสาขาเอง'); return; }
+    if(!found){ try{ console.warn('[auth] สาขาของบัญชีไม่อยู่ในรายการ: '+user.branch); }catch(_e){} setNote(''); return;   /* [2026-10-14 ตามที่ขอ] ไม่ขึ้นข้อความ — ช่องสาขายังเลือกเองได้ (ไม่ล็อก) */ }
     // กำลังแก้บิลเก่า (กู้คืนจาก autosave) = ปล่อยสาขาตามบิลนั้น ไม่ทับ (กันบิลของสาขาอื่นถูกเปลี่ยนสาขาตอนบันทึก) แต่ยังล็อกช่อง
     var eb=document.getElementById('editorBanner'), editing=!!(eb && !eb.classList.contains('hidden'));
     sel.classList.add('branch-locked');
@@ -1679,7 +1679,7 @@
   <li><b>หน้า 02 สินค้า</b> — กรอก <span class="hp-field">รหัสสินค้า</span> (พิมพ์ หรือสแกน​<span class="nb">บาร์โค้ด</span>) และ <span class="hp-field">Size</span> แล้วเลือกจุดที่ต้องแก้ ถ้าบิลเดียวมีสินค้าหลายชิ้น กด <span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>เพิ่มสินค้า</span> (รายละเอียดอยู่ใน​<span class="nb">แท็บ</span> "หน้าที่ 2 สินค้า")
     <br>ข้อควรรู้: ถ้าใส่รหัสเสื้อสูทที่เป็น -J (เช่น UF543-J-50) ระบบจะเพิ่มรายการกางเกงคู่กัน (รหัส -P) ให้เองโดยไม่ต้องกดเพิ่มสินค้า ข้อความมุมขวาของแถบขั้นตอนจะเปลี่ยนเป็น "ทั้งหมด 2 รายการ" เอง แต่ระบบ<b>ไม่ใส่ Size กางเกงให้</b> ต้องกรอกเองทุกครั้ง ถ้าไม่ต้องการกางเกงให้ลบรายการนั้นด้วยปุ่มถังขยะเล็กของรายการ</li>
   <li><b>หน้า 03 นัดรับสินค้า</b> — ตรวจและเลือก <span class="hp-field">สาขาที่นัดรับ</span> และ <span class="hp-field">วันที่นัดรับ</span> ให้ตรงกับที่ลูกค้าตกลง ส่วนที่เหลือเลือกตามจริง เช่น สถานะการชำระเงิน เวลานัดรับ งานด่วน (รายละเอียดอยู่ใน​<span class="nb">แท็บ</span> "หน้าที่ 3 นัดรับ &amp; บันทึก")
-    <br>ข้อควรรู้: สองช่องนี้ระบบใส่ค่าเริ่มต้นให้ก่อนแล้ว คือ <span class="hp-field">สาขาที่นัดรับ</span> = สาขาเดียวกับที่เลือกที่แถบบน (ถ้ายังไม่เลือกสาขาที่แถบบน จะขึ้น R3 ไปก่อน) และ <span class="hp-field">วันที่นัดรับ</span> = อีก 7 วันนับจากวันนี้ ถ้าไม่เปลี่ยน ระบบจะบันทึกตามค่านี้และ<b>ไม่เตือน</b> จึงต้องดูให้ตรงกับที่ลูกค้านัดทุกบิล</li>
+    <br>ข้อควรรู้: สองช่องนี้ระบบใส่ค่าเริ่มต้นให้ก่อนแล้ว คือ <span class="hp-field">สาขาที่นัดรับ</span> = สาขาเดียวกับที่เลือกที่แถบบน (ถ้ายังไม่เลือกสาขาที่แถบบน ช่องนี้จะยังไม่ขึ้นให้ เลือกสาขาที่แถบบนแล้วจึงขึ้น) และ <span class="hp-field">วันที่นัดรับ</span> = อีก 7 วันนับจากวันนี้ ถ้าไม่เปลี่ยน ระบบจะบันทึกตามค่านี้และ<b>ไม่เตือน</b> จึงต้องดูให้ตรงกับที่ลูกค้านัดทุกบิล</li>
   <li><b>บันทึก</b> — กด <span class="hp-btn">บันทึกข้อมูล</span> ปุ่มสีทองมุมขวาล่างของหน้า 03 ระบบจะตรวจว่ากรอกครบหรือยัง แล้วขึ้นหน้าต่างบอกผล ดูรายละเอียดหัวข้อ "แถบด้านล่าง" ด้านล่างของหน้านี้
     <br>หลังบันทึกสำเร็จ ไม่ต้องสั่งพิมพ์ใบสรุปเอง ใบสรุปจะพิมพ์ให้เองที่เครื่องพิมพ์สาขา หลังทีมหลังบ้านยืนยันบิลเข้า Salesforce (ใช้ได้เฉพาะสาขาที่ติดตั้งโปรแกรมพิมพ์ไว้) ถ้าต้องพิมพ์ซ้ำให้ใช้ปุ่มปริ้นที่แถบบน รายละเอียดอยู่ใน​<span class="nb">แท็บ</span> "ร่าง · พิมพ์ · ปัญหาที่พบบ่อย" หัวข้อ "2. การพิมพ์ใบสรุป"</li>
 </ol>
@@ -2684,7 +2684,7 @@
 <li>ตัวเลขในช่องคือจำนวนนิ้วที่ขยายออกหรือเก็บเข้า ไม่มีเครื่องหมายลบ ให้ดูทิศทางจากสีและคำข้างช่อง</li>
 <li>แตะที่ตัวเลขตรงกลางช่องก็เพิ่มทีละ 0.25 เหมือนกดปุ่ม +</li>
 <li>กดผิดให้กดปุ่มฝั่งตรงข้ามย้อนกลับ จนช่องกลับเป็นว่าง</li>
-<li>ขีดจำกัด อก เอว สะโพก ของเสื้อสูท และ เอว สะโพก ของกางเกง <b>ขยายออกหรือเก็บเข้าได้ไม่เกินข้างละ 2 นิ้ว</b> กดต่อก็ไม่เพิ่ม ส่วน โคนขา/ต้นขา และ ปลายขา ไม่มีขีดจำกัดในหน้านี้</li>
+<li>ขีดจำกัด อก เอว สะโพก ของเสื้อสูท และ เอว สะโพก ของกางเกง <b>ขยายออกหรือเก็บเข้าได้ไม่เกินข้างละ 3 นิ้ว</b> กดต่อก็ไม่เพิ่ม ส่วน โคนขา/ต้นขา และ ปลายขา ไม่มีขีดจำกัดในหน้านี้</li>
 </ul>
 <div class="hp-warn"><b>โคนขา/ต้นขา และ ปลายขา ของกางเกง:</b> บนหน้าจอขึ้น “ขยายออก” หรือ “เก็บเข้า” ตามปุ่มที่กด แต่ใบสรุปที่พิมพ์จะเขียนว่า “เก็บโคนขา/ต้นขา” และ “เก็บปลายขา” เสมอ ไม่ว่ากด + หรือ − (เช่น กด + สองครั้ง หน้าจอขึ้น “นิ้ว · ขยายออก” แต่ใบสรุปพิมพ์ “เก็บโคนขา/ต้นขา 0.5 นิ้ว”) ช่างที่อ่านใบสรุปอาจเข้าใจว่าเป็นเก็บเข้า ถ้ากด + (ขยายออก) ที่สองจุดนี้ ให้เขียนบอกช่างในช่องหมายเหตุกางเกงด้วย เช่น “ปลายขา ขยายออก 0.5 นิ้ว” ส่วน เอว สะโพก ของกางเกง และ อก เอว สะโพก ของเสื้อสูท ใบสรุปเขียนทิศทางตรงกับที่กด</div>
 <figure class="hp-fig"><img data-src="help_img/p2-06.jpg" width="1536" height="1073" alt="เสื้อสูทที่เปิดแก้ไขขนาดสินค้า"><figcaption>เสื้อสูทที่กด “แก้ไขขนาดสินค้า” แล้ว ความยาวแขนพิมพ์ 1.5 ต้นแขนพิมพ์ 2 พร้อมแคปซูล เก็บเข้า 0.5 อกขยายออก 0.5 (สีน้ำเงิน) เอวเก็บเข้า 1 (สีแดง) จุดที่เหลือเป็น “ไม่แก้ไข” ฝั่งซ้ายเห็นรหัส UF543-J และ Size 50 ที่ระบบเติมให้ (รหัสและตัวเลขในภาพเป็นข้อมูลสมมติ ไม่ได้บอกว่าควรกรอกเท่าไร)</figcaption></figure></div></div>
@@ -2726,14 +2726,14 @@
 <tr><td>ต้นแขน (ขนาดต้นแขน)</td><td>พิมพ์ตัวเลข และมีปุ่ม เก็บเข้า</td></tr>
 <tr><td>ความยาวเสื้อ (หน้า)</td><td>พิมพ์ตัวเลข</td></tr>
 <tr><td>ความยาวเสื้อ (หลัง)</td><td>พิมพ์ตัวเลข</td></tr>
-<tr><td>อก</td><td>ปุ่ม + − ไม่เกิน 2 นิ้ว</td></tr>
-<tr><td>เอว</td><td>ปุ่ม + − ไม่เกิน 2 นิ้ว</td></tr>
-<tr><td>สะโพก</td><td>ปุ่ม + − ไม่เกิน 2 นิ้ว</td></tr>
+<tr><td>อก</td><td>ปุ่ม + − ได้สูงสุด 3 นิ้ว</td></tr>
+<tr><td>เอว</td><td>ปุ่ม + − ได้สูงสุด 3 นิ้ว</td></tr>
+<tr><td>สะโพก</td><td>ปุ่ม + − ได้สูงสุด 3 นิ้ว</td></tr>
 </tbody></table></div>
 <p><b>กางเกง (สำเร็จรูป)</b> มี 6 จุดวัด และ ระดับความยาว เรียงตามลำดับบนหน้าจอ</p>
 <div class="hp-tablewrap"><table class="hp-table"><thead><tr><th>จุดวัด</th><th>วิธีกรอก</th></tr></thead><tbody>
-<tr><td>เอว</td><td>ปุ่ม + − ไม่เกิน 2 นิ้ว</td></tr>
-<tr><td>สะโพก</td><td>ปุ่ม + − ไม่เกิน 2 นิ้ว</td></tr>
+<tr><td>เอว</td><td>ปุ่ม + − ได้สูงสุด 3 นิ้ว</td></tr>
+<tr><td>สะโพก</td><td>ปุ่ม + − ได้สูงสุด 3 นิ้ว</td></tr>
 <tr><td>โคนขา/ต้นขา (จุดวัดเดียวกัน มี 2 ชื่อ)</td><td>ปุ่ม + − ไม่จำกัด (ใบสรุปพิมพ์ว่า “เก็บ” เสมอ)</td></tr>
 <tr><td>ต่ำเข่า</td><td>พิมพ์ตัวเลข</td></tr>
 <tr><td>ปลายขา</td><td>ปุ่ม + − ไม่จำกัด (ใบสรุปพิมพ์ว่า “เก็บ” เสมอ)</td></tr>
@@ -2824,7 +2824,7 @@
 <thead><tr><th>ช่อง</th><th>ค่าที่ระบบใส่ให้ตอนเปิดหน้า</th></tr></thead>
 <tbody>
 <tr><td>สถานะการชำระเงิน</td><td>จ่ายเงินแล้ว</td></tr>
-<tr><td>สาขาที่นัดรับ</td><td>ตามสาขาที่เลือกไว้ที่แถบด้านบน (ถ้าแถบด้านบนยังไม่ได้เลือก จะขึ้น R3 ไปก่อน)</td></tr>
+<tr><td>สาขาที่นัดรับ</td><td>ตามสาขาที่เลือกไว้ที่แถบด้านบน (ถ้าแถบด้านบนยังไม่ได้เลือก ช่องนี้จะยังไม่ขึ้น)</td></tr>
 <tr><td>วันที่นัดรับ</td><td>อีก 7 วันนับจากวันนี้</td></tr>
 <tr><td>เวลานัดรับ</td><td>ไม่ระบุ</td></tr>
 <tr><td>งานด่วน</td><td>ไม่ด่วน</td></tr>
@@ -2918,7 +2918,7 @@
 </div></div>
 
 <div class="hp-item"><div class="hp-name">ชื่อผู้อนุมัติงานด่วน <span class="hp-req">*</span> <span class="hp-kind">รายการให้เลือก (กดแล้วมีรายการลงมา)</span></div><div class="hp-desc">
-ช่องนี้โผล่ขึ้นมาใต้ปุ่มงานด่วน<b>เฉพาะตอนเป็น "ด่วน"</b> กดแล้วเลือกชื่อผู้อนุมัติ 1 ชื่อจาก 4 ชื่อ คือ Benz Sale Mng., Aor, Saipahn, Emm ก่อนเลือกช่องจะเขียนว่า "เลือกผู้อนุมัติ"
+ช่องนี้โผล่ขึ้นมาใต้ปุ่มงานด่วน<b>เฉพาะตอนเป็น "ด่วน"</b> กดแล้วเลือกชื่อผู้อนุมัติ 1 ชื่อจาก 4 ชื่อ คือ Benz Sale Mng., Aor, Saipahn, EEM ก่อนเลือกช่องจะเขียนว่า "เลือกผู้อนุมัติ"
 <ul class="hp-list">
 <li>ถ้าเป็นงานด่วนแล้วไม่เลือกชื่อ แอปจะไม่บันทึก และขึ้นข้อความว่าขาด "ชื่อผู้อนุมัติงานด่วน"</li>
 <li>ชื่อผู้อนุมัติไม่ได้พิมพ์บนใบสรุป (ระบบเก็บชื่อไว้ในข้อมูลบิล)</li>
@@ -4718,21 +4718,21 @@
         <div class="mitem">
           <div class="mtop"><span class="k">อก</span>
             <div class="num-toggle-wrap">
-            <div class="numstep"><div class="field-wrap"><div class="tapzone l" data-d="1"></div><input class="numonly" value="" placeholder="0" inputmode="decimal" data-max="2" readonly><div class="tapzone r" data-d="-1"></div></div><span class="unit dirword">นิ้ว</span></div>
+            <div class="numstep"><div class="field-wrap"><div class="tapzone l" data-d="1"></div><input class="numonly" value="" placeholder="0" inputmode="decimal" data-max="3" readonly><div class="tapzone r" data-d="-1"></div></div><span class="unit dirword">นิ้ว</span></div>
             <div class="toggle"><button>แก้ไข</button><button class="on">ไม่แก้ไข</button></div>
             </div></div>
         </div>
         <div class="mitem">
           <div class="mtop"><span class="k">เอว</span>
             <div class="num-toggle-wrap">
-            <div class="numstep"><div class="field-wrap"><div class="tapzone l" data-d="1"></div><input class="numonly" value="" placeholder="0" inputmode="decimal" data-max="2" readonly><div class="tapzone r" data-d="-1"></div></div><span class="unit dirword">นิ้ว</span></div>
+            <div class="numstep"><div class="field-wrap"><div class="tapzone l" data-d="1"></div><input class="numonly" value="" placeholder="0" inputmode="decimal" data-max="3" readonly><div class="tapzone r" data-d="-1"></div></div><span class="unit dirword">นิ้ว</span></div>
             <div class="toggle"><button>แก้ไข</button><button class="on">ไม่แก้ไข</button></div>
             </div></div>
         </div>
         <div class="mitem" style="border:none">
           <div class="mtop"><span class="k">สะโพก</span>
             <div class="num-toggle-wrap">
-            <div class="numstep"><div class="field-wrap"><div class="tapzone l" data-d="1"></div><input class="numonly" value="" placeholder="0" inputmode="decimal" data-max="2" readonly><div class="tapzone r" data-d="-1"></div></div><span class="unit dirword">นิ้ว</span></div>
+            <div class="numstep"><div class="field-wrap"><div class="tapzone l" data-d="1"></div><input class="numonly" value="" placeholder="0" inputmode="decimal" data-max="3" readonly><div class="tapzone r" data-d="-1"></div></div><span class="unit dirword">นิ้ว</span></div>
             <div class="toggle"><button>แก้ไข</button><button class="on">ไม่แก้ไข</button></div>
             </div></div>
         </div>
@@ -4760,7 +4760,7 @@
       </div>
       <div class="colR">
         <div class="seclabel"><span class="n serif">02</span><span class="t">การนัดรับ</span></div>
-        <div class="frow"><span class="k">สาขาที่นัดรับ <span class="req">*</span></span><select class="frowsel" id="branchPickup"><option>R3</option><option>T21</option><option>SQ1</option><option>PM</option><option>SC</option><option>CM</option><option>FP</option><option>KR</option><option>SL</option><option>NW</option><option>CC</option><option>BP</option><option>RCD</option><option>KK</option><option>PK</option><option>MG</option><option>CTW</option><option>WG</option><option value="Messenger">Messenger</option><option value="ขนส่งเอกชน">ขนส่งเอกชน</option></select></div>
+        <div class="frow hidden" id="branchPickupRow"><span class="k">สาขาที่นัดรับ <span class="req">*</span></span><select class="frowsel" id="branchPickup"><option>R3</option><option>T21</option><option>SQ1</option><option>PM</option><option>SC</option><option>CM</option><option>FP</option><option>KR</option><option>SL</option><option>NW</option><option>CC</option><option>BP</option><option>RCD</option><option>KK</option><option>PK</option><option>MG</option><option>CTW</option><option>WG</option><option value="Messenger">Messenger</option><option value="ขนส่งเอกชน">ขนส่งเอกชน</option></select></div>
         <div class="frow hidden" id="deliveryRow"><span class="k">สถานที่ส่ง <span class="req">*</span></span><input id="deliveryAddress" placeholder="กรอกสถานที่สำหรับจัดส่งสินค้า"></div>
         <div class="frow"><span class="k">วันที่นัดรับ <span class="req">*</span></span>
           <div class="pickup-date-wrap">
@@ -4786,7 +4786,7 @@
               <div class="type-picker-opt" data-value="Benz Sale Mng.">Benz Sale Mng.</div>
               <div class="type-picker-opt" data-value="Aor">Aor</div>
               <div class="type-picker-opt" data-value="Saipahn">Saipahn</div>
-              <div class="type-picker-opt" data-value="Emm">Emm</div>
+              <div class="type-picker-opt" data-value="EEM">EEM</div>
             </div>
           </div>
           <input type="hidden" id="urgentApprover">
@@ -4832,7 +4832,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-12-1';
+  const APP_VERSION = '2026-10-14-3';
 
   let currentView=1;
   function updateIdx(){
@@ -5650,9 +5650,11 @@
       const measures=[...block.querySelectorAll('.mitem')].map(m=>{
         // เช็คจากปุ่ม toggle จริงเสมอ (ไม่พึ่งคลาส .editing) — เพราะ group-toggle-row (เช่น "แก้ทรงกางเกง") ไม่ได้ตั้งคลาสนี้ ผูกแยกผ่าน wireGroupToggles
         const editing=m.querySelector('.toggle button')?.classList.contains('on')||false;
-        const num=m.querySelector('.numonly');
+        // [แก้ 2026-10-14] ต้นแขนมีช่องตัวเลข 2 ช่อง (ขนาดจริง + "เก็บเข้า" ที่อยู่ก่อน) — เดิมหยิบ .numonly ตัวแรก = ช่องเก็บเข้า ทำให้ขนาดต้นแขนไม่ถูกเก็บ
+        const num=m.querySelector('.numonly:not(.takein-input)');
+        const takeInEl=m.querySelector('.takein-input');
         const value=num?getMitemValue(num):0;
-        return {editing, value};
+        return takeInEl ? {editing, value, takein:getMitemValue(takeInEl)} : {editing, value};
       });
       return {
         sku: block.querySelector('.sku-input')?.value||'',
@@ -5684,33 +5686,59 @@
     };
   }
   // [ใหม่] ย้อนกลับค่าวัดตัวจาก data ดิบ (คีย์อ่านง่ายแบบ "สูท - อก") ใส่กลับเข้า .mitem ที่ label ตรงกัน — ใช้ตอนโหลดบิลเก่ามาแก้ไข
-  function applyMeasuresToBlock(block, type, data){
+  // ตั้งค่า "เก็บเข้า" ของต้นแขน และทำให้แคปซูลโผล่เหมือนตอนกดปุ่ม "+ เก็บเข้า" (ไม่งั้นค่าค้างในช่องที่มองไม่เห็นแต่ยังถูกส่ง) · v = 0 = ล้างค่าและซ่อน
+  function setTakeInValue(m, v){
+    const inp=m.querySelector('.takein-input'); if(!inp) return;
+    const sub=m.querySelector('.takein-sub'), addBtn=m.querySelector('.takein-add');
+    const val=Math.abs(parseFloat(v)||0);
+    if(val>0){ setMitemValue(inp, val); if(sub) sub.classList.add('show'); if(addBtn) addBtn.style.display='none'; }
+    else { inp.value=''; delete inp.dataset.dir; if(sub) sub.classList.remove('show'); if(addBtn) addBtn.style.display='inline-flex'; }
+  }
+  // [แก้ 2026-10-14] โหลดบิลเก่ามาแก้: อ่านค่ารายชิ้น (รายการN_สูท… / รายการN_กางเกง…) ของ "ชิ้นนั้น" — เดิมอ่านแต่ค่ารวมระดับบิลซึ่งเป็นของชิ้นแรก ทำให้สูท/กางเกงตัวที่ 2 ขึ้นค่าของตัวแรก
+  //   + ขนาดต้นแขนลงช่องขนาดจริง (เดิมตกไปอยู่ในช่อง "เก็บเข้า" ที่ซ่อนอยู่) + กู้ค่า "เก็บเข้า" ของต้นแขนกลับมาด้วย
+  //   n = เลขรายการ · isFirstOfKind = เป็นชิ้นแรกของประเภทนั้นในบิลไหม (ค่ารวมระดับบิลเป็นของชิ้นแรกเท่านั้น ใช้เป็นตัวสำรองสำหรับบิลเก่าที่ยังไม่มีค่ารายชิ้น)
+  function applyMeasuresToBlock(block, type, data, n, isFirstOfKind){
     const mitems=[...block.querySelectorAll('.mitem:not(.group-toggle-row)')];
-    function setByLabel(label, val){
-      if(val==null || val==='') return;
-      const n=parseFloat(val); if(!n) return;
-      const m=mitems.find(el=>el.querySelector('.k')?.textContent?.trim()===label);
-      if(!m) return;
+    const findM=(label)=>mitems.find(el=>((el.querySelector('.k')||{}).textContent||'').trim()===label);
+    const findArm=()=>mitems.find(el=>/ต้นแขน/.test((el.querySelector('.k')||{}).textContent||''));
+    function setItem(m, val){      // ตั้งค่าที่มีเครื่องหมาย + เปิดโหมด "แก้ไข" ของจุดนั้น
+      if(!m || val==null || val==='') return false;
+      const num=parseFloat(val); if(!num) return false;
       setToggleOnIndex(m,'.toggle',0); m.classList.add('editing');
-      const num=m.querySelector('.numonly'); if(num) setMitemValue(num, n);
+      const el=m.querySelector('.numonly:not(.takein-input)'); if(el) setMitemValue(el, num);
+      return true;
     }
+    const kindPre = type.includes('เสื้อสูท') ? 'รายการ'+n+'_สูท' : (type.includes('กางเกง') ? 'รายการ'+n+'_กางเกง' : null);
+    const hasPer = !!(kindPre && n!=null && Object.keys(data).some(k=>k.indexOf(kindPre)===0));
+    const useOrder = !hasPer && isFirstOfKind!==false;   // บิลเก่าก่อนมีค่ารายชิ้น: ใช้ค่ารวมระดับบิล (เฉพาะชิ้นแรกของประเภท)
     if(type.includes('เสื้อสูท')){
-      setByLabel('ความยาวแขน', data['สูท - ยาวแขน']);
-      setByLabel('ต้นแขน (ขนาดต้นแขน)', data['สูท - ต้นแขน']);
-      setByLabel('ความยาวเสื้อ (หน้า)', data['สูท - ความยาวหน้า']);
-      setByLabel('ความยาวเสื้อ (หลัง)', data['สูท - ความยาวหลัง']);
-      setByLabel('อก', data['สูท - อก']);
-      setByLabel('เอว', data['สูท - เอว']);
-      setByLabel('สะโพก', data['สูท - สะโพก']);
+      const g=(suffix, orderKey)=> hasPer ? data[kindPre+suffix] : (useOrder ? data[orderKey] : undefined);
+      setItem(findM('ความยาวแขน'), g('ยาวแขน','สูท - ยาวแขน'));
+      const arm=findArm(); setItem(arm, g('ต้นแขน','สูท - ต้นแขน'));
+      if(arm && hasPer){ const tk=parseFloat(data[kindPre+'ต้นแขนเก็บเข้า']); if(tk>0){ setToggleOnIndex(arm,'.toggle',0); arm.classList.add('editing'); setTakeInValue(arm, tk); } }
+      setItem(findM('ความยาวเสื้อ (หน้า)'), g('ความยาวหน้า','สูท - ความยาวหน้า'));
+      setItem(findM('ความยาวเสื้อ (หลัง)'), g('ความยาวหลัง','สูท - ความยาวหลัง'));
+      setItem(findM('อก'), g('อก','สูท - อก'));
+      setItem(findM('เอว'), g('เอว','สูท - เอว'));
+      setItem(findM('สะโพก'), g('สะโพก','สูท - สะโพก'));
     } else if(type.includes('กางเกง')){
-      const wOut=parseFloat(data['กางเกง - เอว ขยายออก']), wIn=parseFloat(data['กางเกง - เอวเอาเข้า']);
-      if(wOut) setByLabel('เอว', wOut); else if(wIn) setByLabel('เอว', -wIn);
-      setByLabel('สะโพก', data['กางเกง - สะโพก']);
-      // [แก้ตามที่ขอ] ยุบ โคนขา/ต้นขา เหลือช่องเดียว (จุดวัดเดียวกัน) — โหลดบิลเก่ากลับมาแก้ ต้องเช็คทั้ง 2 ฟิลด์เดิม เผื่อบิลนั้นเคยกรอกไว้ในฟิลด์ใดฟิลด์หนึ่ง (ก่อนยุบ)
-      setByLabel('โคนขา/ต้นขา', data['กางเกง - เก็บโคนขา'] || data['กางเกง - ต้นขา']);
-      setByLabel('ปลายขา', data['กางเกง - เก็บปลายขา']);
-      setByLabel('ความยาวขา', data['กางเกง - ความยาวขา']);
-      setByLabel('ต่ำเข่า', data['กางเกง - ต่ำเข่า']);
+      if(hasPer){
+        setItem(findM('เอว'), data[kindPre+'เอว']);              // ค่ามีเครื่องหมายอยู่แล้ว (+ ขยายออก / − เอาเข้า)
+        setItem(findM('สะโพก'), data[kindPre+'สะโพก']);
+        setItem(findM('ปลายขา'), data[kindPre+'ปลายขา']);
+        setItem(findM('ความยาวขา'), data[kindPre+'ความยาวขา']);
+        setItem(findM('ต่ำเข่า'), data[kindPre+'ต่ำเข่า']);
+        if(isFirstOfKind!==false) setItem(findM('โคนขา/ต้นขา'), data['กางเกง - เก็บโคนขา'] || data['กางเกง - ต้นขา']);   // โคนขา/ต้นขา ไม่มีคีย์รายชิ้น — มีแต่ค่ารวมของกางเกงตัวแรก
+      } else if(useOrder){
+        const wOut=parseFloat(data['กางเกง - เอว ขยายออก']), wIn=parseFloat(data['กางเกง - เอวเอาเข้า']);
+        if(wOut) setItem(findM('เอว'), wOut); else if(wIn) setItem(findM('เอว'), -wIn);
+        setItem(findM('สะโพก'), data['กางเกง - สะโพก']);
+        // [แก้ตามที่ขอ] ยุบ โคนขา/ต้นขา เหลือช่องเดียว (จุดวัดเดียวกัน) — บิลเก่าอาจกรอกไว้ในฟิลด์ใดฟิลด์หนึ่ง จึงเช็คทั้ง 2
+        setItem(findM('โคนขา/ต้นขา'), data['กางเกง - เก็บโคนขา'] || data['กางเกง - ต้นขา']);
+        setItem(findM('ปลายขา'), data['กางเกง - เก็บปลายขา']);
+        setItem(findM('ความยาวขา'), data['กางเกง - ความยาวขา']);
+        setItem(findM('ต่ำเข่า'), data['กางเกง - ต่ำเข่า']);
+      }
     }
   }
   // [ใหม่] โหลดบิลเก่า (ที่ยังไม่ยืนยันเข้า Salesforce) กลับเข้าฟอร์มทั้งหมดเพื่อแก้ไข — data คือก้อนดิบชุดเดียวกับที่ส่งไป /create-order ตอนบันทึกครั้งแรก (คนละรูปทรงกับร่างบันทึกในเครื่อง)
@@ -5754,7 +5782,9 @@
         const noteInp=block.querySelector('.note-input'); if(noteInp){ noteInp.value=data[bc.noteKey]||''; resizeNoteInput(noteInp); }
       }
       syncNoteCheckboxes(block);
-      applyMeasuresToBlock(block, type, data);
+      const _kind=(t)=>String(t||'').includes('เสื้อสูท')?'suit':(String(t||'').includes('กางเกง')?'pants':'other');
+      const _isFirst=itemNs.slice(0,i).every(k=>_kind(data['รายการ'+k+'_ประเภท'])!==_kind(type));
+      applyMeasuresToBlock(block, type, data, n, _isFirst);   // [แก้ 2026-10-14] อ่านค่ารายชิ้น ไม่ใช่ค่ารวมของชิ้นแรกซ้ำทุกชิ้น
       // มีค่าวัดตัวที่ถูกแก้ไขไหม (เทียบจากบรรทัดสรุปที่บันทึกไว้ตอนแรก) — ถ้าแก้ไข เปิด toptoggle "แก้ไขขนาดสินค้า" ให้เห็นแถบวัดตัวทันที
       const hasEdit=(data['รายการ'+n+'_รายละเอียด']||'')!=='ไม่แก้ไขขนาดสินค้า';
       setToggleOnIndex(block,'.toptoggle', hasEdit?0:1);
@@ -5801,7 +5831,13 @@
       const m=mitems[i]; if(!m) return;
       setToggleOnIndex(m,'.toggle', mv.editing?0:1);
       m.classList.toggle('editing', !!mv.editing);
-      const num=m.querySelector('.numonly'); if(num) setMitemValue(num, mv.value);
+      // [แก้ 2026-10-14] ขนาดต้นแขนลงช่องขนาดจริง + "เก็บเข้า" ลงช่องของมัน (แล้วโชว์แคปซูล) · ร่างเก่าที่ไม่มีคีย์ takein เก็บค่าช่อง "เก็บเข้า" ไว้ใน value → อ่านกลับเป็น "เก็บเข้า" (ขนาดที่ไม่เคยถูกเก็บกู้คืนไม่ได้)
+      const takeInEl=m.querySelector('.takein-input');
+      const sizeEl=m.querySelector('.numonly:not(.takein-input)');
+      let sizeVal=mv.value, takeVal=0;
+      if(takeInEl){ if(mv.takein===undefined){ takeVal=mv.value; sizeVal=0; } else takeVal=mv.takein; }
+      if(sizeEl) setMitemValue(sizeEl, sizeVal);
+      if(takeInEl) setTakeInValue(m, takeVal);
     });
     // ตัวควบคุมกลุ่ม (เช่น "แก้ทรงกางเกง") ผูก state ผ่านคลาส 'on' ตรงๆ ข้างบนแล้ว แต่ยังไม่ได้ sync การโชว์/ซ่อนสมาชิกในกลุ่ม — ทำตรงนี้
     block.querySelectorAll('.group-toggle-row').forEach(row=>{
@@ -6641,13 +6677,13 @@
       {label:'ต้นแขน (ขนาดต้นแขน)', kind:'num', takeIn:true},
       {label:'ความยาวเสื้อ (หน้า)', kind:'num'},
       {label:'ความยาวเสื้อ (หลัง)', kind:'num'},
-      {label:'อก', kind:'tape', dir:true, max:2},
-      {label:'เอว', kind:'tape', dir:true, max:2},
-      {label:'สะโพก', kind:'tape', dir:true, max:2},
+      {label:'อก', kind:'tape', dir:true, max:3},
+      {label:'เอว', kind:'tape', dir:true, max:3},
+      {label:'สะโพก', kind:'tape', dir:true, max:3},
     ]},
     'กางเกง (สำเร็จรูป)': { noteLabel:'หมายเหตุกางเกง', items:[
-      {label:'เอว', kind:'tape', dir:true, dirWords:['ขยายออก','เอาเข้า'], max:2},
-      {label:'สะโพก', kind:'tape', dir:true, max:2},
+      {label:'เอว', kind:'tape', dir:true, dirWords:['ขยายออก','เอาเข้า'], max:3},
+      {label:'สะโพก', kind:'tape', dir:true, max:3},
       // [แก้บั๊ก] เจอจริง — โคนขา/ต้นขา หายไปจากฟอร์ม (ไม่มีใน items เลย) ทั้งที่ applyMeasuresToBlock/readMeasureValues/getPrintMeasureRows ทุกจุดยังอ้างถึงป้าย 'โคนขา'/'ต้นขา' อยู่ (แม็ปกับฟิลด์ Salesforce 'กางเกง - เก็บโคนขา'/'กางเกง - ต้นขา' ด้วย) — เพิ่มกลับเข้ามาก่อนรอบนี้
       // [แก้ตามที่ขอ] ลูกค้ายืนยันว่า "ต้นขา" กับ "โคนขา" คือจุดวัดเดียวกัน (แค่มีคนละชื่อเรียกจากคนละที่มาในโค้ดเดิม) เหลือช่องเดียวพอ
       // [แก้ตามที่ขอ] ตั้งชื่อป้ายเป็น "โคนขา/ต้นขา" ให้พนักงานจำได้ทั้ง 2 ชื่อ — ยังเป็นช่องเดียว/ค่าเดียว แค่ป้ายโชว์ 2 ชื่อ (label ตัวนี้เป็นทั้ง key ที่ readMeasureValues/applyMeasuresToBlock/getPrintMeasureRows ใช้อ้างอิงด้วย ต้องตรงกันทุกจุด)
@@ -6705,7 +6741,7 @@
         + '</div>';
     }
     // จุดวัดที่มีทิศทาง (เดิมเป็นสายวัด) — แตะฝั่งซ้าย/ขวาของช่องตัวเลขเองเพื่อลด/เพิ่มทีละ 0.25 พร้อมบอกทิศทาง ขยายออก/เก็บเข้า (เลิกใช้ปุ่ม +/- แยกข้างๆ แล้ว)
-    // item.max (ถ้ามี) = เพิ่ม/ลดได้ไม่เกินกี่นิ้ว (อก/เอว/สะโพก จำกัดไว้ที่ 2) — เก็บเป็น data-max ให้ stepMitemValue/setMitemValue อ่านไปคลัมป์ค่า
+    // item.max (ถ้ามี) = เพิ่ม/ลดได้ไม่เกินกี่นิ้ว (อก/เอว/สะโพก จำกัดไว้ที่ 3 (เดิม 2 นิ้ว — ปรับเป็น 3 ตามที่ขอ 2026-10-14)) — เก็บเป็น data-max ให้ stepMitemValue/setMitemValue อ่านไปคลัมป์ค่า
     const maxAttr = item.max!=null ? ' data-max="'+item.max+'"' : '';
     return '<div class="mitem"'+groupAttr+'>'
       + '<div class="mtop"><span class="k">'+item.label+'</span>'
@@ -6754,7 +6790,7 @@
   // ตั้งค่าช่องวัดจากตัวเลขที่มีเครื่องหมาย (ใช้ตอนโหลดร่างกลับมา/ตอนกดปุ่ม +/-) — โชว์ในช่องแค่ขนาด (บวกเสมอ) เก็บทิศทางไว้ที่ data-dir
   function setMitemValue(numEl, val){
     let v=Math.round((parseFloat(val)||0)*100)/100;
-    // ช่องที่มี data-max (อก/เอว/สะโพก จำกัดไว้ที่ 2 นิ้ว) — คลัมป์ค่าไม่ให้เกินทั้งสองทิศทาง ไม่ว่าจะมาจากปุ่ม +/- หรือพิมพ์เอง
+    // ช่องที่มี data-max (อก/เอว/สะโพก จำกัดไว้ที่ 3 (เดิม 2 นิ้ว — ปรับเป็น 3 ตามที่ขอ 2026-10-14) นิ้ว) — คลัมป์ค่าไม่ให้เกินทั้งสองทิศทาง ไม่ว่าจะมาจากปุ่ม +/- หรือพิมพ์เอง
     const max=parseFloat(numEl.dataset.max);
     // [ใหม่] data-min — ช่องที่เป็น "จำนวน" ล้วนๆ ไม่ใช่ค่าทิศทาง (เช่น เก็บเข้าของต้นแขน) กำหนดขอบล่างแยกต่างหากได้ (ปกติ = 0 กันติดลบ)
     // ถ้าไม่ระบุ data-min แต่มี data-max ให้ถือขอบล่างเป็น -max เหมือนเดิม (พฤติกรรมเดิมของช่องมีทิศทาง)
@@ -7709,6 +7745,15 @@
     deliveryRow.classList.toggle('hidden', !isDelivery);
   }
   if(branchPickup){ branchPickup.addEventListener('change', updateDeliveryVisibility); updateDeliveryVisibility(); }
+  // [2026-10-14 ตามที่ขอ] ยังไม่ได้เลือกสาขาที่ซื้อ (แถบบน) → ยังไม่ต้องโชว์แถว "สาขาที่นัดรับ" (เดิมขึ้น R3 ทั้งที่ยังไม่ได้เลือกสาขา) · เลือกสาขาแล้วค่อยขึ้น และตั้งต้นตามสาขานั้นเหมือนเดิม
+  const branchPickupRow=document.getElementById('branchPickupRow');
+  function updatePickupRowVisibility(){
+    if(!branchPickupRow) return;
+    const hasTop=!!(((document.getElementById('branchTop')||{}).value)||'').trim();
+    branchPickupRow.classList.toggle('hidden', !hasTop);
+  }
+  branchTopListeners.push(updatePickupRowVisibility);
+  updatePickupRowVisibility();
 
   // สาขาที่นัดรับ (หน้า 3) ตั้งต้นตามสาขาที่เลือกใน header อัตโนมัติ — แต่ถ้าผู้ใช้เปลี่ยนเองแล้ว จะไม่ทับค่าที่เลือกไว้อีก
   let _branchPickupTouched=false;
