@@ -1493,7 +1493,8 @@
       sel.value=user.branch;
       sel.dispatchEvent(new Event('change',{bubbles:true}));     // เหมือนผู้ใช้เลือกสาขาเอง: ตัวจัดการเดิมของช่องสาขาทำงาน (ปรับความกว้าง + โหลดเลขที่บิล + รีเฟรชร่าง) และ autosave เก็บสาขาใหม่ทันที
       // สาขาที่นัดรับที่กู้คืนมาแล้วเลือกต่างจากสาขาเดิมของฟอร์ม = ผู้ใช้เลือกเอง → คืนค่าเดิม (สาขาที่นัดรับที่แค่ "ตามสาขา" ยังตามเป็นสาขาของบัญชีตามปกติ)
-      if(bp && prevPick && prevPick!==prevTop && bp.value!==prevPick){ bp.value=prevPick; bp.dispatchEvent(new Event('change',{bubbles:true})); }
+      // [แก้ 2026-10-15] คืนค่าเฉพาะเมื่อ prevTop (สาขาบนแถบหัวเดิม) มีค่า — เปิดหน้าใหม่ prevTop ว่าง ส่วนช่องนัดรับมีค่าตั้งต้น R3 อยู่ ไม่ใช่ค่าที่ผู้ใช้เลือก (เดิมถูกคืนเป็น R3 ทุกบัญชี)
+      if(bp && prevTop && prevPick && prevPick!==prevTop && bp.value!==prevPick){ bp.value=prevPick; bp.dispatchEvent(new Event('change',{bubbles:true})); }
     }
     sel.disabled=true;
     setNote('สาขา '+(editing ? sel.value : user.branch)+' · ล็อกตามบัญชี', true);
@@ -4832,7 +4833,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-15-1';
+  const APP_VERSION = '2026-10-15-3';
 
   let currentView=1;
   function updateIdx(){
@@ -7102,9 +7103,40 @@
   // หมายเหตุ: ดึงผ่าน Worker (/sku-list) แทนการยิงตรงไปที่ Google Sheets จากเบราว์เซอร์ เพราะ Google
   // รีไดเรกต์ก่อนถึงโดเมนที่มี CORS header ทำให้เบราว์เซอร์บล็อกเสมอ — ต้องให้ฝั่งเซิร์ฟเวอร์ (Worker) ดึงแทน
   let SKU_LIST=['UF543-J-50','UF543-P-32','UF544-SH-L','UF544-V-52','UF550-P-34','UF561-S-48','UF561-J-46'];
-  fetch(WORKER+'/sku-list').then(r=>r.json()).then(d=>{
-    if(d && d.success && Array.isArray(d.skus) && d.skus.length) SKU_LIST=d.skus;
-  }).catch(()=>{ /* ใช้รายการเริ่มต้นต่อไปถ้าโหลดไม่สำเร็จ */ });
+  // [แก้ 2026-10-15] โหลดรายการ SKU ผ่านฟังก์ชันเดียว: โหลดตอนเปิดหน้า + โหลดใหม่เงียบๆ เมื่อแตะช่องรหัสสินค้าและรายการเก่ากว่า 10 นาที (หรือครั้งแรกโหลดไม่สำเร็จ)
+  // เดิมโหลดครั้งเดียวตอนเปิดหน้า — หน้าที่เปิดค้างไว้จึงถือรายการเก่าไปเรื่อยๆ รหัสที่เพิ่งเพิ่มในชีตไม่ขึ้นแนะนำจนกว่าจะรีเฟรช · โหลดไม่สำเร็จก็คงรายการเดิมไว้
+  let SKU_LOADED_AT=0, _skuLoading=null;
+  function loadSkuList(force){
+    if(_skuLoading) return _skuLoading;
+    if(!force && SKU_LOADED_AT && Date.now()-SKU_LOADED_AT<600000) return Promise.resolve(false);
+    _skuLoading=fetch(WORKER+'/sku-list').then(r=>r.json()).then(d=>{
+      if(d && d.success && Array.isArray(d.skus) && d.skus.length){ SKU_LIST=d.skus; SKU_LOADED_AT=Date.now(); return true; }
+      return false;
+    }).catch(()=>false).then(v=>{ _skuLoading=null; return v; });
+    return _skuLoading;
+  }
+  loadSkuList(true);
+  // [แก้ 2026-10-15] เรียงรายการแนะนำจากน้อยไปมากแบบธรรมชาติ (ตัวเลขเทียบเป็นเลข: 2 มาก่อน 24 · -J มาก่อน -J-46 · ไซซ์ 46<48<…<60)
+  function skuTokens(x){ return String(x).toUpperCase().match(/\d+|\D+/g)||[]; }
+  function skuCmp(a,b){
+    const A=skuTokens(a), B=skuTokens(b), n=Math.min(A.length,B.length);
+    for(let i=0;i<n;i++){
+      const x=A[i], y=B[i]; if(x===y) continue;
+      if(/^\d/.test(x) && /^\d/.test(y)){ const d=Number(x)-Number(y); if(d) return d; if(x.length!==y.length) return x.length-y.length; continue; }
+      return x<y?-1:1;
+    }
+    return A.length-B.length;
+  }
+  // เลือก k ตัวที่น้อยที่สุด (ไม่เรียงทั้งรายการ — พิมพ์ตัวเดียวอาจตรงเป็นพันรหัส)
+  function skuSmallest(arr,k){
+    const out=[];
+    for(const x of arr){
+      if(out.length>=k && skuCmp(x,out[out.length-1])>=0) continue;
+      let i=out.length; while(i>0 && skuCmp(x,out[i-1])<0) i--;
+      out.splice(i,0,x); if(out.length>k) out.pop();
+    }
+    return out;
+  }
 
   // เดา "ประเภทสินค้า" และ "Size" จากท้ายรหัส (best-effort) — ไม่ตัดทอนรหัสจริง เพราะรหัสจริงมีรูปแบบหลากหลาย
   // รูปแบบรหัสจริง: [รหัสสินค้า]-[ประเภท]-[ไซซ์] เช่น "UF543-J-38" หรือ "UF068-BK-J-46" (มีรหัสสีคั่นกลางก็ได้)
@@ -7264,7 +7296,14 @@
     }
     function showSug(q){
       if(!sug) return; q=(q||'').trim().toUpperCase();
-      const hits=(q?SKU_LIST.filter(s=>s.toUpperCase().includes(q)):SKU_LIST).slice(0,8);
+      let hits;
+      if(q){
+        // [แก้ 2026-10-15] รหัสที่ขึ้นต้นตรงกับที่พิมพ์มาก่อน (เช่น UF2039-2 → UF2039-2-J… ก่อน UF2039-24-J…) แล้วตามด้วยรหัสที่มีข้อความนี้อยู่กลางรหัส · แต่ละกลุ่มเรียงน้อยไปมาก
+        const pre=[], mid=[];
+        for(const s of SKU_LIST){ const i=String(s).toUpperCase().indexOf(q); if(i===0) pre.push(s); else if(i>0) mid.push(s); }
+        hits=skuSmallest(pre,8);
+        if(hits.length<8) hits=hits.concat(skuSmallest(mid,8-hits.length));
+      } else hits=SKU_LIST.slice(0,8);
       if(!hits.length){ sug.classList.remove('show'); return; }
       sug.innerHTML=hits.map(s=>{ const {type}=parseSkuMeta(s); return '<div class="s" data-code="'+s+'"><b>'+s+'</b><small>'+(type||'')+'</small></div>'; }).join('');
       sug.classList.add('show');
@@ -7273,7 +7312,7 @@
       sku.addEventListener('input',e=>{ if(!e.isComposing) fixThaiKeysInInput(sku); showSug(sku.value); });
       sku.addEventListener('focus',()=>resetThaiKeysState(sku));
       sku.addEventListener('compositionend',()=>{ fixThaiKeysInInput(sku); showSug(sku.value); });
-      sku.addEventListener('focus',()=>showSug(sku.value));
+      sku.addEventListener('focus',()=>{ showSug(sku.value); loadSkuList(false).then(ch=>{ if(ch && document.activeElement===sku) showSug(sku.value); }); });
       sug.addEventListener('click',e=>{ const el=e.target.closest('.s'); if(!el)return; applySku(el.dataset.code); normalizeAccessorySku(block); sug.classList.remove('show'); });
       // รองรับเครื่องสแกนบาร์โค้ดจริง (USB/บลูทูธ) — เครื่องพวกนี้ทำงานเหมือนพิมพ์คีย์บอร์ดเร็วๆ แล้วกด Enter ปิดท้ายเสมอ
       // แค่คลิกโฟกัสช่องนี้ไว้ก่อนแล้วยิงสแกน ไม่ต้องเปิดกล้องผ่านปุ่มสแกนเลย — ดักคีย์ Enter ตรงนี้เพื่อสั่ง parse รหัส/เติมประเภท-ไซซ์ให้ทันที
