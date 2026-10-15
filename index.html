@@ -4832,7 +4832,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-14-3';
+  const APP_VERSION = '2026-10-15-1';
 
   let currentView=1;
   function updateIdx(){
@@ -5518,9 +5518,13 @@
     _histLoading=true; _histLoadedBranch=branch;
     histList.innerHTML='<div class="hist-state">กำลังโหลด…</div>';
     try{
-      const res=await fetch(WORKER+'/list-orders?branch='); // ไม่กรองสาขาที่ซื้อแล้ว ดึงมาทุกสาขา
+      // [แก้ 2026-10-15] ขอเฉพาะสาขาที่ซื้อที่เลือก — Worker กรองคอลัมน์ "สาขา" ให้ (ค่าเดียวกับ o.branch ที่กรองซ้ำด้านล่าง)
+      // เดิมดึงทุกสาขา (branch ว่าง): ตั้งแต่ตารางเกิน 500 แถว (13 ต.ค. 69) Worker ดึงหน้าแรกซ้ำ 30 รอบ ~42 วิ เกินหน่วยความจำ → "เชื่อมต่อ Lark Base ไม่สำเร็จ"
+      const res=await fetch(WORKER+'/list-orders?branch='+encodeURIComponent(branch||''));
       const d=await res.json();
       _histLoading=false;
+      const selNow=document.getElementById('histLiveBranch');
+      if(_histTab==='live' && selNow && selNow.value && selNow.value!==branch){ loadLiveOrders(selNow.value); return; }
       if(_histTab!=='live') return;
       if(d && d.success){
         const all=d.orders||[];
@@ -5529,10 +5533,11 @@
         if(!_histOrders.length){ histList.innerHTML='<div class="hist-state">ยังไม่มีประวัติใบสั่งแก้สำเร็จรูปที่สาขานี้บันทึกไว้</div>'; return; }
         renderHistList(_histOrders, histSearchInput.value);
       } else {
+        _histOrders=null;
         histList.innerHTML='<div class="hist-state">โหลดประวัติไม่สำเร็จ: '+escapeHtml(d&&d.error||'ไม่ทราบสาเหตุ')+'</div>';
       }
     }catch(e){
-      _histLoading=false;
+      _histLoading=false; _histOrders=null;
       if(_histTab==='live') histList.innerHTML='<div class="hist-state">เชื่อมต่อ Lark Base ไม่สำเร็จ — ลองใหม่อีกครั้ง</div>';
     }
   }
@@ -5576,6 +5581,7 @@
         _histEditFilter=btn.dataset.editfilter;
         document.querySelectorAll('#histEditFilterRow .hist-editfilter-btn').forEach(b=>b.classList.toggle('on', b===btn));
         if(_histOrders) renderHistList(_histOrders, histSearchInput.value);
+        else if(_histTab==='live' && !_histLoading){ const s=document.getElementById('histLiveBranch'); loadLiveOrders(s?s.value:''); }
       });
     });
   }
