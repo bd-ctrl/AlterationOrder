@@ -150,6 +150,17 @@
   .note-hint{font-style:italic;font-weight:300;font-size:12px;color:var(--t2);margin:-6px 0 10px;padding-left:2px}
   .stitchlbl{display:flex;align-items:center;gap:10px;cursor:pointer}
   .stitchlbl input{width:18px;height:18px;accent-color:var(--gold);cursor:pointer;margin:0}
+  /* [ใหม่ 2026-10-19 ผู้ใช้เลือกแบบ A "วงกลมติ๊ก" จาก mockup] ช่องติ๊กในก้อนสินค้า 4 ช่อง (เย็บย้ำกระดุม/ลูกค้าใช้งานก่อนปรับแก้/งานทีม/ใช้ช่างหน้าร้าน) เปลี่ยนจากสี่เหลี่ยมเป็นวงกลม — ติ๊กแล้วเต็มวงสีทอง เครื่องหมายถูกขาว · input จริงยังอยู่ (ซ่อนด้วย opacity) ใช้คีย์บอร์ด/JS เดิมได้ทุกอย่าง */
+  .frow.stitch-row,.frow.used-row,.frow.team-row,.frow.shop-row{padding-top:11px;padding-bottom:11px}
+  .stitchlbl.rchk{position:relative;gap:12px;user-select:none}
+  .stitchlbl.rchk input{position:absolute;opacity:0;width:25px;height:25px;margin:0;pointer-events:none}
+  .rchk .ind{width:25px;height:25px;border-radius:50%;border:1.7px solid #c9bfa3;background:#fff;display:grid;place-items:center;flex:0 0 auto;transition:background .18s,border-color .18s,transform .18s}
+  .rchk .ind svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round;opacity:0;transform:scale(.45);transition:opacity .16s,transform .2s cubic-bezier(.3,1.5,.5,1)}
+  .rchk input:checked ~ .ind{background:var(--gold);border-color:var(--gold)}
+  .rchk input:checked ~ .ind svg{opacity:1;transform:none}
+  .rchk:hover .ind{border-color:var(--gold)}
+  .rchk:active .ind{transform:scale(.92)}
+  .rchk input:focus-visible ~ .ind{box-shadow:0 0 0 4px rgba(201,162,75,.35)}
   /* [แก้ตามที่ขอ] เดิมซ้อน input type=date จริง (โปร่งใส แต่กดได้) ไว้ใต้ข้อความไทยที่โชว์ให้เห็น — เปิดปฏิทินของเบราว์เซอร์เอง ซึ่งบางเบราว์เซอร์ (เช่น Chrome บนไอแพด) ไม่ได้ทำวันที่ก่อนวันนี้ให้ดูเป็นสีเทา/กดไม่ได้ชัดเจน
      ตอนนี้เปลี่ยนมาใช้ปฏิทินที่สร้างเอง (ดู .pickup-cal ด้านล่าง) แทน — ตัว input type=date เดิมยังอยู่เบื้องหลังเป็นที่เก็บค่าจริง (โค้ดส่วนอื่นที่อ่าน/เขียน pickupDate.value ไม่ต้องแก้อะไรเลย) แค่ไม่ให้กดเปิดปฏิทิน native ของเบราว์เซอร์แล้ว (pointer-events:none) */
   .pickup-date-wrap{position:relative;margin-left:auto;display:flex;align-items:center;justify-content:flex-end;width:60%}
@@ -4704,13 +4715,13 @@
         <div class="frow"><span class="k">สินค้าใช้ของสาขา</span><select class="frowsel branch-prod"><option>OFFICE</option><option>R3</option><option>T21</option><option>SQ1</option><option>PM</option><option>SC</option><option>CM</option><option>FP</option><option>KR</option><option>SL</option><option>NW</option><option>CC</option><option>BP</option><option>RCD</option><option>KK</option><option>PK</option><option>MG</option><option>CTW</option><option>WG</option></select></div>
         <div class="frow codewrap contact-row hidden"><span class="k">ชื่อพนักงานที่ติดต่อ</span><input class="contact-input" placeholder="พิมพ์แล้วเลือกชื่อ" autocomplete="off"><div class="suggest contact-suggest"></div></div>
         <!-- [ใหม่ตามที่ขอ] ติ๊ก "เย็บย้ำกระดุม" เหนือหมายเหตุ — โชว์เฉพาะเสื้อสูท/กางเกง (คุมด้วย JS ใน renderMeasureSection) ติ๊กแล้วเติมคำนี้ลงหมายเหตุอัตโนมัติ ซึ่งไปรวมกับหมายเหตุที่ส่ง Salesforce (Field20__c) อยู่แล้วตามปกติ -->
-        <div class="frow stitch-row" style="border:none"><label class="stitchlbl"><input type="checkbox" class="stitch-check"><span class="k">เย็บย้ำกระดุม</span></label></div>
+        <div class="frow stitch-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="stitch-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">เย็บย้ำกระดุม</span></label></div>
         <!-- [ใหม่ 2026-09-23 ตามที่ขอ] ติ๊ก "ลูกค้าใช้งานก่อนปรับแก้" เหนือหมายเหตุ — กลไกเดียวกับ "เย็บย้ำกระดุม" ทุกอย่าง (ติ๊กแล้วเติมคำนี้ลงหมายเหตุอัตโนมัติ) ต่างกันแค่ไม่จำกัดประเภทสินค้า (ใช้ได้ทุกประเภท ไม่ใช่แค่เสื้อสูท/กางเกง) ดู wireUsedCheckbox -->
-        <div class="frow used-row" style="border:none"><label class="stitchlbl"><input type="checkbox" class="used-check"><span class="k">ลูกค้าใช้งานก่อนปรับแก้</span></label></div>
+        <div class="frow used-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="used-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">ลูกค้าใช้งานก่อนปรับแก้</span></label></div>
         <!-- [ใหม่ 2026-10-06 ตามที่ขอ] ติ๊ก "งานทีม" เหนือหมายเหตุ — กลไกเดียวกับ "เย็บย้ำกระดุม" (ติ๊กแล้วเติมคำนี้ลงหมายเหตุอัตโนมัติ เอาติ๊กออกแล้วลบคำนี้) ต่างแค่โชว์ทุกประเภทสินค้า (พิมพ์ชื่อทีมต่อท้ายในหมายเหตุได้เอง เช่น "งานทีม K.Wind") -->
-        <div class="frow team-row" style="border:none"><label class="stitchlbl"><input type="checkbox" class="team-check"><span class="k">งานทีม</span></label></div>
-        <!-- [ใหม่ 2026-10-16 ตามที่ขอ] ติ๊ก "ใช้ช่างหน้าร้าน" เหนือหมายเหตุ — โชว์เฉพาะสาขาที่ซื้อ (header) = KK และประเภทของก้อนนี้ = กางเกง (คุมด้วย JS: updateShopTailorRow) · กลไกเดียวกับ "งานทีม" (ติ๊กแล้วเติมคำนี้ลงหมายเหตุ เอาติ๊กออกแล้วลบคำนี้) · หมายเหตุมีคำนี้ → ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว -->
-        <div class="frow shop-row hidden" style="border:none"><label class="stitchlbl"><input type="checkbox" class="shop-check"><span class="k">ใช้ช่างหน้าร้าน</span></label></div>
+        <div class="frow team-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="team-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">งานทีม</span></label></div>
+        <!-- [แก้ 2026-10-19] ติ๊ก "ใช้ช่างหน้าร้าน" เหนือหมายเหตุ — โชว์เฉพาะ สินค้าใช้ของสาขา = KK และประเภทของก้อนนี้ = กางเกง (คุมด้วย JS: updateShopTailorRow) · กลไกเดียวกับ "งานทีม" (ติ๊กแล้วเติมคำนี้ลงหมายเหตุ เอาติ๊กออกแล้วลบคำ) -->
+        <div class="frow shop-row hidden" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="shop-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">ใช้ช่างหน้าร้าน</span></label></div>
         <div class="frow" style="border:none;align-items:flex-start"><span class="k note-label">หมายเหตุเสื้อสูท</span><textarea class="note-input" placeholder="เพิ่มหมายเหตุ" rows="2"></textarea></div>
         <!-- คำแนะนำเพิ่มเติมใต้ช่องหมายเหตุ — โชว์เฉพาะประเภทสินค้าที่เกี่ยวข้อง (คุมด้วย JS ตาม type-select) -->
         <div class="note-hint" data-hint-for="เสื้อกั๊ก (สำเร็จรูป)" style="display:none">ถ้าต้องการเย็บ/ย้ำกระดุม ระบุในช่องหมายเหตุด้านบน</div>
@@ -4873,7 +4884,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-16-2';
+  const APP_VERSION = '2026-10-19-2';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -7099,16 +7110,28 @@
       resizeNoteInput(noteInput);
     });
   }
-  // [ใหม่ 2026-10-16 ตามที่ขอ] ติ๊ก "ใช้ช่างหน้าร้าน" — โชว์เฉพาะสาขาที่ซื้อ (header) = KK และประเภทของก้อนนี้ = กางเกง · ติ๊กแล้วเติมคำนี้ลงหมายเหตุกางเกงอัตโนมัติ (โครงเดียวกับ wireTeamCheckbox) · เอาติ๊กออก = ลบคำนี้ออกจากหมายเหตุ
-  // การโชว์/ซ่อนแถวไม่แตะหมายเหตุเลย (ไม่ลบข้อความที่พนักงานพิมพ์เอง/โหลดมาจากบิลเดิม) — ซ่อน = แค่เลิกโชว์ช่องติ๊ก · ใบ 4×6 ตัดสินใจตอนวาดจากหมายเหตุ+สาขา+ประเภทเสมอ (shouldUseReceipt4x6)
-  function shopTailorEligible(typeValue){
-    const top=(document.getElementById('branchTop')?.value||'').trim();
-    return top==='KK' && /^กางเกง/.test(String(typeValue||''));
+  // [แก้ 2026-10-19 ตามที่ผู้ใช้ท้วง] ติ๊ก "ใช้ช่างหน้าร้าน" — โชว์เฉพาะเมื่อ "สินค้าใช้ของสาขา" (.branch-prod ของก้อนนั้น) = KK และประเภทของก้อนนี้ = กางเกง (เดิมไปดูสาขาที่ซื้อที่ header = ผิด) · ติ๊กแล้วเติมคำนี้ลงหมายเหตุกางเกงอัตโนมัติ (โครงเดียวกับ wireTeamCheckbox) · เอาติ๊กออก = ลบคำนี้ออกจากหมายเหตุ
+  // เงื่อนไขหายตอนที่แถวกำลังโชว์ (เปลี่ยนสินค้าใช้ของสาขาเป็นอย่างอื่น/เปลี่ยนประเภท) → ซ่อน + เอาติ๊กออก + ลบคำออกจากหมายเหตุ (เหมือน "เย็บย้ำกระดุม") · แถวที่ซ่อนอยู่แล้วตั้งแต่ต้น (โหลดบิลเก่า/ร่าง) ไม่แตะหมายเหตุเลย
+  // ใบ 4×6 ตัดสินใจตอนวาดจาก ประเภท + สินค้าใช้ของสาขา + หมายเหตุ เสมอ (shouldUseReceipt4x6)
+  // ค่าสาขาจากฟอร์ม ("KK") กับจาก Salesforce ("สาขา KK (…)") แปลงเป็นรหัสเดียวกันด้วย stockBranchCode
+  function stockBranchCode(v){ return String(v||'').replace(/\s*[(（][^)）]*[)）]/g,'').replace(/^สาขา\s*/,'').trim().toUpperCase(); }
+  function shopTailorEligible(typeValue, stockBranch){
+    return stockBranchCode(stockBranch)==='KK' && /^กางเกง/.test(String(typeValue||''));
   }
   function updateShopTailorRow(block, typeValue){
     const row=block.querySelector('.shop-row'); if(!row) return;
     const type=typeValue!==undefined ? typeValue : (block.querySelector('.type-select')?.value||'');
-    row.classList.toggle('hidden', !shopTailorEligible(type));
+    const eligible=shopTailorEligible(type, block.querySelector('.branch-prod')?.value);
+    const wasShown=!row.classList.contains('hidden');
+    row.classList.toggle('hidden', !eligible);
+    if(wasShown && !eligible){   // เงื่อนไขหายตอนกำลังโชว์ → เอาติ๊กออก + ลบคำออกจากหมายเหตุ
+      const cb=block.querySelector('.shop-check'); if(cb) cb.checked=false;
+      const noteInput=block.querySelector('.note-input');
+      if(noteInput && noteInput.value.split(/\s+/).includes(SHOP_TAILOR_WORD)){
+        noteInput.value=noteInput.value.split(/\s+/).filter(Boolean).filter(w=>w!==SHOP_TAILOR_WORD).join(' ');
+        resizeNoteInput(noteInput);
+      }
+    }
   }
   function wireShopCheckbox(block){
     const cb=block.querySelector('.shop-check');
@@ -7134,7 +7157,7 @@
   function renderMeasureSection(block, typeValue){
     block.dataset.measureRendered=typeValue; // จำประเภทที่ build ช่องวัดตัวไว้ล่าสุด — ให้ applySku รู้ว่าสแกน/พิมพ์รหัสประเภทเดิมซ้ำแล้วไม่ต้อง build ใหม่ทับค่าที่กรอกไว้
     updateNoteHints(block, typeValue);
-    updateShopTailorRow(block, typeValue);   // [ใหม่ 2026-10-16] โชว์/ซ่อนช่องติ๊ก "ใช้ช่างหน้าร้าน" ตามประเภทใหม่ (+สาขาที่ซื้อ)
+    updateShopTailorRow(block, typeValue);   // [2026-10-16/19] โชว์/ซ่อนช่องติ๊ก "ใช้ช่างหน้าร้าน" ตามประเภทใหม่ (+สินค้าใช้ของสาขา)
     // wireStitchCheckbox เรียกผ่าน wireMeasureItems ด้านล่างแทน (จุดเดียวกับ wireLegStyleChips) — ครอบคลุมทั้งตอนโหลดหน้าครั้งแรก (ไม่ผ่าน renderMeasureSection) และตอนเปลี่ยนประเภท
     // [ใหม่ตามที่ขอ] "เย็บย้ำกระดุม" ใช้ได้แค่เสื้อสูท/กางเกง — สลับไปประเภทอื่นแล้วซ่อนแถวนี้ + เอาติ๊กออก + ลบคำออกจากหมายเหตุ กันคำค้างเวลาสลับประเภทไปมา
     const stitchRow=block.querySelector('.stitch-row');
@@ -7317,8 +7340,8 @@
     wireNoteInput(block);
     // [แก้บั๊ก 2026-09-24] ช่องติ๊ก (เย็บย้ำกระดุม/ลูกค้าใช้งานก่อนปรับแก้) เดิมถูกเชื่อมแค่ผ่าน renderMeasureSection→wireMeasureItems ซึ่งก้อนแรกของหน้า (ประเภทเริ่มต้น = เสื้อสูท) ไม่เคยผ่านเลยจนกว่าจะสแกน/เลือกประเภทก่อน — ติ๊กบนก้อนแรกที่ยังไม่ได้แตะอะไรเลยไม่เติมหมายเหตุ (ประเภทอื่นใช้ได้เพราะต้องเลือกประเภท = ผ่าน render แล้ว) เชื่อมตั้งแต่ตอนผูกก้อนเลย (guard dataset.wired กันซ้ำอยู่แล้ว)
     wireStitchCheckbox(block); wireUsedCheckbox(block); wireTeamCheckbox(block); wireShopCheckbox(block);
-    // [ใหม่ 2026-10-16] ช่องติ๊ก "ใช้ช่างหน้าร้าน" โชว์/ซ่อนตามสาขาที่ซื้อ (header) + ประเภทของก้อนนี้ — ฟังตอนเปลี่ยนสาขา (ถอดตอนลบก้อน) + เช็กทันที 1 ครั้ง
-    block._shopTailorFn=()=>updateShopTailorRow(block); branchTopListeners.push(block._shopTailorFn); updateShopTailorRow(block);
+    // [แก้ 2026-10-19] ช่องติ๊ก "ใช้ช่างหน้าร้าน" โชว์/ซ่อนตาม สินค้าใช้ของสาขา (.branch-prod ของก้อนนี้) + ประเภทของก้อนนี้ — ฟังที่ .branch-prod และตอนเปลี่ยนประเภท (renderMeasureSection) · ไม่ผูกกับสาขาที่ซื้อ (header) แล้ว
+    updateShopTailorRow(block);
     const sku=block.querySelector('.sku-input'), sug=block.querySelector('.sku-suggest');
     const sizeInput=block.querySelector('.size-input'), chip=block.querySelector('.type-select');
     function applySku(code){
@@ -7510,7 +7533,7 @@
       const show = v!==topBranch && v!=='OFFICE';
       if(contactRow) contactRow.classList.toggle('hidden', !show);
     }
-    if(branchSel){ branchSel.addEventListener('change', updateContactVisibility); updateContactVisibility(); }
+    if(branchSel){ branchSel.addEventListener('change', updateContactVisibility); updateContactVisibility(); branchSel.addEventListener('change', ()=>updateShopTailorRow(block)); }   // [2026-10-19] เปลี่ยนสินค้าใช้ของสาขา → โชว์/ซ่อนช่องติ๊ก "ใช้ช่างหน้าร้าน"
     branchTopListeners.push(updateContactVisibility);
 
     // ชื่อพนักงานที่ติดต่อ: เปลี่ยนจากช่องพิมพ์อิสระ ให้พิมพ์แล้วเลือกจากรายชื่อจริงเหมือนกับ "พนักงานขาย" ที่ header
@@ -7549,8 +7572,6 @@
         block.remove(); renumberProducts(); updateIdx(); placeAddProductBtn();
         const idx=branchTopListeners.indexOf(updateContactVisibility);
         if(idx>-1) branchTopListeners.splice(idx,1);
-        const sIdx=branchTopListeners.indexOf(block._shopTailorFn);
-        if(sIdx>-1) branchTopListeners.splice(sIdx,1);
       } else {
         resetProductBlockToEmpty(block);
       }
@@ -8645,7 +8666,7 @@
     return out.toDataURL('image/png').split(',')[1];
   }
   // ============================================================
-  // [ใหม่ 2026-10-16 ตามที่ขอ] ใบสรุป 4×6 นิ้ว (รูป 1200×1800 จุด = 300 dpi) — เฉพาะ "กางเกง" ของสาขาที่ซื้อ KK ที่หมายเหตุมีคำว่า "ใช้ช่างหน้าร้าน"
+  // [ใหม่ 2026-10-16 ตามที่ขอ · แก้เงื่อนไข 2026-10-19] ใบสรุป 4×6 นิ้ว (รูป 1200×1800 จุด = 300 dpi) — เฉพาะ "กางเกง" ที่ "สินค้าใช้ของสาขา" = KK และหมายเหตุมีคำว่า "ใช้ช่างหน้าร้าน"
   // จัดตามภาพ layout ที่ผู้ใช้ส่งมา (ตำแหน่ง/ขนาดทุกอย่างวัดจากภาพด้วยพิกเซล) แบบ ก: ตารางสัดส่วน 2 ช่องต่อแถว ชื่อสัดส่วนขยายเท่าที่ช่องรับได้ (56 → 64–72 จุด)
   // ตามภาพของผู้ใช้ไม่มีบรรทัด พนักงานขาย / ใช้สินค้าจาก / จองกับ / QR จึงไม่วาดเลย · ใช้ฟอนต์ Prompt ที่ฝังในหน้าอยู่แล้ว · ขาว-ดำล้วนแบบเดียวกับใบเล็ก
   // ผู้ใช้เลือกวิธีใช้: กด "บันทึกรูปใบสรุป" ในป๊อปอัปผลบันทึก แล้วพิมพ์เอง (ไม่มีทางพิมพ์อัตโนมัติ/ไม่แตะโปรแกรมพิมพ์/Worker) · รูปนี้ "แทน" ใบเล็กของชิ้นนั้นทั้งที่ป๊อปอัป/Lark/Salesforce
@@ -8653,7 +8674,7 @@
   // ============================================================
   function shouldUseReceipt4x6(order, item){
     if(!order || !item) return false;
-    if(String(order.branch||'').trim()!=='KK') return false;                       // สาขาที่ซื้อ (ไม่ใช่สาขานัดรับ)
+    if(stockBranchCode(item.branch)!=='KK') return false;                          // สินค้าใช้ของสาขา = KK (ฟอร์มส่ง "KK" · Salesforce ส่ง "สาขา KK (…)") — ไม่ดูสาขาที่ซื้อ/สาขานัดรับ
     if(!/^กางเกง/.test(String(item.type||'').trim())) return false;                // ประเภทสินค้า = กางเกง
     return String(item.note||'').indexOf(SHOP_TAILOR_WORD)>=0;                     // หมายเหตุมี "ใช้ช่างหน้าร้าน" (ติ๊กเอง/พิมพ์เอง/มาจากบิลเดิมก็นับ)
   }
