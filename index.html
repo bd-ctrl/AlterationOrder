@@ -40,6 +40,30 @@
   #updateBanner span{flex:1}
   #updateReloadBtn{flex:0 0 auto;white-space:nowrap;border:1px solid var(--goldink);background:var(--gold);color:#fff;font-family:inherit;font-size:12.5px;font-weight:600;padding:6px 14px;border-radius:999px;cursor:pointer}
   #updateReloadBtn:active{transform:scale(.97)}
+  /* [ใหม่ 2026-10-16 ตามที่ขอ] หยุดพิมพ์/เริ่มพิมพ์ต่อ จากหน้าเว็บ — แถบแดงบนสุดทุกเครื่องตอนหยุดพิมพ์อยู่ + แถบสถานะ/ปุ่มในหน้าต่างพิมพ์ */
+  #printPauseBanner{flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:9px 16px;background:#b5342a;color:#fff;border-bottom:2px solid #7d1f18;font-size:13.5px;font-weight:500}
+  #printPauseBanner[hidden]{display:none}
+  #printPauseBanner span{flex:1;line-height:1.35}
+  #printPauseBanner button{flex:0 0 auto;white-space:nowrap;border:1px solid #fff;background:#fff;color:#b5342a;font-family:inherit;font-size:12.5px;font-weight:700;padding:6px 14px;border-radius:999px;cursor:pointer}
+  #printPauseBanner button:active{transform:scale(.97)}
+  #printPauseBanner button:disabled{opacity:.6;cursor:default}
+  @media (max-width:520px){#printPauseBanner{flex-wrap:wrap}}
+  .pc-strip{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:10px 0 2px;padding:10px 12px;border:1px solid var(--rule);border-radius:12px;background:#fff;font-size:13.5px}
+  .pc-strip[hidden]{display:none}
+  .pc-strip .pc-dot{width:10px;height:10px;border-radius:50%;background:var(--green);flex:0 0 auto}
+  .pc-strip .pc-txt{flex:1 1 180px;line-height:1.4;min-width:0}
+  .pc-strip .pc-sub{display:block;font-size:12px;color:var(--t2);margin-top:2px;overflow-wrap:anywhere}
+  .pc-strip.paused{border-color:#b5342a;background:#fdecea}
+  .pc-strip.paused .pc-dot{background:#b5342a}
+  .pc-strip.paused .pc-txt{color:#7d1f18;font-weight:600}
+  .pc-strip button{flex:0 0 auto;border-radius:999px;font-family:inherit;font-size:13px;font-weight:600;padding:7px 14px;cursor:pointer;white-space:nowrap}
+  .pc-strip button[hidden]{display:none}
+  .pc-strip button:disabled{opacity:.55;cursor:default}
+  .pc-stop{border:1.5px solid #b5342a;background:#fff;color:#b5342a}
+  .pc-resume{border:none;background:var(--gold);color:var(--ink)}
+  .pc-note{margin-top:6px;color:#b5342a;font-weight:600}
+  /* [2026-10-16] กล่องยืนยัน (หยุดพิมพ์/เริ่มพิมพ์ต่อ ถามจากในหน้าต่างพิมพ์) ต้องอยู่เหนือหน้าต่างพิมพ์ — เดิม z-index เท่ากัน (90) แล้วตัวที่อยู่ท้าย DOM ชนะ กล่องยืนยันเลยจมอยู่ข้างหลังกดไม่ได้ */
+  #confirmPop{z-index:95}
   /* [แก้ตามที่ขอ] เลขเวอร์ชัน — ย้ายมาอยู่ในแถบล่าง ข้างๆ ปุ่ม "บันทึกร่าง" (JS แทรก span.app-ver ก่อนปุ่ม .draft ทุกแถบ) */
   .foot .inner > .app-ver{margin-left:auto;align-self:center;font-size:10.5px;color:var(--t3);font-family:'Barlow',sans-serif;letter-spacing:.3px;white-space:nowrap}
   .foot .inner > .app-ver ~ .draft{margin-left:8px}
@@ -1625,6 +1649,12 @@
 <div id="updateBanner" hidden>
   <span id="updateBannerText">มีเวอร์ชันใหม่แล้ว รีเฟรชเพื่อใช้งานเวอร์ชันล่าสุด</span>
   <button type="button" id="updateReloadBtn">รีเฟรชตอนนี้</button>
+</div>
+
+<!-- [ใหม่ 2026-10-16 ตามที่ขอ] แถบแดง "หยุดพิมพ์อยู่" — ขึ้นทุกเครื่องเมื่อมีคนกดหยุดพิมพ์ จนกว่าจะกดเริ่มพิมพ์ต่อ (ดู initPrintControl ท้ายสคริปต์) -->
+<div id="printPauseBanner" hidden role="status" aria-live="polite">
+  <span id="printPauseBannerText">หยุดพิมพ์อยู่ — บิลจะไม่ออกเครื่องพิมพ์จนกว่าจะกดเริ่มพิมพ์ต่อ</span>
+  <button type="button" id="printPauseBannerBtn">เริ่มพิมพ์ต่อ</button>
 </div>
 
 <div class="ipad">
@@ -4089,6 +4119,7 @@
 <li>ตัวเลขในหน้าสรุปหลังกด สั่งพิมพ์ (เช่น 2 / 3) จึงอาจน้อยกว่า N. แถวที่มีเครื่องหมายเตือนคือบิลที่พิมพ์ไม่ได้ ดูสาเหตุในบรรทัดใต้เลขที่บิล (ตัวอย่างอยู่ในภาพหัวข้อ “บิลที่ยังไม่มีเลข P#”)</li>
 </ul></div></div>
 <div class="hp-item"><div class="hp-name">ปุ่ม ยกเลิก / สั่งพิมพ์</div><div class="hp-desc"><span class="hp-btn">ยกเลิก</span> ปิดหน้าต่าง · <span class="hp-btn">สั่งพิมพ์</span> เริ่มทำงานตามหัวข้อ “สั่งพิมพ์ทำอะไรบ้าง” ด้านล่าง</div></div>
+<div class="hp-item"><div class="hp-name">แถบ “การพิมพ์” และปุ่ม หยุดพิมพ์ <span class="hp-kind">ใต้ป้ายพบทั้งหมด</span></div><div class="hp-desc">บอกว่าเครื่องพิมพ์ตอนนี้ “ปกติ” หรือ “หยุดพิมพ์อยู่”. <span class="hp-btn">หยุดพิมพ์</span> ใช้ตอนกระดาษออกมาผิดบิลหรือออกมากเกินไป: ระบบหยุดส่งบิลไปเครื่องพิมพ์ทันที และสั่งเครื่องพิมพ์ล้างงานที่ค้างอยู่ (บิลที่ยังไม่ได้พิมพ์ยังอยู่ในคิว ไม่หาย). ระหว่างหยุดอยู่ <b>ทุกเครื่องที่เปิดหน้านี้จะเห็นแถบแดงบนสุด</b> จนกว่าจะมีคนกด <span class="hp-btn">เริ่มพิมพ์ต่อ</span> (ไม่เริ่มให้เอง ต้องกดเอง). ถ้าขึ้น “ยังไม่รับทราบ” แปลว่าโปรแกรมพิมพ์ที่เครื่องพิมพ์อาจปิดอยู่ ให้ล้างคิวที่เครื่องพิมพ์เอง</div></div>
 
 <figure class="hp-fig"><img data-src="help_img/more-06.jpg" width="690" height="894" alt="หน้าต่างพิมพ์ใบสั่งแก้ปรับทรงสำเร็จรูป"><figcaption>หน้าต่างพิมพ์ตอนเปิดใหม่: ป้ายทอง “พบทั้งหมด 2 งาน (เมื่อวาน)”, สาขา “ทุกสาขา”, ช่องเลขที่บิล / Suitcube Order / Suitcube Product ว่าง, จาก-ถึงเป็นเมื่อวาน (ข้อมูลในภาพเป็นข้อมูลสมมติ)</figcaption></figure>
 
@@ -4523,6 +4554,13 @@
       <h3>พิมพ์ใบสั่งแก้ปรับทรงสำเร็จรูป <span class="x" id="printRangeClose">&times;</span></h3>
       <div class="printrange-desc">สำหรับทีมสั่งตัด — ค้นหาจากเลขที่บิล, Suitcube Order, Suitcube Product, หรือจากสาขาได้</div>
       <div class="printrange-count" id="printRangeCount"></div>
+      <!-- [ใหม่ 2026-10-16 ตามที่ขอ] สถานะการพิมพ์ + ปุ่ม หยุดพิมพ์ / เริ่มพิมพ์ต่อ (สั่งผ่าน Worker → Lark → โปรแกรมพิมพ์ที่เครื่องพิมพ์) -->
+      <div class="pc-strip" id="pcStrip" hidden>
+        <span class="pc-dot" aria-hidden="true"></span>
+        <span class="pc-txt"><span id="pcState">กำลังตรวจสอบสถานะการพิมพ์…</span><span class="pc-sub" id="pcSub"></span></span>
+        <button type="button" class="pc-stop" id="pcStopBtn" hidden>หยุดพิมพ์</button>
+        <button type="button" class="pc-resume" id="pcResumeBtn" hidden>เริ่มพิมพ์ต่อ</button>
+      </div>
       <div class="printrange-body" id="printRangeForm">
         <div class="frow"><span class="k">สาขา</span><select class="hdrsel" id="printRangeBranch"><option value="">ทุกสาขา</option><option>R3</option><option>T21</option><option>SQ1</option><option>PM</option><option>SC</option><option>CM</option><option>FP</option><option>KR</option><option>SL</option><option>NW</option><option>CC</option><option>BP</option><option>RCD</option><option>KK</option><option>PK</option><option>MG</option><option>CTW</option><option>WG</option></select></div>
         <div class="frow"><span class="k">เลขที่บิล</span><input id="printRangeBillNo" placeholder="เว้นว่าง = ค้นด้วยช่วงวันที่แทน"></div>
@@ -4671,6 +4709,8 @@
         <div class="frow used-row" style="border:none"><label class="stitchlbl"><input type="checkbox" class="used-check"><span class="k">ลูกค้าใช้งานก่อนปรับแก้</span></label></div>
         <!-- [ใหม่ 2026-10-06 ตามที่ขอ] ติ๊ก "งานทีม" เหนือหมายเหตุ — กลไกเดียวกับ "เย็บย้ำกระดุม" (ติ๊กแล้วเติมคำนี้ลงหมายเหตุอัตโนมัติ เอาติ๊กออกแล้วลบคำนี้) ต่างแค่โชว์ทุกประเภทสินค้า (พิมพ์ชื่อทีมต่อท้ายในหมายเหตุได้เอง เช่น "งานทีม K.Wind") -->
         <div class="frow team-row" style="border:none"><label class="stitchlbl"><input type="checkbox" class="team-check"><span class="k">งานทีม</span></label></div>
+        <!-- [ใหม่ 2026-10-16 ตามที่ขอ] ติ๊ก "ใช้ช่างหน้าร้าน" เหนือหมายเหตุ — โชว์เฉพาะสาขาที่ซื้อ (header) = KK และประเภทของก้อนนี้ = กางเกง (คุมด้วย JS: updateShopTailorRow) · กลไกเดียวกับ "งานทีม" (ติ๊กแล้วเติมคำนี้ลงหมายเหตุ เอาติ๊กออกแล้วลบคำนี้) · หมายเหตุมีคำนี้ → ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว -->
+        <div class="frow shop-row hidden" style="border:none"><label class="stitchlbl"><input type="checkbox" class="shop-check"><span class="k">ใช้ช่างหน้าร้าน</span></label></div>
         <div class="frow" style="border:none;align-items:flex-start"><span class="k note-label">หมายเหตุเสื้อสูท</span><textarea class="note-input" placeholder="เพิ่มหมายเหตุ" rows="2"></textarea></div>
         <!-- คำแนะนำเพิ่มเติมใต้ช่องหมายเหตุ — โชว์เฉพาะประเภทสินค้าที่เกี่ยวข้อง (คุมด้วย JS ตาม type-select) -->
         <div class="note-hint" data-hint-for="เสื้อกั๊ก (สำเร็จรูป)" style="display:none">ถ้าต้องการเย็บ/ย้ำกระดุม ระบุในช่องหมายเหตุด้านบน</div>
@@ -4833,7 +4873,9 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-15-3';
+  const APP_VERSION = '2026-10-16-2';
+  // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
+  const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
   let currentView=1;
   function updateIdx(){
@@ -5087,7 +5129,7 @@
         if(orderId) searchLabels.push('Suitcube Order "'+orderId+'"');
         if(productId) searchLabels.push('Suitcube Product "'+productId+'"');
         const scopeLabel=searchLabels.length ? searchLabels.join(', ') : (from+' ถึง '+to);
-        if(printRangeResultSummary) printRangeResultSummary.innerHTML='อัปเดตข้อมูลล่าสุด + เข้าคิวพิมพ์แล้ว <b>'+okCount+' / '+results.length+'</b> รายการ ('+branchLabel+', '+scopeLabel+')';
+        if(printRangeResultSummary) printRangeResultSummary.innerHTML='อัปเดตข้อมูลล่าสุด + เข้าคิวพิมพ์แล้ว <b>'+okCount+' / '+results.length+'</b> รายการ ('+branchLabel+', '+scopeLabel+')'+((window.suitcubePrintControl&&window.suitcubePrintControl.isPaused())?'<div class="pc-note">⛔ ตอนนี้หยุดพิมพ์อยู่ — บิลเข้าคิวแล้วแต่ยังไม่ออกเครื่องพิมพ์ จนกว่าจะกดเริ่มพิมพ์ต่อ</div>':'');
         if(printRangeResultList){
           printRangeResultList.innerHTML = results.length
             ? results.map(r=>'<div class="r"><span class="bill">'+escapeHtml(r.billNo||'-')+(r.ok?'':' ⚠️')+'</span><span class="ids">'
@@ -6252,7 +6294,7 @@
       const lines=buildReceiptLines(order,item);
       // [ใหม่ตามที่ขอ] เก็บ lines ไว้ด้วย (ไม่ใช่แค่รูป) — ให้เอาไปพิมพ์ตรงจากเบราว์เซอร์ได้ทันที (window.print()) ไม่ต้องรอ print-agent
       // [ใหม่ตามที่ขอ] เก็บ productCode (จาก it.code เช่น "P# 396242") ไว้ด้วย — จุดนี้รู้แน่ชัดว่าใบสรุปนี้เป็นของสินค้าชิ้นไหนจริงๆ (ต่างจากตอนบันทึกครั้งแรกที่ยังไม่มี Salesforce ID) ใช้แนบไฟล์เข้า Suitcube_Product__c ให้ตรงชิ้นใน attachReceiptImages
-      images.push({ billNo:o.orderNo, imageBase64: await renderReceiptCanvasBase64(lines), lines, productCode: it.code, itemIndex, itemTotal:items.length });
+      images.push({ billNo:o.orderNo, imageBase64: await renderReceiptForItem(order, item, lines), lines, productCode: it.code, itemIndex, itemTotal:items.length });
     }
     return images;
   }
@@ -6897,6 +6939,7 @@
     wireStitchCheckbox(block);
     wireUsedCheckbox(block);
     wireTeamCheckbox(block);
+    wireShopCheckbox(block);
   }
   // [ใหม่ 2026-09-29 ตามที่ขอ] ความยาวขา (กางเกง) น้อยกว่า 32 นิ้ว → ถามใต้ช่องทันทีที่กรอกเสร็จ (mockup แบบ B):
   // "แน่ใจหรือเปล่าที่จะบันทึกข้อมูลความยาวขาเท่ากับ X นิ้ว" [แน่ใจ] [ไม่แน่ใจ] — ไม่มีข้อความบอกเกณฑ์ 32 ตามที่ขอ
@@ -7056,16 +7099,42 @@
       resizeNoteInput(noteInput);
     });
   }
+  // [ใหม่ 2026-10-16 ตามที่ขอ] ติ๊ก "ใช้ช่างหน้าร้าน" — โชว์เฉพาะสาขาที่ซื้อ (header) = KK และประเภทของก้อนนี้ = กางเกง · ติ๊กแล้วเติมคำนี้ลงหมายเหตุกางเกงอัตโนมัติ (โครงเดียวกับ wireTeamCheckbox) · เอาติ๊กออก = ลบคำนี้ออกจากหมายเหตุ
+  // การโชว์/ซ่อนแถวไม่แตะหมายเหตุเลย (ไม่ลบข้อความที่พนักงานพิมพ์เอง/โหลดมาจากบิลเดิม) — ซ่อน = แค่เลิกโชว์ช่องติ๊ก · ใบ 4×6 ตัดสินใจตอนวาดจากหมายเหตุ+สาขา+ประเภทเสมอ (shouldUseReceipt4x6)
+  function shopTailorEligible(typeValue){
+    const top=(document.getElementById('branchTop')?.value||'').trim();
+    return top==='KK' && /^กางเกง/.test(String(typeValue||''));
+  }
+  function updateShopTailorRow(block, typeValue){
+    const row=block.querySelector('.shop-row'); if(!row) return;
+    const type=typeValue!==undefined ? typeValue : (block.querySelector('.type-select')?.value||'');
+    row.classList.toggle('hidden', !shopTailorEligible(type));
+  }
+  function wireShopCheckbox(block){
+    const cb=block.querySelector('.shop-check');
+    if(!cb || cb.dataset.wired) return;
+    cb.dataset.wired='1';
+    cb.addEventListener('change', ()=>{
+      const noteInput=block.querySelector('.note-input');
+      if(!noteInput) return;
+      let words=noteInput.value.split(/\s+/).filter(Boolean).filter(w=>w!==SHOP_TAILOR_WORD);
+      if(cb.checked) words.push(SHOP_TAILOR_WORD);
+      noteInput.value=words.join(' ');
+      resizeNoteInput(noteInput);
+    });
+  }
   // [แก้บั๊ก 2026-09-24] ตอนโหลดร่าง/โหลดบิลเดิมมาแก้ ช่องติ๊ก (เย็บย้ำกระดุม/ลูกค้าใช้งานก่อนปรับแก้) ต้องตรงกับหมายเหตุที่โหลดเข้ามา — เดิมไม่แตะเลย ติ๊กที่ค้างจากก่อนหน้าเลยโชว์ติ๊กอยู่ทั้งที่หมายเหตุไม่มีคำนั้น (หรือกลับกัน)
   function syncNoteCheckboxes(block){
     const words=(block.querySelector('.note-input')?.value||'').split(/\s+/).filter(Boolean);
     const st=block.querySelector('.stitch-check'); if(st) st.checked=words.includes('เย็บย้ำกระดุม');
     const us=block.querySelector('.used-check'); if(us) us.checked=words.includes('ลูกค้าใช้งานก่อนปรับแก้');
     const tm=block.querySelector('.team-check'); if(tm) tm.checked=words.includes('งานทีม');
+    const sh=block.querySelector('.shop-check'); if(sh) sh.checked=words.includes(SHOP_TAILOR_WORD);
   }
   function renderMeasureSection(block, typeValue){
     block.dataset.measureRendered=typeValue; // จำประเภทที่ build ช่องวัดตัวไว้ล่าสุด — ให้ applySku รู้ว่าสแกน/พิมพ์รหัสประเภทเดิมซ้ำแล้วไม่ต้อง build ใหม่ทับค่าที่กรอกไว้
     updateNoteHints(block, typeValue);
+    updateShopTailorRow(block, typeValue);   // [ใหม่ 2026-10-16] โชว์/ซ่อนช่องติ๊ก "ใช้ช่างหน้าร้าน" ตามประเภทใหม่ (+สาขาที่ซื้อ)
     // wireStitchCheckbox เรียกผ่าน wireMeasureItems ด้านล่างแทน (จุดเดียวกับ wireLegStyleChips) — ครอบคลุมทั้งตอนโหลดหน้าครั้งแรก (ไม่ผ่าน renderMeasureSection) และตอนเปลี่ยนประเภท
     // [ใหม่ตามที่ขอ] "เย็บย้ำกระดุม" ใช้ได้แค่เสื้อสูท/กางเกง — สลับไปประเภทอื่นแล้วซ่อนแถวนี้ + เอาติ๊กออก + ลบคำออกจากหมายเหตุ กันคำค้างเวลาสลับประเภทไปมา
     const stitchRow=block.querySelector('.stitch-row');
@@ -7247,7 +7316,9 @@
   function wireProduct(block){
     wireNoteInput(block);
     // [แก้บั๊ก 2026-09-24] ช่องติ๊ก (เย็บย้ำกระดุม/ลูกค้าใช้งานก่อนปรับแก้) เดิมถูกเชื่อมแค่ผ่าน renderMeasureSection→wireMeasureItems ซึ่งก้อนแรกของหน้า (ประเภทเริ่มต้น = เสื้อสูท) ไม่เคยผ่านเลยจนกว่าจะสแกน/เลือกประเภทก่อน — ติ๊กบนก้อนแรกที่ยังไม่ได้แตะอะไรเลยไม่เติมหมายเหตุ (ประเภทอื่นใช้ได้เพราะต้องเลือกประเภท = ผ่าน render แล้ว) เชื่อมตั้งแต่ตอนผูกก้อนเลย (guard dataset.wired กันซ้ำอยู่แล้ว)
-    wireStitchCheckbox(block); wireUsedCheckbox(block); wireTeamCheckbox(block);
+    wireStitchCheckbox(block); wireUsedCheckbox(block); wireTeamCheckbox(block); wireShopCheckbox(block);
+    // [ใหม่ 2026-10-16] ช่องติ๊ก "ใช้ช่างหน้าร้าน" โชว์/ซ่อนตามสาขาที่ซื้อ (header) + ประเภทของก้อนนี้ — ฟังตอนเปลี่ยนสาขา (ถอดตอนลบก้อน) + เช็กทันที 1 ครั้ง
+    block._shopTailorFn=()=>updateShopTailorRow(block); branchTopListeners.push(block._shopTailorFn); updateShopTailorRow(block);
     const sku=block.querySelector('.sku-input'), sug=block.querySelector('.sku-suggest');
     const sizeInput=block.querySelector('.size-input'), chip=block.querySelector('.type-select');
     function applySku(code){
@@ -7478,6 +7549,8 @@
         block.remove(); renumberProducts(); updateIdx(); placeAddProductBtn();
         const idx=branchTopListeners.indexOf(updateContactVisibility);
         if(idx>-1) branchTopListeners.splice(idx,1);
+        const sIdx=branchTopListeners.indexOf(block._shopTailorFn);
+        if(sIdx>-1) branchTopListeners.splice(sIdx,1);
       } else {
         resetProductBlockToEmpty(block);
       }
@@ -7512,7 +7585,7 @@
     block.querySelector('.branch-prod').value='OFFICE';
     const noteInp=block.querySelector('.note-input'); if(noteInp){ noteInp.value=''; resizeNoteInput(noteInp); }
     // ล้างหมายเหตุแล้วต้องเอาติ๊กออกด้วย (เย็บย้ำกระดุม/ลูกค้าใช้งานก่อนปรับแก้) ไม่งั้นก้อนใหม่ที่โคลนมาจากก้อนที่ติ๊กไว้จะโชว์ติ๊กค้างทั้งที่หมายเหตุว่าง
-    block.querySelectorAll('.stitch-check,.used-check,.team-check').forEach(cb=>{ cb.checked=false; });
+    block.querySelectorAll('.stitch-check,.used-check,.team-check,.shop-check').forEach(cb=>{ cb.checked=false; });
     const contactInp=block.querySelector('.contact-input'); if(contactInp) contactInp.value='';
     const sugEl=block.querySelector('.sku-suggest'); if(sugEl){ sugEl.classList.remove('show'); sugEl.innerHTML=''; }
     block._attachedImages=[];
@@ -7528,7 +7601,7 @@
     if(block._attachedImages && block._attachedImages.length) return true;
     if(toggleOnIndex(block,'.toptoggle')===0) return true;
     if([...block.querySelectorAll('.measure-list input.numonly')].some(i=>i.value.trim()!=='')) return true;
-    if([...block.querySelectorAll('.stitch-check,.used-check,.team-check')].some(cb=>cb.checked)) return true;
+    if([...block.querySelectorAll('.stitch-check,.used-check,.team-check,.shop-check')].some(cb=>cb.checked)) return true;
     return false;
   }
   function addEmptyProductBlock(){
@@ -7537,7 +7610,7 @@
     // firstProductBlock มีปุ่ม "เพิ่มสินค้า" อยู่ใน colL ด้วย — cloneNode เลยติดสำเนาปุ่มมาด้วยเสมอ ต้องทิ้งสำเนานี้ทิ้ง (ตัวจริงจะถูกย้ายมาแทนที่ด้วย placeAddProductBtn ด้านล่าง)
     const dupBtn=clone.querySelector('#addProductBtn'); if(dupBtn) dupBtn.remove();
     // [แก้บั๊ก 2026-09-24] cloneNode คัดลอก data-wired="1" ของช่องติ๊ก (เย็บย้ำกระดุม/ลูกค้าใช้งานก่อนปรับแก้) ไปด้วย แต่ไม่คัดลอกตัวฟัง event — ก้อนที่ 2 เป็นต้นไปเลยกดติ๊กแล้วไม่มีอะไรเกิดขึ้นเลย (guard dataset.wired คิดว่าเชื่อมแล้ว) ต้องล้างธงนี้ในสำเนา ให้ wireMeasureItems เชื่อมใหม่
-    clone.querySelectorAll('.stitch-check,.used-check,.team-check').forEach(cb=>{ delete cb.dataset.wired; });
+    clone.querySelectorAll('.stitch-check,.used-check,.team-check,.shop-check').forEach(cb=>{ delete cb.dataset.wired; });
     resetProductBlockToEmpty(clone);
     wrap.appendChild(clone);
     wireProduct(clone);
@@ -8571,6 +8644,181 @@
     oc.drawImage(canvas, 0, 0, W0, out.height);
     return out.toDataURL('image/png').split(',')[1];
   }
+  // ============================================================
+  // [ใหม่ 2026-10-16 ตามที่ขอ] ใบสรุป 4×6 นิ้ว (รูป 1200×1800 จุด = 300 dpi) — เฉพาะ "กางเกง" ของสาขาที่ซื้อ KK ที่หมายเหตุมีคำว่า "ใช้ช่างหน้าร้าน"
+  // จัดตามภาพ layout ที่ผู้ใช้ส่งมา (ตำแหน่ง/ขนาดทุกอย่างวัดจากภาพด้วยพิกเซล) แบบ ก: ตารางสัดส่วน 2 ช่องต่อแถว ชื่อสัดส่วนขยายเท่าที่ช่องรับได้ (56 → 64–72 จุด)
+  // ตามภาพของผู้ใช้ไม่มีบรรทัด พนักงานขาย / ใช้สินค้าจาก / จองกับ / QR จึงไม่วาดเลย · ใช้ฟอนต์ Prompt ที่ฝังในหน้าอยู่แล้ว · ขาว-ดำล้วนแบบเดียวกับใบเล็ก
+  // ผู้ใช้เลือกวิธีใช้: กด "บันทึกรูปใบสรุป" ในป๊อปอัปผลบันทึก แล้วพิมพ์เอง (ไม่มีทางพิมพ์อัตโนมัติ/ไม่แตะโปรแกรมพิมพ์/Worker) · รูปนี้ "แทน" ใบเล็กของชิ้นนั้นทั้งที่ป๊อปอัป/Lark/Salesforce
+  // (ดู renderReceiptForItem — ทุกจุดที่เคยวาดใบเล็กเรียกผ่านตัวนี้ ทั้งตอนบันทึก พิมพ์ซ้ำ/ดึงข้อมูลล่าสุด และโหมด ?auto=1) · ต้นแบบ/ภาพเทียบ: design-demos/receipt-4x6/แบบB-ตามภาพผู้ใช้/
+  // ============================================================
+  function shouldUseReceipt4x6(order, item){
+    if(!order || !item) return false;
+    if(String(order.branch||'').trim()!=='KK') return false;                       // สาขาที่ซื้อ (ไม่ใช่สาขานัดรับ)
+    if(!/^กางเกง/.test(String(item.type||'').trim())) return false;                // ประเภทสินค้า = กางเกง
+    return String(item.note||'').indexOf(SHOP_TAILOR_WORD)>=0;                     // หมายเหตุมี "ใช้ช่างหน้าร้าน" (ติ๊กเอง/พิมพ์เอง/มาจากบิลเดิมก็นับ)
+  }
+  async function renderReceipt4x6Base64(order, item){
+    const FAM='Prompt, Sarabun, sans-serif', pd=s=>(s==null?'':String(s));
+    const W0=1200, H0=1800, SS=2, THR=205, BOTTOM_MARGIN=36;
+    // ---------- ข้อมูล (ใช้ฟังก์ชันวันที่/หมายเหตุตัวเดียวกับใบเล็ก) ----------
+    const bill=pd(order.billNo||'-'), total=item.itemTotal||1;
+    const pieces=total+' ชิ้น'+((total>1 && item.typeCodesLine) ? ' · '+item.typeCodesLine : '');
+    const pay=order.payStatus==='จ่ายเงินแล้ว' ? 'ชำระเงินแล้ว' : pd(order.payStatus||'-');
+    const sent='ส่งแก้ '+toThaiDateShort(order.sentDate);
+    const typeName=pd(item.type).replace(/\s*\(สำเร็จรูป\)\s*$/,'');
+    const sizeClean=pd(item.size).trim();
+    const sku=pd(item.sku||'-')+((sizeClean && sizeClean!=='-') ? '-'+sizeClean : '');
+    const ids=[item.orderCode,item.productCode].filter(Boolean).join(' · ');
+    const idsLine=ids ? ids+' (ชิ้นที่ '+(item.itemIndex||1)+')' : '';
+    const cells=(item.measureRows||[]).map(r=>({label:pd(r.label), value:pd(r.value)}));
+    const noteText=pd(stripNoteDupMeasures(pd(item.note||''), item.measureRows)).trim();
+    const custName=order.nickname ? pd(order.custName||'-')+' ('+order.nickname+')' : pd(order.custName||'-');
+    const phone=pd(order.phone).trim();
+    const pk=(()=>{ const p=pd(order.pickupDate).split('-').map(Number); if(!p[0]||!p[1]||!p[2]) return {dm:'',day:''};
+      const d=new Date(order.pickupDate+'T00:00:00');
+      return {dm:p[2]+' '+(THAI_MONTHS_ABBR[p[1]-1]||'')+' '+String(p[0]+543).slice(-2), day:isNaN(d)?'':'วัน'+THAI_DAYS[d.getDay()]}; })();
+    const timeTxt=(order.pickupTime && order.pickupTime!=='00:00') ? pd(order.pickupTime)+' น.' : '';
+    const isDelivery=/Messenger|ขนส่งเอกชน/.test(pd(order.pickupLabel));
+    let pickLabel='สาขานัดรับ', pickValue=pd(order.pickupLabel||'-'), place='';
+    if(isDelivery){
+      const label=pd(order.pickupLabel), sep=label.indexOf(' – ');
+      pickLabel='วิธีรับ'; pickValue=(sep>=0 ? label.slice(0,sep) : label).trim();
+      place=pd(order.deliveryPlace||(sep>=0 ? label.slice(sep+3) : '')).trim();
+    }
+    // โหลดฟอนต์ Prompt ให้ครบน้ำหนักที่ใช้ + ตัวอักษรที่จะวาดจริง (ฟอนต์ที่ฝังแบ่งช่วงอักษรไทย/ละติน — ต้องระบุข้อความให้โหลดช่วงที่ต้องใช้)
+    try{
+      const txt='กขคฆงจฉชซญฎฏฐดตถทธนบปผฝพฟภมยรลวศษสหฬอฮะัาำิีึืุูเแโใไๅ็่้๊๋์ๆ 0123456789 ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz ./·-,()#:–!'
+        +bill+pieces+pay+sent+typeName+sku+idsLine+cells.map(c=>c.label+c.value).join('')+noteText+custName+phone+pk.dm+pk.day+timeTxt+pickLabel+pickValue+place+'ใบสั่งแก้ปรับทรงสำเร็จรูปรายการแก้ / ขนาดหมายเหตุนัดรับนิ้ว!! งานด่วน !!';
+      await Promise.all([400,500,600].map(w=>document.fonts.load(w+' 40px Prompt', txt)));
+      await document.fonts.ready;
+    }catch(e){}
+    // ---------- ตัวช่วยวาด: พิกัดทั้งหมดเป็น "จุดของภาพ 1200 กว้าง" (วาดที่ความละเอียด 2 เท่า แล้วย่อกลับ) ----------
+    const U=v=>v*SS;
+    const mc=document.createElement('canvas').getContext('2d');
+    const font=(px,w)=>w+' '+U(px)+'px '+FAM;
+    const wid=(t,px,w)=>{ mc.font=font(px,w); mc.letterSpacing='0px'; return mc.measureText(pd(t)).width/SS; };
+    const wrapLines=(text,px,w,maxW)=>{ if(!text) return []; mc.font=font(px,w); mc.letterSpacing='0px'; return wrapTextByWidth(mc, text, U(maxW)); };
+    const X0=53, X1=1146;                  // ขอบซ้าย/ขวาของเส้นและตัวอักษร (ตามภาพผู้ใช้)
+    // ---------- วางแนวตั้ง: วัดจากภาพผู้ใช้ (กรณีมาตรฐาน 4 ช่อง + หมายเหตุ 1 บรรทัด + นัดรับสาขา) แล้วย่อให้พอดีใบเมื่อของเยอะ ----------
+    const n=cells.length, rows=Math.max(1,Math.ceil(n/2));
+    // แบบ ก: ขยายชื่อสัดส่วนเท่าที่ช่องรับได้ (ช่อง 2 คอลัมน์กว้าง 480 · ช่องสุดท้ายของเลขคี่กว้างเต็ม 960) — 56 ขึ้นไปสูงสุด 72
+    let labelPx=56;
+    { let fit=72; cells.forEach((c,i)=>{ const span=(i===n-1)&&(n%2===1); const cw=span?960:480; const w56=wid(c.label,56,500); if(w56>0) fit=Math.min(fit, 56*(cw-24)/w56); });
+      labelPx=Math.max(56, Math.floor(fit*2)/2); }
+    const plan=(k,noteFs,addrFs)=>{
+      const tableTop=531, P=286*k, tableBot=n ? tableTop+rows*P+2 : 500;     // ไม่มีสัดส่วนเลย (n=0) = ไม่วาดกรอบ เริ่มหมายเหตุใต้ SKU
+      const noteLines=wrapLines(noteText,noteFs,400,X1-X0-4);
+      const addrLines=place ? wrapLines(place,addrFs,400,X1-X0-4) : [];
+      const lh=50*noteFs/37.5;
+      const L={P,k,tableTop,tableBot,noteLines,addrLines,lh,noteFs,addrFs};
+      let y=tableBot, ref=tableBot;      // ref = ขอบบนของเส้นคั่นเหนือบล็อกลูกค้า (มีหมายเหตุ = เส้นใต้หมายเหตุ · ไม่มี = ขอบล่างตาราง)
+      if(noteLines.length){ L.noteLabelBase=y+72; L.noteBase=y+123; L.rule2=y+176+(noteLines.length-1)*lh; ref=L.rule2; }
+      L.nameBase=ref+64; L.phoneBase=phone ? ref+133 : null; y=ref+(phone ? 194 : 130); L.rule3=y;
+      L.pickBase=y+101; L.rlabBase=y+44; L.r3Base=y+121; L.divTop=y+15; L.divBot=y+141; y+=152;
+      if(addrLines.length){ L.addrBase=y+46; y+=addrLines.length*(addrFs*1.4)+18; }
+      L.rule4=y; L.bottom=y+4;
+      return L;
+    };
+    const limit=H0-BOTTOM_MARGIN;
+    let k=1, noteFs=37.5, addrFs=34, L=plan(k,noteFs,addrFs);
+    while(L.bottom>limit && k>0.72){ k=Math.round((k-0.02)*100)/100; L=plan(k,noteFs,addrFs); }
+    while(L.bottom>limit && noteFs>28){ noteFs-=1; addrFs=Math.max(26,addrFs-0.5); L=plan(k,noteFs,addrFs); }
+    const H=Math.max(H0, Math.ceil(L.bottom+BOTTOM_MARGIN));            // เกือบไม่เคยเกิน — ถ้าของล้นจริงๆ ยอมให้ใบยาวขึ้นดีกว่าตัดข้อมูลทิ้ง
+    // ---------- วาด ----------
+    const cvs=document.createElement('canvas'); cvs.width=W0*SS; cvs.height=H*SS;
+    const ctx=cvs.getContext('2d');
+    ctx.fillStyle='#fff'; ctx.fillRect(0,0,cvs.width,cvs.height); ctx.fillStyle='#000';
+    const rect=(x0,y0,x1,y1)=>ctx.fillRect(U(x0),U(y0),U(x1)-U(x0),U(y1)-U(y0));
+    // ข้อความ: align left/right/center ที่ x, baseline y · bold = เพิ่มความหนาเส้นเป็นสัดส่วนของขนาด (ฟอนต์ที่ฝังหนาสุด 600) · maxW = ย่อให้พอดี
+    const T=(t,x,y,px,w,opt)=>{
+      opt=opt||{}; let size=px;
+      if(opt.maxW) while(size>(opt.minPx||px*0.5) && wid(t,size,w)>opt.maxW) size-=0.5;
+      ctx.font=font(size,w); ctx.letterSpacing='0px'; ctx.textAlign=opt.align||'left'; ctx.textBaseline='alphabetic'; ctx.fillStyle='#000';
+      ctx.fillText(pd(t),U(x),U(y));
+      if(opt.bold){ ctx.save(); ctx.lineWidth=U(opt.bold*size); ctx.lineJoin='round'; ctx.strokeStyle='#000'; ctx.strokeText(pd(t),U(x),U(y)); ctx.restore(); }
+      return {size,w:wid(t,size,w)};
+    };
+    // (1) หัวบิล
+    { mc.font=font(50,600); const m=mc.measureText('ใบสั่งแก้ปรับทรงสำเร็จรูป'); const asc=m.actualBoundingBoxAscent/SS;
+      T('ใบสั่งแก้ปรับทรงสำเร็จรูป',X0,40+asc,50,600);
+      if(order.urgent){   // กล่อง "!! งานด่วน !!" มุมขวาของแถวชื่อใบ
+        const tw=wid('!! งานด่วน !!',40,600), bw=tw+44, bh=66, bx=X1-bw, by=40+6;
+        ctx.save(); ctx.lineWidth=U(4); ctx.strokeStyle='#000'; ctx.beginPath();
+        if(ctx.roundRect) ctx.roundRect(U(bx),U(by),U(bw),U(bh),U(14));
+        else { const r=U(14), x=U(bx), y=U(by), w=U(bw), h=U(bh); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r); ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r); ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r); ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r); ctx.closePath(); }
+        ctx.stroke(); ctx.restore();
+        T('!! งานด่วน !!',bx+bw/2,by+48,40,600,{align:'center'});
+      } }
+    T(bill,X0+1,183,68.5,600,{maxW:700});
+    T(pieces,X1,182,39.8,500,{align:'right',maxW:420});
+    T(pay,X0,257,37,600);
+    T(sent,X1,251,37.4,400,{align:'right'});
+    rect(X0,281,X1,286);
+    // (2) ประเภท + SKU
+    T(typeName,X0,396,84,600,{maxW:560});
+    T('รายการแก้ / ขนาด',X1-1,397,46.4,600,{align:'right'});
+    T(sku,X0+1,485,56.3,500,{bold:0.018,maxW:idsLine?600:1000});
+    if(idsLine) T(idsLine,X1,483,30,400,{align:'right',maxW:470});
+    // (3) ตารางสัดส่วน (2 ช่องต่อแถว · ไม่มีสัดส่วน = ไม่วาด)
+    if(n){
+      const t0=L.tableTop, tb=L.tableBot, P=L.P;
+      rect(X0,t0,X1,t0+5); rect(X0,tb-4,X1,tb); rect(X0,t0,X0+5,tb); rect(X1-5,t0,X1,tb);          // กรอบ (หนา 5/4/5/5 ตามภาพผู้ใช้)
+      for(let r=1;r<rows;r++){ const y=t0+r*P; rect(X0,y-1.5,X1,y+1.5); }                              // เส้นแบ่งแถว (หนา 3)
+      const kk=Math.max(L.k,0.8);
+      cells.forEach((c,i)=>{
+        const r=Math.floor(i/2), col=i%2, last=(i===n-1), span=last && (n%2===1);
+        const x0=(col===0||span) ? 98 : 640;
+        const contentTop=r===0 ? t0+5 : t0+r*P+1.5;
+        if(!span && col===0 && (i+1<n)) rect(596.5, r===0?t0:t0+r*P-1.5, 599.5, r===rows-1?tb:t0+(r+1)*P+1.5);   // เส้นแบ่งคอลัมน์ (หนา 3) ต่อเนื่องถึงเส้นกรอบ เฉพาะแถวที่มี 2 ช่อง
+        const cellW=span?960:480;
+        T(c.label, x0-1, contentTop+(91.5+(labelPx-56)*0.95)*L.k, labelPx*kk, 500, {maxW:cellW-20});
+        const vpx=114*L.k, vy=contentTop+214.5*L.k;
+        const vt=T(c.value, x0-2, vy, vpx, 600, {bold:0.02, maxW:cellW-160});
+        mc.font=font(vt.size,600); const inkR=(x0-2)+mc.measureText(pd(c.value)).actualBoundingBoxRight/SS+0.01*vt.size;   // ขอบขวาของหมึกตัวเลข (รวมความหนาที่เพิ่ม)
+        T('นิ้ว', inkR+19*L.k, vy, 46*L.k, 400);
+      });
+    }
+    // (4) หมายเหตุ
+    if(L.noteLines.length){
+      T('หมายเหตุ',X0,L.noteLabelBase,34,600);
+      L.noteLines.forEach((ln,i)=>T(ln,X0,L.noteBase+i*L.lh,L.noteFs,400));
+      rect(X0,L.rule2,X1,L.rule2+3);
+    }
+    // (5) ลูกค้า (ชื่อบรรทัดบน เบอร์บรรทัดล่าง)
+    T(custName,X0,L.nameBase,43.6,500,{maxW:X1-X0});
+    if(phone) T(phone,X0,L.phoneBase,56,600);
+    rect(X0,L.rule3,X1,L.rule3+5);
+    // (6) แถวนัดรับ: ซ้าย = วันนัดรับ (+วัน/เวลา) · ขวา = สาขานัดรับ/วิธีรับ
+    { const maxLeft=930-X0; let dpx=74.8; const gap=29;
+      const tail=[pk.day,timeTxt].filter(Boolean).join(' · ');
+      const total2=()=>wid('นัดรับ',37,600)+gap+wid(pk.dm,dpx,600)+(tail ? 35+wid(tail,34,400) : 0);
+      while(dpx>52 && total2()>maxLeft) dpx-=1;
+      const t1=T('นัดรับ',X0,L.pickBase,37,600);
+      const x2=X0+t1.w+gap;
+      const t2=T(pk.dm,x2,L.pickBase,dpx,600);
+      if(tail){ T('·',x2+t2.w+14,L.pickBase,34,400); T(tail,x2+t2.w+33,L.pickBase,34,400); }
+      rect(944,L.divTop,947,L.divBot);
+      T(pickLabel,1046,L.rlabBase,31,400,{align:'center',maxW:190});
+      T(pickValue,1047,L.r3Base,isDelivery?52:77,600,{align:'center',maxW:190});
+    }
+    if(L.addrLines.length) L.addrLines.forEach((ln,i)=>T(ln,X0,L.addrBase+i*(L.addrFs*1.4),L.addrFs,400));
+    rect(X0,L.rule4,X1,L.rule4+4);
+    // ---------- ขาว-ดำล้วน (threshold เอียงไปทางดำ ตัดที่ 205 เหมือนใบเล็ก) แล้วย่อกลับด้วยการเกลี่ยภาพ ----------
+    const img=ctx.getImageData(0,0,cvs.width,cvs.height), d=img.data;
+    for(let i=0;i<d.length;i+=4){ const v=(d[i]+d[i+1]+d[i+2])/3<THR ? 0 : 255; d[i]=d[i+1]=d[i+2]=v; }
+    ctx.putImageData(img,0,0);
+    const out=document.createElement('canvas'); out.width=W0; out.height=H;
+    const oc=out.getContext('2d'); oc.imageSmoothingEnabled=true; oc.imageSmoothingQuality='high'; oc.drawImage(cvs,0,0,W0,H);
+    return out.toDataURL('image/png').split(',')[1];
+  }
+  // ทุกจุดที่เคยวาดใบเล็กเรียกผ่านตัวนี้: ชิ้นที่เข้าเงื่อนไข 4×6 → ใบ 4×6 · วาด 4×6 ไม่สำเร็จ (ไม่ควรเกิด) → ถอยกลับเป็นใบเล็กเหมือนเดิม ไม่ให้การบันทึก/พิมพ์ซ้ำล้ม
+  async function renderReceiptForItem(order, item, lines){
+    if(shouldUseReceipt4x6(order,item)){
+      try{ return await renderReceipt4x6Base64(order,item); }
+      catch(e){ try{ console.warn('[ใบ 4×6] วาดไม่สำเร็จ ใช้ใบเล็กแทน:', e && e.message); }catch(_e){} }
+    }
+    return renderReceiptCanvasBase64(lines);
+  }
   // เตรียมข้อมูลใบสรุปทุกชิ้นสินค้าในบิลนี้ จาก payload ที่ส่งไปแล้ว + DOM ปัจจุบัน แล้วคืนรายการ {lines, sku} ต่อชิ้น
   // json = ผลลัพธ์จาก /create-order (มี orderNumber "O# ..." และ products[].productNumber "P# ..." ที่ query กลับมาจาก Salesforce ทันที)
   function buildAllReceipts(data, json, opts){
@@ -8608,7 +8856,7 @@
       // [ใหม่ตามที่ขอ] เว้นพื้นที่ว่าง 5 ซม. เฉพาะใบสรุปตอนบันทึกจาก index.html นี้จุดเดียว (reprint จากประวัติใช้ regenerateReceiptsFromLatest แยก ไม่ส่ง opts นี้)
       // [แก้บั๊ก] ส่ง itemIndex/itemTotal ออกมาด้วย (เดิมมีแค่ lines/billNo) — ใช้ตั้งชื่อไฟล์รูปต่อชิ้นไม่ให้ซ้ำกันตอนแนบเข้า Lark (ดู attachReceiptImages/saveSummaryImageByOrderNo)
       // ไม่งั้นบิลที่มีหลายชิ้น ทุกใบชื่อไฟล์เดียวกันหมด ("ใบสรุป_<เลขบิล>.png") พอแนบรูปชิ้นถัดไป โค้ดฝั่ง Worker จะมองว่าเป็นไฟล์เก่าชื่อซ้ำแล้วลบทิ้งก่อนแนบใหม่ เหลือรูปแค่ใบเดียว (ใบสุดท้าย) — เจอจริงบิล CM26091001 (3 ชิ้น เหลือรูปแค่ 1 ใบ)
-      return { lines: buildReceiptLines(order, item, {trailingBlank5cm:true}), billNo: order.billNo, itemIndex:item.itemIndex, itemTotal:item.itemTotal };
+      return { lines: buildReceiptLines(order, item, {trailingBlank5cm:true}), order, item, billNo: order.billNo, itemIndex:item.itemIndex, itemTotal:item.itemTotal };
     });
   }
   // ขั้นตอนนี้ (พนักงานขายกรอกข้อมูลลูกค้า) ไม่ต้องเปิดหน้าต่างพิมพ์ทันที — แค่บันทึกลง Lark Base/Salesforce
@@ -8618,7 +8866,7 @@
     const receipts=buildAllReceipts(data, json, opts);
     const out=[];
     for(const r of receipts){
-      try{ out.push({ billNo:r.billNo, itemIndex:r.itemIndex, itemTotal:r.itemTotal, imageBase64: await renderReceiptCanvasBase64(r.lines) }); }
+      try{ out.push({ billNo:r.billNo, itemIndex:r.itemIndex, itemTotal:r.itemTotal, imageBase64: await renderReceiptForItem(r.order, r.item, r.lines) }); }
       catch(e){ /* สร้างรูปใบสรุปชิ้นนี้ไม่สำเร็จ ข้ามไปชิ้นถัดไป ไม่กระทบการบันทึกออเดอร์หลัก */ }
     }
     return out;
@@ -9293,6 +9541,123 @@
       // เว้นอย่างน้อย 2 นาทีจากการเช็คครั้งก่อน กันเช็คถี่เกินตอนสลับแท็บรัวๆ
       if(document.visibilityState==='visible' && Date.now()-lastCheck > 2*60*1000) checkForUpdate();
     });
+  })();
+
+  // ── [ใหม่ 2026-10-16 ตามที่ขอ] หยุดพิมพ์ / เริ่มพิมพ์ต่อ จากหน้าเว็บ ──
+  // กดหยุดพิมพ์ → Worker จดคำสั่งใน Lark → โปรแกรมพิมพ์ที่เครื่องพิมพ์เห็นภายในไม่กี่วินาที: หยุดส่งบิล + สั่งเครื่องพิมพ์ล้างงานค้าง (บิลที่ยังไม่ได้พิมพ์คงอยู่ในคิว ไม่หาย)
+  // ผู้ใช้เลือกให้ "ต้องกดเริ่มพิมพ์ต่อเอง" (ไม่เริ่มให้อัตโนมัติ) → แถบแดงบนสุดขึ้นทุกเครื่องที่เปิดหน้านี้ตอนหยุดอยู่ (เช็กทุก 60 วินาทีตอนเปิดหน้าอยู่ + ตอนสลับกลับมาที่แท็บ + ตอนเปิดหน้าต่างพิมพ์) กันลืมเปิด
+  // ผลรับทราบจากโปรแกรมพิมพ์ (ล้างงานค้างกี่งาน/คืนบิลเข้าคิวกี่บิล) โชว์ในหน้าต่างพิมพ์ — เกิน 30 วินาทียังไม่รับทราบ = โปรแกรมพิมพ์อาจปิดอยู่ แนะนำล้างคิวที่เครื่องพิมพ์เอง
+  // Worker ยังไม่ได้อัปเดต/ล็อกอินไม่ผ่าน/ออฟไลน์ = ตรวจสถานะไม่ได้ → ไม่มีแถบแดง และปุ่มหยุดพิมพ์ซ่อน (ไม่รบกวนการใช้งานปกติ)
+  (function initPrintControl(){
+    var sm=(window.suitcubeAuth && typeof window.suitcubeAuth.softMode==='function') ? window.suitcubeAuth.softMode() : '';
+    if(sm==='auto') return;   // หน้า ?auto=1 เปิดทิ้งไว้เครื่องเดียว ไม่มีคนดู
+    var el=function(id){ return document.getElementById(id); };
+    var banner=el('printPauseBanner'), bannerText=el('printPauseBannerText'), bannerBtn=el('printPauseBannerBtn');
+    var strip=el('pcStrip'), stateEl=el('pcState'), subEl=el('pcSub'), stopBtn=el('pcStopBtn'), resumeBtn=el('pcResumeBtn');
+    if(!banner||!strip||!stopBtn||!resumeBtn) return;
+    var st=null, failMsg='', busy=false, inflight=false, lastFetch=0, watchCmd=0, watchUntil=0, failStreak=0;
+    var pad=function(n){ return n<10 ? '0'+n : ''+n; };
+    var hhmm=function(ms){ if(!ms) return ''; var d=new Date(ms); return pad(d.getHours())+':'+pad(d.getMinutes()); };
+    function api(method, body){
+      var init={ method:method };
+      if(body){ init.headers={'Content-Type':'application/json'}; init.body=JSON.stringify(body); }
+      return fetch(WORKER+'/print-control', init).then(function(r){
+        return r.json().catch(function(){ return null; }).then(function(j){
+          if(!r.ok || !j || !j.success) throw new Error((j && j.error) || ('HTTP '+r.status));
+          return j;
+        });
+      });
+    }
+    // ชื่อคนกด: สาขา · ชื่อ (จากบัตรผ่านล็อกอิน ไม่มี = ใช้สาขาที่แถบบน/ชื่อพนักงานขายที่เลือกไว้)
+    function who(){
+      var u=(window.suitcubeAuth && typeof window.suitcubeAuth.user==='function') ? window.suitcubeAuth.user() : null;
+      var b=(u && u.branch) || (el('branchTop') ? el('branchTop').value : '') || '';
+      var n=(u && u.name) || (el('staffInput') ? el('staffInput').value : '') || '';
+      return (b+(n ? ' · '+n : '')).replace(/\s+/g,' ').trim().slice(0,60);
+    }
+    function ackLine(){
+      if(!st || st.state!=='pause') return '';
+      var a=st.ack;
+      if(a && a.seen==='pause' && a.cmd>=st.cmd){
+        var s='โปรแกรมพิมพ์รับทราบแล้ว ✓';
+        if(a.purged!=null) s+=' · ล้างงานค้างที่เครื่องพิมพ์ '+a.purged+' งาน';
+        if(a.requeued) s+=' · คืนเข้าคิว '+a.requeued+' บิล';
+        if(a.note && /ไม่สำเร็จ|ยังเหลือ/.test(a.note)) s+=' · ⚠ '+a.note;
+        return s;
+      }
+      var waited=(st.now||Date.now())-(st.at||0);
+      if(waited<30000) return 'รอโปรแกรมพิมพ์รับทราบ…';
+      return '⚠ โปรแกรมพิมพ์ยังไม่รับทราบ (อาจปิดอยู่) — ถ้ากระดาษยังออก ให้ล้างคิวที่เครื่องพิมพ์เอง: กด Win+R พิมพ์ control printers';
+    }
+    function render(){
+      var paused=!!(st && st.state==='pause');
+      if(paused){
+        bannerText.textContent='⛔ หยุดพิมพ์อยู่'+(st.by ? ' — สั่งโดย '+st.by : '')+(st.at ? ' เวลา '+hhmm(st.at) : '')+' · บิลจะไม่ออกเครื่องพิมพ์จนกว่าจะกดเริ่มพิมพ์ต่อ';
+        banner.hidden=false;
+      } else banner.hidden=true;
+      strip.hidden=false; strip.className='pc-strip'+(paused ? ' paused' : '');
+      if(!st){
+        stateEl.textContent = failMsg ? 'ตรวจสถานะการพิมพ์ไม่ได้ในตอนนี้' : 'กำลังตรวจสอบสถานะการพิมพ์…';
+        subEl.textContent = failMsg ? 'ปุ่มหยุดพิมพ์ใช้ไม่ได้ชั่วคราว — ถ้าต้องหยุดด่วนให้ล้างคิวที่เครื่องพิมพ์เอง ('+failMsg+')' : '';
+        stopBtn.hidden=true; resumeBtn.hidden=true; return;
+      }
+      if(paused){
+        stateEl.textContent='⛔ หยุดพิมพ์อยู่';
+        var ack=ackLine();
+        subEl.textContent=(st.by ? 'สั่งโดย '+st.by : '')+(st.at ? ' เวลา '+hhmm(st.at) : '')+(ack ? ' · '+ack : '');
+        stopBtn.hidden=true; resumeBtn.hidden=false;
+      } else {
+        stateEl.textContent='การพิมพ์: ปกติ';
+        subEl.textContent='';
+        stopBtn.hidden=false; resumeBtn.hidden=true;
+      }
+      stopBtn.disabled=resumeBtn.disabled=bannerBtn.disabled=busy;
+    }
+    function refresh(){
+      if(busy || inflight) return Promise.resolve();
+      inflight=true; lastFetch=Date.now();
+      return api('GET').then(function(j){ st=j; failMsg=''; failStreak=0; })
+        .catch(function(e){ failMsg=(e && e.message) || 'ผิดพลาด'; failStreak++; })
+        .then(function(){ inflight=false; render(); });
+    }
+    // หลังกดหยุด: เช็กทุก 2 วินาที (นานสุด 45 วินาที) จนกว่าโปรแกรมพิมพ์จะเขียนผลรับทราบกลับมา
+    function tickWatch(){
+      if(!watchCmd || Date.now()>watchUntil){ watchCmd=0; return; }
+      refresh().then(function(){
+        var done=!st || st.state!=='pause' || (st.ack && st.ack.seen==='pause' && st.ack.cmd>=watchCmd);
+        if(done){ watchCmd=0; return; }
+        setTimeout(tickWatch, 2000);
+      });
+    }
+    function send(action, okMsg){
+      busy=true; render();
+      return api('POST',{ action:action, by:who() }).then(function(j){
+        st=j; failMsg=''; busy=false; render();
+        if(action==='pause'){ watchCmd=j.cmd; watchUntil=Date.now()+45000; setTimeout(tickWatch, 1500); }
+      }).catch(function(e){
+        busy=false; render();
+        alert(okMsg+'ไม่สำเร็จ: '+((e && e.message) || 'เชื่อมต่อไม่สำเร็จ — ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่อีกครั้ง'));
+        refresh();
+      });
+    }
+    function doStop(){
+      if(busy) return;
+      var p=confirmDialog('หยุดพิมพ์ทุกเครื่องใช่ไหม? ระบบจะหยุดส่งบิลไปเครื่องพิมพ์ทันที และสั่งเครื่องพิมพ์ล้างงานที่ค้างอยู่ — บิลที่ยังไม่ได้พิมพ์ยังอยู่ในคิว ไม่หาย จะพิมพ์ต่อเมื่อกด "เริ่มพิมพ์ต่อ" (ต้องกดเอง ไม่เริ่มให้อัตโนมัติ)', 'หยุดพิมพ์');
+      if(confirmOkBtn) confirmOkBtn.classList.add('confirm-danger');
+      p.then(function(ok){ if(ok) send('pause','หยุดพิมพ์'); });
+    }
+    function doResume(){
+      if(busy) return;
+      confirmDialog('เริ่มพิมพ์ต่อใช่ไหม? บิลที่ค้างอยู่ในคิวจะเริ่มพิมพ์ออกเครื่องพิมพ์ทันที', 'เริ่มพิมพ์ต่อ').then(function(ok){ if(ok) send('resume','เริ่มพิมพ์ต่อ'); });
+    }
+    stopBtn.addEventListener('click', doStop);
+    resumeBtn.addEventListener('click', doResume);
+    bannerBtn.addEventListener('click', doResume);
+    var pb=el('printRangeBtn'); if(pb) pb.addEventListener('click', function(){ refresh(); });   // เปิดหน้าต่างพิมพ์ = เช็กสถานะล่าสุดทันที
+    setTimeout(refresh, 2500);
+    setInterval(function(){ if(document.visibilityState==='visible' && !(failStreak>=3 && Date.now()-lastFetch<300000)) refresh(); }, 60000);   // ล้มติดกัน 3 ครั้ง (เช่น Worker ยังไม่ได้อัปเดต) = ห่างเป็นทุก 5 นาที
+    document.addEventListener('visibilitychange', function(){ if(document.visibilityState==='visible' && Date.now()-lastFetch>20000) refresh(); });
+    window.suitcubePrintControl={ isPaused:function(){ return !!(st && st.state==='pause'); }, refresh:refresh };
   })();
 </script>
 
