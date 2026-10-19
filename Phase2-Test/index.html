@@ -2189,7 +2189,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-09-29-2-phase2-47';
+  const APP_VERSION = '2026-09-29-2-phase2-48';
 
   let currentView=1;
   function updateIdx(){
@@ -3659,7 +3659,7 @@
         if(!j||j.success!==true||!Array.isArray(j.names)) throw new Error((j&&j.error)||'ระบบตอบกลับไม่ครบ');
         const seen=new Set();
         // [phase2-47 2026-10-19 ตามที่ขอ "เอาชื่อภาษาไทยออกให้หมด"] ตัดชื่อที่มีอักษรไทยแม้แต่ตัวเดียวออกจากรายชื่อผู้ตรวจ (รวมชื่อ (พ้นสภาพ)) — Salesforce 218 ชื่อ มีไทย 124 (19 ต.ค.)
-        INSP.list=j.names.map(x=>String(x&&typeof x==='object'?(x.name||''):(x==null?'':x)).trim()).filter(x=>x&&!/[฀-๿]/.test(x)&&!seen.has(x)&&seen.add(x));
+        INSP.list=j.names.map(x=>String(x&&typeof x==='object'?(x.name||''):(x==null?'':x)).trim()).filter(x=>x&&!/admin|manager/i.test(x)&&!/[฀-๿]/.test(x)&&!seen.has(x)&&seen.add(x));   // [phase2-48 2026-10-20 ตามที่ขอ] ตัวกรองเดียวกับช่อง “พนักงานขาย” ที่หัวหน้า (ไม่มีชื่อไทย · ไม่มี admin/manager)
         INSP.amb=new Set((Array.isArray(j.ambiguous)?j.ambiguous:[]).map(x=>String(x&&typeof x==='object'?(x.name||''):(x==null?'':x)).trim()).filter(Boolean));   // [D4] ชื่อที่ซ้ำหลาย record ใน Salesforce
         INSP.at=Date.now(); return INSP.list;
       }).catch(e=>{ INSP.fail=(e&&e.message)||'โหลดไม่สำเร็จ'; throw e; }).finally(()=>{ INSP.pr=null; });
