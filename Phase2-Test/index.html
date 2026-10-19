@@ -2176,7 +2176,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-09-29-2-phase2-43';
+  const APP_VERSION = '2026-09-29-2-phase2-45';
 
   let currentView=1;
   function updateIdx(){
@@ -3345,13 +3345,13 @@
   // [phase2-32 · Worker R19.3 — design-demos/repeat-workflow/SPEC_R19.3.md หมวด 5] เก็บงานนำกลับมาแก้ที่ตาราง Lark "Table" (ข้อความด้านบนเรื่อง roundCount/SAVED/ไม่แก้ Worker/ไม่อัปโหลด ถูกแทนที่ด้วยข้อนี้):
   //   · รอบถัดไป + เหตุที่บันทึกไม่ได้ มาจาก GET /repeat-alteration-product (nextRound · slot · blocked{code,message} · larkRecordId) — ไม่คำนวณเองจาก roundCount/SAVED แล้ว
   //   · ผู้ตรวจ = เลือกจาก GET /repeat-alteration-inspectors เท่านั้น (ไม่มีรายชื่อ = บันทึกไม่ได้) · วันนัดรับ ≥ วันนี้เวลาไทย · ตัวนับ 255 เผื่อ "บิลใหม่ <เลข 10 ตัว> " 19 ตัวที่ Worker เติมให้ · "|" → "/" · ขึ้นบรรทัดใหม่ → เว้นวรรค
-  //   · สำเร็จ → ใบสรุปใช้ billNoNew จาก Worker เป็นเลขบิล · รูปอัปโหลด WebP ~0.7 (เป้า ≤ 100 KB · ไม่เกิน 300 KB · WebP ไม่ได้ใช้ PNG ย่อ) · อัปโหลดล้ม ≠ บันทึกล้ม (ปุ่มลองใหม่)
+  //   · สำเร็จ → ใบสรุปใช้ billNoNew จาก Worker เป็นเลขบิล · รูปอัปโหลด PNG ไฟล์เดียวกับปุ่มบันทึกรูป [phase2-44: เดิม WebP] (≤ 300 KB · เกินค่อยย่อ) · อัปโหลดล้ม ≠ บันทึกล้ม (ปุ่มลองใหม่)
   // [phase2-33 · Worker R19.3-r2 — design-demos/repeat-workflow/SPEC_R19.3.md + การตัดสินใจ D1–D6] ทำเพิ่มบนหน้านี้ (ข้อความด้านบนยังใช้ได้):
   //   · P1 เครือข่ายล้ม/หมดเวลาตอนบันทึก → ถาม GET /repeat-alteration-product ของ P# นี้ก่อน: มีบรรทัดค้างแล้ว = บันทึกสำเร็จ (ไปต่อใบสรุป+อัปโหลด) · ไม่มี = บอกว่ายังไม่ได้บันทึก ลองใหม่ได้
   //   · P2 รหัส error ที่ลองซ้ำไม่ได้ (full/status_not_ready/pending_exists/f93_stuck/round_unknown/slot_occupied/product_mismatch/ambiguous_inspector/inspector_not_found/date_past) แสดงข้อความ Worker ตรงๆ ไม่เติม "ลองอีกครั้งได้" + ปุ่มบันทึกล็อก
   //   · P3 branch = สาขาที่ทำรายการ (ช่อง "สาขา" ด้านบนของหน้าหลัก = branchTop) · pickupBranch = สาขาที่นัดรับที่เลือกในฟอร์ม · P4 สำรองเลขบิลใหม่ 20 ตัว + แจ้งเมื่อ Worker ตัดข้อความ
   //   · P5 อัปโหลดรูปเข้า Lark ล้ม → "เสร็จสิ้น"/× /สลับแท็บ ถามก่อนออก + ปุ่มลองใหม่ค้างจนสำเร็จ · 401 → เก็บรูปที่บีบแล้วไว้ใน localStorage แล้วอัปโหลดต่อให้เองหลังล็อกอินใหม่
-  //   · P6 แนบรูปเดียวกัน (บีบแล้ว) เข้า Salesforce Product ด้วย POST /attach-product-file ชื่อไฟล์ นำกลับมาแก้_P#<เลข>_ครั้งที่<r>.<webp|png> (ห้ามขึ้นต้น "ใบสรุป_") — อิสระจากการอัปโหลดเข้า Lark · ล้ม = โน้ตไม่บล็อก
+  //   · P6 แนบรูปเดียวกัน (บีบแล้ว) เข้า Salesforce Product ด้วย POST /attach-product-file ชื่อไฟล์ นำกลับมาแก้_P#<เลข>_ครั้งที่<r>.png [webp = ของค้างใน localStorage จากรุ่นก่อน phase2-44] (ห้ามขึ้นต้น "ใบสรุป_") — อิสระจากการอัปโหลดเข้า Lark · ล้ม = โน้ตไม่บล็อก
   //   · P7 ป้าย "ขนาดต้นแขน" + ใบสรุป: ป้ายค่าวัดยาวย่อ/ตัด "…" ไม่ทับตัวเลข · ชื่อ/ชื่อเล่นยาวขึ้นบรรทัดต่อ ไม่หลุดขอบขวา
   // [phase2-34 · Worker R19.3-r3 — รอบแก้ r3] ทำเพิ่ม (ข้อความด้านบนยังใช้ได้):
   //   · P9 ใช้ pendingKnown ของ GET /repeat-alteration-product: false (หรือถามสถานะไม่ได้) = "ยังไม่ทราบว่าบันทึกสำเร็จหรือไม่" ไม่อ้างว่า "ตรวจแล้วว่ายังไม่ได้บันทึก" · pending_exists หลังเครือข่ายล้ม = น่าจะบันทึกไปแล้วก่อนหน้านี้ + ปุ่ม "ตรวจสอบอีกครั้ง" (ไม่ส่งบันทึกซ้ำ) · Worker รุ่นเก่า (ไม่มีฟิลด์) = พฤติกรรมเดิม
@@ -3364,7 +3364,7 @@
     const input=document.getElementById('ra2PidInput'), view=document.getElementById('ra2View');
     if(!card||!input||!view||!histList) return;
     const clearBtn=document.getElementById('ra2PidClear'), scanBtn=document.getElementById('ra2PidScan'), cap=document.getElementById('ra2PidCap');
-    const CAP_HTML=cap.innerHTML, LIMIT=255, SHOW_MAX=40, BILL_RESERVE=20, UP_TARGET=100*1024, UP_HARD=300*1024;   // BILL_RESERVE = "บิลใหม่ " (8) + เลขบิล 10 ตัว + เว้นวรรค (1) ที่ Worker ต่อหน้ารายละเอียดใน Editdetail + เผื่อ 1 ตัวเมื่อเลขวิ่งถึง 3 หลัก (เลขบิล 11 ตัว) = 20 [phase2-33 · P4]
+    const CAP_HTML=cap.innerHTML, LIMIT=255, SHOW_MAX=40, BILL_RESERVE=20, UP_HARD=300*1024;   // BILL_RESERVE = "บิลใหม่ " (8) + เลขบิล 10 ตัว + เว้นวรรค (1) ที่ Worker ต่อหน้ารายละเอียดใน Editdetail + เผื่อ 1 ตัวเมื่อเลขวิ่งถึง 3 หลัก (เลขบิล 11 ตัว) = 20 [phase2-33 · P4]
     const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const sv=d=>'<svg class="ra2-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg>';
     const IC={chev:sv('<path d="M9 6l6 6-6 6"/>'), chevL:sv('<path d="M15 18l-6-6 6-6"/>'), left:sv('<path d="M19 12H5M11 6l-6 6 6 6"/>'), down:sv('<path d="M6 9l6 6 6-6"/>'),
@@ -4040,29 +4040,24 @@
       }
       uploadReceipt(d);   // ไม่รอผล — ขึ้นสถานะใต้รูป · ล้มไม่ถือว่าบันทึกล้ม
     }
-    // บีบอัดรูปเฉพาะที่อัปโหลด (รูปบนจอ/ปุ่ม "บันทึกรูป" ยังเป็น PNG เต็มเหมือนเดิม): WebP คุณภาพ ~0.7 → ลดคุณภาพ/ขนาดวนจน ≤ UP_TARGET · ไม่เกิน UP_HARD เด็ดขาด
-    // เบราว์เซอร์เข้ารหัส WebP ไม่ได้ (เช่น Safari: toDataURL ตอบ PNG กลับมา) → PNG ย่อเฉพาะรูปอัปโหลด (ขาว-ดำล้วน/ลดความกว้าง) · ไม่ถึงเป้าแต่ไม่เกินเพดานก็ใช้ตัวเล็กสุด · เกินเพดานค่อยย่อหนักขึ้น
+    // [phase2-44] อัปโหลดรูปใบสรุปเป็น PNG เสมอ — ผู้ใช้สั่ง (16 ต.ค.) ให้เหมือนใบสรุปปกติ: WebP ขึ้นไอคอนเทา/ไม่มีตัวอย่างใน X-Files และ Salesforce
+    // ปกติส่ง "ไฟล์เดียวกับปุ่มบันทึกรูป" ตรงๆ ไม่แตะเลย (ใบจริง ~90–165 KB) · เกิน UP_HARD (300 KB = เพดานของ Worker) เท่านั้นถึงย่อ: ขาว-ดำล้วนขนาดเต็ม → ลดความกว้างทีละขั้น · ย่อแล้วยังเกินเพดาน = ไม่อัปโหลด (ขึ้นข้อความ + ปุ่มลองใหม่)
     const b64Bytes=b=>{ const pad=b.endsWith('==')?2:(b.endsWith('=')?1:0); return Math.floor(b.length*3/4)-pad; };
     async function shrinkReceipt(pngB64){
       const img=new Image(); img.src='data:image/png;base64,'+pngB64;
       await (img.decode?img.decode():new Promise((ok,no)=>{ img.onload=ok; img.onerror=()=>no(new Error('อ่านรูปใบสรุปไม่ได้')); }));
       const W0=img.naturalWidth, H0=img.naturalHeight; if(!W0||!H0) throw new Error('รูปใบสรุปว่างเปล่า');
+      const orig=b64Bytes(pngB64);
+      if(orig<=UP_HARD) return {b64:pngB64,mime:'image/png',bytes:orig,w:W0,h:H0,q:null};   // ปกติ: ส่งรูปเดิมทุกไบต์ (เหมือนปุ่ม "บันทึกรูป")
       const cv=(w,bw)=>{ w=Math.max(120,Math.round(w)); const h=Math.max(1,Math.round(H0*w/W0)), c=document.createElement('canvas'); c.width=w; c.height=h;
         const x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,w,h); x.imageSmoothingEnabled=true; x.imageSmoothingQuality='high'; x.drawImage(img,0,0,w,h);
         if(bw){ const d=x.getImageData(0,0,w,h), a=d.data; for(let i=0;i<a.length;i+=4){ const v=a[i]<140?0:255; a[i]=a[i+1]=a[i+2]=v; a[i+3]=255; } x.putImageData(d,0,0); }   // ขาว-ดำล้วน (ใบสรุปเป็นขาว-ดำอยู่แล้ว) — PNG เล็กลงมากโดยตัวอักษรยังเหมือนเดิม
         return c; };
-      const enc=(c,mime,q)=>{ const u=c.toDataURL(mime,q), m=/^data:([^;,]+)/.exec(u); if(!m||m[1]!==mime) return null;
-        const b=u.slice(u.indexOf(',')+1); return {b64:b,mime,bytes:b64Bytes(b),w:c.width,h:c.height,q:q==null?null:q}; };
-      const webp=!!enc(cv(16),'image/webp',0.7), mime=webp?'image/webp':'image/png', qs=webp?[0.7,0.6,0.5]:[undefined];
+      const enc=c=>{ const u=c.toDataURL('image/png'), m=/^data:([^;,]+)/.exec(u); if(!m||m[1]!=='image/png') return null;
+        const b=u.slice(u.indexOf(',')+1); return {b64:b,mime:'image/png',bytes:b64Bytes(b),w:c.width,h:c.height,q:null}; };
       let best=null;
-      const pass=st=>{ for(const [k,bw] of st){ const c=cv(W0*k,bw); for(const q of qs){ const r=enc(c,mime,q); if(!r) continue; if(!best||r.bytes<best.bytes) best=r; if(r.bytes<=UP_TARGET) return r; } } return null; };
-      // WebP: ลดคุณภาพก่อนลดขนาดในแต่ละขั้น · PNG: ขนาดเต็มก่อน → ขาว-ดำล้วนขนาดเต็ม (ย่อภาพด้วยการเกลี่ยทำให้ PNG ใหญ่ขึ้นเพราะเกิดระดับเทาใหม่) → ค่อยลดความกว้าง
-      const ladder=webp?[[1,false],[0.85,false],[0.7,false],[0.58,false],[0.48,false]]:[[1,false],[1,true],[0.85,true],[0.7,true],[0.58,true],[0.48,true]];
-      let r=pass(ladder); if(r) return r;                    // เจอตัวแรกที่ ≤ เป้า หยุดทันที
-      if(best&&best.bytes<=UP_HARD) return best;             // เข้าเป้าไม่ได้ในขนาดที่ยังอ่านออก แต่ไม่เกินเพดาน → ใช้ตัวที่เล็กสุด
-      r=pass([0.4,0.33,0.27,0.2].map(k=>[k,!webp])); if(r) return r;   // ยังเกินเพดาน → ย่อหนักขึ้นจนกว่าจะไม่เกิน
-      if(best&&best.bytes<=UP_HARD) return best;
-      throw new Error('รูปใบสรุปใหญ่เกิน '+Math.round(UP_HARD/1024)+' KB แม้บีบอัดแล้ว');
+      for(const k of [1,0.85,0.7,0.58,0.48,0.4,0.33,0.27,0.2]){ const r=enc(cv(W0*k,true)); if(!r) continue; if(!best||r.bytes<best.bytes) best=r; if(r.bytes<=UP_HARD) return r; }
+      throw new Error('รูปใบสรุปใหญ่เกิน '+Math.round(UP_HARD/1024)+' KB แม้ย่อแล้ว');
     }
     // สถานะอัปโหลดใต้รูปใบสรุป · ปุ่ม "เสร็จสิ้น"/กลับ ใช้ไม่ได้ระหว่างกำลังอัปโหลด (ไม่ให้หลุดจากหน้านี้ก่อนรู้ผล — ล้มแล้วต้องเห็นปุ่มลองใหม่)
     function setUp(d,st){
@@ -5718,6 +5713,29 @@
     if(_pendingReloadAfterResult){ _pendingReloadAfterResult=false; location.reload(); }
   }
   // โชว์รูปใบสรุป (เหมือนที่แนบเข้า Lark Base) ไว้ในป๊อปอัพผลลัพธ์เลย ไม่ต้องไปเปิด Lark เช็คเอง — กดปุ่มใต้รูปเพื่อบันทึกรูปลงเครื่องได้เลย
+  // [phase2-45 2026-10-19 ตามที่ขอ "ทำให้บันทึกได้บนไอแพด"] เว็บที่เปิดในแอป Lark บนไอแพด/ไอโฟนไม่รับลิงก์ดาวน์โหลด (<a download>) → กดปุ่มบันทึกรูปแล้วเงียบ
+  // มือถือ/แท็บเล็ต: (1) เปิดเมนูแชร์ของเครื่อง (เลือก "บันทึกภาพ" ได้) ถ้าเครื่องแชร์ไฟล์ได้ (2) ไม่ได้ = เปิดรูปเต็มจอ + บอกให้กดค้างที่รูปเพื่อบันทึก · คอม = ดาวน์โหลดเหมือนเดิม (ไม่แตะ)
+  const RCPT_TOUCH=(()=>{ const u=navigator.userAgent||''; return /iPad|iPhone|iPod|Android/i.test(u)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1); })();
+  function rcptDataUrlToFile(src,name){ const b=atob(String(src).split(',')[1]||''); const u=new Uint8Array(b.length); for(let i=0;i<b.length;i++) u[i]=b.charCodeAt(i); return new File([u],name,{type:'image/png'}); }
+  function rcptSaveFallback(src){
+    let ov=document.getElementById('rcptSaveOv');
+    if(!ov){ ov=document.createElement('div'); ov.id='rcptSaveOv';
+      ov.style.cssText='position:fixed;inset:0;z-index:2147483000;background:rgba(20,18,15,.92);display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px;overflow:auto;-webkit-overflow-scrolling:touch';
+      ov.innerHTML='<div style="display:flex;align-items:center;gap:10px;width:100%;max-width:520px;color:#fff;font-weight:600;font-size:16px;line-height:1.4"><span style="flex:1">กดค้างที่รูป แล้วเลือก “บันทึกรูปภาพ”</span><button type="button" data-rcpt-x style="flex:none;height:40px;padding:0 18px;border:0;border-radius:999px;background:#C9A24B;color:#fff;font:inherit;font-size:15px">ปิด</button></div><img data-rcpt-img alt="ใบสรุป" style="display:block;max-width:min(520px,100%);height:auto;background:#fff;border-radius:8px;-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto">';
+      ov.addEventListener('click',e=>{ if(e.target===ov||(e.target.closest&&e.target.closest('[data-rcpt-x]'))) ov.remove(); });
+      document.body.appendChild(ov); }
+    ov.querySelector('[data-rcpt-img]').src=src;
+  }
+  document.addEventListener('click',e=>{
+    const a=e.target&&e.target.closest&&e.target.closest('a.ra2-dl,a.receipt-save'); if(!a||!RCPT_TOUCH) return;
+    const src=a.getAttribute('href')||''; if(a.getAttribute('aria-disabled')==='true'||!/^data:image\//.test(src)) return;
+    e.preventDefault();
+    const name=a.getAttribute('download')||'ใบสรุป.png';
+    let file=null; try{ file=rcptDataUrlToFile(src,name); }catch(_e){}
+    let can=false; try{ can=!!(file&&navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})); }catch(_e){}
+    if(can){ navigator.share({files:[file]}).catch(err=>{ if(!(err&&err.name==='AbortError')) rcptSaveFallback(src); }); return; }
+    rcptSaveFallback(src);
+  },true);
   function renderResultReceipts(images){
     const box=document.getElementById('resultReceipts'); if(!box) return;
     box.innerHTML = images.map((img,i)=>{
