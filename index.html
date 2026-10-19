@@ -4941,7 +4941,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-19-4';
+  const APP_VERSION = '2026-10-19-5';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -7277,6 +7277,22 @@
     return A.length-B.length;
   }
   // เลือก k ตัวที่น้อยที่สุด (ไม่เรียงทั้งรายการ — พิมพ์ตัวเดียวอาจตรงเป็นพันรหัส)
+  // [ใหม่ 2026-10-19] รายการ SKU Parent สำหรับช่องแนะนำรหัสสินค้า: รหัสฐาน (ตัดไซซ์ด้วย parseSkuMeta) ไม่ซ้ำ + รหัสเต็มทุกไซซ์ไว้ค้น + ประเภทจากรหัสเต็มตัวแรก · คำนวณครั้งเดียวต่อรายการ SKU ชุดหนึ่ง
+  let _skuParSrc=null, _skuPar=null;
+  function skuParents(){
+    if(_skuParSrc===SKU_LIST && _skuPar) return _skuPar;
+    const list=[], keys=new Map(), type=new Map(), seen=new Map();
+    for(const s of SKU_LIST){
+      const code=String(s).trim(); if(!code) continue;
+      const m=parseSkuMeta(code), base=String(m.baseCode||code).trim(), U=base.toUpperCase();
+      let p=seen.get(U);
+      if(!p){ p=base; seen.set(U,p); list.push(p); keys.set(p,[U]); type.set(p,m.type||''); }
+      else if(!type.get(p) && m.type) type.set(p,m.type);
+      const CU=code.toUpperCase(); if(CU!==U) keys.get(p).push(CU);
+    }
+    _skuParSrc=SKU_LIST; _skuPar={list,keys,type};
+    return _skuPar;
+  }
   function skuSmallest(arr,k){
     const out=[];
     for(const x of arr){
@@ -7447,16 +7463,19 @@
     }
     function showSug(q){
       if(!sug) return; q=(q||'').trim().toUpperCase();
+      // [แก้ 2026-10-19 ตามที่ขอ] รายการแนะนำโชว์แค่ SKU Parent (ตัดไซซ์ท้ายรหัส) — UF019-1-J-46/48/50… รวมเป็นบรรทัดเดียว UF019-1-J · เลือกแล้วช่อง Size ว่างให้พนักงานกรอกเอง (สแกนบาร์โค้ดยังได้รหัส+ไซซ์เหมือนเดิม)
+      // ค้นจากทั้งรหัสฐานและรหัสเต็มของทุกไซซ์ (พิมพ์ UF019-1-J-46 ก็ยังเจอ UF019-1-J) · ชื่อสินค้าจาก StoreHub รอทำพร้อม Worker
+      const P=skuParents();
       let hits;
       if(q){
         // [แก้ 2026-10-15] รหัสที่ขึ้นต้นตรงกับที่พิมพ์มาก่อน (เช่น UF2039-2 → UF2039-2-J… ก่อน UF2039-24-J…) แล้วตามด้วยรหัสที่มีข้อความนี้อยู่กลางรหัส · แต่ละกลุ่มเรียงน้อยไปมาก
         const pre=[], mid=[];
-        for(const s of SKU_LIST){ const i=String(s).toUpperCase().indexOf(q); if(i===0) pre.push(s); else if(i>0) mid.push(s); }
+        for(const code of P.list){ const keys=P.keys.get(code); let best=-1; for(const k of keys){ const i=k.indexOf(q); if(i===0){ best=0; break; } if(i>0&&best<0) best=i; } if(best===0) pre.push(code); else if(best>0) mid.push(code); }
         hits=skuSmallest(pre,8);
         if(hits.length<8) hits=hits.concat(skuSmallest(mid,8-hits.length));
-      } else hits=SKU_LIST.slice(0,8);
+      } else hits=P.list.slice(0,8);
       if(!hits.length){ sug.classList.remove('show'); return; }
-      sug.innerHTML=hits.map(s=>{ const {type}=parseSkuMeta(s); return '<div class="s" data-code="'+s+'"><b>'+s+'</b><small>'+(type||'')+'</small></div>'; }).join('');
+      sug.innerHTML=hits.map(s=>'<div class="s" data-code="'+s+'" data-parent="1"><b>'+s+'</b><small>'+(P.type.get(s)||'')+'</small></div>').join('');
       sug.classList.add('show');
     }
     if(sku){
@@ -7464,7 +7483,7 @@
       sku.addEventListener('focus',()=>resetThaiKeysState(sku));
       sku.addEventListener('compositionend',()=>{ fixThaiKeysInInput(sku); showSug(sku.value); });
       sku.addEventListener('focus',()=>{ showSug(sku.value); loadSkuList(false).then(ch=>{ if(ch && document.activeElement===sku) showSug(sku.value); }); });
-      sug.addEventListener('click',e=>{ const el=e.target.closest('.s'); if(!el)return; applySku(el.dataset.code); normalizeAccessorySku(block); sug.classList.remove('show'); });
+      sug.addEventListener('click',e=>{ const el=e.target.closest('.s'); if(!el)return; if(el.dataset.parent && sizeInput) sizeInput.value=''; applySku(el.dataset.code); normalizeAccessorySku(block); sug.classList.remove('show'); });
       // รองรับเครื่องสแกนบาร์โค้ดจริง (USB/บลูทูธ) — เครื่องพวกนี้ทำงานเหมือนพิมพ์คีย์บอร์ดเร็วๆ แล้วกด Enter ปิดท้ายเสมอ
       // แค่คลิกโฟกัสช่องนี้ไว้ก่อนแล้วยิงสแกน ไม่ต้องเปิดกล้องผ่านปุ่มสแกนเลย — ดักคีย์ Enter ตรงนี้เพื่อสั่ง parse รหัส/เติมประเภท-ไซซ์ให้ทันที
       sku.addEventListener('keydown', e=>{
