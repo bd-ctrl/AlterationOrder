@@ -4941,7 +4941,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-19-5';
+  const APP_VERSION = '2026-10-19-6';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -7265,6 +7265,27 @@
     return _skuLoading;
   }
   loadSkuList(true);
+  // [ใหม่ 2026-10-19 ตามที่ขอ "เอา product name"] ชื่อสินค้าจาก StoreHub (Worker GET /sku-names → [[SKU, ชื่อ], …] · Worker เก็บแคช 6 ชม.) · โหลดใหม่เงียบๆ ทุก 30 นาทีตอนแตะช่องรหัส
+  // โหลดไม่ได้ (Worker เก่ายังไม่มีเส้นทางนี้ / StoreHub ล่ม) = รายการแนะนำโชว์รหัส + ประเภทเหมือนเดิม ไม่มีอะไรพัง
+  let SKU_NAMES=new Map(), SKU_NAMES_AT=0, _skuNamesLoading=null;
+  function loadSkuNames(force){
+    if(_skuNamesLoading) return _skuNamesLoading;
+    if(!force && SKU_NAMES_AT && Date.now()-SKU_NAMES_AT<1800000) return Promise.resolve(false);
+    _skuNamesLoading=fetch(WORKER+'/sku-names').then(r=>r.json()).then(d=>{
+      SKU_NAMES_AT=Date.now();
+      if(d && d.success && Array.isArray(d.items) && d.items.length){ const m=new Map(); for(const x of d.items){ if(Array.isArray(x)&&x[0]&&x[1]) m.set(String(x[0]).trim().toUpperCase(), String(x[1])); } if(m.size){ SKU_NAMES=m; return true; } }
+      return false;
+    }).catch(()=>false).then(v=>{ _skuNamesLoading=null; return v; });
+    return _skuNamesLoading;
+  }
+  loadSkuNames(true);
+  function skuEsc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  // ชื่อของ SKU Parent: ตัดไซซ์ในวงเล็บท้ายชื่อ ("UF543-2-J  Amber Cognac 2B(46)" → "UF543-2-J Amber Cognac 2B") · ชื่อไม่ขึ้นต้นด้วยรหัส = เติมรหัสหน้าชื่อ
+  function skuParentName(parent, rawName){
+    let n=String(rawName||'').replace(/\s*\([^()]*\)\s*$/,'').replace(/\s+/g,' ').trim();
+    if(!n) return '';
+    return n.toUpperCase().startsWith(String(parent).toUpperCase()) ? n : parent+' '+n;
+  }
   // [แก้ 2026-10-15] เรียงรายการแนะนำจากน้อยไปมากแบบธรรมชาติ (ตัวเลขเทียบเป็นเลข: 2 มาก่อน 24 · -J มาก่อน -J-46 · ไซซ์ 46<48<…<60)
   function skuTokens(x){ return String(x).toUpperCase().match(/\d+|\D+/g)||[]; }
   function skuCmp(a,b){
@@ -7278,10 +7299,10 @@
   }
   // เลือก k ตัวที่น้อยที่สุด (ไม่เรียงทั้งรายการ — พิมพ์ตัวเดียวอาจตรงเป็นพันรหัส)
   // [ใหม่ 2026-10-19] รายการ SKU Parent สำหรับช่องแนะนำรหัสสินค้า: รหัสฐาน (ตัดไซซ์ด้วย parseSkuMeta) ไม่ซ้ำ + รหัสเต็มทุกไซซ์ไว้ค้น + ประเภทจากรหัสเต็มตัวแรก · คำนวณครั้งเดียวต่อรายการ SKU ชุดหนึ่ง
-  let _skuParSrc=null, _skuPar=null;
+  let _skuParSrc=null, _skuParNames=null, _skuPar=null;
   function skuParents(){
-    if(_skuParSrc===SKU_LIST && _skuPar) return _skuPar;
-    const list=[], keys=new Map(), type=new Map(), seen=new Map();
+    if(_skuParSrc===SKU_LIST && _skuParNames===SKU_NAMES && _skuPar) return _skuPar;
+    const list=[], keys=new Map(), type=new Map(), name=new Map(), seen=new Map();
     for(const s of SKU_LIST){
       const code=String(s).trim(); if(!code) continue;
       const m=parseSkuMeta(code), base=String(m.baseCode||code).trim(), U=base.toUpperCase();
@@ -7289,8 +7310,9 @@
       if(!p){ p=base; seen.set(U,p); list.push(p); keys.set(p,[U]); type.set(p,m.type||''); }
       else if(!type.get(p) && m.type) type.set(p,m.type);
       const CU=code.toUpperCase(); if(CU!==U) keys.get(p).push(CU);
+      if(!name.get(p)){ const raw=SKU_NAMES.get(CU)||SKU_NAMES.get(U); if(raw){ const n=skuParentName(p,raw); if(n){ name.set(p,n); keys.get(p).push(n.toUpperCase()); } } }
     }
-    _skuParSrc=SKU_LIST; _skuPar={list,keys,type};
+    _skuParSrc=SKU_LIST; _skuParNames=SKU_NAMES; _skuPar={list,keys,type,name};
     return _skuPar;
   }
   function skuSmallest(arr,k){
@@ -7475,14 +7497,15 @@
         if(hits.length<8) hits=hits.concat(skuSmallest(mid,8-hits.length));
       } else hits=P.list.slice(0,8);
       if(!hits.length){ sug.classList.remove('show'); return; }
-      sug.innerHTML=hits.map(s=>'<div class="s" data-code="'+s+'" data-parent="1"><b>'+s+'</b><small>'+(P.type.get(s)||'')+'</small></div>').join('');
+      // [2026-10-19] มีชื่อสินค้าจาก StoreHub = โชว์ "รหัส ชื่อสินค้า" อย่างเดียว (แบบ ข) · ไม่มีชื่อ = รหัส + ประเภทเหมือนเดิม
+      sug.innerHTML=hits.map(s=>{ const n=P.name.get(s); return '<div class="s" data-code="'+skuEsc(s)+'" data-parent="1">'+(n?'<b>'+skuEsc(n)+'</b>':'<b>'+skuEsc(s)+'</b><small>'+(P.type.get(s)||'')+'</small>')+'</div>'; }).join('');
       sug.classList.add('show');
     }
     if(sku){
       sku.addEventListener('input',e=>{ if(!e.isComposing) fixThaiKeysInInput(sku); showSug(sku.value); });
       sku.addEventListener('focus',()=>resetThaiKeysState(sku));
       sku.addEventListener('compositionend',()=>{ fixThaiKeysInInput(sku); showSug(sku.value); });
-      sku.addEventListener('focus',()=>{ showSug(sku.value); loadSkuList(false).then(ch=>{ if(ch && document.activeElement===sku) showSug(sku.value); }); });
+      sku.addEventListener('focus',()=>{ showSug(sku.value); loadSkuList(false).then(ch=>{ if(ch && document.activeElement===sku) showSug(sku.value); }); loadSkuNames(false).then(ch=>{ if(ch && document.activeElement===sku) showSug(sku.value); }); });
       sug.addEventListener('click',e=>{ const el=e.target.closest('.s'); if(!el)return; if(el.dataset.parent && sizeInput) sizeInput.value=''; applySku(el.dataset.code); normalizeAccessorySku(block); sug.classList.remove('show'); });
       // รองรับเครื่องสแกนบาร์โค้ดจริง (USB/บลูทูธ) — เครื่องพวกนี้ทำงานเหมือนพิมพ์คีย์บอร์ดเร็วๆ แล้วกด Enter ปิดท้ายเสมอ
       // แค่คลิกโฟกัสช่องนี้ไว้ก่อนแล้วยิงสแกน ไม่ต้องเปิดกล้องผ่านปุ่มสแกนเลย — ดักคีย์ Enter ตรงนี้เพื่อสั่ง parse รหัส/เติมประเภท-ไซซ์ให้ทันที
