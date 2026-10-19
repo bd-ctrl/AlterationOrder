@@ -627,6 +627,19 @@
   .ra2-img .w{padding:40px 10px;text-align:center;color:var(--t2);font-size:13.5px;display:flex;align-items:center;gap:8px}
   .ra2-dl{height:44px;padding:0 18px;border:1.5px solid var(--goldink);border-radius:999px;background:#fff;color:var(--goldink);font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
   .ra2-dl svg{width:17px;height:17px}
+  /* [phase2-46 2026-10-19 ตามที่ขอ "ตอนบันทึกต้องมีข้อมูลเก่า และข้อมูลใหม่ขึ้นมาด้วย"] กล่องเทียบเก่า→ใหม่ในหน้าหลังบันทึก */
+  .ra2-cmp{flex:none;margin:12px 0 0;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:#fff}
+  .ra2-cmp .hd{background:var(--rule2);padding:9px 14px;font-weight:600;font-size:14px;color:var(--goldink)}
+  .ra2-cmp table{width:100%;border-collapse:collapse;font-size:14px}
+  .ra2-cmp th{font-weight:500;color:var(--mute,#8a8170);font-size:12.5px;text-align:left;padding:8px 12px;border-bottom:1px solid var(--rule)}
+  .ra2-cmp td{padding:9px 12px;border-bottom:1px solid var(--rule);vertical-align:top;overflow-wrap:break-word}
+  .ra2-cmp td:first-child,.ra2-cmp th:first-child{min-width:5.5em}
+  .ra2-cmp tr:last-child td{border-bottom:0}
+  .ra2-cmp td.o{color:#8a8170}
+  .ra2-cmp td.n{font-weight:600;color:#B5452F}
+  .ra2-cmp td.a{color:var(--gold,#C9A24B);font-weight:600;padding-left:0;padding-right:0;width:14px}
+  .ra2-cmp td.nt{font-weight:500;color:var(--ink)}
+  .ra2-cmp .raw{padding:10px 14px;font-size:14px;line-height:1.5}
   .ra2-dl[aria-disabled="true"]{opacity:.45;pointer-events:none}
   .ra2-fin{height:44px;padding:0 22px;border:none;border-radius:999px;background:var(--gold);color:var(--ink);font-family:inherit;font-weight:600;font-size:15px;cursor:pointer}
   /* [phase2-32] ปุ่มเสร็จสิ้นรอระหว่างอัปโหลดรูป · สถานะอัปโหลดรูปใต้ใบสรุป · รหัส error จาก Worker · สถานะโหลดรายชื่อผู้ตรวจ */
@@ -2176,7 +2189,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-09-29-2-phase2-45';
+  const APP_VERSION = '2026-09-29-2-phase2-46';
 
   let currentView=1;
   function updateIdx(){
@@ -3774,7 +3787,9 @@
     }
     // "รายละเอียดการแก้ไข" ที่ส่งเข้า Lark (≤255) แบบเดียวกับ phase2-19: "ป้าย ค่าเดิม→ค่าใหม่" · "ป้าย เก็บเข้า/ขยายออก X" · หมายเหตุท้ายสุด
     function composeBody(rows){
-      const parts=(rows||readChanges()).map(r=>r.dir?r.label+' '+r.now:r.label+' '+(r.prev?r.prev+'→':'')+r.now);
+      // [phase2-46 ตามที่ขอ "ใส่สิ"] ช่องเก็บเข้า/ขยายออกใส่ค่าเก่า (ครั้งที่ 1) ด้วย เหมือนช่องความยาว
+      const dirTxt=r=>{ if(!r.prev) return r.label+' '+r.now; const pw=r.prev.split(' '), nw=String(r.now).split(' '); return pw[0]===nw[0]&&pw.length===2&&nw.length===2 ? r.label+' '+nw[0]+' '+pw[1]+'→'+nw[1] : r.label+' '+r.prev+'→'+r.now; };
+      const parts=(rows||readChanges()).map(r=>r.dir?dirTxt(r):r.label+' '+(r.prev?r.prev+'→':'')+r.now);
       const note=noteVal().trim(); if(note) parts.push(note);
       return parts.join(', ');
     }
@@ -4006,9 +4021,16 @@
     const fileName=f=>'ใบสรุป_นำกลับมาแก้_'+digitsOf(f.code)+'_ครั้งที่'+f.n+'.png';   // ไฟล์ที่ผู้ใช้กด "บันทึกรูป" เอง (PNG เต็ม) — ชื่อที่อัปโหลดเข้า Salesforce เป็นหน้าที่ของ Worker (ห้ามขึ้นต้น "ใบสรุป_")
     function imgInner(d){ return d.img?'<img alt="ใบสรุป สินค้านำกลับมาแก้" src="data:image/png;base64,'+d.img+'">'
       :'<div class="w">'+(d.err?'สร้างรูปใบสรุปไม่สำเร็จ ('+esc(d.err)+') — ข้อมูลบันทึกแล้ว':'<span class="ra2-spin"></span>กำลังสร้างรูปใบสรุป…')+'</div>'; }
+    // [phase2-46] ข้อมูลเก่า = ค่าในบิลแรก (ครั้งที่ 1 · ค่าวัดใน Salesforce จาก /product-latest เดียวกับป้าย "แก้ไขครั้งที่ 1:" ในฟอร์ม) · ข้อมูลใหม่ = ที่กรอกรอบนี้ · ไม่มีแถว (กู้จากที่บันทึกไว้) = โชว์ข้อความที่บันทึกแทน
+    function cmpHtml(d){ const f=d.f, rows=(d.rows||[]), note=String(d.note||'').trim();
+      if(!rows.length&&!note){ const t=String(d.detail||'').trim(); return t?'<div class="ra2-cmp" data-ra2-cmp><div class="hd">สิ่งที่แก้ในครั้งนี้</div><div class="raw">'+esc(t)+'</div></div>':''; }
+      const tr=rows.map(r=>'<tr><td>'+esc(r.dir?r.label:r.rl)+'</td><td class="o">'+esc(r.prev||'—')+'</td><td class="a">→</td><td class="n">'+esc(r.now)+'</td></tr>').join('')
+        + (note?'<tr><td>หมายเหตุ</td><td class="o">—</td><td class="a">→</td><td class="nt">'+esc(note)+'</td></tr>':'');
+      return '<div class="ra2-cmp" data-ra2-cmp><div class="hd">สิ่งที่แก้ในครั้งนี้</div><table><tr><th>จุดที่แก้</th><th>ข้อมูลเก่า (ครั้งที่ 1)</th><th></th><th>ข้อมูลใหม่ (ครั้งที่ '+esc(String(f.n))+')</th></tr>'+tr+'</table></div>'; }
     function doneHtml(){ const d=S.done, f=d.f;
       return '<button type="button" class="ra2-back" data-ra2="fin" aria-disabled="'+(d.busy?'true':'false')+'">'+IC.chevL+'รายการที่นัดรับ</button>'
         + '<div class="ra2-ok"><span class="ic">'+IC.tick+'</span><div><div class="t">บันทึกนำกลับมาแก้ ครั้งที่ '+f.n+' แล้ว</div><div class="s">'+esc(f.code)+' · '+esc(typeShort(f.type))+' · '+esc(f.custShow)+'</div></div></div>'
+        + cmpHtml(d)
         + (d.notes||[]).map(n=>'<div class="ra2-up note" data-ra2-note role="status">'+IC.warn+'<span class="sp">'+esc(n)+'</span></div>').join('')
         + '<div class="ra2-img" data-ra2-img>'+imgInner(d)+'</div>'
         + '<div class="ra2-up" data-ra2-up role="status" aria-live="polite" hidden></div>'
