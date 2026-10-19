@@ -1069,6 +1069,23 @@
   #authGate .ag-note{font-size:12px;color:var(--t2)}
   #authGate .ag-spin{width:30px;height:30px;border-radius:50%;border:3px solid var(--rule2);border-top-color:var(--gold);animation:agSpin 1s linear infinite;flex:0 0 auto}
   @keyframes agSpin{to{transform:rotate(360deg)}}
+  /* ===== [ใหม่ 2026-10-19 ตามที่ขอ] Suitcube Loader — ตัวรอโหลดลูกบาศก์โลโก้ (ใช้แทนไอคอนกำลังโหลดทั่วแอป) · ต้นฉบับ suitcube-loader.css/.js (Insight Portal 16 ต.ค. 2026)
+     ปรับให้เข้ากับแอปหน้าเดียว: สีตามตัวอักษรรอบข้าง (--lc:currentColor) · โลโก้ฝังเป็น data URI (ย่อเหลือ ~8 KB ใช้เป็น mask) · .sc-inl = ตัวเล็กหน้าข้อความ · .sc-line = แถวตัวหมุน+ข้อความ · .sc-stack = ตัวหมุนเหนือข้อความ */
+  .sc-loader{--h:22px;--lc:currentColor;--logo:url(data:image/png;base64,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);display:inline-flex;align-items:center;flex:none;height:var(--h)}
+  .sc-loader .w{display:block;height:var(--h);background:var(--lc);-webkit-mask:var(--logo) no-repeat;mask:var(--logo) no-repeat;-webkit-mask-size:calc(var(--h)*5.15) var(--h);mask-size:calc(var(--h)*5.15) var(--h)}
+  .sc-loader .w.l{width:calc(var(--h)*2.95);-webkit-mask-position:0 0;mask-position:0 0;animation:sc-word-l 3.4s ease-in-out infinite}
+  .sc-loader .w.r{width:calc(var(--h)*1.34);-webkit-mask-position:calc(var(--h)*-3.81) 0;mask-position:calc(var(--h)*-3.81) 0;animation:sc-word-r 3.4s ease-in-out infinite}
+  .sc-loader .scene{display:flex;align-items:center;justify-content:center;width:calc(var(--h)*.86);height:var(--h);flex:none}
+  .sc-loader .scene svg{display:block;width:calc(var(--h)*1.085);height:calc(var(--h)*1.085);fill:var(--lc);transform-origin:50% 50%;animation:sc-spin 3.4s cubic-bezier(.15,.85,.25,1) infinite}
+  .sc-loader.nowords .w{display:none}
+  @keyframes sc-spin{0%{transform:rotate(0)}58%,100%{transform:rotate(1080deg)}}
+  @keyframes sc-word-l{0%,56%{opacity:0;transform:translateX(calc(var(--h)*.3))}68%,90%{opacity:1;transform:none}97%,100%{opacity:0;transform:translateX(calc(var(--h)*.3))}}
+  @keyframes sc-word-r{0%,56%{opacity:0;transform:translateX(calc(var(--h)*-.3))}68%,90%{opacity:1;transform:none}97%,100%{opacity:0;transform:translateX(calc(var(--h)*-.3))}}
+  @media (prefers-reduced-motion:reduce){.sc-loader .scene svg,.sc-loader .w.l,.sc-loader .w.r{animation:none}.sc-loader .w{opacity:1}}
+  .sc-loader.sc-inl{margin-right:8px;vertical-align:middle}
+  .sc-line{display:flex;align-items:center}
+  .sc-stack{display:flex;flex-direction:column;align-items:center;gap:12px}
+  .printrange-count .sc-inl{margin-right:0}
   @media (min-width:881px){ #authGate .ag-mast{padding:12px 28px} #authGate .ag-body{padding-top:48px} }
   /* แถบผู้ใช้ท้ายหน้า (ข้างล่างแถบปุ่มของแต่ละหน้า) — "เข้าสู่ระบบด้วย Lark: ชื่อ" + ออกจากระบบ */
   #authBar{flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:0 8px;min-width:0;padding:5px 16px calc(5px + env(safe-area-inset-bottom,0px));background:#fff;border-top:1px solid var(--rule);font-size:12.5px;line-height:1.4}
@@ -1105,6 +1122,46 @@
   @media (max-width:640px){ #authAdv{padding-left:12px;padding-right:12px} #authAdv .aa-btn{flex:1 1 100%} }
   @media print{ #authGate,#authBar,#authAdv{display:none !important} }
 </style>
+<script>
+/* ===== [ใหม่ 2026-10-19 ตามที่ขอ] Suitcube Loader (ตัวสร้างลูกบาศก์รอโหลด · คู่กับ CSS .sc-loader) — ต้นฉบับ suitcube-loader.js ปรับ: เพิ่ม decor (ไม่ประกาศ role=status ซ้ำเมื่อมีข้อความ "กำลัง…" อยู่ข้างๆ) + inline (.sc-inl)
+   + ตัวช่วยของแอป: scLd(o) = HTML ของตัวหมุน (ใส่ในสตริง innerHTML) · scBusy(el,text,o) = ตั้งปุ่ม/บรรทัดเป็น "ตัวหมุน + ข้อความ" (เรียกซ้ำ = แก้แค่ข้อความ ตัวหมุนไม่สะดุด) · textContent ของ el = ข้อความเท่านั้น (ตัวหมุนไม่มีตัวอักษร) */
+(function (g) {
+  var SVG = '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 1 28 8 16 15 4 8z"/><path d="M3.1 9.5 15.1 16.5v14L3.1 23.5z"/><path d="M28.9 9.5v14L16.9 30.5v-14z"/></svg>';
+  function create(o) {
+    o = o || {};
+    var el = document.createElement('span');
+    el.className = 'sc-loader' + (o.words === false ? ' nowords' : '') + (o.inline ? ' sc-inl' : '');
+    if (o.decor) { el.setAttribute('aria-hidden', 'true'); }
+    else { el.setAttribute('role', 'status'); el.setAttribute('aria-label', o.label || 'กำลังโหลด'); }
+    if (o.size) el.style.setProperty('--h', o.size + 'px');
+    if (o.color) el.style.setProperty('--lc', o.color);
+    var scene = document.createElement('span');
+    scene.className = 'scene';
+    scene.innerHTML = SVG;
+    if (o.words !== false) { var l = document.createElement('span'); l.className = 'w l'; el.appendChild(l); }
+    el.appendChild(scene);
+    if (o.words !== false) { var r = document.createElement('span'); r.className = 'w r'; el.appendChild(r); }
+    return el;
+  }
+  function mount(root) {
+    (root || document).querySelectorAll('[data-suitcube-loader]').forEach(function (h) {
+      h.replaceWith(create({ size: +h.dataset.size || undefined, color: h.dataset.color, words: h.dataset.words !== 'false' }));
+    });
+  }
+  function html(o) { var x = {}; for (var k in (o || {})) x[k] = o[k]; x.decor = true; return create(x).outerHTML; }
+  function busy(el, text, o) {
+    if (!el) return;
+    var ld = el.firstElementChild;
+    if (ld && ld.classList && ld.classList.contains('sc-loader') && el.childNodes.length === 2 && ld.nextSibling && ld.nextSibling.nodeType === 3) { ld.nextSibling.nodeValue = text; return; }
+    el.textContent = '';
+    var x = { size: 16, words: false, inline: true, decor: true }; for (var k in (o || {})) x[k] = o[k];
+    el.appendChild(create(x));
+    el.appendChild(document.createTextNode(text));
+  }
+  g.SuitcubeLoader = { create: create, mount: mount, html: html, busy: busy };
+  g.scLd = html; g.scBusy = busy;
+})(window);
+</script>
 <script>
 /* ===== [ใหม่ 2026-10-06 ตามที่ขอ] index3 — เข้าสู่ระบบด้วย Lark (บล็อกสคริปต์ต้นหน้า: ต้องรันก่อนสคริปต์หลัก) =====
    1) อ่านบัตรผ่านที่เก็บไว้ (localStorage "suitcube_auth_v1") — ยังไม่หมดอายุ (เผื่อ 60 วิ) = ใส่ class "auth-ok" ที่ <html> ด่านไม่โชว์เลย
@@ -1227,7 +1284,7 @@
     gate.name=name;
     if(gateEl) gateEl.setAttribute('data-state',name);
     bodyEl.textContent='';
-    if(s.spin){ var sp=mk('div','ag-spin'); sp.setAttribute('aria-hidden','true'); bodyEl.appendChild(sp); }
+    if(s.spin){ var sp; if(window.SuitcubeLoader){ sp=window.SuitcubeLoader.create({size:40,label:s.title}); } else { sp=mk('div','ag-spin'); sp.setAttribute('aria-hidden','true'); } bodyEl.appendChild(sp); }
     else if(s.icon){ var ic=mk('div','ag-ico'+(s.bad?' bad':'')); ic.setAttribute('aria-hidden','true'); ic.innerHTML=ICON[s.icon]; bodyEl.appendChild(ic); }
     var t=mk('div','ag-ttl'); t.id='authGateTitle'; t.textContent=s.title; bodyEl.appendChild(t);
     if(s.text){ var x=mk('div','ag-txt'); setLines(x,s.text); bodyEl.appendChild(x); }
@@ -1653,7 +1710,7 @@
     <div class="ag-ttl" id="authGateTitle">กำลังตรวจสอบ…</div>
   </div>
 </div>
-<script>if(window.suitcubeAuth&&window.suitcubeAuth.mount){window.suitcubeAuth.mount();}else{document.getElementById('authGateTitle').textContent='โหลดระบบเข้าสู่ระบบไม่สำเร็จ — รีเฟรชหน้านี้อีกครั้ง';}</script>
+<script>(function(){var sp=document.querySelector('#authGateBody .ag-spin');if(sp&&window.SuitcubeLoader){sp.replaceWith(window.SuitcubeLoader.create({size:40,label:'กำลังตรวจสอบ'}));}})();if(window.suitcubeAuth&&window.suitcubeAuth.mount){window.suitcubeAuth.mount();}else{document.getElementById('authGateTitle').textContent='โหลดระบบเข้าสู่ระบบไม่สำเร็จ — รีเฟรชหน้านี้อีกครั้ง';}</script>
 
 
 <!-- [ใหม่ตามที่ขอ] แถบเตือนเมื่อมีเวอร์ชันใหม่ (ดู checkForUpdate ท้ายสคริปต์) -->
@@ -4884,7 +4941,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-19-2';
+  const APP_VERSION = '2026-10-19-4';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -5032,7 +5089,7 @@
     const from=printFromDate?.value||'', to=printToDate?.value||'';
     if(!billNo && !orderId && !productId && (!from || !to)){ printRangeCount.textContent=''; printRangeCount.className='printrange-count'; return; }
     const seq=++_printCountSeq;
-    printRangeCount.textContent='กำลังนับจำนวนงาน…'; printRangeCount.className='printrange-count loading';
+    printRangeCount.innerHTML=scLd({size:14,words:false,inline:true})+'กำลังนับจำนวนงาน…'; printRangeCount.className='printrange-count loading';
     fetch(WORKER+'/queue-reprint', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ branch, billNo, orderId, productId, from, to }) })
       .then(r=>r.json()).then(json=>{
         if(seq!==_printCountSeq) return; // เปลี่ยนเงื่อนไขใหม่แซงไปแล้ว ผลรอบนี้ตกไป
@@ -5101,7 +5158,7 @@
       const hasSearchTerm = !!(billNo || orderId || productId);
       // ถ้ากรอกช่องค้นหาช่องใดช่องหนึ่งมา (เลขที่บิล/Suitcube Order/Suitcube Product) ค้นด้วยช่องนั้นได้เลย ไม่ต้องเลือกช่วงวันที่ก็ได้ — ถ้าไม่กรอกเลย ยังต้องเลือกช่วงวันที่เหมือนเดิม
       if(!hasSearchTerm && (!from || !to)){ alert('กรุณากรอกเลขที่บิล/Suitcube Order/Suitcube Product อย่างใดอย่างหนึ่ง หรือเลือกช่วงวันที่'); return; }
-      printRangeSubmitBtn.disabled=true; printRangeSubmitBtn.textContent='กำลังค้นหา…';
+      printRangeSubmitBtn.disabled=true; scBusy(printRangeSubmitBtn,'กำลังค้นหา…');
       try{
         const res=await fetch(WORKER+'/queue-reprint', {
           method:'POST', headers:{'Content-Type':'application/json'},
@@ -5116,7 +5173,7 @@
         const allImages=[];
         for(let i=0;i<list.length;i++){
           const o=list[i];
-          printRangeSubmitBtn.textContent='กำลังสร้างใบสรุปใหม่ '+(i+1)+'/'+list.length+'…';
+          scBusy(printRangeSubmitBtn,'กำลังสร้างใบสรุปใหม่ '+(i+1)+'/'+list.length+'…');
           try{
             const images=await regenerateReceiptsFromLatest(o);
             await attachReceiptImages(images);
@@ -5205,7 +5262,7 @@
     _scanOnResult=onResult;
     _scanMode=null;
     scanManualInput.value='';
-    scanMsg.textContent='กำลังเปิดกล้อง…';
+    scanMsg.innerHTML=scLd({size:16,words:false,inline:true})+'กำลังเปิดกล้อง…';
     scanPop.classList.add('show');
     if(!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)){
       scanMsg.textContent='อุปกรณ์นี้ไม่รองรับกล้องผ่านเบราว์เซอร์ (ต้องเปิดผ่านลิงก์ https) — พิมพ์รหัสด้วยตนเองด้านล่างแทนได้';
@@ -5536,7 +5593,7 @@
   async function loadPickupOrders(branch){
     if(_pickupLoading) return;
     _pickupLoading=true; _pickupLoadedBranch=branch;
-    histList.innerHTML='<div class="hist-state">กำลังโหลด…</div>';
+    histList.innerHTML='<div class="hist-state sc-stack">'+scLd({size:30})+'<span>กำลังโหลด…</span></div>';
     try{
       const res=await fetch(WORKER+'/list-orders?branch='+encodeURIComponent(branch));
       const d=await res.json();
@@ -5553,7 +5610,7 @@
     const branchSel=document.getElementById('histPickupBranch');
     const branch=branchSel?branchSel.value:'';
     if(branch && branch!==_pickupLoadedBranch){ loadPickupOrders(branch); return; }
-    if(!_pickupOrders){ histList.innerHTML='<div class="hist-state">กำลังโหลด…</div>'; return; }
+    if(!_pickupOrders){ histList.innerHTML='<div class="hist-state sc-stack">'+scLd({size:30})+'<span>กำลังโหลด…</span></div>'; return; }
     const histFromDate=document.getElementById('histFromDate'), histToDate=document.getElementById('histToDate');
     let filtered=filterByPickupRange(_pickupOrders, histFromDate?histFromDate.value:'', histToDate?histToDate.value:'');
     // กรองซ้ำตาม "สาขาที่นัดรับ" (คนละอย่างกับสาขาที่ซื้อด้านบน) — กรองฝั่งหน้าเว็บจากรายการที่โหลดมาแล้ว ไม่ยิง fetch ใหม่
@@ -5570,7 +5627,7 @@
   async function loadLiveOrders(branch){
     if(_histLoading) return;
     _histLoading=true; _histLoadedBranch=branch;
-    histList.innerHTML='<div class="hist-state">กำลังโหลด…</div>';
+    histList.innerHTML='<div class="hist-state sc-stack">'+scLd({size:30})+'<span>กำลังโหลด…</span></div>';
     try{
       // [แก้ 2026-10-15] ขอเฉพาะสาขาที่ซื้อที่เลือก — Worker กรองคอลัมน์ "สาขา" ให้ (ค่าเดียวกับ o.branch ที่กรองซ้ำด้านล่าง)
       // เดิมดึงทุกสาขา (branch ว่าง): ตั้งแต่ตารางเกิน 500 แถว (13 ต.ค. 69) Worker ดึงหน้าแรกซ้ำ 30 รอบ ~42 วิ เกินหน่วยความจำ → "เชื่อมต่อ Lark Base ไม่สำเร็จ"
@@ -6127,7 +6184,7 @@
         setTimeout(()=>{ btn.innerHTML=original; }, 2200);
         return;
       }
-      btn.disabled=true; btn.innerHTML='กำลังบันทึก…';
+      btn.disabled=true; scBusy(btn,'กำลังบันทึก…');
       let r={ synced:false, localOk:false };
       try{ r=await saveDraftNow(); }catch(e){ /* ไม่ควรเกิด — กันปุ่มค้าง */ }
       finally{ btn.disabled=false; }
@@ -6147,7 +6204,7 @@
     // บรรทัดสถานะการซิงก์กับเซิร์ฟเวอร์ (แสดงเหนือรายการเสมอเมื่อเลือกสาขาแล้ว)
     let syncLine='';
     if(!branch) syncLine='<div class="draft-sync-line">เลือกสาขาที่แถบบน เพื่อดูร่างที่ใช้ร่วมกันทุกเครื่องของสาขานั้น (ตอนนี้แสดงเฉพาะร่างในเครื่องนี้)</div>';
-    else if(DRAFT_SYNC.loading) syncLine='<div class="draft-sync-line">กำลังโหลดร่างของสาขา '+escapeHtml(branch)+' จากเซิร์ฟเวอร์…</div>';
+    else if(DRAFT_SYNC.loading) syncLine='<div class="draft-sync-line sc-line">'+scLd({size:15,words:false,inline:true})+'กำลังโหลดร่างของสาขา '+escapeHtml(branch)+' จากเซิร์ฟเวอร์…</div>';
     else if(DRAFT_SYNC.ok===false) syncLine='<div class="draft-sync-line bad">เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ — แสดงเฉพาะร่างในเครื่องนี้ ('+escapeHtml(DRAFT_SYNC.err||'ไม่ทราบสาเหตุ')+')</div>';
     if(DRAFT_SYNC.notice) syncLine+='<div class="draft-sync-line bad">'+escapeHtml(DRAFT_SYNC.notice)+'</div>';
     if(!all.length){ histList.innerHTML=syncLine+'<div class="hist-state">'+(branch?('ยังไม่มีร่างที่บันทึกไว้ของสาขา '+escapeHtml(branch)):'ยังไม่มีร่างที่บันทึกไว้ในเครื่องนี้')+'</div>'; return; }
@@ -6318,7 +6375,7 @@
     const o=findHistOrder(recId);
     if(!o){ alert('ไม่พบข้อมูลบิลนี้ — ลองปิดแล้วเปิดหน้าประวัติใหม่อีกครั้ง'); return; }
     const btn=histList.querySelector('.hist-resync-btn[data-id="'+recId+'"]');
-    if(btn){ btn.disabled=true; btn.textContent='กำลังดึงข้อมูล…'; }
+    if(btn){ btn.disabled=true; scBusy(btn,'กำลังดึงข้อมูล…'); }
     try{
       const images=await regenerateReceiptsFromLatest(o);
       showResult(true, 'ดึงข้อมูลล่าสุดจาก Salesforce สำเร็จ — สร้างใบสรุปใหม่แล้ว '+images.length+' ใบ (แนบเข้า Lark Base เรียบร้อย)');
@@ -6570,7 +6627,7 @@
     _lastSearchedPhone=p;
     const seq=++_phoneSearchSeq;
     if(phoneSuggest){
-      phoneSuggest.innerHTML='<div class="hint">กำลังค้นหา…</div>'; phoneSuggest.classList.add('show');
+      phoneSuggest.innerHTML='<div class="hint sc-line">'+scLd({size:15,words:false,inline:true})+'กำลังค้นหา…</div>'; phoneSuggest.classList.add('show');
       _phoneSuggestJustShown=true; setTimeout(()=>{_phoneSuggestJustShown=false;},0);
     }
     fetch(WORKER+'/find-customer?phone='+encodeURIComponent(p)).then(r=>r.json()).then(d=>{
@@ -7482,7 +7539,7 @@
     const attachLabel=block.querySelector('.attachbtn-label');
     function updateAttachLabel(busy){
       if(!attachLabel) return;
-      if(busy){ attachLabel.innerHTML='กำลังบีบอัดรูป…'; return; }
+      if(busy){ attachLabel.innerHTML=scLd({size:14,words:false,inline:true})+'กำลังบีบอัดรูป…'; return; }
       const n=block._attachedImages.length;
       // [ใหม่] มีรูปแล้ว → กดที่ป้ายเพื่อล้างรูปทั้งหมดของชิ้นนี้ (เผื่อพื้นที่เต็ม / แนบผิด)
       attachLabel.innerHTML = n ? ('แนบรูปแล้ว ('+n+' รูป) · <u>กดล้าง</u>') : 'แนบรูป <span class="opt">(ถ้ามี)</span>';
@@ -7925,7 +7982,7 @@
   let _resultBusy=false;
   function setResultBusy(busy){
     _resultBusy=busy;
-    if(resultOkBtn){ resultOkBtn.disabled=busy; resultOkBtn.textContent=busy?'กำลังบันทึกรูปใบสรุป…':'ตกลง'; }
+    if(resultOkBtn){ resultOkBtn.disabled=busy; if(busy) scBusy(resultOkBtn,'กำลังบันทึกรูปใบสรุป…'); else resultOkBtn.textContent='ตกลง'; }
   }
   function closeResultPop(){
     if(_resultBusy) return;
@@ -9317,7 +9374,7 @@
 
   // บันทึกแบบแยกบิล — ยิง /create-order ทีละบิลเรียงกัน (เลขบิลวิ่งต่อกันเอง) แล้วรวมรูปใบสรุปทุกบิลมาโชว์+แนบ
   async function doSplitSave(groups){
-    submitBtn.disabled=true; submitBtn.textContent='กำลังบันทึก…';
+    submitBtn.disabled=true; scBusy(submitBtn,'กำลังบันทึก…');
     const _draftPhone=(document.getElementById('custPhone')?.value||'').trim(), _draftBranch=draftBranchNow();   // [2026-10-06] จำไว้ก่อนล้างฟอร์ม ใช้ลบร่างของลูกค้าคนนี้เมื่อบันทึกครบทุกบิล
     const allImages=[]; const billNos=[]; const failures=[];
     // [ใหม่ตามที่ขอ] รหัสกลุ่มบิล — ผูกทุกบิลย่อยที่มาจากการแยกบิลครั้งนี้ไว้ด้วยกัน (คนละเลขที่บิล แต่รหัสกลุ่มเดียวกัน)
@@ -9326,7 +9383,7 @@
     try{
       for(let g=0; g<groups.length; g++){
         const idx=groups[g];
-        submitBtn.textContent='กำลังบันทึกบิลที่ '+(g+1)+'/'+groups.length+'…';
+        scBusy(submitBtn,'กำลังบันทึกบิลที่ '+(g+1)+'/'+groups.length+'…');
         const gData=collectSubmitPayload(idx);
         gData['รหัสกลุ่มบิล']=splitGroupId;
         // ยอดค้างชำระลงบิลแรก (บิลหลัก) ใบเดียว — บิลอื่นตั้งเป็นจ่ายเงินแล้ว กันนับเงินซ้ำ (ต้องตรงกับข้อความปุ่ม #payToggle)
@@ -9397,7 +9454,7 @@
       }
     }
     submitBtn.disabled=true;
-    submitBtn.textContent=isEditing?'กำลังบันทึกทับ…':'กำลังบันทึก…';
+    scBusy(submitBtn,isEditing?'กำลังบันทึกทับ…':'กำลังบันทึก…');
     try{
       // แก้ไขบิลเก่า → บันทึกทับ record เดิม (record_id เดิม) พร้อมชื่อผู้แก้ไข / บิลใหม่ → สร้างใหม่ตามปกติ
       const res=await fetch(WORKER+(isEditing?'/update-order':'/create-order'), {
@@ -9618,7 +9675,7 @@
       } else banner.hidden=true;
       strip.hidden=false; strip.className='pc-strip'+(paused ? ' paused' : '');
       if(!st){
-        stateEl.textContent = failMsg ? 'ตรวจสถานะการพิมพ์ไม่ได้ในตอนนี้' : 'กำลังตรวจสอบสถานะการพิมพ์…';
+        if(failMsg) stateEl.textContent='ตรวจสถานะการพิมพ์ไม่ได้ในตอนนี้'; else scBusy(stateEl,'กำลังตรวจสอบสถานะการพิมพ์…',{size:14});
         subEl.textContent = failMsg ? 'ปุ่มหยุดพิมพ์ใช้ไม่ได้ชั่วคราว — ถ้าต้องหยุดด่วนให้ล้างคิวที่เครื่องพิมพ์เอง ('+failMsg+')' : '';
         stopBtn.hidden=true; resumeBtn.hidden=true; return;
       }
