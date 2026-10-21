@@ -4941,7 +4941,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-19-6';
+  const APP_VERSION = '2026-10-21-3';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -5879,7 +5879,7 @@
       block.querySelector('.size-input').value=data['รายการ'+n+'_ไซส์']||'';
       // [ใหม่ตามที่ขอ] โหลดร่าง/แก้ไขบิลเดิมที่เป็นรหัส NT/BT/CL ก็ต้องซ่อนแถว Size เหมือนตอนพิมพ์รหัสสดๆ ด้วย ไม่งั้นโหลดร่างแล้วช่องกลับมาโผล่
       const loadedTypeCode=parseSkuMeta(loadedSku).typeCode;
-      block.querySelector('.size-input').closest('.frow')?.classList.toggle('hidden', NO_SIZE_TYPE_CODES.has(loadedTypeCode));
+      block.querySelector('.size-input').closest('.frow')?.classList.toggle('hidden', skuHasNoSize(loadedSku)); if(/^BL-/i.test(String(loadedSku||'').trim())) block.querySelector('.size-input').value='';
       block.querySelector('.type-select').value=type;
       // [แก้บั๊ก] เจอจริง — โหลดร่าง/บิลเก่ากลับมาแก้ (applyRawDataToForm) ไม่เคยดึงรูปที่เคยแนบไว้ (รายการN_รูป) กลับเข้า block._attachedImages เลย
       // รูปยังอยู่ในข้อมูลจริงปกติ (เห็นได้จาก /order-raw) แต่ปุ่ม "แนบรูป" กลับมาโชว์ "(ถ้ามี)" เหมือนไม่มีอะไรอยู่เลย ทำให้ดูเหมือนรูปหายไป
@@ -5934,7 +5934,7 @@
     block.querySelector('.size-input').value=p.size||'';
     // [ใหม่ตามที่ขอ] เหมือนกับตอนพิมพ์รหัสสดๆ — รหัส NT/BT/CL ต้องซ่อนแถว Size ด้วยตอนโหลดฟอร์มกลับมา (autosave/แก้ไขบิลเดิม)
     const loadedTypeCode=parseSkuMeta(p.sku||'').typeCode;
-    block.querySelector('.size-input').closest('.frow')?.classList.toggle('hidden', NO_SIZE_TYPE_CODES.has(loadedTypeCode));
+    block.querySelector('.size-input').closest('.frow')?.classList.toggle('hidden', skuHasNoSize(p.sku||'')); if(/^BL-/i.test(String(p.sku||'').trim())) block.querySelector('.size-input').value='';
     if(p.type) block.querySelector('.type-select').value=p.type;
     if(p.branch) block.querySelector('.branch-prod').value=p.branch;
     const contactInp=block.querySelector('.contact-input'); if(contactInp) contactInp.value=p.contact||'';
@@ -6762,6 +6762,9 @@
     AT:'Accessory อื่นๆ',BT:'Accessory อื่นๆ',CL:'Accessory อื่นๆ',LP:'Accessory อื่นๆ',NT:'Accessory อื่นๆ',SP:'Accessory อื่นๆ'};
   // [ใหม่ตามที่ขอ] รหัส Accessory prefix ที่ไม่มีไซซ์จริงเลย (ไม่ต้องมีช่อง Size ให้กรอก/ไม่บังคับกรอกตอนบันทึก) — เดิมมีแค่ NT/BT ตอนนี้เพิ่ม CL เข้ามาด้วย รวมไว้จุดเดียวกันหมด ไม่ต้องไล่แก้หลายที่
   const NO_SIZE_TYPE_CODES = new Set(['NT','BT','CL']);
+  // [2026-10-21 ตามที่ขอ "BL ไม่มีไซซ์ ช่อง Size ต้องว่าง"] รหัสขึ้นต้น BL- (เช่น BL-25014-105 — เลขท้ายเป็นส่วนของรหัส ไม่ใช่ไซซ์) ไม่มีไซซ์: ซ่อนแถว Size · ไม่บังคับกรอก · ส่ง Size ว่างเสมอ
+  // (เดิมช่อง Size บังคับกรอก พนักงานจึงต้องใส่ 105 → Salesforce ไม่รับ เพราะ Size เสื้อสูทรับได้ 2 ตัว — บิล SL26102004)
+  function skuHasNoSize(code){ code=String(code||'').trim(); if(!code) return false; return /^BL-/i.test(code) || NO_SIZE_TYPE_CODES.has(parseSkuMeta(code).typeCode); }
   // [ใหม่] รหัสสินค้าที่ยืนยันแล้วว่าเป็น Accessory (เช่น รองเท้า) แต่ไม่ตรงรูปแบบ prefix ปกติ (AT/BT/CL/LP/NT/SP) — hardcode รายชื่อไว้ตรงๆ ตามที่ขอ กันไม่ให้ auto-detect ประเภทพลาด
   const HARDCODED_ACCESSORY_SKUS = new Set([
     '504-H27-CF','752-H6-BLK','827-7-CF','50317-01-02-BRO','827-7-BRO','B69-HL-BLK','AM8803-V5-CF',
@@ -6780,10 +6783,11 @@
   ].map(s=>s.toUpperCase()));
   // ไซซ์ที่มีจริงต่อประเภทสินค้า (อ้างอิงตารางไซซ์จริง) — ใช้ตรวจสอบว่าไซซ์ที่แยกได้จากรหัสสแกนถูกต้องหรือไม่
   const VALID_SIZES={
-    'เสื้อสูท (สำเร็จรูป)': ['46','48','50','52','54','56','58','60','62'],
-    'กางเกง (สำเร็จรูป)': ['29','30','31','32','33','34','36','38','40','42','44'],
+    // [2026-10-21] เพิ่มไซซ์ที่มีจริงในรายการสินค้า (Google Sheet/StoreHub) แต่เดิมไม่อยู่ในรายการ — เช่น UF259-1-V-46 เคยขึ้นแยกบรรทัด ไม่ถูกตัดไซซ์ · ใช้แค่ตอนแยกรหัส/ไซซ์ ไม่ได้บังคับช่อง Size
+    'เสื้อสูท (สำเร็จรูป)': ['30','32','34','36','38','40','42','44','46','48','50','52','54','56','58','60','62','SS','XS','S','M','L','XL','2XL','3XL','4XL','5XL'],
+    'กางเกง (สำเร็จรูป)': ['26','26.5','28','29','29.5','30','31','32','33','34','34.5','35','36','38','40','41','42','44','46'],
     'เสื้อเชิ้ต (สำเร็จรูป)': ['S','M','L','XL','XXL','46','48','50','52','54','56','58','60','62'],
-    'เสื้อกั๊ก (สำเร็จรูป)': ['48','50','52','54','56','58'],
+    'เสื้อกั๊ก (สำเร็จรูป)': ['42','44','46','48','50','52','54','56','58','60','62'],
   };
 
   // สัดส่วนที่แก้ไขได้ต่างกันตามประเภทสินค้า (อิงตามฟิลด์จริงที่ส่งเข้า Salesforce/Lark ต่อประเภท)
@@ -7267,13 +7271,13 @@
   loadSkuList(true);
   // [ใหม่ 2026-10-19 ตามที่ขอ "เอา product name"] ชื่อสินค้าจาก StoreHub (Worker GET /sku-names → [[SKU, ชื่อ], …] · Worker เก็บแคช 6 ชม.) · โหลดใหม่เงียบๆ ทุก 30 นาทีตอนแตะช่องรหัส
   // โหลดไม่ได้ (Worker เก่ายังไม่มีเส้นทางนี้ / StoreHub ล่ม) = รายการแนะนำโชว์รหัส + ประเภทเหมือนเดิม ไม่มีอะไรพัง
-  let SKU_NAMES=new Map(), SKU_NAMES_AT=0, _skuNamesLoading=null;
+  let SKU_NAMES=new Map(), SKU_NAMES_SKUS=[], SKU_NAMES_AT=0, _skuNamesLoading=null;   // [2026-10-21] SKU_NAMES_SKUS = รหัสทั้งหมดจาก StoreHub (ตัวพิมพ์ตามต้นฉบับ)
   function loadSkuNames(force){
     if(_skuNamesLoading) return _skuNamesLoading;
     if(!force && SKU_NAMES_AT && Date.now()-SKU_NAMES_AT<1800000) return Promise.resolve(false);
     _skuNamesLoading=fetch(WORKER+'/sku-names').then(r=>r.json()).then(d=>{
       SKU_NAMES_AT=Date.now();
-      if(d && d.success && Array.isArray(d.items) && d.items.length){ const m=new Map(); for(const x of d.items){ if(Array.isArray(x)&&x[0]&&x[1]) m.set(String(x[0]).trim().toUpperCase(), String(x[1])); } if(m.size){ SKU_NAMES=m; return true; } }
+      if(d && d.success && Array.isArray(d.items) && d.items.length){ const m=new Map(); for(const x of d.items){ if(Array.isArray(x)&&x[0]&&x[1]) m.set(String(x[0]).trim().toUpperCase(), String(x[1])); } if(m.size){ SKU_NAMES=m; SKU_NAMES_SKUS=d.items.filter(x=>Array.isArray(x)&&x[0]).map(x=>String(x[0]).trim()); return true; } }
       return false;
     }).catch(()=>false).then(v=>{ _skuNamesLoading=null; return v; });
     return _skuNamesLoading;
@@ -7303,7 +7307,8 @@
   function skuParents(){
     if(_skuParSrc===SKU_LIST && _skuParNames===SKU_NAMES && _skuPar) return _skuPar;
     const list=[], keys=new Map(), type=new Map(), name=new Map(), seen=new Map();
-    for(const s of SKU_LIST){
+    // [2026-10-21 ตามที่ขอ "ให้เชื่อมต่อ api storehub"] รายการรหัส = Google Sheet master + สินค้าทั้งหมดใน StoreHub (รหัสที่มีแค่ใน StoreHub เช่น UF669-1 ก็ขึ้น) · ซ้ำกันรวมเป็นบรรทัดเดียว
+    for(const s of (SKU_NAMES_SKUS.length?SKU_LIST.concat(SKU_NAMES_SKUS):SKU_LIST)){
       const code=String(s).trim(); if(!code) continue;
       const m=parseSkuMeta(code), base=String(m.baseCode||code).trim(), U=base.toUpperCase();
       let p=seen.get(U);
@@ -7446,7 +7451,7 @@
       if(size && sizeInput) sizeInput.value=size;
       // [ใหม่ตามที่ขอ] รหัส Accessory ขึ้นต้น NT/BT/CL ไม่มีไซซ์ให้กรอกเลย (ไม่เหมือน Accessory อื่นๆ ที่อาจมีไซซ์ เช่น รองเท้า) ซ่อนทั้งแถว Size ไปเลยไม่ต้องเหลือช่องว่างให้กรอก และล้างค่าไซซ์เก่าที่อาจค้างจากรหัสก่อนหน้าทิ้งด้วย
       const sizeRow=sizeInput?sizeInput.closest('.frow'):null;
-      const hideSize = NO_SIZE_TYPE_CODES.has(typeCode);
+      const hideSize = NO_SIZE_TYPE_CODES.has(typeCode) || /^BL-/i.test(String(baseCode||''));
       if(sizeRow) sizeRow.classList.toggle('hidden', hideSize);
       if(hideSize && sizeInput) sizeInput.value='';
       // ตั้งค่า .value ตรงๆ ไม่ยิง 'change' event เอง — ต้องเรียก renderMeasureSection เองด้วย
@@ -8141,7 +8146,7 @@
       const note=block.querySelector('.note-input')?.value?.trim()||'';
       data['รายการ'+n+'_ประเภท']=type;
       data['รายการ'+n+'_รหัส']=sku;
-      data['รายการ'+n+'_ไซส์']=size;
+      data['รายการ'+n+'_ไซส์']=/^BL-/i.test(sku)?'':size;   // [2026-10-21] BL- ไม่มีไซซ์ — ส่งว่างเสมอ
       // [ใหม่ตามที่ขอ] หมายเหตุแยกรายชิ้น (เดิมมีแต่ รายการN_รหัส/ไซส์ ไม่เคยส่งหมายเหตุแยกรายชิ้นเลย) — Worker ใช้ประกอบเป็นช่อง Accessory 1/2/3 (1 ช่อง = 1 ชิ้น ครบทั้ง SKU/Size/หมายเหตุ) แทนการยัดรวมทุกชิ้นเป็นก้อนเดียว
       data['รายการ'+n+'_หมายเหตุ']=note;
       // [ใหม่ตามที่ขอ] "สินค้าใช้ของสาขา" แยกรายชิ้นด้วย (เดิม branchProd มีแต่ order-level ตัวเดียวต่อประเภท) — Worker เอาไปรวมในช่อง เสื้อสูท/กางเกง/เสื้อเชิ้ต/เสื้อกั๊ก N ด้วย
@@ -8234,7 +8239,7 @@
       else if(code.length>SF_SKU_MAX) missing.push({page:2,label:'สินค้ารายการที่ '+n+' — รหัสสินค้า "'+code+'" ยาว '+code.length+' ตัว (Salesforce รับได้ไม่เกิน '+SF_SKU_MAX+' ตัว) — ไซซ์ที่ต่อท้ายรหัสให้ตัดออกแล้วใส่ช่อง Size แทน'});
       const parsed=code?parseSkuMeta(code):null;
       // [แก้ตามที่ขอ] รหัส Accessory ขึ้นต้น NT/BT/CL ไม่มีไซซ์จริงเลย (แถว Size ถูกซ่อนไปแล้วในหน้าสินค้า) เลยไม่ต้องบังคับกรอก — Accessory รหัสอื่น (เช่น รองเท้า) ยังต้องกรอกไซซ์เหมือนเดิม
-      const sizeNotNeeded = parsed && NO_SIZE_TYPE_CODES.has(parsed.typeCode);
+      const sizeNotNeeded = !!code && skuHasNoSize(code);
       if(!sizeNotNeeded && !data['รายการ'+n+'_ไซส์']) missing.push({page:2,label:'สินค้ารายการที่ '+n+' — Size'});
       // [ใหม่] เช็ค 2 ทาง — "ประเภทสินค้า" ที่เลือกไว้ ต้องตรงกับประเภทที่อ่านได้จากตัวรหัส SKU เอง กันเคสเลือกประเภทผิด/แก้ทับหลังสแกนแล้วข้อมูลสองช่องขัดกัน (เช่น รหัสลงท้าย -P- แต่ประเภทดันเลือกเป็น "เสื้อสูท")
       if(parsed && parsed.type && parsed.type!==type){
