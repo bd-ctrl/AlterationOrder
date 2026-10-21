@@ -734,6 +734,184 @@
 
   /* history popover */
   .histcard{width:min(640px,94vw);display:flex;flex-direction:column;max-height:82vh}
+  /* ── [ใหม่ Phase 2 · 2026-09-30] สินค้านำกลับมาแก้ — ทางเข้าย้ายมาอยู่ในแท็บ "รายการที่นัดรับ" ของป๊อปอัปประวัติ ตาม mockup D (pickup-entry-options.html) · คลาสใหม่ขึ้นต้น ra2- ── */
+  /* [ย้ายตามที่ขอ] คำอธิบายสี P# อยู่มุมขวาล่างของป๊อปอัป (ใต้รายการ ไม่เลื่อนตาม) · ตัวหนังสือสีเดียวกับ P# (แดง = ยังไม่ถึงสาขา · เขียว = ถึงสาขาแล้ว) · แท็บอื่นซ่อนตาม #histDateRange */
+  .hist-arrival-legend-bottom{display:flex;justify-content:flex-end;align-items:center;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--t2);padding-top:10px;flex:0 0 auto}
+  .hist-arrival-legend-bottom .hist-arrival-legend-item:nth-child(1){color:var(--red)}
+  .hist-arrival-legend-bottom .hist-arrival-legend-item:nth-child(2){color:var(--green)}
+  #histDateRange.hidden~.hist-arrival-legend-bottom{display:none}
+  /* [ตามที่ขอ เฉพาะ phase2] หัวการ์ด (ชื่อลูกค้า + เบอร์) เป็นแถบเต็มความกว้าง สีเดียวกับกล่องค่าวัดตัว — การ์ดมี padding 14px มุมโค้ง 16px · ใช้ทั้งแท็บรายการที่นัดรับ/ประวัติ (การ์ดร่างไม่มี custheader) */
+  .hist-ordercard>.hist-custheader:first-child{background:var(--paper);margin:-14px -14px 6px;padding:12px 14px;border-radius:15px 15px 0 0}
+  :where(#histPop) .ra2-i{width:1em;height:1em;display:block;flex:0 0 auto}
+  /* ช่องค้น P# ใต้ "สาขาที่นัดรับ" */
+  .ra2-hero{display:flex;gap:8px;align-items:stretch;margin:10px 0 8px}
+  .ra2-field{flex:1;min-width:0;display:flex;align-items:center;gap:10px;background:#fff;border:2px solid var(--rule);border-radius:14px;padding:0 6px 0 7px;height:56px;transition:border-color .15s,box-shadow .15s;cursor:text}
+  .ra2-field:focus-within{border-color:var(--gold);box-shadow:0 0 0 4px rgba(201,162,75,.14)}
+  .ra2-pfx{flex:0 0 auto;font-family:'Barlow',sans-serif;font-size:18px;font-weight:700;line-height:1.2;color:var(--goldink);border-radius:10px;padding:8px 12px;background:rgba(201,162,75,.16)}
+  .ra2-input{flex:1;min-width:0;border:none;outline:none;background:transparent;font-family:'Barlow',sans-serif;font-weight:600;font-size:24px;letter-spacing:.03em;color:var(--ink);padding:0}
+  .ra2-input::placeholder{color:var(--t3);font-weight:500;font-size:18px;letter-spacing:0}
+  .ra2-clear{flex:0 0 auto;width:36px;height:36px;border:none;border-radius:50%;background:transparent;color:var(--t2);font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+  .ra2-clear[hidden]{display:none}
+  .ra2-qr{flex:0 0 auto;align-self:center;width:44px;height:44px;border:none;border-radius:12px;padding:0;background:var(--ink);color:var(--gold-br);font-size:0;gap:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .ra2-qr svg{width:20px;height:20px}
+  .ra2-cap{margin:-2px 2px 0;font-size:11px;color:var(--t3);font-style:italic;line-height:1.4}
+  .ra2-cap b{font-family:'Barlow',sans-serif;font-style:normal;color:var(--goldink)}
+  .ra2-cap.busy,.ra2-cap.ok,.ra2-cap.bad{font-style:normal;font-size:12px;color:var(--goldink);overflow-wrap:anywhere}
+  .ra2-cap.bad{color:var(--red)}
+  /* ผลค้นหา + ป้ายบนการ์ด */
+  .ra2-count{font-size:12px;color:var(--t2);padding:0 2px}
+  .ra2-oldtag{display:inline-block;font-family:'Prompt',sans-serif;font-size:11px;font-weight:500;color:var(--t2);background:var(--rule2);border-radius:999px;padding:2px 9px;margin-left:8px;vertical-align:3px}
+  .hist-pid.ra2-match{background:rgba(201,162,75,.22);border-radius:4px;padding:0 3px}
+  .ra2-chip{display:inline-flex;align-items:center;gap:3px;border:1.5px solid var(--gold);background:rgba(201,162,75,.10);color:var(--goldink);font-family:'Prompt',sans-serif;font-weight:600;font-size:12px;line-height:1.5;border-radius:999px;padding:3px 9px 3px 11px;cursor:pointer;white-space:nowrap}
+  .ra2-chip svg{width:12px;height:12px}
+  .ra2-chip.off{border-color:var(--rule);background:transparent;color:var(--t3);font-weight:500;padding-right:11px}
+  .ra2-chip:disabled{cursor:default;opacity:.7}
+  .ra2-pidbtn{border:none;background:none;padding:0;font:inherit;color:inherit;cursor:pointer;display:inline-flex;align-items:center}
+  .ra2-pidbtn .hist-pid{text-decoration:underline dotted;text-underline-offset:3px}
+  .ra2-why{flex-basis:100%;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--red);background:rgba(181,87,59,.08);border-radius:8px;padding:5px 8px;margin-top:2px}
+  .ra2-why svg{width:13px;height:13px}
+  .ra2-why.gray{color:var(--t2);background:var(--rule2)}
+  .ra2-min .hist-top{font-size:13px;color:var(--t2)}
+  /* ฟอร์ม/ผลบันทึก — แทนที่ส่วนรายการในป๊อปอัปเดียวกัน (หัว+แท็บคงเดิม) */
+  .histcard.ra2-on #histDateRange,.histcard.ra2-on #histList,.histcard.ra2-on .hist-arrival-legend-bottom{display:none!important}
+  .ra2-view{display:flex;flex-direction:column;flex:1 1 auto;min-height:0}
+  .ra2-view[hidden]{display:none}
+  .ra2-back{flex:0 0 auto;display:inline-flex;align-items:center;gap:2px;align-self:flex-start;border:none;background:none;font-family:inherit;font-size:14px;font-weight:500;color:var(--goldink);cursor:pointer;padding:6px 8px 6px 0;margin:-6px 0 6px}
+  .ra2-back svg{width:18px;height:18px}
+  .ra2-sum{flex:0 0 auto;background:#fff;border:1px solid var(--rule2);border-radius:14px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px}
+  .ra2-sum .m{flex:1;min-width:0}
+  .ra2-sum .p{font-family:'Barlow',sans-serif;font-weight:700;font-size:21px;line-height:1.25;display:flex;align-items:center;gap:5px;color:var(--ink)}
+  .ra2-sum .p .ok{display:inline-flex;color:var(--green)}
+  .ra2-sum .p .ok svg{width:16px;height:16px}
+  .ra2-sum .s{font-size:13px;color:var(--t2);margin-top:2px;line-height:1.5}
+  .ra2-sum .s .nw{font-family:'Barlow',sans-serif;white-space:nowrap}
+  .ra2-sum .c{font-size:13px;color:var(--goldink);font-weight:600;margin-top:2px}
+  .ra2-sum .rd{flex:0 0 auto;font-size:15px;font-weight:700;color:#fff;background:var(--goldink);border-radius:999px;padding:4px 12px;white-space:nowrap}
+  .ra2-body{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:0 0 10px}
+  .ra2-sec{padding-top:14px}
+  .ra2-sec .seclabel{margin-bottom:0}
+  .ra2-off{font-size:13.5px;color:var(--t2);padding:10px 2px 12px;border-bottom:1px solid var(--rule2)}
+  .ra2-measure:not(.hidden)+.ra2-off{display:none}
+  .ra2-pv{margin:6px 0 0;font-size:13px;font-style:italic;font-weight:400;color:var(--red);line-height:1.4}
+  .ra2-pv b{font-family:'Barlow',sans-serif;font-weight:400}
+  .ra2-frow{display:flex;align-items:center;gap:12px;padding:13px 2px;border-bottom:1px solid var(--rule2)}
+  .ra2-frow>.k{font-size:14.5px;color:var(--ink);flex:0 1 auto}
+  .ra2-frow .req{color:var(--red)}
+  .ra2-frow.note{align-items:flex-start;border:none}
+  .ra2-nwrap{margin-left:auto;width:62%;position:relative}
+  .ra2-nwrap textarea.note-input{width:100%;margin:0;padding:2px 66px 2px 0;border:none;background:transparent;font-family:inherit;font-size:14.5px;color:var(--ink);outline:none;resize:none;line-height:1.5;min-height:44px;overflow:hidden}
+  .ra2-cnt{position:absolute;right:0;top:4px;font-family:'Barlow',sans-serif;font-size:13px;font-weight:500;color:var(--t3);pointer-events:none}
+  .ra2-cnt b{color:var(--t2);font-weight:600}
+  .ra2-cnt.over,.ra2-cnt.over b{color:var(--red)}
+  .ra2-sel{margin-left:auto;border:none;background:transparent;font-family:'Barlow',sans-serif;font-weight:600;font-size:16px;color:var(--ink);outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;text-align:right;text-align-last:right;padding:4px 20px 4px 4px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a8474' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 0 center}
+  .ra2-date{margin-left:auto;display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:5px 12px;border:1.5px solid var(--rule);border-radius:999px;background:#fff;font-family:'Prompt',sans-serif;font-weight:600;font-size:14.5px;color:var(--ink);cursor:pointer;white-space:nowrap}
+  .ra2-date svg{width:14px;height:14px;color:var(--t2)}
+  .ra2-date[aria-expanded="true"] svg{transform:rotate(180deg)}
+  .ra2-date.empty{color:var(--t2);font-weight:500}
+  .ra2-cal{background:#fff;border:1px solid var(--rule);border-radius:16px;box-shadow:0 10px 28px rgba(40,30,10,.12);padding:12px 14px 14px;margin:0 0 12px auto;max-width:330px}
+  .ra2-cal[hidden]{display:none}
+  .ra2-cal .h{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .ra2-cal .nav{background:none;border:none;color:var(--goldink);font-family:'Prompt',sans-serif;font-size:13.5px;cursor:pointer;padding:8px 4px;min-height:40px;display:flex;align-items:center;gap:4px}
+  .ra2-cal .nav svg{width:14px;height:14px}
+  .ra2-cal .nav:disabled{color:var(--t3);opacity:.4;cursor:default}
+  .ra2-cal .ti{font-weight:600;font-size:14.5px}
+  .ra2-cal .dow{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;font-size:13px;color:var(--t3);margin-bottom:4px}
+  .ra2-cal .grid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:2px}
+  .ra2-cal .d{aspect-ratio:1;min-height:34px;display:flex;align-items:center;justify-content:center;font-family:'Barlow',sans-serif;font-size:15px;color:var(--ink);border-radius:50%;cursor:pointer;border:none;background:none;padding:0}
+  .ra2-cal .d.today{box-shadow:inset 0 0 0 1.5px var(--gold)}
+  .ra2-cal .d.sel{background:var(--gold);color:#fff;font-weight:700}
+  .ra2-cal .d:disabled{color:var(--t3);opacity:.38;cursor:not-allowed}
+  .ra2-cal .d.e{visibility:hidden}
+  .ra2-frow[hidden]{display:none}
+  /* งานด่วน + ผู้อนุมัติ — ใช้ .urgent-chip / .type-picker.approver-picker ของฟอร์มหลักตรงๆ · เมนูชื่อชิดขวา (แถวนี้อยู่ขอบขวา ไม่ให้ล้นกรอบ) */
+  .ra2-view .approver-picker{margin-left:auto}
+  .ra2-view [data-ra2-apprrow]{flex-wrap:wrap;row-gap:8px}
+  .ra2-view .approver-picker .type-picker-btn{white-space:nowrap}
+  .ra2-view .approver-picker .type-picker-menu{left:auto;right:0}
+  .ra2-hint{font-size:12.5px;color:var(--red);line-height:1.5;padding:0 2px 10px}
+  .ra2-hint[hidden]{display:none}
+  .ra2-frow.insp{flex-wrap:wrap;row-gap:8px;border:none}
+  .ra2-insp{margin-left:auto;font-family:'Prompt',sans-serif;font-weight:300;font-size:12.5px;color:var(--ink);background:#fff;border:1px solid var(--rule);border-radius:999px;padding:4px 10px;outline:none;width:96px;min-width:96px;max-width:100%;text-align:center;text-overflow:ellipsis;box-sizing:border-box}
+  .ra2-insp::placeholder{font-weight:300;color:var(--t2)}
+  .ra2-insp:focus{border-color:var(--t2)}
+  .ra2-insp.bad{border-color:var(--red)}
+  .ra2-isug{margin:-4px 0 10px auto;max-width:320px;background:#fff;border:1px solid var(--rule);border-radius:12px;box-shadow:0 10px 26px rgba(40,30,10,.12);overflow-x:hidden;overflow-y:auto;max-height:264px;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+  .ra2-isug[hidden]{display:none}
+  .ra2-isug .s{display:flex;align-items:center;gap:10px;padding:11px 14px;min-height:44px;cursor:pointer;border-bottom:1px solid var(--rule2)}
+  .ra2-isug .s:last-child{border-bottom:none}
+  .ra2-isug .s svg{width:16px;height:16px}
+  .ra2-isug .s b{font-family:'Barlow',sans-serif;font-weight:600;font-size:15px}
+  .ra2-isug .nf{padding:12px 14px;font-size:13.5px;color:var(--t2)}
+  .ra2-isug .s .amb{margin-left:auto;font-size:11.5px;color:var(--red);white-space:nowrap}   /* [phase2-33 · D4] ชื่อที่ซ้ำใน Salesforce */
+  .ra2-err{flex:0 0 auto;display:flex;gap:8px;align-items:flex-start;margin-top:8px;padding:9px 12px;border-radius:10px;font-size:13.5px;line-height:1.5;background:#fbeeea;color:var(--red)}
+  .ra2-err[hidden]{display:none}
+  .ra2-err svg{width:16px;height:16px;margin-top:3px}
+  .ra2-foot{flex:0 0 auto;display:flex;align-items:center;gap:12px;border-top:1px solid var(--rule2);padding:10px 0 0;margin-top:6px}
+  .ra2-foot.end{justify-content:flex-end}
+  .ra2-nb{width:48px;height:48px;border-radius:50%;border:2px solid var(--goldink);background:#fff;color:var(--goldink);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto;padding:0}
+  .ra2-nb svg{width:22px;height:22px}
+  .ra2-fsum{flex:1;min-width:0;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ra2-fsum .p{font-family:'Barlow',sans-serif;color:var(--green)}
+  .ra2-save{flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 20px;border:none;border-radius:999px;background:var(--gold);color:var(--ink);font-family:inherit;font-weight:600;font-size:15px;cursor:pointer;white-space:nowrap}
+  .ra2-save:disabled{background:var(--rule2);color:var(--t2);cursor:default}
+  .ra2-spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(35,34,32,.2);border-top-color:var(--ink);border-radius:50%;animation:ra2spin .7s linear infinite;flex:0 0 auto}
+  @keyframes ra2spin{to{transform:rotate(360deg)}}
+  /* ผลบันทึก + รูปใบสรุป */
+  .ra2-ok{flex:0 0 auto;display:flex;align-items:center;gap:10px;background:rgba(92,127,79,.10);border:1px solid rgba(92,127,79,.28);border-radius:14px;padding:12px 14px;margin-bottom:12px}
+  .ra2-ok .ic{width:30px;height:30px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .ra2-ok .ic svg{width:17px;height:17px}
+  .ra2-ok .t{font-size:15px;font-weight:600;color:var(--ink)}
+  .ra2-ok .s{font-size:12.5px;color:var(--t2);margin-top:1px}
+  .ra2-img{flex:1 1 auto;min-height:0;overflow:auto;background:var(--paper);border-radius:14px;padding:14px;display:flex;justify-content:center;align-items:flex-start}
+  .ra2-img img{width:100%;max-width:300px;height:auto;border-radius:6px;box-shadow:0 6px 20px rgba(0,0,0,.12);background:#fff}
+  .ra2-img .w{padding:40px 10px;text-align:center;color:var(--t2);font-size:13.5px;display:flex;align-items:center;gap:8px}
+  .ra2-dl{height:44px;padding:0 18px;border:1.5px solid var(--goldink);border-radius:999px;background:#fff;color:var(--goldink);font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+  .ra2-dl svg{width:17px;height:17px}
+  /* [phase2-46 2026-10-19 ตามที่ขอ "ตอนบันทึกต้องมีข้อมูลเก่า และข้อมูลใหม่ขึ้นมาด้วย"] กล่องเทียบเก่า→ใหม่ในหน้าหลังบันทึก */
+  .ra2-cmp{flex:none;margin:12px 0 0;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:#fff}
+  .ra2-cmp .hd{background:var(--rule2);padding:9px 14px;font-weight:600;font-size:14px;color:var(--goldink)}
+  .ra2-cmp table{width:100%;border-collapse:collapse;font-size:14px}
+  .ra2-cmp th{font-weight:500;color:var(--mute,#8a8170);font-size:12.5px;text-align:left;padding:8px 12px;border-bottom:1px solid var(--rule)}
+  .ra2-cmp td{padding:9px 12px;border-bottom:1px solid var(--rule);vertical-align:top;overflow-wrap:break-word}
+  .ra2-cmp td:first-child,.ra2-cmp th:first-child{min-width:5.5em}
+  .ra2-cmp tr:last-child td{border-bottom:0}
+  .ra2-cmp td.o{color:#8a8170}
+  .ra2-cmp td.n{font-weight:600;color:#B5452F}
+  .ra2-cmp td.a{color:var(--gold,#C9A24B);font-weight:600;padding-left:0;padding-right:0;width:14px}
+  .ra2-cmp td.nt{font-weight:500;color:var(--ink)}
+  .ra2-cmp .raw{padding:10px 14px;font-size:14px;line-height:1.5}
+  .ra2-dl[aria-disabled="true"]{opacity:.45;pointer-events:none}
+  .ra2-fin{height:44px;padding:0 22px;border:none;border-radius:999px;background:var(--gold);color:var(--ink);font-family:inherit;font-weight:600;font-size:15px;cursor:pointer}
+  /* [phase2-32] ปุ่มเสร็จสิ้นรอระหว่างอัปโหลดรูป · สถานะอัปโหลดรูปใต้ใบสรุป · รหัส error จาก Worker · สถานะโหลดรายชื่อผู้ตรวจ */
+  .ra2-fin:disabled{opacity:.45;cursor:default}
+  .ra2-back[aria-disabled="true"]{opacity:.45;cursor:default}
+  .ra2-up{flex:0 0 auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;padding:9px 12px;border-radius:10px;font-size:13px;line-height:1.5;background:var(--rule2);color:var(--t2)}
+  .ra2-up[hidden]{display:none}
+  .ra2-up svg{width:16px;height:16px;flex:0 0 auto}
+  .ra2-up.ok{background:rgba(92,127,79,.10);color:var(--green)}
+  .ra2-up.fail{background:#fbeeea;color:var(--red)}
+  .ra2-up .sp{flex:1 1 150px;min-width:0;overflow-wrap:anywhere}
+  .ra2-up .rt,.ra2-hint .rt,.ra2-isug .nf .rt,.ra2-err .rt{flex:0 0 auto;min-height:36px;padding:0 14px;border:1.5px solid currentColor;border-radius:999px;background:#fff;color:inherit;font-family:inherit;font-weight:600;font-size:13px;cursor:pointer}
+  .ra2-hint.mut{color:var(--t2)}
+  .ra2-err .cd{font-family:'Barlow',sans-serif;font-size:11.5px;opacity:.75;white-space:nowrap}
+  .ra2-err .rt{margin-top:8px}
+  /* [phase2-33] โน้ตบนหน้าสำเร็จ (ข้อความถูกตัด/กู้สถานะ) · สถานะแนบรูปเข้า Salesforce · ป้ายแจ้งรูปที่ค้างอัปโหลด */
+  .ra2-up.note{background:rgba(163,127,48,.13);color:var(--goldink)}
+  .ra2-up.sf{margin-top:6px;font-size:12.5px}
+  .ra2-up.sf.ok{background:transparent;padding:2px 12px;color:var(--t2)}
+  .ra2-toast{position:fixed;left:50%;bottom:18px;z-index:9999;transform:translate(-50%,16px);max-width:min(92vw,440px);padding:10px 16px;border-radius:12px;background:var(--ink);color:#fff;font-size:13.5px;line-height:1.5;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+  .ra2-toast.show{opacity:1;transform:translate(-50%,0)}
+  .ra2-toast.bad{background:var(--red)}
+  @media (max-width:520px){
+    .ra2-qr{width:44px;height:44px}
+    .ra2-input{font-size:21px;letter-spacing:0}
+    .ra2-input::placeholder{font-size:16px}
+    .ra2-frow.note{flex-direction:column;align-items:stretch;gap:6px}
+    .ra2-nwrap{width:100%}
+    .ra2-insp{padding-top:9px;padding-bottom:9px}
+    .ra2-cal,.ra2-isug{max-width:none;margin-left:0}
+    .ra2-save{padding:0 16px}
+  }
   .hist-tabs{display:flex;gap:8px;margin-bottom:12px;flex:0 0 auto;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .hist-tabs::-webkit-scrollbar{display:none}
   .hist-tab{border:none;background:none;font-family:'Prompt',sans-serif;font-size:13.5px;color:var(--t3);padding:6px 14px;border-radius:999px;cursor:pointer;position:relative;transition:.15s;white-space:nowrap;flex:0 0 auto}
@@ -830,6 +1008,45 @@
   .confirm-editor-field .hdrsel-input{width:100%;text-align:left;border-radius:10px;padding:9px 12px;font-size:14px}
   .confirm-editor-field .hdrsel-input.err{border-color:var(--red)}
   #confirmEditorNameSuggest.hdr-suggest{width:100%;left:0;right:auto}
+  /* [2026-10-21-8 ตามที่ขอ] NOTE ระดับบิล (ถึงเพื่อนสาขา) — ช่องกรอกหน้า 03 · กระดาษโน้ตมีเส้น "แบบ ข" บนการ์ดรายการที่นัดรับ/ประวัติ (ไม่มีเทป · ฟอนต์ Prompt · หัว NOTE) · ป็อปอัปแก้ NOTE */
+  .bill-note-sec{margin-top:22px}
+  .bill-note-field textarea{display:block;width:100%;box-sizing:border-box;min-height:84px;margin-top:4px;border:1.5px solid var(--rule);border-radius:12px;padding:9px 12px;font-family:'Prompt',sans-serif;font-weight:400;font-size:15px;line-height:1.5;color:var(--ink);background:#fff;resize:vertical;outline:none}
+  .bill-note-field textarea:focus{border-color:var(--gold)}
+  .bill-note-field .bill-note-hint{display:block;color:var(--t2);font-size:12px;margin-top:6px;line-height:1.5}
+  .hist-billnote{position:relative;margin:6px 8px 4px;background:#fffdf6;padding:14px 16px 12px 46px;transform:rotate(.7deg);box-shadow:0 8px 14px -8px rgba(0,0,0,.35);background-image:linear-gradient(transparent 27px,#d9e6f2 28px);background-size:100% 28px;background-position:0 12px}
+  .hist-billnote:before{content:"";position:absolute;left:34px;top:0;bottom:0;width:2px;background:#e8a3a0}
+  .hist-billnote .dot{position:absolute;left:13px;top:18px;width:10px;height:10px;border-radius:50%;background:#d9d4c7;box-shadow:inset 0 1px 2px rgba(0,0,0,.3)}
+  .hist-billnote .to{font-family:'Prompt',sans-serif;font-weight:700;letter-spacing:1.5px;font-size:14px;color:#B83A2E;line-height:28px}
+  .hist-billnote .b{font-family:'Prompt',sans-serif;font-weight:500;font-size:16px;line-height:28px;color:#24324a;white-space:pre-wrap;word-break:break-word}
+  .hist-billnote .by{font-family:'Prompt',sans-serif;font-size:12.5px;color:#7d7566;line-height:28px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .hist-note-btn{font-family:'Prompt',sans-serif;font-size:12.5px;font-weight:600;color:var(--goldink);border:1px solid var(--gold);border-radius:999px;padding:0 10px;line-height:22px;background:#fff;cursor:pointer;white-space:nowrap;flex:none}
+  .hist-note-btn:hover{background:rgba(201,162,75,.1)}
+  .hist-note-add{align-self:flex-start;margin-left:2px}
+  .hist-billnote .by .hist-note-add{margin-left:auto}
+  .hist-billnote .auto{font-family:'Prompt',sans-serif;margin-top:2px}
+  .hist-billnote .auto .ah{font-size:14.5px;font-weight:600;color:#7a2a20;line-height:28px}
+  .hist-billnote .auto .bl{font-size:14px;line-height:28px;color:#24324a;display:flex;gap:8px;align-items:flex-start}
+  .hist-billnote .auto .bl b{font-family:'Barlow',sans-serif;font-weight:600;font-size:14px;color:#24324a;min-width:92px;flex:none}
+  .hist-billnote .auto .bl .d{min-width:62px;color:#7d7566;white-space:nowrap;flex:none}
+  .hist-billnote .auto .bl .it{flex:1;text-align:right;word-break:break-word}
+  .hist-billnote .auto .bl.me b{color:#B83A2E}
+  .hist-billnote .auto .tag{display:inline-block;font-size:11px;font-weight:600;color:#fff;background:#B83A2E;border-radius:6px;padding:0 6px;line-height:18px;margin-left:6px;vertical-align:1px;white-space:nowrap}
+  #notePop{z-index:96}
+  .notecard{width:min(480px,92vw);padding:22px 22px 18px;overflow:visible}
+  .notecard h4{font-family:'Prompt',sans-serif;font-weight:600;font-size:16.5px;margin:0 0 10px;color:var(--ink)}
+  .notecard textarea{display:block;width:100%;box-sizing:border-box;min-height:88px;border:1.5px solid var(--rule);border-radius:10px;padding:8px 10px;font-family:'Prompt',sans-serif;font-weight:500;font-size:15px;line-height:1.5;color:var(--ink);resize:vertical;outline:none}
+  .notecard textarea:focus{border-color:var(--gold)}
+  .note-editor-row{display:flex;align-items:flex-start;gap:14px;margin-top:12px}
+  .note-editor-row .k{flex:none;font-size:14px;color:var(--ink);padding-top:9px}
+  .note-editor-row .hdrsearch-wrap{flex:1;min-width:0}
+  .note-editor-row .hdrsel-input{width:100%;box-sizing:border-box;text-align:left;border-radius:10px;padding:8px 12px;font-size:15px;font-weight:400;background:#fff;border:1.5px solid var(--gold)}
+  #notePopEditorSuggest.hdr-suggest{position:static;width:auto;margin-top:6px;max-height:240px;overflow:auto}
+  #notePopEditorSuggest .s{font-family:'Prompt',sans-serif;font-size:14.5px;color:var(--ink);padding:9px 14px;gap:0;white-space:pre}
+  #notePopEditorSuggest .s b{font-family:'Prompt',sans-serif;font-weight:600;font-size:14.5px}
+  .note-pop-msg{min-height:18px;font-size:12.5px;color:var(--t2);margin:8px 0 2px;line-height:1.5}
+  .note-pop-msg.err{color:var(--red)}
+  .notecard .confirm-actions{justify-content:flex-end;margin-top:8px}
+  .notecard .submit:disabled{opacity:.45;cursor:not-allowed}
   .hist-pay{font-size:12px;color:var(--green,#5c7f4f);font-weight:600;display:inline-flex;align-items:center;gap:5px}
   .hist-pay svg{width:13px;height:13px;flex:0 0 auto}
   .hist-pay.unpaid{color:var(--red,#b5573b)}
@@ -1577,8 +1794,9 @@
     if(!found){ try{ console.warn('[auth] สาขาของบัญชีไม่อยู่ในรายการ: '+user.branch); }catch(_e){} setNote(''); return;   /* [2026-10-14 ตามที่ขอ] ไม่ขึ้นข้อความ — ช่องสาขายังเลือกเองได้ (ไม่ล็อก) */ }
     // กำลังแก้บิลเก่า (กู้คืนจาก autosave) = ปล่อยสาขาตามบิลนั้น ไม่ทับ (กันบิลของสาขาอื่นถูกเปลี่ยนสาขาตอนบันทึก) แต่ยังล็อกช่อง
     var eb=document.getElementById('editorBanner'), editing=!!(eb && !eb.classList.contains('hidden'));
-    sel.classList.add('branch-locked');
-    sel.title='สาขาล็อกตามบัญชี Lark ('+user.branch+')';
+    // [2026-10-21-9 ตามที่ขอ "เลือกสาขาที่ซื้อด้านบนได้เอง ไม่จำเป็นต้องล็อกตามบัญชี Lark แต่ค่าเริ่มต้นเป็นสาขาของบัญชี"] ไม่ล็อกช่องแล้ว — แค่ตั้งค่าเริ่มต้น
+    sel.classList.remove('branch-locked'); sel.disabled=false;
+    sel.title='ค่าเริ่มต้นตามบัญชี Lark ('+user.branch+') · เปลี่ยนได้';
     /* [แก้ตามรีวิว F1] ยิง change เฉพาะเมื่อสาขาเปลี่ยนจริง — ถ้าตรงกับบัญชีอยู่แล้ว (เช่น autosave ของสาขาเดียวกัน) ตัวจัดการเดิมของแอปทำงานไปแล้วตอนกู้คืน ไม่ต้องยิงซ้ำ
        (ยิงซ้ำ = ตัวจัดการเดิมตั้ง "สาขาที่นัดรับ" = สาขาที่ซื้อ เพราะหลังโหลดหน้าใหม่ธง "ผู้ใช้เลือกเองแล้ว" เป็น false เสมอ → ค่าที่กู้คืน เช่น สาขาอื่น/Messenger/ขนส่งเอกชน ถูกทับเงียบๆ แล้ว autosave เก็บค่าผิดทับ) */
     if(!editing && sel.value!==user.branch){
@@ -1589,8 +1807,7 @@
       // [แก้ 2026-10-15] คืนค่าเฉพาะเมื่อ prevTop (สาขาบนแถบหัวเดิม) มีค่า — เปิดหน้าใหม่ prevTop ว่าง ส่วนช่องนัดรับมีค่าตั้งต้น R3 อยู่ ไม่ใช่ค่าที่ผู้ใช้เลือก (เดิมถูกคืนเป็น R3 ทุกบัญชี)
       if(bp && prevTop && prevPick && prevPick!==prevTop && bp.value!==prevPick){ bp.value=prevPick; bp.dispatchEvent(new Event('change',{bubbles:true})); }
     }
-    sel.disabled=true;
-    setNote('สาขา '+(editing ? sel.value : user.branch)+' · ล็อกตามบัญชี', true);
+    setNote('สาขาเริ่มต้น '+user.branch+' (ตามบัญชี) · เปลี่ยนได้', true);
   }
   /* ตัวเฝ้าบัตร (ติดตั้งทุกแท็บตั้งแต่โหลดสคริปต์ — [แก้ตามรีวิว BOOT-GATED-NO-SYNC] เดิมติดตั้งใน afterBoot ซึ่งออกก่อนเมื่อแท็บเปิดมาเจอด่านเลย จึงไม่เห็นว่าอีกแท็บล็อกอินแล้ว)
      · ด่านโชว์อยู่ + มีบัตรที่ยังไม่หมดอายุอยู่ในเครื่อง (อีกแท็บเพิ่งล็อกอิน) = รีโหลดเข้าแอปด้วยบัตรนั้น
@@ -1735,7 +1952,7 @@
         <button class="info" id="printRangeBtn" title="พิมพ์ใบสั่งแก้ปรับทรงสำเร็จรูป"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><path d="M6 18H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2"/><path d="M6 14h12v7H6z"/></svg></button>
       </div>
       <!-- [ใหม่ตามที่ขอ] ป้ายข้อความหลังไอคอนปริ้น — แค่ป้ายบอก ไม่เปลี่ยนพฤติกรรมจริง (พิมพ์กระดาษ/ส่ง Salesforce ทำงานเหมือนเดิมทุกอย่าง) -->
-      <div class="brand-note">สินค้านำกลับมาแก้ เขียนบนกระดาษ และลงระบบ Salesforce เหมือนเดิม จนกว่าจะมีการอัปเดต ขอบคุณค่ะ</div>
+      <div class="brand-note">สินค้าสำเร็จรูปที่นำกลับมาแก้ เริ่มใช้ 3 สาขา CM RCD R3 เริ่มใช้วันแรกวันที่ 22 ตุลาคม</div>
     </div>
     <div class="meta">
       <div class="bill-chip"><span class="l">เลขที่บิล</span><span class="v g" id="billNoDisplay">—</span></div>
@@ -1807,9 +2024,9 @@
 
 <div class="hp-item">
   <div class="hp-name">ข้อความตัวเล็กใต้ชื่อแอป <span class="hp-kind">ข้อความประกาศ (กดไม่ได้)</span></div>
-  <div class="hp-desc">ตอนนี้เขียนว่า "สินค้านำกลับมาแก้ เขียนบนกระดาษ และลงระบบ Salesforce เหมือนเดิม จนกว่าจะมีการอัปเดต ขอบคุณค่ะ" เป็นแค่ข้อความบอกให้ทราบ ไม่ได้เปลี่ยนวิธีทำงานของแอป ข้อความนี้อาจเปลี่ยนเมื่อมีการอัปเดต
+  <div class="hp-desc">ตอนนี้เขียนว่า "สินค้าสำเร็จรูปที่นำกลับมาแก้ เริ่มใช้ 3 สาขา CM RCD R3 เริ่มใช้วันแรกวันที่ 22 ตุลาคม" เป็นแค่ข้อความบอกให้ทราบ ไม่ได้เปลี่ยนวิธีทำงานของแอป ข้อความนี้อาจเปลี่ยนเมื่อมีการอัปเดต
     <ul class="hp-list">
-      <li>ความหมายตามข้อความ: สินค้าที่ลูกค้านำกลับมาแก้ ให้ทำเหมือนเดิม คือ เขียนบนกระดาษและลงระบบ Salesforce ตามที่เคยทำ จนกว่าจะมีการอัปเดตใหม่</li>
+      <li>ความหมายตามข้อความ: สาขา CM, RCD และ R3 เริ่มลงสินค้าสำเร็จรูปที่ลูกค้านำกลับมาแก้ในแอปนี้ ตั้งแต่วันที่ 22 ตุลาคม</li>
       <li>ข้อความนี้ไม่ได้เพิ่มปุ่มหรือขั้นตอนใดๆ ในแอปนี้ ไม่ต้องกดหรือกรอกอะไรเพิ่มเพราะข้อความนี้</li>
     </ul>
   </div>
@@ -2719,7 +2936,7 @@
 <li>ถ้าเปลี่ยนสาขาบนแถบด้านบนสุดทีหลัง ช่องนี้จะซ่อนหรือโผล่ให้ใหม่เอง (ตอนซ่อน ชื่อที่เลือกไว้ไม่ถูกลบ ดูกล่องเตือนด้านล่าง)</li>
 <li>ชื่อที่เลือกขึ้นบนใบสรุปที่พิมพ์เป็นบรรทัด “จองกับ”</li>
 </ul>
-<div class="hp-warn">ถ้าเลือกชื่อไปแล้ว ภายหลังเปลี่ยน สินค้าใช้ของสาขา กลับเป็น OFFICE หรือเป็นสาขาเดียวกับแถบบนสุด ช่องนี้จะหายไป แต่ชื่อเดิมยังค้างอยู่ในช่องที่มองไม่เห็น ยังถูกส่งไปกับบิล และยังขึ้นบรรทัด “จองกับ …” บนใบสรุป (เช่น เลือก T21 แล้วเลือกชื่อ จากนั้นเปลี่ยนกลับเป็น OFFICE ช่องหายไป แต่ใบสรุปยังมีบรรทัด “จองกับ” ชื่อเดิม) วิธีแก้ ให้เปลี่ยนสาขากลับไปที่เดิมก่อนให้ช่องโผล่ ลบชื่อในช่องออก แล้วค่อยเปลี่ยนสาขาอีกครั้ง</div></div></div>
+</div></div>
 
 <div class="hp-item"><div class="hp-name">เย็บย้ำกระดุม · ลูกค้าใช้งานก่อนปรับแก้ · งานทีม <span class="hp-kind">ช่องติ๊ก 3 ช่อง</span></div><div class="hp-desc">
 <p>ทั้ง 3 ช่องเป็นทางลัด ติ๊กแล้วระบบเติมคำนั้นต่อท้ายช่องหมายเหตุให้ เอาติ๊กออกก็ลบคำนั้นออกให้</p>
@@ -2896,7 +3113,7 @@
 <div class="hp-warn">ถังขยะเล็กข้างแนบรูปลบสินค้า 1 ชิ้นทันทีโดยไม่ถามซ้ำ ถ้าลบผิด ต้องกรอกชิ้นนั้นใหม่</div>
 <div class="hp-warn">หลังเปิดร่างกลับมา (หรือรีเฟรชหน้า) ขนาด ต้นแขน ของเสื้อสูทหาย และอาจมีค่า เก็บเข้า ค้างโดยไม่เห็นแคปซูล ให้ตรวจแถวต้นแขนทุกครั้ง (รายละเอียดอยู่ใต้หัวข้อ ปุ่มที่แถบล่างของหน้านี้)</div>
 <div class="hp-warn">พิมพ์หมายเหตุของ Accessory แล้ว ข้อความไม่ขึ้นบนใบสรุปที่พิมพ์ตอนบันทึก ถ้าช่างต้องรู้ ให้แจ้งช่างอีกทางหนึ่ง</div>
-<div class="hp-warn">เปลี่ยนสินค้าใช้ของสาขากลับเป็น OFFICE ทีหลัง ช่อง ชื่อพนักงานที่ติดต่อ หายไปแต่ชื่อเดิมยังค้างและยังขึ้น “จองกับ” บนใบสรุป ให้ลบชื่อออกก่อนเปลี่ยนสาขา</div>
+
 <div class="hp-warn">รหัสสูท -J ต้องเป็นตัวพิมพ์ใหญ่ ถึงจะมีกางเกงเพิ่มให้ ถ้าแป้นค้างภาษาไทยโดยไม่กด Shift จะได้ตัวพิมพ์เล็ก (uf543-j) และไม่มีกางเกงเพิ่ม</div>
 <div class="hp-warn">รหัสที่ระบบอ่านประเภทไม่ได้ ประเภทยังเป็นเสื้อสูทและระบบไม่เตือนตอนบันทึก ให้ดูช่องประเภทหลังกด Enter ทุกครั้ง</div>
 <div class="hp-warn">โคนขา/ต้นขา และ ปลายขา ของกางเกง ใบสรุปพิมพ์ว่า “เก็บ” เสมอ แม้กด + (ขยายออก) ให้เขียนบอกช่างในหมายเหตุกางเกง</div>
@@ -2974,7 +3191,7 @@
 <figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/p3-02.jpg" width="1494" height="276" alt="ตัวอย่างเลือกค้างชำระและ Messenger"></div><figcaption>ตัวอย่าง เลือก "ค้างชำระ" ช่อง "จำนวนเงินที่ค้างชำระ" โผล่ขึ้นมาทางซ้าย เลือก "Messenger" ช่อง "สถานที่ส่ง" โผล่ขึ้นมาทางขวา</figcaption></figure>
 </div></div>
 
-<div class="hp-warn">ช่อง "สถานที่ส่ง" มีดอกจัน แต่ถ้าเลือก Messenger แล้วเว้นช่องนี้ว่างไว้ แอปจะไม่เตือนและบันทึกให้ผ่าน ใบสรุปจะเขียนแค่ "ที่ Messenger" โดยไม่มีที่อยู่ ให้กรอกที่อยู่ทุกครั้ง</div>
+<div class="hp-warn">ช่อง "สถานที่ส่ง" มีดอกจัน แต่ถ้าเลือก Messenger แล้วเว้นช่องนี้ว่างไว้ แอปจะไม่เตือนและบันทึกให้ผ่าน ใบสรุปจะเขียนแค่ "Messenger" โดยไม่มีที่อยู่ ให้กรอกที่อยู่ทุกครั้ง</div>
 
 <div class="hp-item"><div class="hp-name">วันที่นัดรับ <span class="hp-req">*</span> <span class="hp-kind">ปฏิทิน</span></div><div class="hp-desc">
 กดที่ข้อความวันที่ (เช่น "วันพุธที่ 14 ตุลา 2569") ปฏิทินจะเปิดลงมาใต้ช่อง ค่าเริ่มต้นคือ<b>อีก 7 วัน</b>นับจากวันนี้ ปีที่แสดงเป็น พ.ศ.
@@ -3036,7 +3253,7 @@
 </div>
 
 <div class="hp-case"><div class="hp-case-title">สถานการณ์ ต้องส่งสินค้าไปให้ลูกค้า</div>
-เลือก "Messenger" หรือ "ขนส่งเอกชน" ที่ช่อง "สาขาที่นัดรับ" แล้วพิมพ์ชื่อผู้รับกับที่อยู่ในช่อง "สถานที่ส่ง" บนใบสรุปจะขึ้นบรรทัดใหญ่ว่า "ที่ Messenger" (หรือ "ที่ขนส่งเอกชน") และที่อยู่ตัดบรรทัดให้อัตโนมัติ
+เลือก "Messenger" หรือ "ขนส่งเอกชน" ที่ช่อง "สาขาที่นัดรับ" แล้วพิมพ์ชื่อผู้รับกับที่อยู่ในช่อง "สถานที่ส่ง" บนใบสรุปจะขึ้นบรรทัดใหญ่ว่า "Messenger" (หรือ "ขนส่งเอกชน") และที่อยู่ตัดบรรทัดให้อัตโนมัติ
 <ul class="hp-list">
 <li>บิลส่งของขึ้นใน​<span class="nb">แท็บ</span> <b>"ประวัติ"</b> ตามสาขาที่ซื้อ เหมือนบิลอื่น (บนการ์ดจะเขียนว่า "จัดส่ง Messenger – …" ตามด้วยที่อยู่)</li>
 <li>ถ้าต้องการหาบิลนี้ ให้เปิดรายการย้อนหลัง <span class="nb">แท็บ</span> "รายการที่นัดรับ" ให้ช่อง "สาขาที่ซื้อ" เป็นสาขาที่ขายบิลนี้ แล้วเปลี่ยนช่อง "สาขาที่นัดรับ" เป็น "ทั้งหมด" บนการ์ดจะเขียนว่า "จัดส่ง Messenger – …" ตามด้วยที่อยู่</li>
@@ -3193,7 +3410,7 @@
 
 <ul class="hp-list">
 <li><b>ใบสรุป</b> คือ "ใบสั่งแก้ปรับทรงสำเร็จรูป" ที่ใช้ให้ช่างและทีมหลังบ้านอ่าน แอปวาดให้ <b>1 ใบต่อสินค้า 1 ชิ้น</b> เช่น บิลสูท + กางเกง จะได้ 2 ใบ</li>
-<li><b>บนใบสรุปมี:</b> เลขที่บิลและจำนวนชิ้น (เช่น "(2 ชิ้น)") วันที่ส่งแก้ ชื่อประเภทสินค้าตัวใหญ่ กรอบ "!! งานด่วน !!" (ถ้าด่วน) ชื่อลูกค้า เบอร์โทร พนักงานขาย ใช้สินค้าจากสาขาไหน SKU และไซส์ จุดที่ปรับเป็นนิ้ว หมายเหตุ สถานะ "ชำระเงินแล้ว" หรือ "ค้างชำระ" วันนัดรับ และ "ที่สาขา…" (หรือ "ที่ Messenger" พร้อมที่อยู่) พร้อมบรรทัด "เวลานัดรับ" ถ้าระบุเวลา</li>
+<li><b>บนใบสรุปมี:</b> เลขที่บิลและจำนวนชิ้น (เช่น "(2 ชิ้น)") วันที่ส่งแก้ ชื่อประเภทสินค้าตัวใหญ่ กรอบ "!! งานด่วน !!" (ถ้าด่วน) ชื่อลูกค้า เบอร์โทร พนักงานขาย ใช้สินค้าจากสาขาไหน SKU และไซส์ จุดที่ปรับเป็นนิ้ว หมายเหตุ สถานะ "ชำระเงินแล้ว" หรือ "ค้างชำระ" วันนัดรับ และ "ที่สาขา…" (หรือ "Messenger" พร้อมที่อยู่) พร้อมบรรทัด "เวลานัดรับ" ถ้าระบุเวลา</li>
 <li><b>รหัสท้ายเลขที่บิล:</b> ถ้าบิลมีสินค้ามากกว่า 1 ชิ้น หลังเลขที่บิลจะมีรหัสประเภทสินค้าต่อท้าย เช่น "R326100701 (2 ชิ้น) · J1, P1" โดย J = เสื้อสูท, P = กางเกง, SH = เสื้อเชิ้ต, V = เสื้อกั๊ก, AC = Accessory ตัวเลขท้ายรหัสนับแยกตามประเภทตามลำดับสินค้าในบิล เช่น สูท กางเกง สูท กางเกง จะได้ J1, P1, J2, P2 ใบสรุปทุกใบของบิลเดียวกันจะมีรหัสชุดเดียวกัน บิลที่มีชิ้นเดียวจะไม่มีรหัสนี้</li>
 <li><b>ใบแรกที่เห็นตอนบันทึกยังไม่มี</b> เลข O# เลข P# และ QR เพราะบิลยังไม่เข้า Salesforce สิ่งเหล่านี้จะมีเฉพาะใบที่สร้างใหม่ทีหลังจากที่บิลเข้า Salesforce แล้ว (เช่น ด้วยปุ่ม "ดึงข้อมูลล่าสุด + พิมพ์ใบสรุปใหม่" ในรายการย้อนหลัง)</li>
 <li>ตอนกดบันทึก<b>ไม่มีหน้าต่างพิมพ์เด้งขึ้นมา</b> แอปแค่วาดรูปใบสรุป โชว์ในกล่องผลลัพธ์ และแนบรูปเข้า Lark Base ให้</li>
@@ -4176,7 +4393,7 @@
 
 <h4 class="hp-h" id="hp-more-11">แบบที่ 2: <span class="hp-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="hp-ico"><path d="M6 9V3h12v6"></path><path d="M6 18H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2"></path><path d="M6 14h12v7H6z"></path></svg>ปุ่มปริ้น</span> — พิมพ์ซ้ำเอง</h4>
 <p>ปุ่มไอคอนเครื่องพิมพ์อยู่มุมซ้ายบน ข้างไอคอน <span class="hp-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" class="hp-ico"><path d="M9.09 9.5a3 3 0 0 1 5.82 1c0 2-3 3-3 3"></path><path d="M12 17.2v.01"></path></svg>วิธีใช้งาน</span> (ถัดจากชื่อหน้า “สั่งแก้ปรับทรงสำเร็จรูป”). ชื่อปุ่มคือ “พิมพ์ใบสั่งแก้ปรับทรงสำเร็จรูป” (ขึ้นเมื่อวางเมาส์บนปุ่ม). หน้าต่างที่เปิดขึ้นเขียนกำกับว่า <b>“สำหรับทีมสั่งตัด”</b> — ใช้ค้นบิลเก่าแล้วสั่งพิมพ์ใบสรุปซ้ำ</p>
-<figure class="hp-fig"><img data-src="help_img/more-05.jpg" width="870" height="135" alt="มุมซ้ายบนมีไอคอนเครื่องหมายคำถามและไอคอนเครื่องพิมพ์"><figcaption>มุมซ้ายบนของหน้า: ไอคอน ? (วิธีใช้งาน) และไอคอนเครื่องพิมพ์ (ปุ่มปริ้น). ข้อความเล็กใต้ชื่อหน้า (“สินค้านำกลับมาแก้ เขียนบนกระดาษ และลงระบบ Salesforce เหมือนเดิม จนกว่าจะมีการอัปเดต ขอบคุณค่ะ”) เป็นป้ายประกาศอย่างเดียว ไม่ได้เปลี่ยนการทำงานของปุ่ม</figcaption></figure>
+<figure class="hp-fig"><img data-src="help_img/more-05.jpg" width="870" height="135" alt="มุมซ้ายบนมีไอคอนเครื่องหมายคำถามและไอคอนเครื่องพิมพ์"><figcaption>มุมซ้ายบนของหน้า: ไอคอน ? (วิธีใช้งาน) และไอคอนเครื่องพิมพ์ (ปุ่มปริ้น). ข้อความเล็กใต้ชื่อหน้า (“สินค้าสำเร็จรูปที่นำกลับมาแก้ เริ่มใช้ 3 สาขา CM RCD R3 เริ่มใช้วันแรกวันที่ 22 ตุลาคม”) เป็นป้ายประกาศอย่างเดียว ไม่ได้เปลี่ยนการทำงานของปุ่ม</figcaption></figure>
 
 <div class="hp-item"><div class="hp-name">สาขา <span class="hp-kind">Dropdown</span></div><div class="hp-desc">เริ่มต้น “ทุกสาขา”. เลือกสาขาเพื่อเอาเฉพาะบิลที่ลงด้วยสาขานั้น (= สาขาที่เลือกที่แถบบนตอนลงบิล) — ไม่ใช่สาขาที่นัดรับ</div></div>
 <div class="hp-item"><div class="hp-name">เลขที่บิล <span class="hp-kind">พิมพ์ข้อความ</span></div><div class="hp-desc">พิมพ์ไม่ครบก็เจอ เช่น R3261007 ได้ทุกบิลที่เลขที่บิลมีข้อความนี้. ช่องบอกว่า “เว้นว่าง = ค้นด้วยช่วงวันที่แทน”</div></div>
@@ -4256,7 +4473,7 @@
 <tr><td>แถวค่าวัดตัว</td><td>เฉพาะ <b>เสื้อสูท</b> และ <b>กางเกง</b> ที่เลือกแก้ไขขนาด: ชื่อจุดวัด (+ ทิศทาง “ขยายออก” / “เก็บเข้า” สำหรับ อก เอว สะโพก) และค่า เช่น “ยาวขา 33 นิ้ว”. ถ้าเลือก “ไม่แก้ไขขนาดสินค้า” ไม่มีแถวพวกนี้</td></tr>
 <tr><td>หมายเหตุ</td><td>ขึ้นเมื่อมีหมายเหตุ (ท่อนที่ซ้ำกับแถวค่าวัดตัวด้านบนจะถูกตัดออก)</td></tr>
 <tr><td>ชำระเงินแล้ว / ค้างชำระ</td><td>สถานะการชำระเงิน (ไม่แสดงยอดค้าง)</td></tr>
-<tr><td>นัดรับ + วันนัดรับ + ที่สาขา …</td><td>วันนัดรับตัวใหญ่ เช่น “เสาร์ที่ 17 ต.ค. 69” แล้วต่อด้วย “ที่สาขาR3” (ชื่อสาขาติดกับคำว่า “สาขา” ไม่มีเว้นวรรค ตามภาพด้านล่าง). ถ้าเลือกจัดส่ง ขึ้น “ที่ Messenger” หรือ “ที่ขนส่งเอกชน” แล้วต่อด้วยบรรทัดที่อยู่จัดส่ง</td></tr>
+<tr><td>นัดรับ + วันนัดรับ + ที่สาขา …</td><td>วันนัดรับตัวใหญ่ เช่น “เสาร์ที่ 17 ต.ค. 69” แล้วต่อด้วย “ที่สาขาR3” (ชื่อสาขาติดกับคำว่า “สาขา” ไม่มีเว้นวรรค ตามภาพด้านล่าง). ถ้าเลือกจัดส่ง ขึ้น “Messenger” หรือ “ขนส่งเอกชน” แล้วต่อด้วยบรรทัดที่อยู่จัดส่ง</td></tr>
 <tr><td>เวลานัดรับ</td><td>ขึ้นเมื่อเลือก “ระบุ” เวลา (ไม่ระบุ = ไม่มีบรรทัดนี้)</td></tr>
 <tr><td>QR code</td><td>ท้ายใบ ขึ้นเฉพาะใบที่สร้างจากข้อมูล Salesforce (ใบพิมพ์ซ้ำ) — คือลิงก์ไปหน้าสินค้าชิ้นนั้นใน Salesforce</td></tr>
 </tbody>
@@ -4556,14 +4773,25 @@
             <option>Messenger</option><option>ขนส่งเอกชน</option>
           </select>
         </div>
-        <!-- [ใหม่ 2026-09-23 ตามที่ขอ] คำอธิบายความหมายสี P# — โชว์ครั้งเดียวตรงนี้ (อยู่ใน #histDateRange อยู่แล้ว = โชว์เฉพาะแท็บ "รายการที่นัดรับ" โดยอัตโนมัติ ไม่ต้องเช็ค tab ซ้ำ) -->
-        <div class="hist-arrival-legend-top">
-          <span class="hist-arrival-legend-item"><span class="hist-pid-sample notarrived">P#</span> ยังไม่ถึงสาขา</span>
-          <span class="hist-arrival-legend-item"><span class="hist-pid-sample">P#</span> ถึงสาขาแล้ว<span class="hist-pid-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9"/><path d="M9 20v-5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5"/><path d="M4 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/></svg></span></span>
-        </div>
         <button type="button" id="histDateClear" class="hist-date-clear hidden">ล้างตัวกรองวันที่</button>
+        <!-- [ใหม่ Phase 2 · 2026-09-30] สินค้านำกลับมาแก้ — ช่องค้น P# ใต้ "สาขาที่นัดรับ" (ค้นทุกวันที่/ทุกสาขา · ยิงเครื่องสแกนที่ QR บนใบสรุปในช่องนี้ได้) ต่อสายใน wireRepeatAlterationPickup -->
+        <div class="ra2-hero">
+          <label class="ra2-field"><span class="ra2-pfx" aria-hidden="true">P#</span>
+            <input class="ra2-input" id="ra2PidInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" lang="en" enterkeyhint="search" inputmode="numeric" placeholder="เช่น 399665" aria-label="P# ที่นำกลับมาแก้">
+            <button type="button" class="ra2-clear" id="ra2PidClear" aria-label="ล้างคำค้น" hidden>&times;</button>
+          </label>
+          <button type="button" class="ra2-qr" id="ra2PidScan" title="สแกน QR บนใบสรุป" aria-label="สแกน QR บนใบสรุป"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M3 12h18"/></svg></button>
+        </div>
+        <div class="ra2-cap" id="ra2PidCap" aria-live="polite">ยิงเครื่องสแกนที่ QR บนใบสรุปในช่องนี้ได้ — <b>P#</b> จะขึ้นให้อัตโนมัติ</div>
       </div>
       <div class="hist-list" id="histList"><div class="hist-state">กำลังโหลด…</div></div>
+      <!-- [ย้าย Phase 2 · 2026-09-30 ตามที่ขอ] คำอธิบายสี P# — เดิมอยู่ใต้ "สาขาที่นัดรับ" ใน #histDateRange ย้ายมามุมขวาล่างของป๊อปอัป (ใต้รายการ ไม่เลื่อนตาม) · ซ่อนในแท็บอื่นด้วย CSS (#histDateRange.hidden ~ …) -->
+      <div class="hist-arrival-legend-bottom" id="histArrivalLegend">
+        <span class="hist-arrival-legend-item"><span class="hist-pid-sample notarrived">P#</span> ยังไม่ถึงสาขา</span>
+        <span class="hist-arrival-legend-item"><span class="hist-pid-sample">P#</span> ถึงสาขาแล้ว<span class="hist-pid-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9"/><path d="M9 20v-5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5"/><path d="M4 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/></svg></span></span>
+      </div>
+      <!-- [ใหม่ Phase 2 · 2026-09-30] ฟอร์ม/ผลบันทึก "สินค้านำกลับมาแก้" แสดงแทนที่รายการในป๊อปอัปนี้ (สร้างด้วย JS ใน wireRepeatAlterationPickup) -->
+      <div class="ra2-view" id="ra2View" hidden></div>
     </div>
   </div>
   <div class="infopop scanpop" id="scanPop">
@@ -4867,6 +5095,14 @@
         <div class="seclabel"><span class="n serif">01</span><span class="t">การชำระเงิน</span></div>
         <div class="frow"><span class="k">สถานะการชำระเงิน</span><div class="toggle" id="payToggle"><button class="on">จ่ายเงินแล้ว</button><button>ค้างชำระ</button></div></div>
         <div class="frow hidden" id="debtRow" style="border:none"><span class="k">จำนวนเงินที่ค้างชำระ <span class="req">*</span></span><input class="fig" id="debtAmount" type="text" inputmode="decimal" placeholder="0"><span style="margin-left:6px;color:var(--t2);font-size:13px">บาท</span></div>
+        <!-- [2026-10-21-8 ตามที่ขอ] NOTE ระดับบิล ถึงเพื่อนสาขา (ไม่บังคับ · 1 บิล 1 NOTE · ไม่ใช่หมายเหตุรายชิ้น · ไม่ส่งเข้า Salesforce) — แก้ภายหลังได้จากการ์ดในรายการที่นัดรับ/ประวัติ -->
+        <div class="bill-note-sec">
+          <div class="seclabel"><span class="n serif">03</span><span class="t">NOTE (ถึงเพื่อนสาขา)</span></div>
+          <div class="bill-note-field">
+            <textarea id="billNote" maxlength="1000" placeholder="เช่น มีเชิ้ตฝากหน้าร้านอีกบิล · ลูกค้าให้เพื่อนมารับแทน" aria-label="NOTE (ถึงเพื่อนสาขา)"></textarea>
+            <span class="bill-note-hint">ไม่บังคับกรอก · ขึ้นในรายการที่นัดรับ/ประวัติ และพิมพ์เป็นกล่องดำบนใบสรุปทุกชิ้นของบิล</span>
+          </div>
+        </div>
       </div>
       <div class="colR">
         <div class="seclabel"><span class="n serif">02</span><span class="t">การนัดรับ</span></div>
@@ -4911,6 +5147,25 @@
     </div></div>
   </div>
 </div>
+<!-- [2026-10-21-8 ตามที่ขอ] ป็อปอัปแก้/เพิ่ม NOTE ของบิล (ใช้ได้แม้บิลมี O# แล้ว) — ชื่อผู้แก้ไขต้องเลือกจากรายชื่อพนักงาน (พิมพ์แล้วขึ้นแนะนำ) -->
+<div class="infopop" id="notePop">
+  <div class="infocard notecard" role="dialog" aria-labelledby="notePopTitle">
+    <h4 id="notePopTitle">แก้ NOTE</h4>
+    <textarea id="notePopText" maxlength="1000" placeholder="เขียน NOTE ถึงเพื่อนสาขา (ลบข้อความทั้งหมด = ลบ NOTE)"></textarea>
+    <div class="note-editor-row">
+      <span class="k">ชื่อผู้แก้ไข <span class="req">*</span></span>
+      <div class="hdrsearch-wrap"><div class="hdrsearch">
+        <input class="hdrsel-input" id="notePopEditor" placeholder="พิมพ์ชื่อแล้วเลือกจากรายชื่อ" autocomplete="off">
+        <div class="suggest hdr-suggest" id="notePopEditorSuggest"></div>
+      </div></div>
+    </div>
+    <div class="note-pop-msg" id="notePopMsg"></div>
+    <div class="confirm-actions">
+      <button type="button" class="back" id="notePopCancel">ยกเลิก</button>
+      <button type="button" class="submit" id="notePopSave" disabled>บันทึก NOTE</button>
+    </div>
+  </div>
+</div>
 <!-- [ใหม่ 2026-10-06 ตามที่ขอ] index3 — แถบผู้ใช้ท้ายหน้า: "เข้าสู่ระบบด้วย Lark: ชื่อ" + ออกจากระบบ (สคริปต์ส่วนหัวเติมชื่อ/โน้ต แล้วเอา hidden ออก) -->
 <div id="authBar" hidden>
   <span class="ab-dot" aria-hidden="true"></span>
@@ -4942,7 +5197,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-21-5';
+  const APP_VERSION = '2026-10-21-15';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -5358,6 +5613,98 @@
   }
   // [ใหม่ 2026-09-23 ตามที่ขอ] ไอคอนร้านค้า ใช้ร่วมกัน 2 จุด — ต่อท้าย P# ที่ถึงสาขาแล้ว + ในคำอธิบายสี P# ใต้ "สาขาที่นัดรับ"
   const HIST_STORE_ICON_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9"/><path d="M9 20v-5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5"/><path d="M4 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/></svg>';
+  // ── [2026-10-21-8 ตามที่ขอ] NOTE ระดับบิล ─────────────────────────────────────────
+  // คอลัมน์ Lark "NOTE แก้ล่าสุดโดย" เก็บเป็น "<เขียนโดย|แก้ล่าสุดโดย> <ชื่อ> · YYYY-MM-DD HH:mm" (เวลาไทย · Worker เขียน) → แสดงเป็น "… · 21 ต.ค. 14:30"
+  const NOTE_TH_MON=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+  function noteStampText(ymd, hm){
+    const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(ymd||'')); if(!m) return '';
+    return parseInt(m[3],10)+' '+(NOTE_TH_MON[parseInt(m[2],10)-1]||m[2])+(hm?' '+hm:'');
+  }
+  function formatNoteBy(o){
+    const raw=String(o&&o.noteBy||'').trim();
+    const m=/^(เขียนโดย|แก้ล่าสุดโดย)\s+(.+?)\s+·\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})$/.exec(raw);
+    if(m) return m[1]+' '+m[2]+' · '+noteStampText(m[3], m[4]);
+    if(raw) return raw;
+    // ไม่มีบรรทัดผู้เขียน (เช่น พิมพ์ลงคอลัมน์ใน Lark ตรงๆ) — ใช้พนักงานขาย + วันที่ทำรายการของบิล
+    return o&&o.staffTake ? 'เขียนโดย '+o.staffTake+(o.dates&&o.dates.created ? ' · '+noteStampText(o.dates.created, o.dates.createdTime||'') : '') : '';
+  }
+  function noteSupported(o){ return !!(o && o._fromLark && o.id && Object.prototype.hasOwnProperty.call(o,'note')); }
+  // ── [2026-10-21-8 ตามที่ขอ] ส่วนอัตโนมัติบนกระดาษโน้ต: "ลูกค้ามี N บิลรอรับที่สาขานี้" (คำนวณในหน้าเว็บ · ไม่เก็บ · แก้ไม่ได้)
+  //   บิลเดียวกัน = เบอร์ลูกค้าเดียวกัน (ตัวเลขล้วน · +66 → 0) · ยังรอรับ = ไม่ยกเลิก และวันนัดรับ ≥ วันนี้ − 7 วัน (เวลาไทย · ระบบไม่มีสถานะ "รับแล้ว")
+  //   · สาขาที่นัดรับเดียวกับบิลของการ์ด · ขึ้นเมื่อมี ≥ 2 บิล (รวมบิลนี้) · เรียงวันนัดรับ แล้วเลขที่บิล
+  //   ข้อมูล: รายการที่เปิดอยู่ (ประวัติ/นัดรับ — กรองตามสาขาที่ซื้อ) + GET /list-orders?pickupBranch=<สาขา>&recentDays=180 (Worker sh2 — บิลที่นัดรับที่สาขานี้จากทุกสาขาที่ซื้อ)
+  //   โหลดครั้งเดียวต่อสาขาที่นัดรับต่อการเปิดป็อปอัปประวัติ แล้ววาดการ์ดของสาขานั้นใหม่ในที่เดิม · Worker รุ่นเก่า (ไม่มีคีย์ note) = ไม่โหลด ไม่แสดง
+  const AUTO_NOTE_RECENT_DAYS=180;
+  const _autoNoteCache={};   // สาขาที่นัดรับ → {orders, loading, failed}
+  function notePhoneKey(p){ let d=String(p||'').replace(/\D/g,''); if(d.length===11 && d.startsWith('66')) d='0'+d.slice(2); return d; }
+  function autoNoteMinPickup(){ const t=new Date(Date.now()+7*3600e3); t.setUTCDate(t.getUTCDate()-7); return t.toISOString().slice(0,10); }
+  const autoNoteBranchOk=br=>/^[A-Za-z0-9]{1,8}$/.test(String(br||''));
+  function autoNoteItems(o){
+    const src=(Array.isArray(o.skuDetails)&&o.skuDetails.length) ? o.skuDetails : (Array.isArray(o.productItems)?o.productItems:[]);
+    const parts=[];
+    src.forEach(d=>{
+      const t=String(d.type||'').replace(/\s*\(สำเร็จรูป\)\s*/g,'').trim();
+      const skus=String(d.sku||'').split('\n').map(x=>x.trim()).filter(x=>x && x!=='-');
+      if(skus.length) skus.forEach(x=>parts.push((t?t+' ':'')+x)); else if(t) parts.push(t);
+    });
+    return parts.join(' · ');
+  }
+  function autoNotePool(br){
+    const m=new Map(), add=x=>{ if(x && x.id && x._fromLark && String(x.pickupBranch||'').trim()===br) m.set(x.id, x); };
+    const c=_autoNoteCache[br]; ((c&&c.orders)||[]).forEach(add);
+    (typeof _histOrders!=='undefined' ? (_histOrders||[]) : []).forEach(add);
+    (typeof _pickupOrders!=='undefined' ? (_pickupOrders||[]) : []).forEach(add);
+    return [...m.values()];
+  }
+  function autoNoteBills(o){
+    if(!noteSupported(o)) return [];
+    const br=String(o.pickupBranch||'').trim(), ph=notePhoneKey(o.customer&&o.customer.phone);
+    if(!autoNoteBranchOk(br) || ph.length<6) return [];
+    const minD=autoNoteMinPickup();
+    const waiting=x=>!x.cancelled && String((x.dates&&x.dates.pickup)||'').trim()>=minD;
+    if(!waiting(o)) return [];
+    const list=autoNotePool(br).filter(x=>x.id!==o.id && notePhoneKey(x.customer&&x.customer.phone)===ph && waiting(x));
+    if(!list.length) return [];
+    list.push(o);
+    return list.sort((a,b)=>String(a.dates.pickup).localeCompare(String(b.dates.pickup)) || String(a.orderNo||'').localeCompare(String(b.orderNo||'')));
+  }
+  function ensureAutoNoteBranch(br){
+    if(!autoNoteBranchOk(br) || _autoNoteCache[br]) return;
+    const c=_autoNoteCache[br]={orders:null, loading:true, failed:false};
+    fetch(WORKER+'/list-orders?pickupBranch='+encodeURIComponent(br)+'&recentDays='+AUTO_NOTE_RECENT_DAYS)
+      .then(r=>r.json())
+      .then(d=>{ if(_autoNoteCache[br]!==c) return; c.loading=false; if(d && d.success && d.pickupBranch===br && Array.isArray(d.orders)){ c.orders=d.orders; rerenderHistRows(x=>String(x.pickupBranch||'').trim()===br); } else c.failed=true; })
+      .catch(()=>{ if(_autoNoteCache[br]===c){ c.loading=false; c.failed=true; } });
+  }
+  // วาดการ์ดที่ตรงเงื่อนไขใหม่ในที่เดิม (ใช้ทั้งหลังโหลดบิลของสาขาที่นัดรับ และหลังบันทึก NOTE)
+  function rerenderHistRows(pred){
+    if(typeof histList==='undefined' || !histList) return;
+    histList.querySelectorAll('.hist-row[data-id]').forEach(row=>{
+      if(row.classList.contains('draft-row')) return;
+      const o=findHistOrder(row.dataset.id); if(!o || !pred(o)) return;
+      const tmp=document.createElement('div'); tmp.innerHTML=buildHistRowHtml(o, _histTab==='pickup');
+      if(tmp.firstElementChild) row.replaceWith(tmp.firstElementChild);
+    });
+  }
+  function buildBillNoteHtml(o){
+    if(!noteSupported(o)) return '';
+    const br=String(o.pickupBranch||'').trim();
+    if(autoNoteBranchOk(br) && !_autoNoteCache[br]) setTimeout(()=>ensureAutoNoteBranch(br), 0);
+    const note=String(o.note||'').trim(), bills=autoNoteBills(o);
+    const id=escapeHtml(o.id);
+    if(!note && !bills.length) return '<button type="button" class="hist-note-btn hist-note-add" data-id="'+id+'">+ เพิ่ม NOTE</button>';
+    let h='<div class="hist-billnote"><span class="dot"></span><div class="to">NOTE</div>';
+    if(bills.length){
+      h+='<div class="auto"><div class="ah">ลูกค้ามี '+bills.length+' บิลรอรับที่สาขานี้</div>'+bills.map(x=>{
+        const me=x.id===o.id;
+        return '<div class="bl'+(me?' me':'')+'"><b>'+escapeHtml(x.orderNo||'—')+'</b><span class="d">นัด '+escapeHtml(noteStampText(x.dates.pickup,''))+'</span>'
+          + '<span class="it">'+escapeHtml(autoNoteItems(x))+(me?'<span class="tag">บิลนี้</span>':'')+'</span></div>';
+      }).join('')+'</div>';
+    }
+    if(note) h+='<div class="b">'+escapeHtml(note)+'</div><div class="by"><span>'+escapeHtml(formatNoteBy(o))+'</span><button type="button" class="hist-note-btn" data-id="'+id+'">✎ แก้ NOTE</button></div>';
+    else h+='<div class="by"><span></span><button type="button" class="hist-note-btn hist-note-add" data-id="'+id+'">+ เพิ่ม NOTE</button></div>';
+    return h+'</div>';
+  }
   function buildHistRowHtml(o, showArrival){
     const nick = o.customer?.nickname ? ' ('+escapeHtml(o.customer.nickname)+')' : '';
     // [แก้ตามที่ขอ] เบอร์ลูกค้าย้ายไปอยู่ใต้ชื่อลูกค้า (สแตกฝั่งขวา) แทนที่จะอยู่คู่กับพนักงานขายที่ .cust .sub เหมือนเดิม
@@ -5482,6 +5829,9 @@
     const fullName = [o.customer?.firstname, o.customer?.lastname].filter(Boolean).join(' ');
     const branchBlock = '<div class="hist-branches">'+branchLines.join('')+'</div>';
     // [แก้ตามที่ขอ] ชื่อลูกค้าคุมข้อมูลทั้งหมด — ย้ายขึ้นเป็นหัวการ์ดบนสุด (เหนือ O#) แทนที่จะฝังอยู่มุมขวาล่างของสแตกสาขา ให้รู้ทันทีว่าออเดอร์นี้ของใคร (เบอร์โทรย้ายตามมาด้วย)
+    // [2026-10-21-8 ตามที่ขอ] NOTE ระดับบิล — มี NOTE = กระดาษโน้ตมีเส้น (หัว NOTE แดง · ข้อความ · บรรทัดผู้เขียน/ผู้แก้ล่าสุด + ปุ่ม "✎ แก้ NOTE")
+    // ไม่มี NOTE = การ์ดเหมือนเดิม + ปุ่มเล็ก "+ เพิ่ม NOTE" · Worker รุ่นเก่า (ไม่มีคีย์ note ในรายการ) = ไม่แสดงอะไรเลย (ยังแก้ NOTE ไม่ได้)
+    const billNoteBlock = buildBillNoteHtml(o);
     const custHeaderHtml = '<div class="hist-custheader"><span class="hist-branch-name">'+escapeHtml(fullName||'—')+nick+'</span>'
       + (phoneFormatted ? '<span class="hist-branch-phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'+escapeHtml(phoneFormatted)+'</span>' : '')
       + '</div>';
@@ -5527,6 +5877,7 @@
           + '</div>'
           + branchBlock
         + '</div>'
+        + billNoteBlock
         + debtBanner
         + measureBlock
         // [แก้ตามที่ขอ] "วันที่ทำรายการ" ย้ายมาอยู่บรรทัดเดียวกับ "สถานะการชำระเงิน" ฝั่งขวา (เดิมคนละบรรทัดแยกกัน)
@@ -5655,6 +6006,7 @@
   }
   function openHistory(){
     histPop.classList.add('show');
+    for(const k of Object.keys(_autoNoteCache)) delete _autoNoteCache[k]; // [2026-10-21-8] ส่วนอัตโนมัติของ NOTE โหลดใหม่ทุกครั้งที่เปิด
     const branch=document.getElementById('branchTop')?.value||'';
     histSearchInput.value='';
     // ค่าเริ่มต้นแท็บ "ประวัติ" และแท็บ "รายการที่นัดรับ" = สาขาเดียวกับแถบหัวก่อน แต่เลือกเปลี่ยนเป็นสาขาอื่นได้อิสระในแต่ละแท็บ
@@ -5801,6 +6153,7 @@
       urgentCheck: document.getElementById('urgentCheck')?.classList.contains('on')||false,
       // [แก้บั๊ก] เดิมไม่เคยเก็บชื่อผู้อนุมัติงานด่วนไว้เลย ติ๊กด่วน+เลือกชื่อแล้ว รีเฟรช/โหลดร่างกลับมาค่านี้หายทุกครั้ง
       urgentApprover: val('urgentApprover'),
+      billNote: val('billNote'), // [2026-10-21-8] NOTE ระดับบิล
     };
   }
   // [ใหม่] ย้อนกลับค่าวัดตัวจาก data ดิบ (คีย์อ่านง่ายแบบ "สูท - อก") ใส่กลับเข้า .mitem ที่ label ตรงกัน — ใช้ตอนโหลดบิลเก่ามาแก้ไข
@@ -5928,6 +6281,7 @@
     setUrgentChip(!!data['งานด่วน']);
     urgentManuallySet=true;
     setv('urgentApprover', data['ชื่อผู้อนุมัติงานด่วน']);
+    setv('billNote', data['NOTE']); // [2026-10-21-8] NOTE ระดับบิลจากข้อมูลดิบ
     syncApproverChips();
   }
   function fillProductBlock(block, p){
@@ -5995,6 +6349,7 @@
     setUrgentChip(!!state.urgentCheck);
     urgentManuallySet=true; // ค่าที่กู้คืนมาจากร่างถือเป็นค่าที่เลือกไว้แล้ว ไม่ต้องให้ auto-default ทับซ้ำ
     setv('urgentApprover', state.urgentApprover);
+    setv('billNote', state.billNote); // [2026-10-21-8]
     syncApproverChips(); // ซิงก์ dropdown ผู้อนุมัติงานด่วนที่มองเห็นให้ตรงกับค่าที่กู้คืนมาด้วย
   }
 
@@ -6301,6 +6656,957 @@
   });
   if(confirmCancelBtn) confirmCancelBtn.addEventListener('click',()=>_settleConfirm(false));
   if(confirmPop) confirmPop.addEventListener('click', e=>{ if(e.target===confirmPop) _settleConfirm(false); });
+
+  // ── [ใหม่ Phase 2 · 2026-09-30] สินค้านำกลับมาแก้ (ไม่ใช่ครั้งแรก) — ทางเข้าย้ายมาอยู่ในแท็บ "รายการที่นัดรับ" ของป๊อปอัปประวัติ ตาม mockup D
+  // (design-demos/repeat-alteration-search/pickup-entry-options.html) แทนแบนเนอร์ในแท็บประวัติ + ป๊อปอัปแยกของ phase2-19 · ใช้ Worker ตัวที่ใช้อยู่ (ไม่แก้ Worker)
+  // · ช่องค้น P# ใต้ "สาขาที่นัดรับ": พิมพ์ ≥3 หลักกรองสด (6 หลัก = ตรงตัว) ค้นทุกวันที่/ทุกสาขาจาก /list-orders?branch= (โหลดครั้งเดียวต่อการเปิดป๊อปอัป)
+  //   ไม่มีในบิลที่ลงผ่านแอป → หาใน Salesforce (POST /product-status ก่อน แล้ว /repeat-alteration-product?code= — ตัวหลังตอบ 500 เมื่อไม่พบ จึงไม่ยิงถ้าไม่มีสถานะ)
+  //   เครื่องยิงบาร์โค้ดที่ QR บนใบสรุป = พิมพ์ลิงก์ Salesforce ลงช่อง + Enter → /repeat-alteration-product?id= → P# · ปุ่มสแกน = openScanner ของแอป (แปลงแบบเดียวกัน)
+  // · การ์ดเดิมของแท็บ (buildHistRowHtml): P# เขียว มีป้าย "แก้ครั้งที่ N ›" (N = roundCount ใน Salesforce + 2 · บิลแรก = ครั้งที่ 1 · แก้ซ้ำครบ 5 ครั้ง = "แก้ครบแล้ว")
+  //   P# แดง แตะแล้วบอกสถานะตอนนี้ใต้บรรทัด — ป้าย/ปุ่มเติมหลังการ์ดถูกวาด (MutationObserver บน #histList) ไม่แก้ buildHistRowHtml/renderPickupRangeList ของแอปหลัก
+  // · แตะป้าย → ฟอร์มในป๊อปอัปนี้ (แทนที่รายการ) → "บันทึกข้อมูล" = POST /repeat-alteration-submit ทันที (ไม่มีหน้ายืนยัน) → รูปใบสรุป (buildReceiptLines + renderReceiptCanvasBase64) → อัปโหลดรูปบีบอัด POST /repeat-alteration-receipt
+  // [phase2-32 · Worker R19.3 — design-demos/repeat-workflow/SPEC_R19.3.md หมวด 5] เก็บงานนำกลับมาแก้ที่ตาราง Lark "Table" (ข้อความด้านบนเรื่อง roundCount/SAVED/ไม่แก้ Worker/ไม่อัปโหลด ถูกแทนที่ด้วยข้อนี้):
+  //   · รอบถัดไป + เหตุที่บันทึกไม่ได้ มาจาก GET /repeat-alteration-product (nextRound · slot · blocked{code,message} · larkRecordId) — ไม่คำนวณเองจาก roundCount/SAVED แล้ว
+  //   · ผู้ตรวจ = เลือกจาก GET /repeat-alteration-inspectors เท่านั้น (ไม่มีรายชื่อ = บันทึกไม่ได้) · วันนัดรับ ≥ วันนี้เวลาไทย · ตัวนับ 255 เผื่อ "บิลใหม่ <เลข 10 ตัว> " 19 ตัวที่ Worker เติมให้ · "|" → "/" · ขึ้นบรรทัดใหม่ → เว้นวรรค
+  //   · สำเร็จ → ใบสรุปใช้ billNoNew จาก Worker เป็นเลขบิล · รูปอัปโหลด PNG ไฟล์เดียวกับปุ่มบันทึกรูป [phase2-44: เดิม WebP] (≤ 300 KB · เกินค่อยย่อ) · อัปโหลดล้ม ≠ บันทึกล้ม (ปุ่มลองใหม่)
+  // [phase2-33 · Worker R19.3-r2 — design-demos/repeat-workflow/SPEC_R19.3.md + การตัดสินใจ D1–D6] ทำเพิ่มบนหน้านี้ (ข้อความด้านบนยังใช้ได้):
+  //   · P1 เครือข่ายล้ม/หมดเวลาตอนบันทึก → ถาม GET /repeat-alteration-product ของ P# นี้ก่อน: มีบรรทัดค้างแล้ว = บันทึกสำเร็จ (ไปต่อใบสรุป+อัปโหลด) · ไม่มี = บอกว่ายังไม่ได้บันทึก ลองใหม่ได้
+  //   · P2 รหัส error ที่ลองซ้ำไม่ได้ (full/status_not_ready/pending_exists/f93_stuck/round_unknown/slot_occupied/product_mismatch/ambiguous_inspector/inspector_not_found/date_past) แสดงข้อความ Worker ตรงๆ ไม่เติม "ลองอีกครั้งได้" + ปุ่มบันทึกล็อก
+  //   · P3 branch = สาขาที่ทำรายการ (ช่อง "สาขา" ด้านบนของหน้าหลัก = branchTop) · pickupBranch = สาขาที่นัดรับที่เลือกในฟอร์ม · P4 สำรองเลขบิลใหม่ 20 ตัว + แจ้งเมื่อ Worker ตัดข้อความ
+  //   · P5 อัปโหลดรูปเข้า Lark ล้ม → "เสร็จสิ้น"/× /สลับแท็บ ถามก่อนออก + ปุ่มลองใหม่ค้างจนสำเร็จ · 401 → เก็บรูปที่บีบแล้วไว้ใน localStorage แล้วอัปโหลดต่อให้เองหลังล็อกอินใหม่
+  //   · P6 แนบรูปเดียวกัน (บีบแล้ว) เข้า Salesforce Product ด้วย POST /attach-product-file ชื่อไฟล์ นำกลับมาแก้_P#<เลข>_ครั้งที่<r>.png [webp = ของค้างใน localStorage จากรุ่นก่อน phase2-44] (ห้ามขึ้นต้น "ใบสรุป_") — อิสระจากการอัปโหลดเข้า Lark · ล้ม = โน้ตไม่บล็อก
+  //   · P7 ป้าย "ขนาดต้นแขน" + ใบสรุป: ป้ายค่าวัดยาวย่อ/ตัด "…" ไม่ทับตัวเลข · ชื่อ/ชื่อเล่นยาวขึ้นบรรทัดต่อ ไม่หลุดขอบขวา
+  // [phase2-34 · Worker R19.3-r3 — รอบแก้ r3] ทำเพิ่ม (ข้อความด้านบนยังใช้ได้):
+  //   · P9 ใช้ pendingKnown ของ GET /repeat-alteration-product: false (หรือถามสถานะไม่ได้) = "ยังไม่ทราบว่าบันทึกสำเร็จหรือไม่" ไม่อ้างว่า "ตรวจแล้วว่ายังไม่ได้บันทึก" · pending_exists หลังเครือข่ายล้ม = น่าจะบันทึกไปแล้วก่อนหน้านี้ + ปุ่ม "ตรวจสอบอีกครั้ง" (ไม่ส่งบันทึกซ้ำ) · Worker รุ่นเก่า (ไม่มีฟิลด์) = พฤติกรรมเดิม
+  //   · P10 กู้จากบรรทัดค้างแล้วค่าที่เก็บไว้ (รายละเอียด/ผู้ตรวจ/วันนัดรับ) ไม่ตรงกับฟอร์ม → ใบสรุป/รูปที่อัปโหลดวาดจากค่าที่เก็บไว้จริง + โน้ต "ข้อความที่บันทึกไว้ไม่ตรงกับในฟอร์ม"
+  //   · P11 ปุ่มสแกน P# ในป๊อปอัปหน้าตาเหมือนปุ่มสแกนของหน้าสินค้า (.scanbtn: สี่เหลี่ยมมนสีเข้ม 44×44 ไอคอนทอง ไม่มีข้อความ) — ไอดี/ตัวจัดการ/title/aria-label ไม่เปลี่ยน
+  // [phase2-21 ตามที่ขอ] งานด่วน + ชื่อผู้อนุมัติ (หน้าตา/ชื่อ/พฤติกรรมเดียวกับฟอร์มหลัก) — Worker ยังไม่มีช่องงานด่วนของงานแก้ซ้ำ จึงขึ้นต้นรายละเอียดด้วย "!! งานด่วน !! (อนุมัติ: ชื่อ) "
+  //   · ช่อง P#: เครื่องยิง/คีย์บอร์ดที่พิมพ์ตอนเครื่องอยู่โหมดภาษาไทย ได้อักษรไทยแบบเกษมณี → แปลงกลับเป็นปุ่มภาษาอังกฤษให้เอง (หน้าเว็บบังคับภาษาแป้นพิมพ์ไม่ได้)
+  (function wireRepeatAlterationPickup(){
+    const card=histPop?histPop.querySelector('.histcard'):null;
+    const input=document.getElementById('ra2PidInput'), view=document.getElementById('ra2View');
+    if(!card||!input||!view||!histList) return;
+    const clearBtn=document.getElementById('ra2PidClear'), scanBtn=document.getElementById('ra2PidScan'), cap=document.getElementById('ra2PidCap');
+    const CAP_HTML=cap.innerHTML, LIMIT=255, SHOW_MAX=40, BILL_RESERVE=20, UP_HARD=300*1024;   // BILL_RESERVE = "บิลใหม่ " (8) + เลขบิล 10 ตัว + เว้นวรรค (1) ที่ Worker ต่อหน้ารายละเอียดใน Editdetail + เผื่อ 1 ตัวเมื่อเลขวิ่งถึง 3 หลัก (เลขบิล 11 ตัว) = 20 [phase2-33 · P4]
+    const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const sv=d=>'<svg class="ra2-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg>';
+    const IC={chev:sv('<path d="M9 6l6 6-6 6"/>'), chevL:sv('<path d="M15 18l-6-6 6-6"/>'), left:sv('<path d="M19 12H5M11 6l-6 6 6 6"/>'), down:sv('<path d="M6 9l6 6 6-6"/>'),
+      warn:sv('<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4.5M12 17h.01"/>'),
+      tick:sv('<path d="M5 12.5l4.5 4.5L19 7.5"/>'), user:sv('<circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/>'), dl:sv('<path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 20h14"/>'),
+      phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'};
+    const S={q:'',tk:0,scanTk:0,why:{},view:'list',form:null,done:null,sending:false,err:'',errRetry:false,listTop:0,kbTh:false};
+    let ALL=null;                     // บิลที่ค้นเจอแล้วในรอบเปิดป๊อปอัปนี้ (ไม่รวมยกเลิก/ร่าง) — ปุ่มบนการ์ดผลค้นหาหาบิลจากที่นี่
+    const PROD={};                    // 'P# 396241' → {p: ข้อมูลจาก /repeat-alteration-product, pr: กำลังโหลด, fail}
+    const LATEST={};                  // 'P# …' → ค่าวัดปัจจุบันใน Salesforce (/product-latest) · null = กำลังโหลด · false = ไม่มี
+    const INSP={list:null,pr:null,fail:'',at:0,amb:new Set()};   // รายชื่อผู้ตรวจจาก Salesforce (GET /repeat-alteration-inspectors) — Worker cache ~10 นาที หน้านี้จำไว้ 10 นาทีเหมือนกัน
+    const STATUS_DONE=new Set();      // P# ที่ขอสถานะสดแล้วในรอบเปิดป๊อปอัปนี้
+
+    // ---------- ตัวช่วย ----------
+    async function getJSON(url,opts,ms){
+      const ac=new AbortController(); const t=setTimeout(()=>ac.abort(),ms||20000);
+      try{
+        const res=await fetch(url,Object.assign({signal:ac.signal},opts||{}));
+        let j=null; try{ j=await res.json(); }catch(e){ const er=new Error('ระบบตอบกลับผิดรูปแบบ (HTTP '+res.status+')'); er.net=true; throw er; }
+        return j;
+      }catch(e){ if(e&&e.name==='AbortError'){ const er=new Error('เชื่อมต่อนานเกินไป'); er.net=true; throw er; } if(e&&!e.net&&(e instanceof TypeError||e.name==='TypeError')) e.net=true; throw e; }   // net=true: เครือข่ายล้ม/หมดเวลา/ตอบไม่ใช่ JSON (ไม่รู้ว่า Worker ทำงานเสร็จหรือยัง)
+      finally{ clearTimeout(t); }
+    }
+    const digitsOf=v=>String(v||'').replace(/\D/g,'');
+    const normCode=v=>'P# '+digitsOf(v);
+    const codesOf=o=>(String((o&&o.productCode)||'').match(/P#\s*\d+/g)||[]).map(normCode);
+    const oCodeOf=o=>{ const m=String(extractCode((o&&o.orderCode)||'')).match(/O#\s*(\d+)/); return m?'O# '+m[1]:''; };
+    const matchCode=(code,q)=>{ const d=digitsOf(code); return q.length>=6?d===q:d.includes(q); };
+    // วันที่ "วันนี้" ของฟอร์มนี้ = เวลาไทย (UTC+7) เสมอ ไม่ใช่เวลาของเครื่อง (Worker ตรวจวันนัดรับย้อนหลังด้วยเวลาไทยเหมือนกัน)
+    const thaiToday=()=>new Date(Date.now()+7*3600e3).toISOString().slice(0,10);
+    const isoPlus=n=>{ const d=new Date(thaiToday()+'T00:00:00Z'); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); };
+    const dayText=iso=>(iso&&toThaiDateWithDay(iso))||'—';
+    const typeShort=t=>{ t=String(t||''); if(!t) return 'สินค้า'; const k=shortTypeLabel(t); return k!=='สินค้า'?k:(t.replace(/\s*\(สำเร็จรูป\)\s*/g,'').trim()||'สินค้า'); };
+    const skuText=f=>{ const z=String(f.size||'').trim(); return (f.sku||'—')+(z&&z!=='-'?'-'+z:''); };
+    const typeCfg=t=>(typeof MEASURE_CONFIG!=='undefined'&&MEASURE_CONFIG[formatProductType(t)])||{noteLabel:'หมายเหตุ',items:[]};
+    const findOrder=id=>(_pickupOrders||[]).find(o=>o.id===id)||(ALL||[]).find(o=>o.id===id)||(_histOrders||[]).find(o=>o.id===id)||null;
+    // ปุ่ม "ดึงข้อมูลล่าสุด + พิมพ์ใบสรุปใหม่" บนการ์ดผลค้นหา (บิลนอกช่วงวันที่/สาขาอื่น อยู่ใน ALL ไม่อยู่ใน _histOrders/_pickupOrders) — ให้ findHistOrder ของแอปหาเจอด้วย
+    const baseFindHistOrder=findHistOrder;
+    findHistOrder=id=>baseFindHistOrder(id)||(ALL||[]).find(o=>o.id===id)||null;
+    function setCap(msg,kind){ if(!msg){ cap.className='ra2-cap'; cap.innerHTML=CAP_HTML; return; } cap.className='ra2-cap '+(kind||''); cap.textContent=msg; }
+    // แป้นพิมพ์โหมดไทย (เกษมณี) → ปุ่มภาษาอังกฤษ: ตารางเรียงตามแป้น [ปุ่มอังกฤษ, ตัวที่ออกในโหมดไทย] แถวไม่กด Shift 4 แถว + กด Shift 4 แถว แล้วกลับด้านเป็นตาราง ไทย → อังกฤษ
+    // แปลงเมื่อข้อความมีอักษรไทย (U+0E00–U+0E7F) อย่างน้อย 1 ตัว และแปลง "ทุกตัว" — ในโหมดไทย "/" มาจากปุ่ม 2, "-" จากปุ่ม 3, "." จาก Shift+' ฯลฯ (เช่น 396241 → "-ตุ/ภๅ")
+    const KEDMANEE=[
+      ['`1234567890-=','_ๅ/-ภถุึคตจขช'], ['qwertyuiop[]\\','ๆไำพะัีรนยบลฃ'], ["asdfghjkl;'",'ฟหกดเ้่าสวง'], ['zxcvbnm,./','ผปแอิืทมใฝ'],
+      ['~!@#$%^&*()_+','%+๑๒๓๔ู฿๕๖๗๘๙'], ['QWERTYUIOP{}|','๐"ฎฑธํ๊ณฯญฐ,ฅ'], ['ASDFGHJKL:"','ฤฆฏโฌ็๋ษศซ.'], ['ZXCVBNM<>?','()ฉฮฺ์?ฒฬฦ']];
+    const TH2EN={}; KEDMANEE.forEach(([en,th])=>{ const t=[...th]; [...en].forEach((k,i)=>{ TH2EN[t[i]]=k; }); });
+    const hasThai=s=>/[\u0E00-\u0E7F]/.test(s);
+    const mapThai=s=>[...s].map(c=>TH2EN[c]!==undefined?TH2EN[c]:c).join('');
+    const thaiToEn=s=>{ s=String(s==null?'':s); return hasThai(s)?mapThai(s):s; };
+
+    // ---------- ข้อมูลจาก Worker ----------
+    // [phase2-40 · 2026-10-15] ค้นบิลด้วยเลข P# ที่พิมพ์ ผ่าน Worker GET /find-by-pnum (R19.3-r4) — Lark กรองให้เฉพาะบิลที่มีเลขนี้ ข้อมูลเล็ก
+    // เดิมโหลดบิลทุกสาขาทั้งตาราง (/list-orders?branch= ~5 MB) แล้วค่อยหาในหน้าเว็บ → Worker เกินเพดาน CPU ของแพ็กเกจ Free → "Failed to fetch" (เจอจริง 2026-10-15)
+    // ผลของแต่ละเลขเก็บไว้ (QCACHE) · ผลที่ครบ (ไม่ถูกตัด) ใช้กรองเลขที่ยาวกว่าได้เลยโดยไม่ยิงซ้ำ · ทุกบิลที่เคยค้นเจอรวมไว้ใน ALL (ปุ่มบนการ์ดผลค้นหาหาบิลด้วย id)
+    // [phase2-41] ช่องว่าง = ยกเลิกการค้นที่ค้าง · เกิน 6 หลัก = ไม่พบ (ไม่ยิง Worker) · ค้นไม่สำเร็จแล้วพิมพ์/ยิงเลขเดิมซ้ำ = ค้นใหม่ · QSES กันคำตอบรอบก่อนปนเข้ารอบใหม่
+    const QCACHE={}; let QSES=0;
+    function cachedFor(q){
+      if(QCACHE[q]&&QCACHE[q].v) return QCACHE[q].v;
+      for(const k in QCACHE){ const v=QCACHE[k]&&QCACHE[k].v; if(v&&!v.truncated&&q.includes(k)) return v; }
+      return null;
+    }
+    function searchQ(q){
+      const e=QCACHE[q]||(QCACHE[q]={});
+      if(e.v) return Promise.resolve(e.v);
+      if(e.p) return e.p;
+      const ses=QSES;
+      e.p=getJSON(WORKER+'/find-by-pnum?q='+encodeURIComponent(q)).then(j=>{
+        if(!j||!j.success||!Array.isArray(j.orders)) throw new Error((j&&j.error)||'ค้นบิลไม่สำเร็จ');
+        const orders=j.orders.filter(o=>o&&!o.cancelled&&!o.isDraft&&codesOf(o).length);
+        if(ses===QSES){ const byId=new Map((ALL||[]).map(o=>[o.id,o])); orders.forEach(o=>byId.set(o.id,o)); ALL=[...byId.values()]; }
+        e.v={orders,truncated:!!j.truncated}; e.p=null; return e.v;
+      }).catch(err=>{ if(QCACHE[q]===e) delete QCACHE[q]; throw err; });
+      return e.p;
+    }
+    // สถานะสด (Status__c) ของ P# ที่ยังไม่เคยขอในรอบนี้ → รวมเข้า _pickupStatusMap ของแท็บ (buildHistRowHtml ใช้ระบายสี P#)
+    async function ensureStatuses(codes){
+      const need=[...new Set(codes)].filter(c=>!STATUS_DONE.has(c)); if(!need.length) return;
+      const j=await getJSON(WORKER+'/product-status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({codes:need})});
+      if(!j||!j.success) throw new Error((j&&j.error)||'ดึงสถานะสินค้าจาก Salesforce ไม่สำเร็จ');
+      Object.assign(_pickupStatusMap, j.statuses||{});
+      need.forEach(c=>STATUS_DONE.add(c));
+    }
+    // สัญญา GET /repeat-alteration-product (R19.3): billNo · status · slot (1..4|null) · nextRound (r = slot+1|null) · larkRecordId · pending · blocked ({code,message}|null · code = full|status_not_ready|pending_exists)
+    // Worker รุ่นเก่า (ไม่มี slot/blocked/larkRecordId เลย) → blocked 'worker_old' กันบันทึกผิดรุ่น · ไม่มีรอบถัดไปและไม่ได้บอกว่าติดขัด → ถือว่า "แก้ครบแล้ว"
+    const roundOf=p=>{ if(!p) return null; const r=p.nextRound!=null&&p.nextRound!==''?+p.nextRound:(p.slot!=null&&p.slot!==''?+p.slot+1:NaN); return Number.isInteger(r)&&r>0?r:null; };
+    const BLOCK_MSG={full:'แก้ครบแล้ว — นำกลับมาแก้ต่อไม่ได้',status_not_ready:'สินค้านี้ยังไม่อยู่ในสถานะ “ตรวจสอบสินค้าที่สาขา” — นำกลับมาแก้ยังไม่ได้',pending_exists:'สินค้านี้มีงานแก้ค้างรอหลังบ้านส่งข้อมูลอยู่แล้ว',worker_old:'ระบบหลังบ้านยังไม่อัปเดตเป็นรุ่น R19.3 — บันทึกนำกลับมาแก้ยังไม่ได้ (แจ้งผู้ดูแลระบบ)',f93_stuck:'ช่อง ลูกค้ารับสินค้า ของสินค้านี้เป็น "ไม่รับสินค้า" ค้างอยู่ ต้องล้างใน Salesforce ก่อน'};
+    function normProd(j){
+      const p=Object.assign({},j.product);
+      ['billNo','status','slot','nextRound','larkRecordId','pending','blocked','pendingKnown'].forEach(k=>{ if(p[k]===undefined&&j[k]!==undefined) p[k]=j[k]; });
+      const legacy=!('slot' in p)&&!('blocked' in p)&&!('larkRecordId' in p);
+      let b=p.blocked;
+      if(legacy) b={code:'worker_old'};
+      else if(b&&typeof b!=='object') b={code:'blocked',message:String(b)};
+      else if(!b&&Array.isArray(p.pending)&&p.pending.length) b={code:'pending_exists'};   // มีบรรทัดค้างของ P# นี้อยู่ — Worker ปฏิเสธซ้ำอยู่แล้ว (4.3 ข้อ 2)
+      else if(!b&&roundOf(p)==null) b={code:'full'};
+      p.blocked=b?{code:String(b.code||'blocked'),message:String(b.message||BLOCK_MSG[b.code]||'นำกลับมาแก้ไม่ได้ตอนนี้')}:null;
+      return p;
+    }
+    function getProd(code){
+      const e=PROD[code]||(PROD[code]={});
+      if(e.p) return Promise.resolve(e.p);
+      if(e.pr) return e.pr;
+      e.pr=getJSON(WORKER+'/repeat-alteration-product?code='+encodeURIComponent(code)).then(j=>{
+        if(!j||!j.success||!j.product) throw new Error((j&&j.error)||'ไม่พบสินค้านี้ใน Salesforce');
+        e.p=normProd(j); e.fail=false; return e.p;
+      }).catch(err=>{ e.fail=true; throw err; }).finally(()=>{ e.pr=null; });
+      return e.pr;
+    }
+    // ดึงรอบของ P# สีเขียวเฉพาะป้ายที่เลื่อนมาใกล้จอ ทีละไม่เกิน 3 ตัว (เก็บไว้ต่อ P#)
+    const QUEUE=[]; let running=0;
+    const io=('IntersectionObserver' in window)?new IntersectionObserver(es=>es.forEach(en=>{ if(!en.isIntersecting) return; io.unobserve(en.target); want(en.target.dataset.ra2Chip); }),{root:histList,rootMargin:'600px 0px'}):null;
+    function watchChips(){ if(io) io.disconnect(); histList.querySelectorAll('.ra2-chip').forEach(c=>{ if(!chipState(c.dataset.ra2Chip).unk) return; if(io) io.observe(c); else want(c.dataset.ra2Chip); }); }
+    function want(code){ const e=PROD[code]; if(e&&(e.p||e.pr||e.q||e.fail)) return; (PROD[code]=e||{}).q=true; QUEUE.push(code); pump(); }
+    function pump(){
+      while(running<3&&QUEUE.length){ const c=QUEUE.shift(); running++;
+        getProd(c).catch(()=>{}).finally(()=>{ running--; if(PROD[c]) PROD[c].q=false; paintChips(c); pump(); }); }
+    }
+    function loadLatest(code){
+      if(LATEST[code]!==undefined) return;
+      LATEST[code]=null;
+      getJSON(WORKER+'/product-latest?codes='+encodeURIComponent(code)).then(j=>{
+        LATEST[code]=((j&&j.items)||[]).find(x=>x&&normCode(x.code)===code)||false;
+      },()=>{ delete LATEST[code]; }).then(()=>{ if(S.view==='form'&&S.form&&S.form.code===code){ paintPv(); changed(); } });
+    }
+
+    // ---------- ป้ายบนการ์ด ----------
+    // ป้ายบนการ์ด: ปกติ "แก้ครั้งที่ {nextRound}" · blocked = ป้ายเทา (off) แตะแล้วโชว์ข้อความสาเหตุจาก Worker (ครบรอบ = "แก้ครบแล้ว")
+    function chipState(code){ const p=PROD[code]&&PROD[code].p; if(!p) return {t:'นำกลับมาแก้',unk:true};
+      if(p.blocked){ const c=p.blocked.code; return {t:c==='full'?'แก้ครบแล้ว':(c==='pending_exists'?'รอหลังบ้านส่ง':'แก้ไม่ได้ตอนนี้'),off:true,why:p.blocked.message}; }
+      return {t:'แก้ครั้งที่ '+roundOf(p)}; }
+    const chipInner=s=>esc(s.t)+(s.off?'':IC.chev);
+    function paintChip(b){ const s=chipState(b.dataset.ra2Chip); b.className='ra2-chip'+(s.off?' off':''); b.innerHTML=chipInner(s); b.disabled=false; }
+    function paintChips(code){ histList.querySelectorAll('.ra2-chip[data-ra2-chip="'+CSS.escape(code)+'"]').forEach(paintChip); }
+    function showWhy(line,code,w){ const old=line.querySelector('.ra2-why'); if(old) old.remove();
+      line.insertAdjacentHTML('beforeend','<div class="ra2-why'+(w.gray?' gray':'')+'" role="status">'+IC.warn+'<span>'+esc(w.t)+'</span></div>');
+      const b=line.querySelector('[data-ra2-why]'); if(b) b.setAttribute('aria-expanded','true'); }
+    function toggleWhy(el,code,w){ const line=el.closest('.hist-skuline'); if(!line) return; const old=line.querySelector('.ra2-why');
+      if(old){ old.remove(); delete S.why[code]; const b=line.querySelector('[data-ra2-why]'); if(b) b.setAttribute('aria-expanded','false'); return; }
+      S.why[code]=w; showWhy(line,code,w); }
+    // เติมป้าย/ปุ่มให้ P# ที่ยังไม่ได้เติม (เรียกซ้ำได้ — ข้ามตัวที่เติมแล้ว)
+    function decorate(){
+      if(_histTab!=='pickup') return;
+      histList.querySelectorAll('.hist-skuline .hist-pid:not([data-ra2])').forEach(el=>{
+        el.dataset.ra2='1';
+        const code=normCode(el.textContent), line=el.parentNode;
+        if(S.q.length>=3&&matchCode(code,S.q)) el.classList.add('ra2-match');
+        if(el.classList.contains('notarrived')){
+          const b=document.createElement('button'); b.type='button'; b.className='ra2-pidbtn'; b.dataset.ra2Why=code; b.title='ดูสถานะตอนนี้'; b.setAttribute('aria-expanded','false');
+          el.replaceWith(b); b.appendChild(el);
+        }else if(el.nextElementSibling&&el.nextElementSibling.classList.contains('hist-pid-icon')){
+          el.nextElementSibling.insertAdjacentHTML('afterend','<button type="button" class="ra2-chip" data-ra2-chip="'+esc(code)+'"></button>');
+          paintChip(el.nextElementSibling.nextElementSibling);
+        }else return;
+        if(S.why[code]) showWhy(line,code,S.why[code]);
+      });
+      watchChips();
+    }
+    // แอปวาดรายการใหม่ (สถานะมาถึง/เปลี่ยนตัวกรอง/สลับแท็บ) → เติมป้าย · ถ้ากำลังค้น P# อยู่แต่แอปวาดรายการตามช่วงวันที่ทับ → วาดผลค้นหากลับ (ก่อนจอวาดจริง ไม่กระพริบ)
+    new MutationObserver(()=>{
+      if(_histTab!=='pickup'||S.view!=='list') return;
+      if(S.q&&!histList.querySelector(':scope>[data-ra2-res]')) renderSearch(); else decorate();
+    }).observe(histList,{childList:true});
+
+    // ---------- ค้นหา ----------
+    const stateHtml=t=>'<div class="hist-state" data-ra2-res>'+t+'</div>';   // ทุกอย่างที่ส่วนนี้วาดลง #histList ขึ้นต้นด้วย data-ra2-res
+    let _stT=null;
+    function renderSearch(){
+      if(_histTab!=='pickup'||S.view!=='list'||!S.q) return;
+      const q=S.q, tk=++S.tk; clearTimeout(_stT);
+      if(q.length<3){ histList.innerHTML=stateHtml('พิมพ์ P# อย่างน้อย 3 หลัก'); return; }
+      if(q.length>6){ histList.innerHTML=stateHtml('ไม่พบ P# ที่มีเลข “'+esc(q)+'”'); return; }
+      const hit=cachedFor(q);
+      if(!hit){
+        histList.innerHTML=stateHtml('กำลังค้นหา…');
+        _stT=setTimeout(()=>{ if(tk!==S.tk) return;   // หน่วงเล็กน้อยระหว่างพิมพ์ต่อเนื่อง ไม่ยิงทุกตัวเลข (ตัวจับเวลาเดียวกับสถานะ — renderSearch รอบใหม่ล้างให้เอง)
+          searchQ(q).then(()=>{ if(tk===S.tk) renderSearch(); },e=>{ if(tk===S.tk) histList.innerHTML=stateHtml('ค้นบิลไม่สำเร็จ ('+esc(e.message)+') — พิมพ์หรือยิงเลขเดิมอีกครั้งเพื่อลองใหม่'); });
+        },250);
+        return;
+      }
+      const from=histFromDateEl?histFromDateEl.value:'', to=histToDateEl?histToDateEl.value:'';
+      const inRange=o=>filterByPickupRange([o],from,to).length>0, pk=o=>(o.dates&&o.dates.pickup)||'';
+      const m=hit.orders.filter(o=>codesOf(o).some(c=>matchCode(c,q))).sort((a,b)=>(inRange(b)-inRange(a))||pk(b).localeCompare(pk(a)));
+      if(!m.length){ if(q.length===6) fallback(q,tk); else histList.innerHTML=stateHtml('ไม่พบ P# ที่มีเลข “'+esc(q)+'”'); return; }
+      const shown=m.slice(0,SHOW_MAX);
+      histList.innerHTML='<div class="ra2-count" data-ra2-res>พบ '+m.length+(hit.truncated?'+':'')+' บิล · ค้นทุกวันที่'+((m.length>shown.length||hit.truncated)?' · แสดง '+shown.length+' บิลแรก — พิมพ์เลขเพิ่มให้แคบลง':'')+'</div>'
+        + shown.map(o=>buildHistRowHtml(o,true)).join('');
+      shown.forEach(o=>{ if(inRange(o)) return; const row=histList.querySelector('.hist-row[data-id="'+CSS.escape(String(o.id))+'"]'); if(!row) return;
+        const at=row.querySelector('.hist-orderid')||row.querySelector('.hist-orderrow'); if(at) at.insertAdjacentHTML('beforeend','<span class="ra2-oldtag">นอกช่วงวันที่</span>'); });
+      decorate();
+      const need=[...new Set(shown.flatMap(codesOf))].filter(c=>!STATUS_DONE.has(c));
+      if(need.length) _stT=setTimeout(()=>{ ensureStatuses(need).then(()=>{ if(tk===S.tk) renderSearch(); },()=>{
+        if(tk!==S.tk) return; const c=histList.querySelector(':scope>.ra2-count'); if(c) c.textContent+=' · ดึงสถานะจาก Salesforce ไม่สำเร็จ'; }); },250);
+    }
+    // P# 6 หลักที่ไม่มีในบิลที่ลงผ่านแอป → หาใน Salesforce แล้วโชว์การ์ดย่อ
+    async function fallback(q,tk){
+      const code='P# '+q;
+      histList.innerHTML=stateHtml('ไม่พบในบิลที่ลงผ่านแอป — กำลังหา '+esc(code)+' ใน Salesforce…');
+      try{
+        await ensureStatuses([code]);
+        if(tk!==S.tk) return;
+        const p=(code in _pickupStatusMap)?await getProd(code):null;
+        if(tk!==S.tk) return;
+        if(!p){ histList.innerHTML=stateHtml('ไม่พบ '+esc(code)); return; }
+        histList.innerHTML=minimalCard(p); decorate();
+      }catch(e){ if(tk===S.tk) histList.innerHTML=stateHtml('ค้นใน Salesforce ไม่สำเร็จ ('+esc(e.message)+')'); }
+    }
+    function minimalCard(p){
+      const code=normCode(p.code), ok=_pickupStatusMap[code]===ARRIVED_STATUS_VALUE, phone=p.custPhone?formatThaiPhone(p.custPhone):'';
+      return '<div class="ra2-count" data-ra2-res>ไม่พบในบิลที่ลงผ่านแอป · ข้อมูลจาก Salesforce</div>'
+        + '<div class="hist-row synced ra2-min"><div class="hist-ordercard">'
+          + '<div class="hist-custheader"><span class="hist-branch-name">'+esc(p.custName||'—')+'</span>'+(phone?'<span class="hist-branch-phone">'+IC.phone+esc(phone)+'</span>':'')+'</div>'
+          + (p.orderCode?'<div class="hist-orderrow"><div class="hist-orderid">'+esc(p.orderCode)+'</div></div>':'')
+          + '<div class="hist-top">'+esc(typeShort(p.type))+'</div>'
+          + '<div class="hist-skuline"><span class="hist-sku">'+esc('SKU '+skuText(p))+'</span><span class="hist-pid'+(ok?'':' notarrived')+'">'+esc(code)+'</span>'
+            + (ok?'<span class="hist-pid-icon" aria-label="ถึงสาขาแล้ว">'+HIST_STORE_ICON_SVG+'</span>':'')+'</div>'
+        + '</div></div>';
+    }
+    // ช่องนี้กำลังพิมพ์ด้วยแป้นโหมดไทยอยู่ไหม — จำไว้ เพราะพอเขียนเลขอังกฤษกลับลงช่องแล้ว ปุ่ม 2/3 ที่กดต่อในโหมดไทยจะออกมาเป็น "/" "-" (ไม่มีอักษรไทยให้เห็น)
+    // เลิกจำเมื่อช่องว่าง / เจอลิงก์ภาษาอังกฤษ (ยิงตอนโหมดอังกฤษ) / ระบบใส่ค่าให้เอง
+    const toEnglish=raw=>(S.kbTh||hasThai(raw))?mapThai(raw):raw;
+    function onInput(){
+      let raw=input.value;
+      if(!raw) S.kbTh=false; else if(hasThai(raw)) S.kbTh=true; else if(/https?:|Suitcube_Product__c/i.test(raw)) S.kbTh=false;
+      const en=toEnglish(raw);   // พิมพ์/ยิงตอนเครื่องอยู่โหมดไทย → ใช้ข้อความที่แปลงเป็นปุ่มภาษาอังกฤษแล้วก่อนกรอง
+      // ได้เป็นเลข P# → เขียนกลับลงช่องเป็นภาษาอังกฤษเลย (ลิงก์ที่เครื่องยิงยังพิมพ์ไม่จบ ปล่อยไว้ก่อน รอ Enter)
+      if(en!==raw&&/^[\dp#\s]*$/i.test(en)){ const pos=input.selectionStart; input.value=en; try{ if(pos!=null) input.setSelectionRange(pos,pos); }catch(e){} }
+      raw=en;
+      clearBtn.hidden=!raw;
+      if(cap.className!=='ra2-cap') setCap();
+      if(/https?:|Suitcube_Product__c/i.test(raw)) return;   // เครื่องยิงกำลังพิมพ์ลิงก์ใน QR — รอ Enter ค่อยแปลงเป็น P#
+      const q=digitsOf(raw);
+      if(q===S.q){ if(q&&!cachedFor(q)&&!(QCACHE[q]&&QCACHE[q].p)) renderSearch(); return; }
+      S.q=q; S.why={};
+      if(q) renderSearch(); else { S.tk++; clearTimeout(_stT); if(_histTab==='pickup'&&S.view==='list') renderPickupRangeList(); }
+    }
+    function setQuery(v){ S.kbTh=false; input.value=v; onInput(); }
+    // [แก้ 2026-09-30] เปิด Caps Lock ค้าง หรือตั้งเครื่องยิงให้พิมพ์ตัวใหญ่ทั้งหมด → ลิงก์ใน QR ใบสรุปมาแบบตัวพิมพ์สลับ (HTTPS://…/sUITCUBE_pRODUCT__C/A04tl…)
+    // เดิมหาคำ Suitcube_Product__c แบบตัวพิมพ์ต้องตรง เลยขึ้น "ไม่ใช่ QR บนใบสรุป" ทั้งที่ใช่ · และ Salesforce Id ถือตัวพิมพ์ (a04TL… กับ A04TL… คนละตัว Worker หาไม่เจอ)
+    // 3 ตัวท้ายของ Id 18 หลักบอกไว้ว่า 15 ตัวแรกตัวไหนเป็นตัวใหญ่ (ตัวละ 5 ตัวอักษร) → คืนตัวพิมพ์ที่ถูกได้เสมอ · Id 15 หลักไม่มีตัวบอก ใช้ตามที่อ่านได้
+    const SFID_TAIL='ABCDEFGHIJKLMNOPQRSTUVWXYZ012345';
+    function sfIdFixCase(id){
+      if(!/^[a-z0-9]{18}$/i.test(id)) return id;
+      const tail=id.slice(15).toUpperCase(); let out='';
+      for(let c=0;c<3;c++){
+        const n=SFID_TAIL.indexOf(tail[c]); if(n<0) return id;
+        for(let k=0;k<5;k++){ const ch=id[c*5+k]; out+=((n>>k)&1)?ch.toUpperCase():ch.toLowerCase(); }
+      }
+      return out+tail;
+    }
+    // ข้อความจากเครื่องยิง/กล้อง: ลิงก์ที่มี Salesforce Id ของสินค้า → ขอ P# จาก Salesforce · "P# 399665" หรือเลข 6 หลัก → ใช้ตรงๆ
+    //  · QR บนใบสรุป: https://d6f000002yqrnuao.lightning.force.com/lightning/r/Suitcube_Product__c/<Id>/view
+    //  · QR ป้ายงาน (ปุ่ม "Print QR" หน้า Suitcube Product ใน Salesforce): https://d6f000002yqrnuao--c.vf.force.com/<Id>
+    // [แก้ 2026-09-30 รอบ 2] เดิมรู้จักแค่แบบใบสรุป ยิง QR ป้ายงานแล้วขึ้น "ไม่ใช่ QR บนใบสรุป" → หา Id 15/18 ตัวที่เป็นท่อนหนึ่งของลิงก์ (ตามหลัง / หรือ =) ด้วย
+    const SFID_PART=/(?:^|[\/=])([a-z0-9]{15}(?:[a-z0-9]{3})?)(?=$|[\/?&#])/i;
+    async function applyScan(raw){
+      raw=String(raw||'').trim(); if(!raw) return;
+      const tk=++S.scanTk;
+      const direct=raw.match(/^(?:P#\s*)?(\d{6})$/i), m=raw.match(/Suitcube_Product__c\/([a-z0-9]{15,18})/i)||raw.match(SFID_PART);
+      if(direct){ setQuery(direct[1]); return; }
+      setQuery('');
+      // อ่านไม่ออก → โชว์ข้อความที่เครื่องอ่านได้ (ไม่เกิน 40 ตัว) ด้วย จะได้รู้ว่าเครื่องยิง/กล้องส่งอะไรมา
+      if(!m){ setCap('อ่านได้ "'+(raw.length>40?raw.slice(0,40)+'…':raw)+'" แต่ไม่ใช่ QR บนใบสรุป — พิมพ์ P# 6 หลักแทน','bad'); return; }
+      setCap('อ่าน QR ได้ · กำลังหา P# จาก Salesforce…','busy');
+      try{
+        const j=await getJSON(WORKER+'/repeat-alteration-product?id='+encodeURIComponent(sfIdFixCase(m[1])));
+        if(tk!==S.scanTk) return;
+        if(!j||!j.success||!j.product||!j.product.code) throw new Error('ไม่พบ');
+        const code=normCode(j.product.code); (PROD[code]=PROD[code]||{}).p=normProd(j);   // ได้ข้อมูลรอบมาด้วยแล้ว ไม่ต้องยิงซ้ำ
+        setQuery(digitsOf(code)); setCap('สแกนแล้ว → '+code,'ok');
+      }catch(e){ if(tk===S.scanTk) setCap('ไม่พบสินค้าของ QR นี้ใน Salesforce — พิมพ์ P# 6 หลักแทน','bad'); }
+    }
+
+    // ---------- รายชื่อผู้ตรวจ (GET /repeat-alteration-inspectors → {success,names:[...]}) ----------
+    function loadInspectors(force){
+      if(INSP.pr) return INSP.pr;
+      if(INSP.list&&!force&&Date.now()-INSP.at<10*60e3) return Promise.resolve(INSP.list);
+      INSP.fail='';
+      INSP.pr=getJSON(WORKER+'/repeat-alteration-inspectors').then(j=>{
+        if(!j||j.success!==true||!Array.isArray(j.names)) throw new Error((j&&j.error)||'ระบบตอบกลับไม่ครบ');
+        const seen=new Set();
+        // [phase2-47 2026-10-19 ตามที่ขอ "เอาชื่อภาษาไทยออกให้หมด"] ตัดชื่อที่มีอักษรไทยแม้แต่ตัวเดียวออกจากรายชื่อผู้ตรวจ (รวมชื่อ (พ้นสภาพ)) — Salesforce 218 ชื่อ มีไทย 124 (19 ต.ค.)
+        INSP.list=j.names.map(x=>String(x&&typeof x==='object'?(x.name||''):(x==null?'':x)).trim()).filter(x=>x&&!/admin|manager/i.test(x)&&!/[฀-๿]/.test(x)&&!seen.has(x)&&seen.add(x));   // [phase2-48 2026-10-20 ตามที่ขอ] ตัวกรองเดียวกับช่อง “พนักงานขาย” ที่หัวหน้า (ไม่มีชื่อไทย · ไม่มี admin/manager)
+        INSP.amb=new Set((Array.isArray(j.ambiguous)?j.ambiguous:[]).map(x=>String(x&&typeof x==='object'?(x.name||''):(x==null?'':x)).trim()).filter(Boolean));   // [D4] ชื่อที่ซ้ำหลาย record ใน Salesforce
+        INSP.at=Date.now(); return INSP.list;
+      }).catch(e=>{ INSP.fail=(e&&e.message)||'โหลดไม่สำเร็จ'; throw e; }).finally(()=>{ INSP.pr=null; });
+      return INSP.pr;
+    }
+    // ชื่อในรายชื่อที่ตรงกับ name แบบไม่สนตัวพิมพ์ (ไม่เจอ = '') — ใช้ใส่ค่าเริ่มต้นจากช่องพนักงานขายของฟอร์มหลักเฉพาะเมื่ออยู่ในรายชื่อผู้ตรวจ
+    function canonInsp(name){ const L=INSP.list; name=String(name||'').trim().toLowerCase(); if(!L||!name) return ''; return L.find(x=>x.toLowerCase()===name)||''; }
+    function onInspReady(){
+      const f=S.form; if(!f||S.view!=='form') return;
+      if(!f.inspector&&f.inspDefault){ const m=canonInsp(f.inspDefault); if(m){ f.inspector=m; const inp=view.querySelector('[data-ra2-insp]'); if(inp){ inp.value=m; fitInsp(inp); } } }
+      const box=view.querySelector('[data-ra2-isug]'); if(box&&!box.hidden){ const inp=view.querySelector('[data-ra2-insp]'); showSug(inp?inp.value:''); }
+      changed();
+    }
+    function retryInsp(){ loadInspectors(true).then(onInspReady,onInspReady); changed(); }
+    // ช่องผู้ตรวจ: พิมพ์ตรงกับชื่อในรายชื่อต่างแค่ตัวพิมพ์ (และมีชื่อเดียว) → ปรับเป็นชื่อในรายชื่อให้ตอนออกจากช่อง
+    function snapInsp(){ const f=S.form, inp=view.querySelector('[data-ra2-insp]'); if(!f||!inp||!INSP.list) return;
+      const v=inp.value.trim(); if(!v||INSP.list.includes(v)) return;
+      const m=INSP.list.filter(x=>x.toLowerCase()===v.toLowerCase()); if(m.length===1){ inp.value=m[0]; f.inspector=m[0]; fitInsp(inp); changed(); } }
+
+    // ---------- ฟอร์ม ----------
+    function branchOptions(){
+      const sel=document.getElementById('branchPickup'), out=[];
+      if(sel) [...sel.options].forEach(op=>{ const v=String(op.value||op.textContent||'').trim(); if(v&&!/Messenger|ขนส่ง/.test(v)&&!out.includes(v)) out.push(v); });
+      return out.length?out:['R3','T21','SQ1','PM','SC','CM','FP','KR','SL','NW','CC','BP','RCD','KK','PK','MG','CTW','WG'];
+    }
+    // [2026-10-21-13 ตามที่ขอ] นัดรับเลือก Messenger / ขนส่งเอกชน ได้ (เหมือนฟอร์มหลัก) → ต้องกรอกสถานที่ส่ง · ข้อความ " · จัดส่ง <วิธี> – <ที่อยู่>" ต่อท้ายรายละเอียด (ไป Lark + Salesforce · นับใน 255 ตัว) + ขึ้นบนใบสรุปแบบเดียวกับบิลปกติ
+    // Worker ยังไม่มีช่องเก็บวิธีจัดส่ง/ที่อยู่ของงานแก้ซ้ำ และรับ pickupBranch เป็นตัวอักษรอังกฤษ/ตัวเลขเท่านั้น → "ขนส่งเอกชน" ส่ง pickupBranch ว่าง
+    const RA_DELIV=['Messenger','ขนส่งเอกชน'], isDel=v=>RA_DELIV.includes(String(v||''));
+    const delivTxt=()=>{ const f=S.form; return f&&isDel(f.branch)&&String(f.addr||'').trim()?' · จัดส่ง '+f.branch+' – '+cleanTxt(String(f.addr).trim()):''; };
+    function setView(v){ S.view=v; card.classList.toggle('ra2-on',v!=='list'); view.hidden=v==='list'; if(v==='list') view.innerHTML=''; }
+    function backToList(){ S.form=null; S.done=null; S.err=''; setView('list');
+      if(S.q&&!histList.querySelector(':scope>[data-ra2-res]')) renderSearch(); else decorate();
+      histList.scrollTop=S.listTop||0; }
+    function openForm(code,oid){
+      const p=PROD[code]&&PROD[code].p; if(!p||p.blocked) return;   // blocked = ครบรอบ/สถานะไม่พร้อม/มีงานค้าง → ไม่เปิดฟอร์ม (ป้ายเทาโชว์เหตุผลแทน)
+      const n=roundOf(p); if(!n) return;
+      const o=(oid&&findOrder(oid))||null, d=o?((o.skuDetails||[])[codesOf(o).indexOf(code)]||{}):{};
+      const c=(o&&o.customer)||{}, nm=[c.firstname,c.lastname].filter(Boolean).join(' ');
+      const br=branchOptions(), pk=String((o&&o.pickupBranch)||'').trim();
+      let branch=''; if(o&&br.includes(pk)) branch=pk; else if(o&&br.includes(o.branch)) branch=o.branch; else { const t=document.getElementById('branchTop'); if(t&&br.includes(t.value)) branch=t.value; }
+      const staffEl=document.getElementById('staffInput');
+      S.form={code,o,p,n,larkId:String(p.larkRecordId||(o&&o.id)||''),type:p.type||d.type||'',sku:p.sku||d.sku||'',size:p.size||d.size||'',custName:nm||p.custName||'',custShow:(nm||p.custName||'—')+(c.nickname?' ('+c.nickname+')':''),
+        nick:c.nickname||'',phone:c.phone||p.custPhone||'',billNo:o?(o.orderNo||''):String(p.billNo||''),orderCode:p.orderCode||oCodeOf(o)||'',branch,date:isoPlus(7),inspDefault:(staffEl&&staffEl.value.trim())||'',inspector:'',
+        urgent:false,approver:'',urgentManual:false,addr:''};
+      S.form.inspector=canonInsp(S.form.inspDefault); S.err=''; S.listTop=histList.scrollTop;
+      setView('form'); view.innerHTML=formHtml(); wireForm(); loadLatest(code); loadInspectors().then(onInspReady,onInspReady);
+    }
+    function formHtml(){
+      const f=S.form, cfg=typeCfg(f.type), hasM=cfg.items.length>0, br=branchOptions();
+      return '<button type="button" class="ra2-back" data-ra2="back">'+IC.chevL+'รายการที่นัดรับ</button>'
+        + '<div class="ra2-sum"><div class="m"><div class="p">'+esc(f.code)+'<span class="ok" role="img" aria-label="ถึงสาขาแล้ว">'+HIST_STORE_ICON_SVG+'</span></div>'
+          + '<div class="s">'+esc(typeShort(f.type))+' · <span class="nw">'+esc(skuText(f))+'</span>'+(f.billNo?' · บิล <span class="nw">'+esc(f.billNo)+'</span>':'')+'</div>'
+          + '<div class="c">'+esc(f.custShow)+'</div></div><span class="rd">ครั้งที่ '+f.n+'</span></div>'
+        + '<div class="ra2-body" data-ra2-body>'
+          + '<div class="ra2-sec"><div class="seclabel"><span class="n serif">01</span><span class="t">รายละเอียด</span>'
+            + (hasM?'<div class="toptoggle"><button type="button" class="on">แก้ไขขนาด</button><button type="button">ไม่แก้ไข</button></div>':'')+'</div>'
+            + (hasM?'<div class="measure-list ra2-measure">'+cfg.items.map(buildMitemHtml).join('')+'</div><div class="ra2-off">ไม่แก้ขนาด — กด “แก้ไขขนาด” เพื่อเลือกจุด</div>'
+                   :'<div class="ra2-off">สินค้าประเภทนี้ไม่มีจุดวัด — เขียนรายละเอียดในหมายเหตุ</div>')
+            + '<div class="ra2-frow note"><span class="k">หมายเหตุ'+(hasM?'':' <span class="req">*</span>')+'</span><div class="ra2-nwrap"><textarea class="note-input" data-ra2-note rows="2" maxlength="'+LIMIT+'" placeholder="เพิ่มหมายเหตุ" aria-label="หมายเหตุ"></textarea><span class="ra2-cnt" data-ra2-cnt></span></div></div>'
+            + '<div class="ra2-hint" data-ra2-over role="alert" hidden></div>'
+            + '<div class="ra2-hint mut">ระบบจะเติม “บิลใหม่ …” ไว้ต้นรายละเอียดให้ (นับรวมในเลข '+LIMIT+' ตัวแล้ว) · เลขบิลใหม่ออกในนามสาขา '+esc(workBranch()||'—')+'</div>'
+          + '</div>'
+          + '<div class="ra2-sec"><div class="seclabel"><span class="n serif">02</span><span class="t">นัดรับ</span></div>'
+            + '<div class="ra2-frow"><span class="k">สาขาที่นัดรับ <span class="req">*</span></span><select class="ra2-sel" data-ra2-branch aria-label="สาขาที่นัดรับ"><option value="">เลือก…</option>'+[...br,...RA_DELIV].map(b=>'<option'+(b===f.branch?' selected':'')+'>'+esc(b)+'</option>').join('')+'</select></div>'
+            + '<div class="ra2-frow note" data-ra2-addrrow'+(isDel(f.branch)?'':' hidden')+'><span class="k">สถานที่ส่ง <span class="req">*</span></span><div class="ra2-nwrap"><textarea class="note-input" data-ra2-addr rows="2" placeholder="ชื่อผู้รับ ที่อยู่ เบอร์โทร" aria-label="สถานที่ส่ง" style="padding-right:0">'+esc(f.addr||'')+'</textarea></div></div>'
+            + '<div class="ra2-frow"><span class="k">วันที่นัดรับ <span class="req">*</span></span><button type="button" class="ra2-date" data-ra2="date" aria-expanded="false"><span data-ra2-dth></span>'+IC.down+'</button></div>'
+            + '<div class="ra2-cal" data-ra2-cal hidden></div>'
+            + '<div class="ra2-frow"><span class="k">งานด่วน</span><button type="button" class="urgent-chip" data-ra2="urgent" aria-pressed="false"><span class="dot"></span><span data-ra2-ulabel>ไม่ด่วน</span></button></div>'
+            + '<div class="ra2-frow" data-ra2-apprrow hidden><span class="k">ชื่อผู้อนุมัติงานด่วน <span class="req">*</span></span>'
+              + '<div class="type-picker approver-picker" data-ra2-appr><button type="button" class="type-picker-btn" data-ra2="apprbtn" aria-haspopup="listbox" aria-expanded="false"><span class="type-picker-label">เลือกผู้อนุมัติ</span><svg class="type-picker-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>'
+              + '<div class="type-picker-menu" role="listbox">'+approverNames().map(n=>'<div class="type-picker-opt" role="option" data-ra2="appr" data-value="'+esc(n)+'">'+esc(n)+'</div>').join('')+'</div></div></div>'
+            + '<div class="ra2-frow insp"><span class="k">ชื่อพนักงานตรวจสอบประจำสาขา <span class="req">*</span></span><input class="ra2-insp" data-ra2-insp value="'+esc(f.inspector)+'" placeholder="เลือกชื่อพนักงาน" autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-label="ชื่อพนักงานตรวจสอบประจำสาขา"></div>'
+            + '<div class="ra2-isug" data-ra2-isug hidden role="listbox"></div>'
+            + '<div class="ra2-hint" data-ra2-inspst role="status" hidden></div>'
+          + '</div>'
+        + '</div>'
+        + '<div class="ra2-err" data-ra2-err role="alert" hidden></div>'
+        + '<div class="ra2-foot"><button type="button" class="ra2-nb" data-ra2="back" aria-label="ย้อนกลับไปรายการที่นัดรับ" title="ย้อนกลับ">'+IC.left+'</button>'
+          + '<div class="ra2-fsum">'+esc(typeShort(f.type))+' · <span class="p">'+esc(f.code)+'</span></div>'
+          + '<button type="button" class="ra2-save" data-ra2="save" disabled>บันทึกข้อมูล</button></div>';
+    }
+    function wireForm(){
+      const list=view.querySelector('.ra2-measure');
+      if(list){
+        wireMeasureItems(view); // ตัวต่อสายช่องวัดตัวของฟอร์มหลัก (แก้ไข/ไม่แก้ไข · แตะซ้าย/ขวาทีละ 0.25 · เก็บเข้า · FB/NB/HB)
+        const tg=view.querySelector('.toptoggle');
+        if(tg) wireSimpleToggle(tg,i=>{ list.classList.toggle('hidden',i===1); changed(); });
+      }
+      resizeNoteInput(view.querySelector('[data-ra2-note]'));
+      fitInsp(view.querySelector('[data-ra2-insp]'));
+      paintPv(); changed();
+    }
+    // [phase2-33] Worker /product-latest ยังส่งคีย์เดิม "ต้นแขน (ขนาดต้นแขน)" (และ "… เก็บเข้า") — ทำสำเนาค่าด้วยคีย์ใหม่ให้ prevText อ่านได้
+    const mvOf=()=>{
+      const m=(S.form&&LATEST[S.form.code]&&LATEST[S.form.code].mv)||{};
+      const need=(nk,ok)=>m[nk]==null&&m[ok]!=null;
+      if(!need('ขนาดต้นแขน','ต้นแขน (ขนาดต้นแขน)')&&!need('ขนาดต้นแขน เก็บเข้า','ต้นแขน (ขนาดต้นแขน) เก็บเข้า')) return m;
+      const o=Object.assign({},m);
+      if(need('ขนาดต้นแขน','ต้นแขน (ขนาดต้นแขน)')) o['ขนาดต้นแขน']=m['ต้นแขน (ขนาดต้นแขน)'];
+      if(need('ขนาดต้นแขน เก็บเข้า','ต้นแขน (ขนาดต้นแขน) เก็บเข้า')) o['ขนาดต้นแขน เก็บเข้า']=m['ต้นแขน (ขนาดต้นแขน) เก็บเข้า'];
+      return o;
+    };
+    function prevText(label,dir){ const n=parseFloat(mvOf()[label]); if(isNaN(n)||!n) return ''; return dir?(n<0?'เก็บเข้า ':'ขยายออก ')+fmtInch(Math.abs(n)):fmtInch(n); }
+    const measureDefs=()=>typeCfg(S.form.type).items.filter(x=>x.kind!=='legStyle'&&x.kind!=='group');
+    // [แก้ 2026-09-30 ตามที่ขอ] ป้าย "ค่าปัจจุบันใน Salesforce:" → "แก้ไขครั้งที่ 1:" (ค่าวัดใน Salesforce = ค่าที่สั่งแก้ในบิลแรก) ใต้ชื่อจุดวัด (ตัวเอียงสีแดง) — มาจาก /product-latest
+    function paintPv(){
+      const list=view.querySelector('.ra2-measure'); if(!list||!S.form) return;
+      list.querySelectorAll('.ra2-pv').forEach(x=>x.remove());
+      const defs=measureDefs();
+      [...list.querySelectorAll('.mitem')].forEach((m,i)=>{ const d=defs[i]; if(!d) return;
+        const parts=[]; const p=prevText(d.label,!!d.dir); if(p) parts.push('<b>'+esc(p)+'</b> นิ้ว');
+        if(d.takeIn){ const t=prevText(d.label+' เก็บเข้า',false); if(t) parts.push('เก็บเข้า <b>'+esc(t)+'</b> นิ้ว'); }
+        if(parts.length) m.insertAdjacentHTML('beforeend','<div class="ra2-pv">แก้ไขครั้งที่ 1: '+parts.join(' · ')+'</div>'); });
+    }
+    // 1 บรรทัดใน Lark = 1 สินค้า และ " | " เป็นตัวคั่นฟิลด์ → ขึ้นบรรทัดใหม่แทนด้วยเว้นวรรค · "|" แทนด้วย "/"
+    const cleanTxt=t=>String(t==null?'':t).replace(/[\r\n]+/g,' ').replace(/\|/g,'/');
+    const noteVal=()=>{ const t=view.querySelector('[data-ra2-note]'); return t?cleanTxt(t.value):''; };
+    // จุดที่แก้ → [{label, dir, now, prev, rl, rv}] (rl/rv = แถวบนใบสรุป: ความยาว = ค่าใหม่ · จุดมีทิศทาง = "อก เก็บเข้า" 0.5)
+    function readChanges(){
+      const rows=[], list=view.querySelector('.ra2-measure'); if(!S.form||!list||list.classList.contains('hidden')) return rows;
+      const defs=measureDefs();
+      [...list.querySelectorAll('.mitem')].forEach((m,i)=>{ const d=defs[i]; if(!d||!m.classList.contains('editing')) return;
+        const num=m.querySelector('.numonly:not(.takein-input)'), v=num?getMitemValue(num):0;
+        if(v){ const w=v<0?'เก็บเข้า':'ขยายออก';
+          if(d.dir) rows.push({label:d.label,dir:true,now:w+' '+fmtInch(Math.abs(v)),prev:prevText(d.label,true),rl:d.label+' '+w,rv:fmtInch(Math.abs(v))});
+          else rows.push({label:d.label,dir:false,now:fmtInch(v),prev:prevText(d.label,false),rl:d.label,rv:fmtInch(v)}); }
+        const ti=m.querySelector('.takein-input'), tv=ti?getMitemValue(ti):0;
+        if(tv){ const lb=(d.takeInLabel||d.label.replace(/\s*\(.*\)$/,''))+' เก็บเข้า'; rows.push({label:lb,dir:false,now:fmtInch(Math.abs(tv)),prev:prevText(d.label+' เก็บเข้า',false),rl:lb,rv:fmtInch(Math.abs(tv))}); }
+      });
+      return rows;
+    }
+    // "รายละเอียดการแก้ไข" ที่ส่งเข้า Lark (≤255) แบบเดียวกับ phase2-19: "ป้าย ค่าเดิม→ค่าใหม่" · "ป้าย เก็บเข้า/ขยายออก X" · หมายเหตุท้ายสุด
+    function composeBody(rows){
+      // [phase2-46 ตามที่ขอ "ใส่สิ"] ช่องเก็บเข้า/ขยายออกใส่ค่าเก่า (ครั้งที่ 1) ด้วย เหมือนช่องความยาว
+      const dirTxt=r=>{ if(!r.prev) return r.label+' '+r.now; const pw=r.prev.split(' '), nw=String(r.now).split(' '); return pw[0]===nw[0]&&pw.length===2&&nw.length===2 ? r.label+' '+nw[0]+' '+pw[1]+'→'+nw[1] : r.label+' '+r.prev+'→'+r.now; };
+      const parts=(rows||readChanges()).map(r=>r.dir?dirTxt(r):r.label+' '+(r.prev?r.prev+'→':'')+r.now);
+      const note=noteVal().trim(); if(note) parts.push(note);
+      return parts.join(', ');
+    }
+    // งานด่วน: Worker ยังไม่มีช่องงานด่วนของงานแก้ซ้ำ → ขึ้นต้นรายละเอียดด้วยป้ายแบบเดียวกับที่ flow หลักแปะในหมายเหตุ Salesforce (นับรวมใน 255 ตัว)
+    const urgentPrefix=()=>{ const f=S.form; return f&&f.urgent?'!! งานด่วน !!'+(f.approver?' (อนุมัติ: '+cleanTxt(f.approver)+')':'')+' ':''; };
+    function composeDetail(rows){ const b=composeBody(rows); return b?cleanTxt(urgentPrefix()+b+delivTxt()):''; }
+    const detailLen=()=>BILL_RESERVE+urgentPrefix().length+composeBody().length+delivTxt().length;   // รวม "บิลใหม่ <เลข> " ที่ Worker เติมให้ (19 ตัว) แล้ว ≤ 255
+    // ชื่อผู้อนุมัติ = รายชื่อ/ลำดับเดียวกับฟอร์มหลัก (อ่านจากเมนูของฟอร์มหลักในหน้านี้ · ไม่มีค่อยใช้ชุดเดียวกันที่เขียนไว้)
+    const approverNames=()=>{ const l=[...document.querySelectorAll('#urgentApproverPicker .type-picker-opt')].map(o=>o.dataset.value).filter(Boolean); return l.length?l:['Benz Sale Mng.','Aor','Saipahn','Emm']; };
+    function setUrgent(on){
+      const f=S.form; if(!f) return; f.urgent=!!on;
+      const chip=view.querySelector('[data-ra2="urgent"]');
+      if(chip){ chip.classList.toggle('on',f.urgent); chip.setAttribute('aria-pressed',String(f.urgent)); const l=chip.querySelector('[data-ra2-ulabel]'); if(l) l.textContent=f.urgent?'ด่วน':'ไม่ด่วน'; }
+      const row=view.querySelector('[data-ra2-apprrow]'); if(row) row.hidden=!f.urgent;
+      if(!f.urgent) closeApprover();
+      changed();
+    }
+    function paintApprover(){ const pk=view.querySelector('[data-ra2-appr]'); if(!pk||!S.form) return; const v=S.form.approver;
+      const l=pk.querySelector('.type-picker-label'); if(l) l.textContent=v||'เลือกผู้อนุมัติ';
+      pk.querySelectorAll('.type-picker-opt').forEach(o=>o.classList.toggle('on',o.dataset.value===v)); }
+    function closeApprover(){ const pk=view.querySelector('[data-ra2-appr]'); if(!pk) return; pk.classList.remove('open'); const b=pk.querySelector('[data-ra2="apprbtn"]'); if(b) b.setAttribute('aria-expanded','false'); }
+    const staffList=()=>INSP.list||[];   // รายชื่อผู้ตรวจจาก Salesforce เท่านั้น (ไม่ใช้ STAFF_LIST ของฟอร์มหลัก)
+    function inspOk(name){ name=String(name||'').trim(); if(!name) return false; return staffList().includes(name)&&!INSP.amb.has(name); }   // ต้องตรงตัวกับชื่อในรายชื่อ · ยังไม่มีรายชื่อ = ไม่ผ่าน
+    function formValid(){ const f=S.form; if(!f) return false; const b=composeBody();
+      return b.length>0&&detailLen()<=LIMIT&&!!f.branch&&(!isDel(f.branch)||!!String(f.addr||'').trim())&&!!f.date&&f.date>=isoPlus(0)&&inspOk(f.inspector)&&(!f.urgent||!!f.approver)&&!(f.p&&f.p.blocked)&&workBranchOk()&&!hardOn(f); }
+    function missingText(){ const f=S.form; if(!f) return ''; const b=composeBody(), m=[];
+      if(!b) m.push(typeCfg(f.type).items.length?'จุดที่แก้หรือหมายเหตุ':'หมายเหตุ'); if(b&&detailLen()>LIMIT) m.push('ข้อความยาวเกิน '+LIMIT+' ตัว'+(f.urgent?' (รวมป้ายงานด่วน)':''));
+      if(!f.branch) m.push('สาขาที่นัดรับ'); else if(isDel(f.branch)&&!String(f.addr||'').trim()) m.push('สถานที่ส่ง'); if(!f.date) m.push('วันที่นัดรับ'); if(f.urgent&&!f.approver) m.push('ชื่อผู้อนุมัติงานด่วน');
+      if(!inspOk(f.inspector)) m.push(!INSP.list?'รายชื่อผู้ตรวจ (ยังโหลดไม่สำเร็จ)':(f.inspector&&INSP.amb.has(String(f.inspector).trim())?'ชื่อผู้ตรวจอื่น (ชื่อนี้ซ้ำใน Salesforce)':(f.inspector?'ชื่อผู้ตรวจที่อยู่ในรายชื่อ':'ชื่อผู้ตรวจ'))); if(f.p&&f.p.blocked) m.push(f.p.blocked.message); if(!workBranchOk()) m.push('สาขาที่ทำรายการ (ช่อง “สาขา” ด้านบนของหน้าหลัก)'); if(hardOn(f)) m.push(f.hard.message); return m.join(' · '); }
+    function showErr(t,code,act){ const el=view.querySelector('[data-ra2-err]'); if(!el) return; el.hidden=!t; el.innerHTML=t?IC.warn+'<span>'+esc(t)+(code?' <span class="cd">('+esc(code)+')</span>':'')+(act==='recheck'?'<br><button type="button" class="rt" data-ra2="recheck">ตรวจสอบอีกครั้ง</button>':'')+'</span>':''; }
+    // อัปเดตตัวนับ/วันที่/ปุ่มบันทึกในที่เดิม (ไม่วาดแถบล่างใหม่ — กันคลิกแรกหายตอนช่องเสียโฟกัส)
+    function changed(){
+      const f=S.form; if(!f||S.view!=='form') return;
+      if(f.hard&&!hardOn(f)){ f.hard=null; if(!S.errRetry){ S.err=''; showErr(''); } }   // [phase2-33 · P2] ค่าที่เป็นต้นเหตุ (ผู้ตรวจ/วันนัดรับ) เปลี่ยนแล้ว → ปลดล็อก + ซ่อน error เดิม
+      const n=detailLen(), cnt=view.querySelector('[data-ra2-cnt]'), over=view.querySelector('[data-ra2-over]');
+      if(cnt){ cnt.innerHTML='<b>'+n+'</b> / '+LIMIT; cnt.classList.toggle('over',n>LIMIT); }
+      if(over){ over.hidden=n<=LIMIT; over.textContent=n>LIMIT?'ข้อความที่จะบันทึกยาว '+n+' ตัว (รวมเลขบิลใหม่ที่ระบบเติมให้ '+BILL_RESERVE+' ตัว) เกิน '+LIMIT+' — ลดหมายเหตุลงอีก '+(n-LIMIT)+' ตัว'+(f.urgent?' (ป้ายงานด่วนใช้ '+urgentPrefix().length+' ตัว)':'')+' ถึงจะบันทึกได้':''; }
+      const dt=view.querySelector('[data-ra2-dth]'), db=view.querySelector('[data-ra2="date"]');
+      if(dt) dt.textContent=f.date?dayText(f.date):'เลือกวันที่'; if(db) db.classList.toggle('empty',!f.date);
+      const ins=view.querySelector('[data-ra2-insp]'); if(ins) ins.classList.toggle('bad',!!f.inspector&&!inspOk(f.inspector));
+      const ist=view.querySelector('[data-ra2-inspst]');
+      if(ist){   // สถานะรายชื่อผู้ตรวจ: กำลังโหลด / โหลดไม่สำเร็จ (ปุ่มลองใหม่) / ไม่มีรายชื่อ — สร้างใหม่เฉพาะตอนสถานะเปลี่ยน (ไม่ทำลายปุ่มระหว่างกด)
+        const k=(!INSP.list&&INSP.pr)?'load':(!INSP.list&&INSP.fail?'fail:'+INSP.fail:(INSP.list&&!INSP.list.length?'empty':(INSP.list&&f.inspector&&INSP.amb.has(String(f.inspector).trim())?'amb:'+String(f.inspector).trim():'')));
+        if(ist._k!==k){ ist._k=k; ist.hidden=!k; ist.className='ra2-hint'+(k==='load'?' mut':'');
+          ist.innerHTML=!k?'':(k==='load'?'กำลังโหลดรายชื่อผู้ตรวจจาก Salesforce…':(k==='empty'?'ไม่มีรายชื่อผู้ตรวจในระบบ — บันทึกไม่ได้ (แจ้งผู้ดูแลระบบ)':(k.indexOf('amb:')===0?'ชื่อผู้ตรวจ “'+esc(k.slice(4))+'” ซ้ำกันหลายรายการใน Salesforce — ระบบไม่เลือกให้เอง · เลือกชื่ออื่น หรือแจ้งผู้ดูแลระบบให้แก้ข้อมูลใน Salesforce':'โหลดรายชื่อผู้ตรวจไม่สำเร็จ ('+esc(INSP.fail)+') · <button type="button" class="rt" data-ra2="inspretry">ลองใหม่</button>'))); } }
+      const b=view.querySelector('[data-ra2="save"]'); if(!b) return;
+      const ok=formValid(), label=S.sending?'<span class="ra2-spin"></span>'+(S.checking?'กำลังตรวจสอบ…':'กำลังบันทึก…'):(S.err&&S.errRetry?'ลองบันทึกอีกครั้ง':'บันทึกข้อมูล');
+      b.disabled=S.sending||!ok; if(b._l!==label){ b.innerHTML=label; b._l=label; }
+      if(ok||S.sending) b.removeAttribute('title'); else b.title='ยังขาด: '+missingText();
+    }
+    // ช่องผู้ตรวจ: กว้างตามชื่อ (ต่ำสุด 96px) + รายชื่อแนะนำจาก Salesforce (STAFF_LIST ของแอป)
+    let _fitSpan=null;
+    function fitInsp(inp){ if(!inp) return;
+      if(!_fitSpan){ _fitSpan=document.createElement('span'); _fitSpan.setAttribute('aria-hidden','true'); _fitSpan.style.cssText='position:absolute;visibility:hidden;white-space:pre;left:-9999px;top:0'; document.body.appendChild(_fitSpan); }
+      const cs=getComputedStyle(inp); _fitSpan.style.font=cs.font; _fitSpan.textContent=inp.value||inp.placeholder||'';
+      const extra=parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight)+parseFloat(cs.borderLeftWidth)+parseFloat(cs.borderRightWidth)+6;
+      inp.style.width=Math.max(96,Math.ceil(_fitSpan.getBoundingClientRect().width+extra))+'px'; }
+    function showSug(qv){ const box=view.querySelector('[data-ra2-isug]'), inp=view.querySelector('[data-ra2-insp]'); if(!box) return;
+      const L=staffList(); qv=String(qv||'').trim().toLowerCase(); let html;
+      if(!L.length){
+        html=INSP.pr?'<div class="nf">กำลังโหลดรายชื่อผู้ตรวจ…</div>'
+          :'<div class="nf">'+(INSP.fail?'โหลดรายชื่อผู้ตรวจไม่สำเร็จ':'ไม่มีรายชื่อผู้ตรวจในระบบ')+' · <button type="button" class="rt" data-ra2="inspretry">ลองใหม่</button></div>';
+      }else{
+        const SHOW=40, hits=(qv&&!L.some(x=>x.toLowerCase()===qv))?L.filter(x=>x.toLowerCase().includes(qv)):L, shown=hits.slice(0,SHOW);
+        html=shown.length?shown.map(x=>'<div class="s" role="option" data-ra2="insp" data-name="'+esc(x)+'">'+IC.user+'<b>'+esc(x)+'</b>'+(INSP.amb.has(x)?'<span class="amb">ซ้ำใน Salesforce</span>':'')+'</div>').join('')
+            +(hits.length>shown.length?'<div class="nf">แสดง '+shown.length+' จาก '+hits.length+' ชื่อ — พิมพ์เพิ่มเพื่อกรอง</div>':'')
+          :'<div class="nf">ไม่พบชื่อที่ตรงกับ “'+esc(qv)+'” ในรายชื่อผู้ตรวจ — เลือกจากรายชื่อเท่านั้น</div>';
+      }
+      box.innerHTML=html; box.hidden=false; if(inp) inp.setAttribute('aria-expanded','true');
+      try{ box.scrollIntoView({block:'nearest'}); }catch(x){} }   // รายชื่อยาวขึ้นแล้ว (สูงสุด 40 ชื่อ เลื่อนในกล่อง) — ให้กล่องโผล่ในพื้นที่ที่เห็นเสมอ
+    function hideSug(){ const box=view.querySelector('[data-ra2-isug]'), inp=view.querySelector('[data-ra2-insp]'); if(box) box.hidden=true; if(inp) inp.setAttribute('aria-expanded','false'); }
+    // ปฏิทินวันนัดรับ (ย้อนหลังไม่ได้) — วางเป็นแถวใต้ช่อง ไม่ลอยทับ
+    const TH_MF=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+    function calHtml(y,m,sel){
+      const today=isoPlus(0), first=new Date(y,m,1).getDay(), dim=new Date(y,m+1,0).getDate(), tp=today.split('-'), atMin=(y===+tp[0]&&m===+tp[1]-1);   // เดือนปัจจุบันของ "วันนี้เวลาไทย" = ถอยเดือนไม่ได้
+      let g=''; for(let i=0;i<first;i++) g+='<span class="d e"></span>';
+      for(let d=1;d<=dim;d++){ const iso=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+        g+='<button type="button" class="d'+(iso===today?' today':'')+(iso===sel?' sel':'')+'" data-ra2="day" data-date="'+iso+'"'+(iso<today?' disabled':'')+'>'+d+'</button>'; }
+      return '<div class="h"><button type="button" class="nav" data-ra2="calnav" data-d="-1"'+(atMin?' disabled':'')+'>'+IC.chevL+'ก่อนหน้า</button><div class="ti">'+TH_MF[m]+' '+(y+543)+'</div><button type="button" class="nav" data-ra2="calnav" data-d="1">ถัดไป'+IC.chev+'</button></div>'
+        + '<div class="dow">'+THAI_DAYS_ABBR.map(x=>'<span>'+x+'</span>').join('')+'</div><div class="grid">'+g+'</div>';
+    }
+
+    // ---------- บันทึก → ใบสรุป → อัปโหลดรูปบีบอัด (phase2-33 · Worker R19.3-r2) ----------
+    // กำลังบันทึก หรืออยู่หน้าผลบันทึกที่ยังวาด/อัปโหลดรูปไม่เสร็จ → ห้ามปิดป๊อปอัป/สลับแท็บ/กลับรายการ (อยู่ได้ไม่เกินเวลาหมดอายุของคำขอ)
+    const holding=()=>S.sending||!!(S.done&&S.done.busy&&S.view==='done');
+    // [phase2-33 · P5] อัปโหลดรูปเข้า Lark ล้มและยังไม่สำเร็จ → ออกจากหน้านี้แล้วอัปโหลดภายหลังไม่ได้ → ถามก่อนออกทุกทาง (เสร็จสิ้น · กลับ · × · แตะพื้นหลัง · สลับแท็บ)
+    const leaveBlocked=()=>S.view==='done'&&!!S.done&&S.done.upOk===false&&!S.done.busy&&!S.done.leaveOk;
+    const LEAVE_MSG='รูปยังไม่ถูกอัปโหลด — ออกไปแล้วอัปโหลดภายหลังไม่ได้ ต้องการออกใช่ไหม';
+    let _leaveAsk=false;
+    function askLeave(go){
+      if(_leaveAsk) return; _leaveAsk=true; const d=S.done;
+      confirmDialog(LEAVE_MSG,'ออกไปเลย').then(ok=>{ _leaveAsk=false; if(ok&&d&&S.done===d&&S.view==='done'&&!d.busy){ d.leaveOk=true; go(); } },()=>{ _leaveAsk=false; });
+    }
+    // [phase2-33 · P2] รหัส error ที่ลองซ้ำก็ไม่ได้ผล — สถานะสินค้า/ข้อมูลใน Salesforce เป็นต้นเหตุ → ปุ่มบันทึกล็อก + ป้ายบนการ์ดเป็นเทา (จนกว่าจะเปิดป๊อปอัปใหม่/สถานะเปลี่ยน)
+    // ชื่อผู้ตรวจ (inspector_not_found / ambiguous_inspector) กับวันนัดรับ (date_past) → ปุ่มบันทึกล็อกจนกว่าค่านั้นในฟอร์มจะเปลี่ยน · ข้อความไทยของ Worker แสดงตามเดิมทุกตัวอักษร ไม่เติม "ลองอีกครั้งได้"
+    const HARD_PRODUCT=/^(full|status_not_ready|pending_exists|f93_stuck|round_unknown|slot_occupied|slot_mismatch|product_mismatch|ambiguous_product|product_not_found)$/;
+    const HARD_FIELD=/^(inspector_not_found|ambiguous_inspector|date_past|date_too_far)$/;
+    const hardCause=(code,f)=>/^(inspector_not_found|ambiguous_inspector)$/.test(code)?'insp:'+String(f.inspector||'').trim():(/^(date_past|date_too_far)$/.test(code)?'date:'+f.date:'');
+    const hardOn=f=>!!(f&&f.hard&&hardCause(f.hard.code,f)===f.hard.cause);
+    const isAuthCode=c=>/^(no_token|token_invalid|token_expired|token_revoked)$/.test(String(c||''));
+    // [phase2-33 · P3 / D2] branch = สาขาที่ล็อกอิน/ทำรายการ (ช่อง "สาขา" ด้านบนของหน้าหลัก — Worker ออกเลขบิลใหม่ในนามสาขานี้ เหมือน generateBillNo ของแอปหลัก)
+    const workBranch=()=>{ const t=document.getElementById('branchTop'); return t?String(t.value||'').trim():''; };
+    const workBranchOk=()=>/^[A-Za-z0-9]{1,20}$/.test(workBranch());
+    // [phase2-33 · P1] เครือข่ายล้ม/หมดเวลา/ตอบไม่ใช่ JSON ตอนบันทึก = ไม่รู้ว่า Worker เขียนบรรทัดลง Lark ไปแล้วหรือยัง → ถาม GET สดของ P# นี้ : มีบรรทัดค้างของ P# นี้แล้ว = บันทึกสำเร็จ (ใช้ recordId/billNoNew/round จากบรรทัดนั้น)
+    const pendInfo=x=>{
+      if(x&&typeof x==='object') return {recordId:String(x.recordId||''),billNoNew:String(x.billNoNew||''),round:+x.round||0,detail:typeof x.detail==='string'?x.detail:null,inspector:typeof x.inspector==='string'?x.inspector:null,pickupDate:typeof x.pickupDate==='string'?x.pickupDate:null};
+      // [phase2-34 · P10] แบบข้อความ "P# n | บิลใหม่ X | ผู้ตรวจ ชื่อ | นัดรับ YYYY-MM-DD | รายละเอียด…" (สเปกข้อ 3) — แยกค่าที่เก็บไว้จริงไว้เทียบกับฟอร์ม
+      const sx=String(x||''), m=/บิลใหม่\s+([A-Za-z0-9]+)/.exec(sx), fl=sx.split(' | ');
+      const ins=fl.length>=3&&/^ผู้ตรวจ /.test(fl[2])?fl[2].replace(/^ผู้ตรวจ /,'').trim():null, dt=fl.length>=4&&/^นัดรับ \d{4}-\d{2}-\d{2}$/.test(fl[3])?fl[3].replace(/^นัดรับ /,''):null;
+      return {recordId:'',billNoNew:m?m[1]:'',round:0,detail:fl.length>=5?fl.slice(4).join(' | '):null,inspector:ins,pickupDate:dt};
+    };
+    // [phase2-34 · P9] Worker R19.3-r3 ใส่ pendingKnown:false ใน GET /repeat-alteration-product เมื่ออ่านรายการค้างจาก Lark ไม่ได้ (pending:[] ตอนนั้น "ไม่ได้แปลว่าไม่มี") · Worker รุ่นก่อนไม่มีฟิลด์นี้ → null = ถือว่ารู้ (พฤติกรรมเดิม)
+    const pkOf=(j,p)=>{ const v=(p&&p.pendingKnown!==undefined)?p.pendingKnown:(j&&j.pendingKnown); return (v===false||v==='false')?false:((v===true||v==='true')?true:null); };
+    async function recoverSaved(code,f){
+      let lastErr=null;
+      for(let i=0;i<3;i++){
+        if(i) await new Promise(r=>setTimeout(r,i*1500));   // เครือข่ายอาจยังสะดุด / Lark อ่านไม่ได้ชั่วคราว — ลองถามใหม่ 2 รอบ (รอ 1.5 วิ / 3 วิ)
+        try{
+          const j=await getJSON(WORKER+'/repeat-alteration-product?code='+encodeURIComponent(code),null,15000);
+          if(!j||j.success!==true||!j.product) throw new Error((j&&j.error)||'ตรวจสถานะสินค้าไม่ได้');
+          const p=normProd(j), pend=Array.isArray(p.pending)?p.pending:[];
+          if(!pend.length&&pkOf(j,p)===false){   // [P9] Worker บอกว่าอ่านรายการค้างไม่ได้ → pending:[] ไม่ใช่หลักฐานว่ายังไม่ได้บันทึก · ไม่ทับข้อมูลสินค้าที่มีอยู่ด้วยผลที่ไม่ครบ · รอแล้วถามใหม่
+            lastErr=new Error('ระบบหลังบ้านอ่านรายการค้างจาก Lark ไม่ได้ในขณะนี้'); lastErr.lark=true; continue;
+          }
+          (PROD[code]=PROD[code]||{}).p=p;   // ผลสดไว้ให้ป้ายบนการ์ด
+          if(S.form===f&&f.p&&f.p.id===p.id) f.p=p;   // ฟอร์มใช้ผลสดนี้ต่อ (ถ้าสถานะเปลี่ยนเป็น blocked ระหว่างนี้ ปุ่มบันทึกล็อกเอง)
+          if(!pend.length) return {saved:false,known:true};
+          const x=pendInfo(pend[0]);
+          return {saved:true,j:{success:true,larkRecordId:x.recordId||String(p.larkRecordId||f.larkId||''),billNoNew:x.billNoNew,round:x.round||f.n,detail:x.detail,inspector:x.inspector,pickupDate:x.pickupDate,recovered:true}};
+        }catch(e){ lastErr=e; if(!(e&&e.net)) break; }   // Worker ตอบมาแล้วแต่ไม่ครบ = ไม่ต้องถามซ้ำ · ล้มที่เครือข่าย = ถามอีกรอบ
+      }
+      return {saved:false,known:false,err:lastErr};
+    }
+    async function submit(opt){
+      const f=S.form; if(!f||S.sending) return;   // กันกดซ้ำ
+      const recheck=!!(opt&&opt.recheck);   // [P9] ปุ่ม "ตรวจสอบอีกครั้ง" = ไม่ส่งบันทึกใหม่ · ถามสถานะสดของ P# นี้อย่างเดียว (พบบรรทัดค้างของ P# นี้ = ถือว่าบันทึกแล้ว)
+      if(!recheck&&!formValid()){ showErr('ยังขาด: '+missingText()); return; }
+      const rows=readChanges(), detail=composeDetail(rows), note=noteVal().trim();
+      // สัญญา POST /repeat-alteration-submit: Worker อ่านสถานะ/รอบ/ชื่อลูกค้าจาก Salesforce สดเอง (ไม่เชื่อค่าจากหน้า) — ส่งแค่ที่ผู้ใช้กรอก + กุญแจหาสินค้า/แถวบิล
+      // branch = สาขาที่ทำรายการ (เลขบิลใหม่ออกในนามสาขานี้) · pickupBranch = สาขาที่นัดรับที่เลือกในฟอร์ม (Worker เก็บเป็นข้อมูลเมื่อสร้างแถวใหม่เท่านั้น)
+      const payload={sfRecordId:f.p.id, productCode:f.code, branch:workBranch(), pickupBranch:(/^[A-Za-z0-9]+$/.test(f.branch)?f.branch:''), detail, inspectorName:String(f.inspector).trim(), pickupDate:f.date, urgent:!!f.urgent};
+      if(f.larkId) payload.larkRecordId=f.larkId;
+      if(f.urgent&&f.approver) payload.approver=f.approver;
+      if(!recheck&&!payload.sfRecordId){ showErr('ไม่พบรหัสสินค้าใน Salesforce — กลับไปแตะป้ายใหม่อีกครั้ง'); return; }
+      S.sending=true; S.checking=recheck; S.err=''; S.errRetry=false; f.hard=null; showErr(''); changed();
+      let j=null, fail=null, recovered=false;
+      if(recheck){ fail=new Error('สินค้านี้มีรายการนำกลับมาแก้ค้างอยู่แล้ว'); fail.code='pending_exists'; fail.recheck=true; }
+      else{
+        try{
+          j=await getJSON(WORKER+'/repeat-alteration-submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)},30000);
+          if(!j||j.success!==true){ fail=new Error((j&&j.error)||'ระบบไม่ยืนยันการบันทึก'); fail.code=(j&&j.code)?String(j.code):''; }
+        }catch(e){ fail=e||new Error('บันทึกไม่สำเร็จ'); }
+      }
+      // [P1/P9] ไม่ได้คำตอบ (หรือเคยไม่ได้คำตอบในฟอร์มนี้แล้วรอบนี้ Worker บอกว่ามีบรรทัดค้าง) → ตรวจก่อนว่าบันทึกไปแล้วหรือยัง ไม่บอกว่า "ไม่สำเร็จ" ทั้งที่สำเร็จ
+      if(fail&&fail.net) f.netFail=true;
+      if(fail&&(fail.net||(fail.code==='pending_exists'&&(f.netFail||fail.recheck)))){
+        if(S.form===f) showErr(fail.net?'ไม่ได้รับคำตอบจากระบบ — กำลังตรวจสอบว่าบันทึกสำเร็จหรือไม่ …':'กำลังตรวจสอบรายการค้างของสินค้านี้ …');
+        const r=await recoverSaved(f.code,f);
+        if(r.saved){ j=r.j; fail=null; recovered=true; }
+        else if(fail.net){ f.netSuspect=!r.known; f.suspectLark=!!(r.err&&r.err.lark); }   // ถามสถานะก็ไม่ได้ (หรือ Worker อ่านรายการค้างจาก Lark ไม่ได้) = ยังไม่รู้ผล → "ยังไม่ทราบ" ไม่ใช่ "ตรวจแล้วว่ายังไม่ได้บันทึก"
+        else{ fail.probable=true; fail.why=r.known?'ระบบอาจยังอัปเดตไม่ทัน':((r.err&&r.err.message)||'ตรวจสอบสถานะไม่ได้'); }   // [P9] Worker ปฏิเสธเพราะมีบรรทัดค้าง หลังเครือข่ายล้มมาแล้ว แต่ยังดึงบรรทัดนั้นมายืนยันไม่ได้ = น่าจะบันทึกไปแล้วก่อนหน้านี้
+      }
+      if(fail){
+        S.sending=false; S.checking=false;
+        const code=fail.code?String(fail.code):'', msg=fail.message||String(fail);
+        let act='';
+        if(fail.probable){   // [P9] ไม่ใช่ error ของ Worker ที่ลองซ้ำได้ — บรรทัดค้างน่าจะเป็นของเราเอง: ล็อกปุ่มบันทึก (ส่งซ้ำก็ถูกปฏิเสธ) + ให้ตรวจสอบอีกครั้งโดยไม่ส่งซ้ำ
+          const pp=PROD[f.code]&&PROD[f.code].p, blk={code:'pending_exists',message:BLOCK_MSG.pending_exists};
+          if(pp) pp.blocked=blk; if(f.p&&f.p!==pp) f.p.blocked=blk;
+          if(!pp&&!f.p) f.hard={code,message:blk.message,cause:''};
+          paintChips(f.code);
+          S.err='ระบบแจ้งว่าสินค้านี้มีรายการนำกลับมาแก้ค้างอยู่แล้ว — น่าจะเป็นรายการที่บันทึกไปแล้วตอนเครือข่ายขัดข้องก่อนหน้านี้ แต่ยังดึงรายการนั้นมายืนยันไม่ได้ ('+fail.why+') · ไม่ต้องบันทึกซ้ำ รอสักครู่แล้วกด “ตรวจสอบอีกครั้ง”';
+          S.errRetry=false; act='recheck';
+        }else if(HARD_PRODUCT.test(code)){   // สถานะของสินค้าเปลี่ยนไปแล้ว — ลองซ้ำไม่ได้ผล · ป้ายบนการ์ดเปลี่ยนตามเมื่อกลับไปรายการ
+          const pp=PROD[f.code]&&PROD[f.code].p, blk={code,message:msg};
+          if(pp) pp.blocked=blk; if(f.p&&f.p!==pp) f.p.blocked=blk;   // f.p กับ PROD อาจเป็นคนละอ็อบเจ็กต์ (หลังกู้สถานะ) → ตั้งทั้งสอง ปุ่มบันทึกล็อกแน่นอน
+          if(!pp&&!f.p) f.hard={code,message:msg,cause:''};
+          paintChips(f.code);
+          S.err=msg; S.errRetry=false;
+        }else if(HARD_FIELD.test(code)){   // ผู้ตรวจ/วันนัดรับ — แก้ค่าในฟอร์มก่อนถึงจะบันทึกได้
+          f.hard={code,message:msg,cause:hardCause(code,f)};
+          S.err=msg; S.errRetry=false;
+        }else if(isAuthCode(code)){   // บัตรผ่านหมดอายุ: ด่านล็อกอินขึ้น · ล็อกอินใหม่ = โหลดหน้าใหม่ทั้งหน้า ฟอร์มนี้จะหาย (ยังไม่ได้บันทึกอะไร)
+          S.err='บัตรผ่านเข้าสู่ระบบหมดอายุ — ยังไม่ได้บันทึก · เข้าสู่ระบบใหม่แล้วต้องกรอกฟอร์มนำกลับมาแก้อีกครั้ง'; S.errRetry=true;
+        }else if(fail.net){
+          S.err=f.netSuspect
+            ?(f.suspectLark
+              ?'ยังไม่ทราบว่าบันทึกสำเร็จหรือไม่ ('+msg+') — ระบบหลังบ้านอ่านรายการค้างจาก Lark ไม่ได้ในขณะนี้ จึงยืนยันไม่ได้ว่าบันทึกไปแล้วหรือยัง · ข้อมูลในฟอร์มยังอยู่ รอสักครู่แล้วกดบันทึกอีกครั้ง ระบบจะเช็กให้ก่อนว่าบันทึกไปแล้วหรือยัง'
+              :'ยังไม่ทราบว่าบันทึกสำเร็จหรือไม่ ('+msg+') — ตรวจสอบอินเทอร์เน็ตแล้วกดบันทึกอีกครั้ง ระบบจะเช็กให้ว่าบันทึกไปแล้วหรือยัง')
+            :'บันทึกไม่สำเร็จ — '+msg+' · ตรวจแล้วว่ายังไม่ได้บันทึก ข้อมูลในฟอร์มยังอยู่ ลองอีกครั้งได้';
+          S.errRetry=true;
+        }else{ S.err='บันทึกไม่สำเร็จ — '+msg+' · ข้อมูลในฟอร์มยังอยู่ ลองอีกครั้งได้'; S.errRetry=true; }
+        if(S.form===f){ showErr(S.err,code,act); changed(); }
+        return;
+      }
+      // สำเร็จ: ใช้รอบ/เลขบิลใหม่ตามที่ Worker ออกให้จริง · สินค้านี้มีงานค้างแล้ว → ป้ายเป็น "รอหลังบ้านส่ง" จนกว่าจะโหลดใหม่ (Worker ปฏิเสธซ้ำอยู่แล้ว)
+      const rn=(Number.isInteger(+j.round)&&+j.round>0)?+j.round:f.n; f.n=rn;
+      const pp=PROD[f.code]&&PROD[f.code].p;
+      if(pp) pp.blocked={code:'pending_exists',message:'บันทึกงานแก้ครั้งที่ '+rn+' แล้ว — รอหลังบ้านลงชื่อและส่งข้อมูลไป Salesforce'};
+      paintChips(f.code);
+      S.sending=false; S.checking=false; S.form=null;
+      // [P4] Worker ตัดรายละเอียดให้พอดี 255 ตัวรวมเลขบิลใหม่ — ถ้าที่ Worker เก็บสั้นกว่าที่ส่ง (หลังยุบช่องว่าง) บอกผู้ใช้บนหน้าสำเร็จ
+      const notes=[], nz=s=>String(s==null?'':s).replace(/\s+/g,' ').trim();
+      // [phase2-34 · P10] กู้จากบรรทัดค้างที่มีอยู่แล้ว: เทียบค่าที่เก็บไว้ (รายละเอียด/ผู้ตรวจ/วันนัดรับ) กับฟอร์ม — ไม่ตรง = วาดใบสรุป/อัปโหลดจากค่าที่เก็บไว้จริง + เตือน
+      // (รายละเอียดที่เก็บเป็น "ส่วนต้น" ของที่ส่ง = Worker ตัดให้พอดี 255 ตามปกติ ไม่นับว่าไม่ตรง)
+      let useStored=false, sdText='', storedNote='';
+      if(recovered){
+        const sd=typeof j.detail==='string'?nz(j.detail):null, fd=nz(detail), si=nz(j.inspector), fi=nz(f.inspector);
+        const dD=sd!==null&&sd!==fd&&!fd.startsWith(sd), dI=!!si&&si!==fi, dT=!!j.pickupDate&&String(j.pickupDate)!==String(f.date);
+        if(dD||dI||dT){
+          const vals=[], what=[];
+          if(dD){ useStored=true; sdText=sd; storedNote=sd.replace(/^!!\s*งานด่วน\s*!!(?:\s*\(อนุมัติ:[^)]*\))?\s*/,''); f.urgent=/^!!\s*งานด่วน\s*!!/.test(sd); what.push('รายละเอียด'); vals.push('รายละเอียด “'+sd+'”'); }
+          if(dI){ f.inspector=String(j.inspector).trim(); what.push('ผู้ตรวจ'); vals.push('ผู้ตรวจ '+si); }
+          if(dT){ f.date=String(j.pickupDate); what.push('วันนัดรับ'); vals.push('นัดรับ '+dayText(f.date)); }
+          notes.push('ข้อความที่บันทึกไว้ไม่ตรงกับในฟอร์ม ('+what.join(' / ')+') — ใบสรุปนี้วาดและอัปโหลดจากค่าที่บันทึกไว้จริง: '+vals.join(' · '));
+        }
+      }
+      if(!useStored&&(j.detailClipped===true||(typeof j.detail==='string'&&nz(j.detail).length<nz(detail).length))){
+        const kept=nz(typeof j.detail==='string'?j.detail:'');
+        notes.push(kept?'ข้อความถูกตัดเหลือ '+kept.length+' ตัว: “'+kept+'” (ยาวเกินที่ Salesforce เก็บได้) — ใบสรุปบนจอยังเป็นข้อความเต็ม':'ข้อความถูกตัดให้สั้นลง (ยาวเกินที่ Salesforce เก็บได้) — ใบสรุปบนจอยังเป็นข้อความเต็ม');
+      }
+      if(recovered) notes.push('ระบบไม่ได้รับคำตอบตอนกดบันทึก แต่ตรวจพบว่าบันทึกสำเร็จแล้ว — ไม่ต้องบันทึกซ้ำ');
+      // busy = กำลังวาดรูป/อัปโหลดรูป (ห้ามออกจากหน้าผลบันทึกจนรู้ผล ไม่งั้นอัปโหลดล้มแล้วไม่เห็นปุ่มลองใหม่) · run = กำลังยิงอัปโหลดอยู่
+      const d=S.done={f,rows:useStored?[]:rows,note:useStored?storedNote:note,detail:useStored?sdText:detail,img:'',err:'',billNoNew:String(j.billNoNew||''),larkId:String(j.larkRecordId||f.larkId||''),round:rn,busy:true,run:false,upOk:false,upErr:'',small:null,
+        notes,sfOk:false,sfRun:false,sfErr:'',noSf:false,authLost:false,leaveOk:false};
+      view.innerHTML=doneHtml(); setView('done');
+      buildReceipt(d);
+    }
+    const fileName=f=>'ใบสรุป_นำกลับมาแก้_'+digitsOf(f.code)+'_ครั้งที่'+f.n+'.png';   // ไฟล์ที่ผู้ใช้กด "บันทึกรูป" เอง (PNG เต็ม) — ชื่อที่อัปโหลดเข้า Salesforce เป็นหน้าที่ของ Worker (ห้ามขึ้นต้น "ใบสรุป_")
+    function imgInner(d){ return d.img?'<img alt="ใบสรุป สินค้านำกลับมาแก้" src="data:image/png;base64,'+d.img+'">'
+      :'<div class="w">'+(d.err?'สร้างรูปใบสรุปไม่สำเร็จ ('+esc(d.err)+') — ข้อมูลบันทึกแล้ว':'<span class="ra2-spin"></span>กำลังสร้างรูปใบสรุป…')+'</div>'; }
+    // [phase2-46] ข้อมูลเก่า = ค่าในบิลแรก (ครั้งที่ 1 · ค่าวัดใน Salesforce จาก /product-latest เดียวกับป้าย "แก้ไขครั้งที่ 1:" ในฟอร์ม) · ข้อมูลใหม่ = ที่กรอกรอบนี้ · ไม่มีแถว (กู้จากที่บันทึกไว้) = โชว์ข้อความที่บันทึกแทน
+    function cmpHtml(d){ const f=d.f, rows=(d.rows||[]), note=String(d.note||'').trim();
+      if(!rows.length&&!note){ const t=String(d.detail||'').trim(); return t?'<div class="ra2-cmp" data-ra2-cmp><div class="hd">สิ่งที่แก้ในครั้งนี้</div><div class="raw">'+esc(t)+'</div></div>':''; }
+      const tr=rows.map(r=>'<tr><td>'+esc(r.dir?r.label:r.rl)+'</td><td class="o">'+esc(r.prev||'—')+'</td><td class="a">→</td><td class="n">'+esc(r.now)+'</td></tr>').join('')
+        + (note?'<tr><td>หมายเหตุ</td><td class="o">—</td><td class="a">→</td><td class="nt">'+esc(note)+'</td></tr>':'');
+      return '<div class="ra2-cmp" data-ra2-cmp><div class="hd">สิ่งที่แก้ในครั้งนี้</div><table><tr><th>จุดที่แก้</th><th>ข้อมูลเก่า (ครั้งที่ 1)</th><th></th><th>ข้อมูลใหม่ (ครั้งที่ '+esc(String(f.n))+')</th></tr>'+tr+'</table></div>'; }
+    function doneHtml(){ const d=S.done, f=d.f;
+      return '<button type="button" class="ra2-back" data-ra2="fin" aria-disabled="'+(d.busy?'true':'false')+'">'+IC.chevL+'รายการที่นัดรับ</button>'
+        + '<div class="ra2-ok"><span class="ic">'+IC.tick+'</span><div><div class="t">บันทึกนำกลับมาแก้ ครั้งที่ '+f.n+' แล้ว</div><div class="s">'+esc(f.code)+' · '+esc(typeShort(f.type))+' · '+esc(f.custShow)+'</div></div></div>'
+        + cmpHtml(d)
+        + (d.notes||[]).map(n=>'<div class="ra2-up note" data-ra2-note role="status">'+IC.warn+'<span class="sp">'+esc(n)+'</span></div>').join('')
+        + '<div class="ra2-img" data-ra2-img>'+imgInner(d)+'</div>'
+        + '<div class="ra2-up" data-ra2-up role="status" aria-live="polite" hidden></div>'
+        + '<div class="ra2-up sf" data-ra2-sf role="status" aria-live="polite" hidden></div>'
+        + '<div class="ra2-foot end"><a class="ra2-dl" data-ra2-dl aria-disabled="true" download="'+esc(fileName(f))+'">'+IC.dl+'บันทึกรูป</a><button type="button" class="ra2-fin" data-ra2="fin"'+(d.busy?' disabled':'')+'>เสร็จสิ้น</button></div>';
+    }
+    // ใบสรุปวาดด้วยโค้ดใบสรุปตัวจริงของแอป แล้วปรับหัว/บรรทัดให้เป็นใบ "สินค้านำกลับมาแก้" · เลขบิลบนใบ = billNoNew จาก Worker (O#/P# คงเดิม)
+    async function buildReceipt(d){
+      const f=d.f, o=f.o, lt=LATEST[f.code]||{}, bill=d.billNoNew||f.billNo||'-';
+      d.img=''; d.err=''; d.busy=true;
+      try{
+        const order={billNo:bill, sentDate:isoPlus(0), custName:f.custName||'-', phone:f.phone, nickname:f.nick, staff:f.inspector, payStatus:'', urgent:!!f.urgent,
+          pickupLabel:f.branch, deliveryPlace:isDel(f.branch)?String(f.addr||'').trim():'', pickupDate:f.date, branch:(o&&o.branch)||''};
+        const item={type:f.type||'สินค้า', sku:f.sku, size:f.size, measureRows:d.rows.map(r=>({label:r.rl,value:r.rv})), orderCode:f.orderCode, productCode:f.code,
+          branch:lt.stockBranch||(o&&o.branch)||'', note:d.note, itemIndex:1, itemTotal:1};
+        const lines=buildReceiptLines(order,item).map(l=>{
+          if(l.kind==='title'&&l.text==='ใบสั่งแก้ปรับทรงสำเร็จรูป') return Object.assign({},l,{text:'สินค้านำกลับมาแก้'});
+          if(l.kind==='right'&&l.big) return Object.assign({},l,{text:bill+' · ครั้งที่ '+f.n});
+          if(l.kind==='right'&&/^ส่งแก้ /.test(l.text)) return Object.assign({},l,{text:l.text.replace(/^ส่งแก้/,'นำกลับมาแก้')});
+          if(l.kind==='right'&&/ \(ชิ้นที่ 1\)$/.test(l.text)) return Object.assign({},l,{text:l.text.replace(/ \(ชิ้นที่ 1\)$/,'')});
+          if(l.kind==='kv'&&l.label==='พนักงานขาย') return Object.assign({},l,{label:'พนักงานตรวจสอบ',value:f.inspector||'-'});
+          return l; }).filter(l=>!(l.kind==='center'&&(!l.text||l.text==='-')));   // ไม่มีสถานะชำระเงิน → ตัดบรรทัดว่าง
+        d.img=await Promise.race([renderReceiptCanvasBase64(lines), new Promise((_,no)=>setTimeout(()=>no(new Error('วาดรูปนานเกินไป')),25000))]);
+      }catch(e){ d.err=(e&&e.message)||String(e); }
+      if(S.done===d&&S.view==='done'){
+        const w=view.querySelector('[data-ra2-img]'), a=view.querySelector('[data-ra2-dl]');
+        if(w) w.innerHTML=imgInner(d);
+        if(a&&d.img){ a.href='data:image/png;base64,'+d.img; a.removeAttribute('aria-disabled'); }
+      }
+      uploadReceipt(d);   // ไม่รอผล — ขึ้นสถานะใต้รูป · ล้มไม่ถือว่าบันทึกล้ม
+    }
+    // [phase2-44] อัปโหลดรูปใบสรุปเป็น PNG เสมอ — ผู้ใช้สั่ง (16 ต.ค.) ให้เหมือนใบสรุปปกติ: WebP ขึ้นไอคอนเทา/ไม่มีตัวอย่างใน X-Files และ Salesforce
+    // ปกติส่ง "ไฟล์เดียวกับปุ่มบันทึกรูป" ตรงๆ ไม่แตะเลย (ใบจริง ~90–165 KB) · เกิน UP_HARD (300 KB = เพดานของ Worker) เท่านั้นถึงย่อ: ขาว-ดำล้วนขนาดเต็ม → ลดความกว้างทีละขั้น · ย่อแล้วยังเกินเพดาน = ไม่อัปโหลด (ขึ้นข้อความ + ปุ่มลองใหม่)
+    const b64Bytes=b=>{ const pad=b.endsWith('==')?2:(b.endsWith('=')?1:0); return Math.floor(b.length*3/4)-pad; };
+    async function shrinkReceipt(pngB64){
+      const img=new Image(); img.src='data:image/png;base64,'+pngB64;
+      await (img.decode?img.decode():new Promise((ok,no)=>{ img.onload=ok; img.onerror=()=>no(new Error('อ่านรูปใบสรุปไม่ได้')); }));
+      const W0=img.naturalWidth, H0=img.naturalHeight; if(!W0||!H0) throw new Error('รูปใบสรุปว่างเปล่า');
+      const orig=b64Bytes(pngB64);
+      if(orig<=UP_HARD) return {b64:pngB64,mime:'image/png',bytes:orig,w:W0,h:H0,q:null};   // ปกติ: ส่งรูปเดิมทุกไบต์ (เหมือนปุ่ม "บันทึกรูป")
+      const cv=(w,bw)=>{ w=Math.max(120,Math.round(w)); const h=Math.max(1,Math.round(H0*w/W0)), c=document.createElement('canvas'); c.width=w; c.height=h;
+        const x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,w,h); x.imageSmoothingEnabled=true; x.imageSmoothingQuality='high'; x.drawImage(img,0,0,w,h);
+        if(bw){ const d=x.getImageData(0,0,w,h), a=d.data; for(let i=0;i<a.length;i+=4){ const v=a[i]<140?0:255; a[i]=a[i+1]=a[i+2]=v; a[i+3]=255; } x.putImageData(d,0,0); }   // ขาว-ดำล้วน (ใบสรุปเป็นขาว-ดำอยู่แล้ว) — PNG เล็กลงมากโดยตัวอักษรยังเหมือนเดิม
+        return c; };
+      const enc=c=>{ const u=c.toDataURL('image/png'), m=/^data:([^;,]+)/.exec(u); if(!m||m[1]!=='image/png') return null;
+        const b=u.slice(u.indexOf(',')+1); return {b64:b,mime:'image/png',bytes:b64Bytes(b),w:c.width,h:c.height,q:null}; };
+      let best=null;
+      for(const k of [1,0.85,0.7,0.58,0.48,0.4,0.33,0.27,0.2]){ const r=enc(cv(W0*k,true)); if(!r) continue; if(!best||r.bytes<best.bytes) best=r; if(r.bytes<=UP_HARD) return r; }
+      throw new Error('รูปใบสรุปใหญ่เกิน '+Math.round(UP_HARD/1024)+' KB แม้ย่อแล้ว');
+    }
+    // สถานะอัปโหลดใต้รูปใบสรุป · ปุ่ม "เสร็จสิ้น"/กลับ ใช้ไม่ได้ระหว่างกำลังอัปโหลด (ไม่ให้หลุดจากหน้านี้ก่อนรู้ผล — ล้มแล้วต้องเห็นปุ่มลองใหม่)
+    function setUp(d,st){
+      if(S.done!==d||S.view!=='done') return;
+      const el=view.querySelector('[data-ra2-up]'); if(!el) return;
+      el.hidden=false; el.className='ra2-up'+(st==='ok'?' ok':(st==='fail'?' fail':''));
+      if(st==='busy') el.innerHTML='<span class="ra2-spin"></span><span class="sp">กำลังอัปโหลดรูปใบสรุป… รอสักครู่</span>';
+      else if(st==='ok') el.innerHTML=IC.tick+'<span class="sp">อัปโหลดรูปใบสรุปแล้ว ('+Math.max(1,Math.round(d.small.bytes/1024))+' KB)</span>';
+      else el.innerHTML=IC.warn+'<span class="sp">อัปโหลดรูปไม่สำเร็จ'+(d.upErr?' — '+esc(d.upErr):'')+(d.authLost?' · เข้าสู่ระบบใหม่แล้วระบบจะอัปโหลดรูปที่ค้างให้เอง':' · ข้อมูลที่บันทึกแล้วยังอยู่')+'</span><button type="button" class="rt" data-ra2="reup">ลองใหม่</button>';
+      view.querySelectorAll('.ra2-fin').forEach(x=>{ x.disabled=st==='busy'; });
+      view.querySelectorAll('.ra2-back').forEach(x=>x.setAttribute('aria-disabled',String(st==='busy')));
+    }
+    // [phase2-33 · P6 / D1] สถานะการแนบรูปเข้า Salesforce (ไม่บล็อกอะไร — ล้ม = แค่โน้ต + ปุ่มลองใหม่)
+    function setSf(d,st){
+      if(S.done!==d||S.view!=='done') return;
+      const el=view.querySelector('[data-ra2-sf]'); if(!el) return;
+      el.hidden=false; el.className='ra2-up sf'+(st==='ok'||st==='skip'?' ok':(st==='fail'?' fail':''));
+      if(st==='busy') el.innerHTML='<span class="ra2-spin"></span><span class="sp">กำลังแนบรูปเข้า Salesforce…</span>';
+      else if(st==='ok') el.innerHTML=IC.tick+'<span class="sp">แนบรูปเข้า Salesforce แล้ว</span>';
+      else if(st==='skip') el.innerHTML=IC.tick+'<span class="sp">หลังบ้านจะแนบรูปเข้า Salesforce ให้ตอนส่งข้อมูล</span>';
+      else el.innerHTML=IC.warn+'<span class="sp">แนบรูปเข้า Salesforce ไม่สำเร็จ'+(d.sfErr?' — '+esc(d.sfErr):'')+' · ไม่กระทบการบันทึก (หลังบ้านยังส่งข้อมูลได้ตามปกติ)</span><button type="button" class="rt" data-ra2="resf">ลองใหม่</button>';
+    }
+    // ---------- รูปที่ค้างเพราะบัตรผ่านหมดอายุ (phase2-33 · P5/P6) ----------
+    // 401 ระหว่างอัปโหลด → ด่านล็อกอินขึ้น → ล็อกอินใหม่ = โหลดหน้าใหม่ทั้งหน้า (หน่วยความจำหาย) จึงเก็บรูปที่บีบแล้วไว้ใน localStorage (≤ 3 วัน · ≤ 4 รายการ) แล้วอัปโหลดต่อให้เองเมื่อเปิดหน้าด้วยบัตรที่ใช้ได้
+    const UNSENT_KEY='suitcube_ra2_unsent_v1', UNSENT_TTL=3*864e5, UNSENT_MAX=4;
+    function unsentLoad(){ try{ const a=JSON.parse(localStorage.getItem(UNSENT_KEY)||'[]'); return Array.isArray(a)?a.filter(u=>u&&u.code&&u.b64&&u.mime&&Date.now()-(+u.at||0)<UNSENT_TTL):[]; }catch(e){ return []; } }
+    function unsentSave(a){ try{ if(a.length) localStorage.setItem(UNSENT_KEY,JSON.stringify(a.slice(-UNSENT_MAX))); else localStorage.removeItem(UNSENT_KEY); return true; }catch(e){ return false; } }
+    function unsentKeep(d){
+      if(!d||!d.small) return false;
+      const k=d.f.code+'|'+d.round, a=unsentLoad().filter(u=>u.k!==k);
+      a.push({k,code:d.f.code,round:d.round,larkId:d.larkId,mime:d.small.mime,b64:d.small.b64,bill:d.billNoNew,at:Date.now(),lark:!d.upOk,sf:!d.sfOk&&!d.noSf});
+      return unsentSave(a);
+    }
+    function unsentSync(d){   // ทำสำเร็จไปแล้วบางส่วน → ปรับธง/ลบรายการที่เก็บไว้
+      const k=d.f.code+'|'+d.round, a=unsentLoad(), u=a.find(x=>x.k===k); if(!u) return;
+      u.lark=!d.upOk; u.sf=!d.sfOk&&!d.noSf; unsentSave(a.filter(x=>x.lark||x.sf));
+    }
+    function toast(msg,bad){
+      try{
+        let t=document.getElementById('ra2Toast');
+        if(!t){ t=document.createElement('div'); t.id='ra2Toast'; t.className='ra2-toast'; t.setAttribute('role','status'); document.body.appendChild(t); }
+        t.textContent=msg; t.classList.toggle('bad',!!bad); t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),10000);
+      }catch(e){}
+    }
+    const tokenLive=()=>{ try{ const o=JSON.parse(localStorage.getItem('suitcube_auth_v1')||'null'); return !!(o&&o.token&&+o.expiresAt>Date.now()+60000); }catch(e){ return false; } };
+    const JSON_H={'Content-Type':'application/json'};
+    const sfFileName=(code,round,mime)=>'นำกลับมาแก้_P#'+digitsOf(code)+'_ครั้งที่'+round+'.'+(mime==='image/webp'?'webp':'png');   // ห้ามขึ้นต้น "ใบสรุป_" (/attach-product-file ลบไฟล์ชื่อขึ้นต้นนั้นของสินค้าก่อนแนบ)
+    let _resuming=false;
+    async function resumeUnsent(){
+      if(_resuming||!tokenLive()) return;
+      const a=unsentLoad(); if(!a.length) return;
+      _resuming=true;
+      try{
+        for(const u of a){
+          let authFail=false;
+          if(u.lark){
+            try{
+              const j=await getJSON(WORKER+'/repeat-alteration-receipt',{method:'POST',headers:JSON_H,body:JSON.stringify({larkRecordId:u.larkId,productCode:u.code,round:u.round,imageBase64:u.b64,mime:u.mime})},45000);
+              if(j&&(j.success===true||j.code==='no_pending_line')) u.lark=false;   // no_pending_line = หลังบ้านส่งข้อมูลไปแล้ว แนบเข้า Lark ไม่ได้อีก
+              else if(j&&isAuthCode(j.code)) authFail=true;
+            }catch(e){}
+          }
+          if(u.sf&&!authFail){
+            if(await workerAttachesInConfirm()){ u.sf=false; continue; }   // Paid: หลังบ้านแนบให้ตอนส่งข้อมูลแล้ว
+            try{
+              const j=await getJSON(WORKER+'/attach-product-file',{method:'POST',headers:JSON_H,body:JSON.stringify({productCode:u.code,imageBase64:u.b64,filename:sfFileName(u.code,u.round,u.mime)})},45000);
+              if(j&&j.success===true) u.sf=false;
+            }catch(e){}
+          }
+        }
+      }finally{ _resuming=false; }
+      const left=a.filter(u=>u.lark||u.sf), done=a.filter(u=>!u.lark&&!u.sf);
+      unsentSave(left);
+      const nm=l=>l.map(u=>u.code+' (ครั้งที่ '+u.round+')').join(', ');
+      if(done.length) toast('อัปโหลดรูปใบสรุปที่ค้างไว้เรียบร้อยแล้ว: '+nm(done));
+      if(left.length) toast('รูปใบสรุปที่ค้างไว้ยังอัปโหลดไม่สำเร็จ: '+nm(left)+' — จะลองใหม่ตอนเปิดหน้านี้ครั้งหน้า',true);
+    }
+    // Worker แพ็กเกจ Free (ค่าเริ่มต้น): confirm ไม่แนบรูป → หน้านี้แนบเอง · แพ็กเกจ Paid (/version → attachReceiptsInRequest=true): confirm แนบให้ → หน้าไม่แนบซ้ำ · ถามไม่ได้ = แนบเอง
+    const VER={at:0,pr:null,inReq:false};
+    function workerAttachesInConfirm(){
+      if(VER.pr) return VER.pr;
+      if(VER.at&&Date.now()-VER.at<10*60e3) return Promise.resolve(VER.inReq);
+      VER.pr=getJSON(WORKER+'/version',null,8000).then(j=>{ VER.inReq=!!(j&&j.attachReceiptsInRequest===true); VER.at=Date.now(); return VER.inReq; },()=>false).finally(()=>{ VER.pr=null; });
+      return VER.pr;
+    }
+    async function attachToSalesforce(d){
+      if(d.sfRun||d.sfOk||d.noSf||!d.small) return;
+      d.sfRun=true; d.sfErr=''; setSf(d,'busy');
+      try{
+        if(await workerAttachesInConfirm()){ d.noSf=true; unsentSync(d); setSf(d,'skip'); return; }
+        const j=await getJSON(WORKER+'/attach-product-file',{method:'POST',headers:JSON_H,body:JSON.stringify({productCode:d.f.code,imageBase64:d.small.b64,filename:sfFileName(d.f.code,d.round,d.small.mime)})},45000);
+        if(!j||j.success!==true){ const er=new Error((j&&j.error)||'ระบบไม่ยืนยันการแนบรูป'); er.code=(j&&j.code)||''; throw er; }
+        d.sfOk=true; unsentSync(d); setSf(d,'ok');
+      }catch(e){
+        d.sfOk=false; d.sfErr=(e&&e.message)||String(e);
+        if(isAuthCode(e&&e.code)) unsentKeep(d);
+        setSf(d,'fail');
+      }finally{ d.sfRun=false; }
+    }
+    async function uploadReceipt(d){
+      if(d.run) return; d.run=true; d.busy=true; d.leaveOk=false; d.authLost=false; setUp(d,'busy');
+      let prep=null;
+      try{
+        if(!d.img) throw new Error(d.err?'สร้างรูปใบสรุปไม่สำเร็จ ('+d.err+')':'ยังไม่มีรูปใบสรุป');
+        if(!d.small) d.small=await shrinkReceipt(d.img);
+        if(d.small.bytes>UP_HARD) throw new Error('รูปใหญ่เกินเพดาน '+Math.round(UP_HARD/1024)+' KB');
+      }catch(e){ prep=e; }
+      if(!prep) attachToSalesforce(d);   // [P6] ไม่รอ — อิสระจากการอัปโหลดเข้า Lark (มีสถานะ/ปุ่มลองใหม่ของตัวเอง)
+      try{
+        if(prep) throw prep;
+        if(!d.larkId) throw new Error('ไม่พบรหัสแถวใน Lark สำหรับแนบรูป');
+        const j=await getJSON(WORKER+'/repeat-alteration-receipt',{method:'POST',headers:JSON_H,
+          body:JSON.stringify({larkRecordId:d.larkId, productCode:d.f.code, round:d.round, imageBase64:d.small.b64, mime:d.small.mime})},45000);
+        if(!j||j.success!==true){ const er=new Error((j&&j.error)||'ระบบไม่ยืนยันการอัปโหลดรูป'); er.code=(j&&j.code)||''; throw er; }
+        d.upOk=true; d.upErr=''; d.busy=false; unsentSync(d); setUp(d,'ok');
+      }catch(e){
+        d.upOk=false; d.upErr=(e&&e.message)||String(e); d.busy=false;
+        if(isAuthCode(e&&e.code)) d.authLost=unsentKeep(d);   // บัตรผ่านหมดอายุ → เก็บรูปไว้ในเครื่อง ล็อกอินใหม่แล้วอัปโหลดต่อให้เอง
+        setUp(d,'fail');
+      }finally{ d.run=false; }
+    }
+    function retryUp(){
+      const d=S.done; if(!d||d.busy||S.view!=='done') return;
+      if(d.img){ uploadReceipt(d); return; }
+      d.busy=true; setUp(d,'busy'); const w=view.querySelector('[data-ra2-img]'); if(w) w.innerHTML=imgInner({img:'',err:''}); buildReceipt(d);
+    }
+    function retrySf(){ const d=S.done; if(!d||S.view!=='done'||d.sfRun||d.sfOk) return; attachToSalesforce(d); }
+    setTimeout(resumeUnsent,2500);   // เปิดหน้าด้วยบัตรผ่านที่ใช้ได้แล้วมีรูปค้างจากรอบก่อน → อัปโหลดต่อ
+
+    // ---------- เหตุการณ์ ----------
+    // กันเหตุการณ์ในส่วนนี้ไปปลุก autosave ของฟอร์มหลัก (document input/change)
+    input.addEventListener('input',e=>{ e.stopPropagation(); onInput(); });
+    input.addEventListener('change',e=>e.stopPropagation());
+    input.addEventListener('focus',()=>{ if(!INSP.list&&!INSP.pr&&!INSP.fail) loadInspectors().catch(()=>{}); });   // [phase2-40] ไม่โหลดบิลทุกสาขาล่วงหน้าแล้ว (ค้นตามเลขที่พิมพ์ผ่าน /find-by-pnum)
+    input.addEventListener('keydown',e=>{ if(e.key!=='Enter') return; e.preventDefault(); const v=toEnglish(input.value.trim()); if(/https?:|Suitcube_Product__c|^P#/i.test(v)) applyScan(v); });
+    clearBtn.addEventListener('click',()=>{ S.scanTk++; setQuery(''); setCap(); try{ input.focus({preventScroll:true}); }catch(x){} });
+    scanBtn.addEventListener('click',()=>{ if(typeof openScanner==='function') openScanner(v=>applyScan(thaiToEn(v))); });
+    histList.addEventListener('click',async e=>{
+      const w=e.target.closest('[data-ra2-why]');
+      if(w&&histList.contains(w)){ const code=w.dataset.ra2Why, st=_pickupStatusMap[code]; toggleWhy(w,code,{t:st?'ยังไม่ถึงสาขา · ตอนนี้: '+st:'ยังไม่ถึงสาขา'}); return; }
+      const c=e.target.closest('[data-ra2-chip]'); if(!c||!histList.contains(c)||c.disabled) return;
+      const code=c.dataset.ra2Chip, row=c.closest('.hist-row'), oid=(row&&row.dataset.id)||'';
+      if(chipState(code).unk){
+        c.disabled=true; c.innerHTML='<span class="ra2-spin"></span>กำลังโหลด…';
+        try{ await getProd(code); }catch(err){ paintChip(c); toggleWhy(c,code,{t:'ดึงข้อมูลจาก Salesforce ไม่สำเร็จ — แตะป้ายอีกครั้ง',gray:true}); return; }
+        paintChips(code);
+        if(_histTab!=='pickup'||S.view!=='list'||!histPop.classList.contains('show')) return;
+      }
+      if(chipState(code).off){ toggleWhy(c,code,{t:chipState(code).why||BLOCK_MSG.full,gray:true}); return; }
+      openForm(code,oid);
+    });
+    view.addEventListener('input',e=>{
+      e.stopPropagation();
+      const t=e.target, f=S.form; if(!f||S.view!=='form') return;
+      if(t.matches('[data-ra2-note]')){ if(t.value.indexOf('|')>=0){ const ps=t.selectionStart; t.value=t.value.replace(/\|/g,'/'); try{ t.setSelectionRange(ps,ps); }catch(x){} } resizeNoteInput(t); }
+      else if(t.matches('[data-ra2-addr]')){ f.addr=t.value; resizeNoteInput(t); }
+      else if(t.matches('[data-ra2-insp]')){ f.inspector=t.value; fitInsp(t); showSug(t.value); }
+      changed();
+    });
+    view.addEventListener('change',e=>{ e.stopPropagation(); if(S.form&&e.target.matches('[data-ra2-branch]')){ S.form.branch=e.target.value; const ar=view.querySelector('[data-ra2-addrrow]'); if(ar) ar.hidden=!isDel(S.form.branch); changed(); } });
+    view.addEventListener('focusin',e=>{ if(e.target.matches&&e.target.matches('[data-ra2-insp]')){ e.target.select(); showSug(''); } });
+    view.addEventListener('focusout',e=>{ if(e.target.matches&&e.target.matches('[data-ra2-insp]')) setTimeout(()=>{ const a=document.activeElement; if(!a||!a.matches||!a.matches('[data-ra2-insp]')){ snapInsp(); hideSug(); } },150); });
+    view.addEventListener('pointerdown',e=>{ if(e.target.closest('[data-ra2-isug]')) e.preventDefault(); });
+    view.addEventListener('keydown',e=>{ if(e.key!=='Escape') return; const sug=view.querySelector('[data-ra2-isug]'), cal=view.querySelector('[data-ra2-cal]'), pk=view.querySelector('[data-ra2-appr].open');
+      if(pk){ e.stopPropagation(); closeApprover(); } else if(sug&&!sug.hidden){ e.stopPropagation(); hideSug(); } else if(cal&&!cal.hidden){ e.stopPropagation(); cal.hidden=true; } });
+    view.addEventListener('click',e=>{
+      // ช่องวัดตัว (ตัวต่อสายของแอปหลัก) เปลี่ยน/เลือก FB·NB·HB ลงหมายเหตุ → อัปเดตตัวนับ/ปุ่มบันทึก
+      if(S.view==='form'&&e.target.closest('.ra2-measure')) setTimeout(changed,0);
+      const t=e.target.closest('[data-ra2]'); if(!t||!view.contains(t)) return;
+      const a=t.dataset.ra2, f=S.form;
+      if(S.sending) return;
+      if(a==='back'||a==='fin'){ if(holding()) return; if(leaveBlocked()){ askLeave(()=>{ if(S.view==='done') backToList(); }); return; } backToList(); }
+      else if(a==='reup') retryUp();
+      else if(a==='resf') retrySf();
+      else if(a==='inspretry') retryInsp();
+      else if(a==='save') submit();
+      else if(a==='recheck') submit({recheck:true});
+      else if(a==='date'&&f){ const cal=view.querySelector('[data-ra2-cal]'); if(!cal) return; const opening=cal.hidden; cal.hidden=!opening; t.setAttribute('aria-expanded',String(opening));
+        if(opening){ const d=new Date((f.date||isoPlus(0))+'T00:00:00'); cal.dataset.y=d.getFullYear(); cal.dataset.m=d.getMonth(); cal.innerHTML=calHtml(d.getFullYear(),d.getMonth(),f.date); } }
+      else if(a==='calnav'&&f){ const cal=view.querySelector('[data-ra2-cal]'); if(!cal||t.disabled) return; let y=+cal.dataset.y, m=+cal.dataset.m+ +t.dataset.d; if(m<0){ m=11; y--; } if(m>11){ m=0; y++; } cal.dataset.y=y; cal.dataset.m=m; cal.innerHTML=calHtml(y,m,f.date); }
+      else if(a==='day'&&f){ if(t.disabled) return; f.date=t.dataset.date; const cal=view.querySelector('[data-ra2-cal]'); if(cal) cal.hidden=true; const db=view.querySelector('[data-ra2="date"]'); if(db) db.setAttribute('aria-expanded','false');
+        if(!f.urgentManual){ const diff=Math.round((Date.parse(f.date+'T00:00:00Z')-Date.parse(isoPlus(0)+'T00:00:00Z'))/86400000); setUrgent(diff>=0&&diff<7); }   // เหมือน updateUrgentDefault ของฟอร์มหลัก
+        changed(); }
+      else if(a==='urgent'&&f){ f.urgentManual=true; setUrgent(!f.urgent); }
+      else if(a==='apprbtn'&&f){ const pk=t.closest('.type-picker'), open=!pk.classList.contains('open');
+        document.querySelectorAll('.type-picker.open').forEach(x=>{ if(x!==pk) x.classList.remove('open'); });
+        pk.classList.toggle('open',open); t.setAttribute('aria-expanded',String(open));
+        if(open){ const m=pk.querySelector('.type-picker-menu'); try{ if(m) m.scrollIntoView({block:'nearest'}); }catch(x){} } }
+      else if(a==='appr'&&f){ f.approver=t.dataset.value||''; paintApprover(); closeApprover(); changed(); }
+      else if(a==='insp'&&f){ const inp=view.querySelector('[data-ra2-insp]'); inp.value=t.dataset.name; f.inspector=t.dataset.name; hideSug(); fitInsp(inp); changed(); }
+    });
+    // เปิดป๊อปอัปใหม่ = เริ่มใหม่ (สถานะ/รอบเปลี่ยนได้ตลอด — โหลดใหม่ทุกครั้งที่เปิด)
+    histBtn.addEventListener('click',()=>{
+      S.tk++; S.scanTk++; clearTimeout(_stT); S.q=''; S.why={}; S.err='';
+      ALL=null; QSES++; Object.keys(QCACHE).forEach(k=>delete QCACHE[k]); STATUS_DONE.clear(); QUEUE.length=0;
+      Object.keys(PROD).forEach(k=>delete PROD[k]); Object.keys(LATEST).forEach(k=>delete LATEST[k]);
+      input.value=''; S.kbTh=false; clearBtn.hidden=true; setCap(); S.form=null; S.done=null; setView('list');
+    },true);
+    // สลับแท็บระหว่างอยู่ในฟอร์ม/ผลบันทึก → กลับสู่รายการก่อน · ระหว่างกำลังบันทึก ห้ามสลับแท็บ/ปิดป๊อปอัป
+    const tabsEl=document.getElementById('histTabs');
+    if(tabsEl) tabsEl.addEventListener('click',e=>{ if(S.view==='list') return; if(holding()){ e.stopPropagation(); showErr('กำลังบันทึก — รอสักครู่'); return; }
+      if(leaveBlocked()){ e.stopPropagation(); const tb=e.target.closest?e.target.closest('.hist-tab'):null; askLeave(()=>{ if(tb) tb.click(); }); return; }   // [phase2-33 · P5] รูปยังไม่ถูกอัปโหลด → ถามก่อนสลับแท็บ
+      S.form=null; S.done=null; setView('list'); },true);
+    const guardClose=e=>{
+      if(e.currentTarget===histPop&&e.target!==histPop) return;
+      if(holding()){ e.stopImmediatePropagation(); showErr('กำลังบันทึก — รอสักครู่'); return; }
+      if(leaveBlocked()){ e.stopImmediatePropagation(); const el=e.currentTarget; askLeave(()=>el.click()); }   // [phase2-33 · P5] รูปยังไม่ถูกอัปโหลด → ถามก่อนปิดป๊อปอัป
+    };
+    if(histClose) histClose.addEventListener('click',guardClose,true);
+    histPop.addEventListener('click',guardClose,true);
+  })();
   // ── ช่องพิมพ์ "ชื่อผู้แก้ไข" ในป็อปอัปยืนยันแก้ไขบิล — พิมพ์แล้ว suggest เหมือน "พนักงานขาย"/"ชื่อผู้แก้ไข" ในฟอร์ม (ใช้ STAFF_LIST ตัวเดียวกัน ประกาศทีหลังด้านล่าง จึงอ้างอิงสดตอนเรียกใช้งานจริง) ──
   (function wireConfirmEditorNameInput(){
     const inp=document.getElementById('confirmEditorName'), sug=document.getElementById('confirmEditorNameSuggest');
@@ -6319,6 +7625,92 @@
     document.addEventListener('click',e=>{ if(!e.target.closest('#confirmEditorField')) sug.classList.remove('show'); });
   })();
 
+  // ── [2026-10-21-8 ตามที่ขอ] ป็อปอัปแก้/เพิ่ม NOTE ของบิล — POST /update-note {recordId, note, editor} (Worker sh2) แล้วอัปเดตการ์ดทันที
+  //   ชื่อผู้แก้ไข: พิมพ์แล้วขึ้นแนะนำจาก STAFF_LIST (ชุดเดียวกับ "พนักงานขาย") · ต้องตรงกับชื่อในรายชื่อเท่านั้นถึงกดบันทึกได้
+  //   Worker รุ่นเก่ายังไม่มี /update-note (ตอบ 404) = แจ้งให้อัปเดต Worker ก่อน ไม่พัง
+  const notePop=document.getElementById('notePop'), notePopText=document.getElementById('notePopText'), notePopEditor=document.getElementById('notePopEditor');
+  const notePopSug=document.getElementById('notePopEditorSuggest'), notePopSave=document.getElementById('notePopSave'), notePopMsg=document.getElementById('notePopMsg');
+  let _noteEditId=null, _noteBusy=false;
+  const noteStaffList=()=>{ try{ return (typeof STAFF_LIST!=='undefined' && Array.isArray(STAFF_LIST)) ? STAFF_LIST : []; }catch(e){ return []; } };
+  const noteEditorValid=()=>noteStaffList().includes(String(notePopEditor&&notePopEditor.value||'').trim());
+  function noteSetMsg(t, isErr){ if(notePopMsg){ notePopMsg.textContent=t||''; notePopMsg.classList.toggle('err', !!isErr); } }
+  function noteRefreshSave(){
+    if(!notePopSave) return;
+    const o=_noteEditId?findHistOrder(_noteEditId):null;
+    const txt=String(notePopText&&notePopText.value||'').trim();
+    const hadNote=!!String(o&&o.note||'').trim();
+    notePopSave.disabled = _noteBusy || !noteEditorValid() || (!txt && !hadNote) || txt.length>1000;
+  }
+  function noteShowSug(q){
+    if(!notePopSug) return;
+    q=String(q||'').trim().toLowerCase();
+    const list=noteStaffList();
+    const hits=(q ? list.filter(n=>n.toLowerCase().includes(q)) : list).slice(0,8);
+    if(!hits.length){ notePopSug.innerHTML=''; notePopSug.classList.remove('show'); return; }
+    notePopSug.innerHTML=hits.map(n=>{
+      const i=q?n.toLowerCase().indexOf(q):-1;
+      const label=i>=0 ? escapeHtml(n.slice(0,i))+'<b>'+escapeHtml(n.slice(i,i+q.length))+'</b>'+escapeHtml(n.slice(i+q.length)) : escapeHtml(n);
+      return '<div class="s" data-name="'+escapeHtml(n)+'">'+label+'</div>';
+    }).join('');
+    notePopSug.classList.add('show');
+  }
+  function openNoteEditor(recId){
+    const o=findHistOrder(recId);
+    if(!o || !notePop) return;
+    _noteEditId=recId; _noteBusy=false;
+    const hadNote=!!String(o.note||'').trim();
+    const title=document.getElementById('notePopTitle');
+    if(title) title.textContent=(hadNote?'แก้ NOTE':'เพิ่ม NOTE')+' · '+(o.orderNo||'');
+    notePopText.value=o.note||'';
+    notePopEditor.value='';
+    if(notePopSug){ notePopSug.innerHTML=''; notePopSug.classList.remove('show'); }
+    noteSetMsg(noteStaffList().length ? '' : 'ยังโหลดรายชื่อพนักงานไม่ได้ — ปิดแล้วลองใหม่อีกครั้ง', !noteStaffList().length);
+    if(notePopSave) notePopSave.textContent='บันทึก NOTE';
+    noteRefreshSave();
+    notePop.classList.add('show');
+    setTimeout(()=>{ try{ notePopText.focus(); }catch(e){} }, 30);
+  }
+  function closeNoteEditor(){ if(_noteBusy) return; notePop.classList.remove('show'); _noteEditId=null; if(notePopSug) notePopSug.classList.remove('show'); }
+  // อัปเดตบิลเดียวกันในทุกรายการที่โหลดไว้ (ประวัติ/นัดรับ เป็นคนละชุดข้อมูล) แล้ววาดการ์ดใบนั้นใหม่ในที่เดิม
+  function applyNoteToCards(recId, note, noteBy){
+    [_histOrders, _pickupOrders].forEach(list=>{ (list||[]).forEach(x=>{ if(x && x.id===recId){ x.note=note; x.noteBy=noteBy; } }); });
+    const c=_autoNoteCache[String((findHistOrder(recId)||{}).pickupBranch||'').trim()];
+    if(c && c.orders) c.orders.forEach(x=>{ if(x && x.id===recId){ x.note=note; x.noteBy=noteBy; } });
+    rerenderHistRows(x=>x.id===recId);
+  }
+  async function saveNoteEditor(){
+    if(_noteBusy || !_noteEditId) return;
+    const editor=String(notePopEditor.value||'').trim();
+    if(!noteEditorValid()){ noteSetMsg('กรุณาเลือกชื่อผู้แก้ไขจากรายชื่อ', true); try{ notePopEditor.focus(); }catch(e){} return; }
+    const recId=_noteEditId, note=String(notePopText.value||'').trim();
+    if(note.length>1000){ noteSetMsg('NOTE ยาวเกิน 1000 ตัวอักษร', true); return; }
+    _noteBusy=true; noteRefreshSave(); notePopSave.textContent='กำลังบันทึก…'; noteSetMsg('');
+    try{
+      const res=await fetch(WORKER+'/update-note', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ recordId:recId, note, editor }) });
+      let j=null; try{ j=await res.json(); }catch(e){ j=null; }
+      if(!j && res.status===404) throw new Error('ระบบหลังบ้าน (Worker) ยังไม่รองรับการแก้ NOTE — ต้องอัปเดต Worker ก่อน');
+      if(!j || !j.success) throw new Error((j && j.error) || ('HTTP '+res.status));
+      _noteBusy=false;
+      applyNoteToCards(recId, String(j.note!=null?j.note:note), String(j.noteBy||''));
+      closeNoteEditor();
+    }catch(e){
+      _noteBusy=false;
+      notePopSave.textContent='บันทึก NOTE';
+      noteSetMsg('บันทึก NOTE ไม่สำเร็จ: '+(e && e.message || e), true);
+      noteRefreshSave();
+    }
+  }
+  if(notePop){
+    notePopText.addEventListener('input', noteRefreshSave);
+    notePopEditor.addEventListener('input', ()=>{ noteShowSug(notePopEditor.value); noteSetMsg(''); noteRefreshSave(); });
+    notePopEditor.addEventListener('focus', ()=>{ noteShowSug(notePopEditor.value); });
+    notePopEditor.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); const first=notePopSug&&notePopSug.querySelector('.s'); if(first && !noteEditorValid()){ notePopEditor.value=first.dataset.name; notePopSug.classList.remove('show'); noteRefreshSave(); } } });
+    notePopSug.addEventListener('mousedown', e=>e.preventDefault());
+    notePopSug.addEventListener('click', e=>{ const el=e.target.closest('.s'); if(!el) return; notePopEditor.value=el.dataset.name; notePopSug.classList.remove('show'); noteSetMsg(''); noteRefreshSave(); });
+    notePop.addEventListener('click', e=>{ if(e.target===notePop) closeNoteEditor(); else if(!e.target.closest('.note-editor-row')) notePopSug.classList.remove('show'); });
+    document.getElementById('notePopCancel').addEventListener('click', closeNoteEditor);
+    notePopSave.addEventListener('click', saveNoteEditor);
+  }
   // ── ดึงค่าวัดตัวล่าสุดจาก Salesforce (เผื่อพนักงานไปแก้ตรงๆ ใน Salesforce ทีหลัง) มาสร้างใบสรุปใหม่ ──
   // ขอบเขต: ดึงเฉพาะค่าวัดตัว/SKU/ไซซ์สดใหม่จาก Salesforce — ข้อมูลลูกค้า/สถานะจ่ายเงิน/วันนัดรับ ยังใช้ของเดิมจาก Lark Base (แทบไม่เคยถูกแก้ตรง Salesforce)
   // ใช้ร่วมกันทั้งปุ่ม "ดึงข้อมูลล่าสุด + พิมพ์ใบสรุปใหม่" รายบิลในหน้าประวัติ และปุ่ม "ปริ้นใบสรุปย้อนหลัง" (ทำทีละหลายบิลตามช่วงวันที่)
@@ -6403,6 +7795,7 @@
       const json=await res.json();
       if(!json || !json.success) throw new Error(json&&json.error||'ดึงข้อมูลไม่สำเร็จ');
       applyRawDataToForm(json.data);
+      { const _no=findHistOrder(recId); const _bn=document.getElementById('billNote'); if(_bn && noteSupported(_no)) _bn.value=_no.note||''; } // [2026-10-21-8] NOTE ล่าสุดจากคอลัมน์ Lark (อาจถูกแก้ผ่าน "แก้ NOTE" หลังบันทึก — ข้อมูลดิบเก่ากว่า)
       _editingRecordId=recId;
       const submitBtn=document.getElementById('submitBtn'); if(submitBtn) submitBtn.textContent='บันทึกการแก้ไข';
       // โชว์แถบ "ชื่อผู้แก้ไข" ให้เลือกทันทีที่เข้าโหมดแก้ไข (dropdown มาจากรายชื่อพนักงานเดียวกับ "พนักงานขาย")
@@ -6447,6 +7840,8 @@
     }
   }
   histList.addEventListener('click', async e=>{
+    const noteBtn=e.target.closest('.hist-note-btn');
+    if(noteBtn){ e.stopPropagation(); openNoteEditor(noteBtn.dataset.id); return; } // [2026-10-21-8] แก้/เพิ่ม NOTE
     const resyncBtn=e.target.closest('.hist-resync-btn');
     if(resyncBtn){ e.stopPropagation(); resyncAndReprint(resyncBtn.dataset.id); return; }
     const editBtn=e.target.closest('.hist-edit-btn');
@@ -7640,6 +9035,8 @@
       const v=branchSel?branchSel.value:'';
       const show = v!==topBranch && v!=='OFFICE';
       if(contactRow) contactRow.classList.toggle('hidden', !show);
+      // [2026-10-21-6] ช่องถูกซ่อน (OFFICE / สาขาเดียวกับด้านบน) = ล้างชื่อทิ้ง — เดิมชื่อค้างในช่องที่มองไม่เห็นแล้วยังถูกส่ง/พิมพ์ "จองกับ" (WG26102002)
+      if(!show){ const ci=block.querySelector('.contact-input'); if(ci) ci.value=''; }
     }
     if(branchSel){ branchSel.addEventListener('change', updateContactVisibility); updateContactVisibility(); branchSel.addEventListener('change', ()=>updateShopTailorRow(block)); }   // [2026-10-19] เปลี่ยนสินค้าใช้ของสาขา → โชว์/ซ่อนช่องติ๊ก "ใช้ช่างหน้าร้าน"
     branchTopListeners.push(updateContactVisibility);
@@ -8079,6 +9476,19 @@
       + (_resultImgs.length>1?'บันทึกรูปใบสรุป (ทั้งหมด '+_resultImgs.length+' รูป)':'บันทึกรูปใบสรุป')+'</button>';
     const btn=box.querySelector('[data-rcpt-all]'); if(btn) btn.addEventListener('click',rcptSaveAll);
   }
+  // [รวม Phase2 2026-10-21-10 · จาก phase2-45] ปุ่ม "บันทึกรูป" ของใบสรุปสินค้านำกลับมาแก้ (a.ra2-dl) บนไอแพด/มือถือ (เว็บในแอป Lark ไม่รับลิงก์ดาวน์โหลด)
+  // → เมนูแชร์ของเครื่อง (เลือก "บันทึกภาพ") · แชร์ไม่ได้ = เปิดรูปเต็มจอให้กดค้างบันทึก · คอม = ดาวน์โหลดตามปกติ · ใช้ RCPT_TOUCH/rcptToFile/rcptShowAll ของหน้าหลัก
+  // (ปุ่มบันทึกรูปของบิลปกติ = ปุ่ม data-rcpt-all มีตัวจัดการของตัวเองแล้ว ไม่แตะ)
+  document.addEventListener('click',e=>{
+    const a=e.target&&e.target.closest&&e.target.closest('a.ra2-dl'); if(!a||!RCPT_TOUCH) return;
+    const src=a.getAttribute('href')||''; if(a.getAttribute('aria-disabled')==='true'||!/^data:image\/png;base64,/.test(src)) return;
+    e.preventDefault();
+    const b64=src.slice(src.indexOf(',')+1), name=a.getAttribute('download')||'ใบสรุป.png', show=()=>rcptShowAll([{imageBase64:b64}]);
+    let file=null; try{ file=rcptToFile(b64,name); }catch(_e){}
+    let can=false; try{ can=!!(file&&navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})); }catch(_e){}
+    if(can){ navigator.share({files:[file]}).catch(err=>{ if(!(err&&err.name==='AbortError')) show(); }); return; }
+    show();
+  },true);
   if(resultOkBtn) resultOkBtn.addEventListener('click', closeResultPop);
   if(resultPop) resultPop.addEventListener('click', e=>{ if(e.target===resultPop) closeResultPop(); });
 
@@ -8163,6 +9573,7 @@
     const payOn=document.querySelector('#payToggle button.on');
     data['สถานะการชำระเงิน']=payOn?payOn.textContent.trim():'';
     if(payOn && payOn.textContent.trim()==='ค้างชำระ') data['จำนวนเงินที่ค้างชำระ (บาท)']=val('debtAmount');
+    data['NOTE']=val('billNote'); // [2026-10-21-8] NOTE ระดับบิล (ถึงเพื่อนสาขา) — Worker เก็บลงคอลัมน์ Lark "NOTE" เท่านั้น ไม่ส่ง Salesforce
 
     const allBlocks=[...document.querySelectorAll('#productsWrap .product-block')];
     const blocks = Array.isArray(blockIndices) ? blockIndices.map(ix=>allBlocks[ix]).filter(Boolean) : allBlocks;
@@ -8183,7 +9594,9 @@
       // [ใหม่ตามที่ขอ] "สินค้าใช้ของสาขา" แยกรายชิ้นด้วย (เดิม branchProd มีแต่ order-level ตัวเดียวต่อประเภท) — Worker เอาไปรวมในช่อง เสื้อสูท/กางเกง/เสื้อเชิ้ต/เสื้อกั๊ก N ด้วย
       data['รายการ'+n+'_สาขา']=branchProd;
       // [แก้ตามที่ขอ] "พนักงานติดต่อ" แยกรายชิ้นด้วยเหมือนสาขา (เดิมมีแต่ order-level ตัวเดียวต่อประเภท "พนักงานติดต่อสูท" ฯลฯ — ค่าสุดท้ายที่กรอกทับของชิ้นก่อนหน้าเสมอ งงว่าเป็นของชิ้นไหน) Worker เอาไปรวมในช่อง เสื้อสูท/กางเกง/เสื้อเชิ้ต/เสื้อกั๊ก N ด้วย
-      data['รายการ'+n+'_ติดต่อ']=contact;
+      // [2026-10-21-6] ส่งชื่อติดต่อเฉพาะตอนเบิกจากสาขาอื่น (สาขาสินค้า ≠ OFFICE และ ≠ สาขาด้านบน) — กันชื่อค้างซ้ำอีกชั้น
+      const _topBr=document.getElementById('branchTop')?.value||'';
+      data['รายการ'+n+'_ติดต่อ']=(branchProd && branchProd!=='OFFICE' && branchProd!==_topBr)?contact:'';
       // รูปที่แนบไว้ (base64 data URI) — ต่อกันด้วยช่องว่าง ฝั่ง Worker จะแยกด้วย .split(/\s+/) ตอนแนบเข้า Salesforce
       if(block._attachedImages && block._attachedImages.length) data['รายการ'+n+'_รูป']=block._attachedImages.join(' ');
 
@@ -8474,15 +9887,17 @@
     const custNameWithNick = order.nickname ? (order.custName||'-')+' ('+order.nickname+')' : (order.custName||'-');
     // [แก้บั๊ก+ตามที่ขอ] เดิมรวมชื่อ+เบอร์บรรทัดเดียวกัน พอขยายฟอนต์ตามที่ขอหลายรอบ ชื่อยาว+เบอร์ยาวรวมกันล้นขอบกระดาษ (โดนตัดขวา มองไม่เห็นเบอร์เต็ม) แยกเป็นคนละบรรทัดแทน กันล้นแน่นอนไม่ว่าชื่อจะยาวแค่ไหน
     // [แก้ตามที่ขอ] ชื่อลูกค้า/เบอร์/พนักงานขาย ย่อเล็กเท่าหมายเหตุ (small) — บรรทัดเดียว ป้าย+ค่าติดกัน (จากเดิมตัวใหญ่ 2 บรรทัด)
-    lines.push({kind:'kv', label:'ลูกค้า', value:custNameWithNick, small:true});
-    if(order.phone) lines.push({kind:'kv2', value:order.phone, small:true});
+    // [2026-10-21-11 ตามที่ขอ] ไม่มีคำว่า "ลูกค้า" · เบอร์โทรอยู่ในวงเล็บต่อท้ายชื่อ บรรทัดเดียว (ยาวเกิน = ตัดขึ้นบรรทัดใหม่เองแบบเดิม)
+    lines.push({kind:'kv', label:'', value:custNameWithNick+(order.phone?' ('+order.phone+')':''), small:true});
     lines.push({kind:'kv', label:'พนักงานขาย', value:order.staff||'-', small:true});
     // [แก้ตามที่ขอ] "ใช้สินค้าจาก" ย้ายจาก branchCenter (กลางใบ ใต้ SKU) มาไว้ในกลุ่มลูกค้า ชิดซ้ายตัวเล็ก + ค่าอ่านง่ายขึ้น
     const stockSrc=receiptStockSrcLabel(item.branch, order.branch);
     // [แก้ตามที่ขอ] ขยายตัวอักษรบรรทัดนี้ให้ใหญ่กว่ากลุ่ม ลูกค้า/เบอร์/พนักงานขาย ข้างเคียง (bigger:true → F(24) แทน F(19) เดิม)
     if(stockSrc) lines.push({kind:'kv', label:'ใช้สินค้าจาก', value:stockSrc, small:true, bigger:true});
     // [แก้ตามที่ขอ] "พนักงานที่ติดต่อ" → "จองกับ" (index.html ส่ง item.contact มาเฉพาะตอนเบิกจากสาขาอื่น)
-    if(item.contact) lines.push({kind:'kv', label:'จองกับ', value:item.contact, small:true});
+    // [2026-10-21-6] "จองกับ" เฉพาะสินค้าที่เบิกจากสาขาอื่น — ใช้ของ OFFICE / สาขาตัวเอง / หน้าร้าน = ไม่พิมพ์ (บิลเก่าที่มีชื่อค้าง พิมพ์ซ้ำก็ไม่ขึ้น)
+    const _stockU=String(stockSrc||'').toUpperCase(), _orderBr=String(order.branch||'').trim().toUpperCase();
+    if(item.contact && _stockU && _stockU!=='OFFICE' && _stockU!=='หน้าร้าน' && _stockU!==_orderBr) lines.push({kind:'kv', label:'จองกับ', value:item.contact, small:true});
     lines.push({kind:'dash'});
     // รวม size ต่อท้ายรหัสสินค้าเป็นก้อนเดียวกันเลย เช่น "UF068-BK-P-32"
     // [แก้บั๊ก] Accessory ไม่มีไซซ์จริง พนักงานบางคนพิมพ์ "-" ใส่ช่อง Size ไว้เฉยๆ (ไม่รู้จะใส่อะไร) โค้ดเดิมเห็นว่ามีค่า (ไม่ว่าง) เลยต่อท้ายให้กลายเป็น "รหัส--" (ขีดคู่) — กรองค่าที่เป็นแค่ขีด/ว่างออกก่อน
@@ -8519,7 +9934,7 @@
       const label=String(order.pickupLabel||''), sepIdx=label.indexOf(' – ');
       const method=(sepIdx>=0 ? label.slice(0,sepIdx) : label).trim();
       const place=String(order.deliveryPlace || (sepIdx>=0 ? label.slice(sepIdx+3) : '')).trim();
-      lines.push({kind:'centerBig', text:(/^[A-Za-z]/.test(method)?'ที่ ':'ที่')+method, xl:true});
+      lines.push({kind:'centerBig', text:method, xl:true});   // [2026-10-21-15 ตามที่ขอ] ไม่มีคำว่า "ที่" หน้าวิธีจัดส่ง (เดิม "ที่ Messenger")
       if(place) lines.push({kind:'addrLine', text:place});
     } else {
       lines.push({kind:'centerBig', text:'ที่สาขา'+(order.pickupLabel||'-'), xl:true});
@@ -8606,9 +10021,27 @@
       // [แก้บั๊ก 2026-09-29] ที่อยู่จัดส่ง (addrLine) ตัดบรรทัดแบบเดียวกัน แต่วัดด้วยฟอนต์ของมันเอง F(21) — กันที่อยู่ยาวล้นขอบกระดาษ
       const aC=document.createElement('canvas').getContext('2d');
       aC.font='400 '+F(21)+'px '+RFONT; aC.letterSpacing=LS;
+      const kC=document.createElement('canvas').getContext('2d'); kC.letterSpacing=LS;   // [phase2-33 · P7] วัดแถว ลูกค้า/พนักงาน ...
       lines=lines.reduce((acc,l)=>{
         if(l.kind==='noteLine') wrapTextByWidth(mC, l.text, noteMaxW).forEach(t=>acc.push({kind:'noteLine', text:t}));
         else if(l.kind==='addrLine') wrapTextByWidth(aC, l.text, noteMaxW).forEach(t=>acc.push({kind:'addrLine', text:t}));
+        else if(l.kind==='kv' && l.small){
+          // [phase2-33 · P7] ชื่อ/ชื่อเล่นยาวมาก: ย่อฟอนต์ได้ถึง F(15) · ยังไม่พอ = ขึ้นบรรทัดต่อ (แถวต่อใช้ kv2 small ชิดซ้าย) — ไม่ให้ตัวอักษรหลุดขอบขวาและไม่ตัดข้อมูลทิ้ง
+          kC.font='400 '+F(l.bigger?24:19)+'px '+RFONT; const kLw=kC.measureText(String(l.label)).width;
+          const kMax=(W-padX)-(padX+kLw+(l.label?F(10):0));   // [2026-10-21-11] ไม่มีป้าย (บรรทัดชื่อลูกค้า) = ไม่เว้นช่องหน้า
+          kC.font='400 '+F(15)+'px '+RFONT;
+          const kv=String(l.value==null?'':l.value);
+          if(kMax>0 && kC.measureText(kv).width>kMax){
+            kC.font='400 '+F(l.bigger?24:19)+'px '+RFONT;   // หัวบรรทัดตัดตามขนาดตัวอักษรที่วาดจริง (ไม่ย่อลงเหลือ F(15)) ให้ขนาดเท่ากับบรรทัดต่อ
+            const head0=wrapTextByWidth(kC, kv, kMax)[0]||'';
+            const nv=kv.split(/\s+/).filter(Boolean).join(' ');
+            let cut=head0.length;   // ไม่ตัดแยกสระบน/ล่าง/วรรณยุกต์ออกจากพยัญชนะ · ไม่ทิ้งสระหน้า (เ แ โ ใ ไ) ค้างท้ายบรรทัด
+            while(cut>1 && (/[\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]/.test(nv.charAt(cut)) || /[\u0E40-\u0E44]/.test(nv.charAt(cut-1)))) cut--;
+            const head=nv.slice(0,cut).trimEnd(), rest=nv.slice(cut).trim();
+            acc.push(Object.assign({},l,{value:head}));
+            if(rest) wrapTextByWidth(mC, rest, noteMaxW).forEach(t=>acc.push({kind:'kv2', value:t, small:true}));
+          } else acc.push(l);
+        }
         else acc.push(l);
         return acc;
       },[]);
@@ -8631,6 +10064,13 @@
     const ctx=canvas.getContext('2d');
     ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,totalH);
     ctx.fillStyle='#000'; ctx.textBaseline='middle'; ctx.letterSpacing=LS;
+    // [phase2-33 · P7] ด่านสุดท้ายกันตัวอักษรหลุดขอบ: ข้อความที่ย่อฟอนต์ถึงขนาดต่ำสุดแล้วยังกว้างเกิน → ตัดท้ายแล้วใส่ "…" (ข้อความที่พอดีอยู่แล้วคืนค่าเดิมทุกตัวอักษร จึงไม่เปลี่ยนผลของใบปกติ)
+    const fitEllipsis=(text,maxW)=>{
+      text=String(text); if(ctx.measureText(text).width<=maxW) return text;
+      let lo=0, hi=text.length;
+      while(lo<hi){ const mid=(lo+hi+1)>>1; if(ctx.measureText(text.slice(0,mid)+'…').width<=maxW) lo=mid; else hi=mid-1; }
+      return text.slice(0,lo).replace(/[\u0E40-\u0E44]+$/,'').trimEnd()+'…';   // ไม่ทิ้งสระหน้า (เ แ โ ใ ไ) ค้างท้ายคำ
+    };
     let y=F(20);
     let qrBounds=null; // [ใหม่ตามที่ขอ] กันโซน QR ไว้ ไม่ให้โดนขั้นตอน "ขยายเส้นดำ" ด้านล่างทำลายลวดลาย (ดูเหตุผลที่ใช้ตัวแปรนี้ตรงจุด dilate)
     lines.forEach(l=>{
@@ -8708,10 +10148,11 @@
           ctx.fillStyle='#777'; ctx.fillText(l.label, padX, y);
           const lw=ctx.measureText(l.label).width;
           // [แก้บั๊ก] ค่าบางอย่าง (เช่น "ใช้สินค้าจาก" ตอนเป็นชื่อสาขาเต็มๆ จาก Salesforce ที่ดึงมาตอนพิมพ์ซ้ำ) อาจยาวเกินพื้นที่ที่เหลือหลังป้าย — เดิมไม่มีการันตีไม่ให้ล้นขอบกระดาษเลย (ต่างจาก skuCenter ที่แก้ไปแล้ว) ใส่ auto-shrink แบบเดียวกัน เฉพาะฝั่งค่า (ป้ายขนาดคงเดิม)
-          let kvPx=kvSmallPx; const kvMaxW=(W-padX)-(padX+lw+F(10));
+          const kvGap=l.label?F(10):0;   // [2026-10-21-11] ไม่มีป้าย = ชิดซ้าย
+          let kvPx=kvSmallPx; const kvMaxW=(W-padX)-(padX+lw+kvGap);
           ctx.font='400 '+kvPx+'px '+RFONT;
           while(kvPx>F(11) && ctx.measureText(l.value).width>kvMaxW){ kvPx--; ctx.font='400 '+kvPx+'px '+RFONT; }
-          ctx.fillStyle='#000'; ctx.fillText(l.value, padX+lw+F(10), y);
+          ctx.fillStyle='#000'; ctx.fillText(fitEllipsis(String(l.value),kvMaxW), padX+lw+kvGap, y);
         } else {
           // แบบเดิม (ตัวใหญ่ 2 บรรทัด) — ป้ายบน / ค่าล่าง
           const kvTop=y-h/2;
@@ -8719,7 +10160,10 @@
           ctx.font='400 '+F(33)+'px '+RFONT; ctx.fillStyle='#000'; ctx.textAlign='left'; ctx.fillText(l.value, padX, kvTop+F(46));
         }
       } else if(l.kind==='kv2'){
-        ctx.font='400 '+F(l.small?19:30)+'px '+RFONT; ctx.fillStyle='#000'; ctx.textAlign='left'; ctx.fillText(l.value, padX, y);
+        let k2Px=F(l.small?19:30); const k2Max=W-padX*2;
+        ctx.font='400 '+k2Px+'px '+RFONT; ctx.fillStyle='#000'; ctx.textAlign='left';
+        while(k2Px>F(11) && ctx.measureText(String(l.value)).width>k2Max){ k2Px--; ctx.font='400 '+k2Px+'px '+RFONT; }   // [phase2-33 · P7] เบอร์/แถวต่อของชื่อยาว ไม่ให้หลุดขอบขวา
+        ctx.fillText(fitEllipsis(String(l.value),k2Max), padX, y);
       } else if(l.kind==='skuCenter'){
         // [แก้ตามที่ขอ] SKU บางตัวยาวมาก (เช่น FW-ZD2202-H1-BK-46-46) เกินขอบกระดาษ — ลดขนาดอัตโนมัติจนพอดีความกว้าง กันตัวขาด
         let skPx=F(26); const skMaxW=W-padX*2;
@@ -8730,7 +10174,13 @@
         ctx.font='400 '+F(24)+'px '+RFONT; ctx.fillStyle='#000'; ctx.textAlign='center'; ctx.fillText(l.text, W/2, y);
       } else if(l.kind==='measure'){
         ctx.font='400 '+F(24)+'px '+RFONT; ctx.fillStyle='#000';
-        ctx.textAlign='left'; ctx.fillText(l.label, padX, y);
+        // [phase2-33 · P7] ป้ายยาว (เช่น "โคนขา/ต้นขา เก็บเข้า" "ความยาวเสื้อ (หน้า)") ห้ามพิมพ์ทับตัวเลข — ตัวเลขคงขนาดเดิมชิดขวา · ป้ายย่อฟอนต์จนพอดีที่เหลือ (ไม่ต่ำกว่า F(12)) · ยังไม่พอ = ตัดท้ายด้วย "…"
+        const mvW=ctx.measureText(String(l.value)).width, mlMax=(W-padX*2)-mvW-F(6);
+        let mlPx=F(24), mlText=String(l.label);
+        while(mlPx>F(12) && ctx.measureText(mlText).width>mlMax){ mlPx--; ctx.font='400 '+mlPx+'px '+RFONT; }
+        mlText=fitEllipsis(mlText,mlMax);
+        ctx.textAlign='left'; ctx.fillText(mlText, padX, y);
+        ctx.font='400 '+F(24)+'px '+RFONT;
         ctx.textAlign='right'; ctx.fillText(l.value, W-padX, y);
         if(l.dotted){
           ctx.save(); ctx.strokeStyle='#ddd'; ctx.lineWidth=F(1); ctx.setLineDash([F(2),F(3)]);
