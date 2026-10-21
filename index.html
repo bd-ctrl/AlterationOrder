@@ -675,6 +675,7 @@
   .receipt-item{display:flex;flex-direction:column;gap:8px}
   .receipt-save{display:flex;align-items:center;justify-content:center;gap:8px;height:40px;border-radius:10px;border:1px solid var(--rule);color:var(--goldink);font-family:inherit;font-size:13.5px;text-decoration:none;background:var(--paper)}
   .receipt-save svg{width:16px;height:16px}
+  button.receipt-save{width:100%;background:#fff;cursor:pointer;flex:none}   /* [2026-10-21-5] ปุ่มบันทึกทุกรูป (เดิมเป็นลิงก์) */
   .confirm-actions{display:flex;gap:10px;justify-content:center}
   .confirm-actions .back{margin:0}
   .confirm-actions .confirm-danger{background:var(--red);margin:0}
@@ -4941,7 +4942,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-21-3';
+  const APP_VERSION = '2026-10-21-5';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -6761,7 +6762,7 @@
   const TYPE_MAP={J:'เสื้อสูท (สำเร็จรูป)',P:'กางเกง (สำเร็จรูป)',V:'เสื้อกั๊ก (สำเร็จรูป)',SH:'เสื้อเชิ้ต (สำเร็จรูป)',
     AT:'Accessory อื่นๆ',BT:'Accessory อื่นๆ',CL:'Accessory อื่นๆ',LP:'Accessory อื่นๆ',NT:'Accessory อื่นๆ',SP:'Accessory อื่นๆ'};
   // [ใหม่ตามที่ขอ] รหัส Accessory prefix ที่ไม่มีไซซ์จริงเลย (ไม่ต้องมีช่อง Size ให้กรอก/ไม่บังคับกรอกตอนบันทึก) — เดิมมีแค่ NT/BT ตอนนี้เพิ่ม CL เข้ามาด้วย รวมไว้จุดเดียวกันหมด ไม่ต้องไล่แก้หลายที่
-  const NO_SIZE_TYPE_CODES = new Set(['NT','BT','CL']);
+  const NO_SIZE_TYPE_CODES = new Set(['NT','BT','CL','BL']);   // [2026-10-21] + BL (รหัสขึ้นต้น BL-)
   // [2026-10-21 ตามที่ขอ "BL ไม่มีไซซ์ ช่อง Size ต้องว่าง"] รหัสขึ้นต้น BL- (เช่น BL-25014-105 — เลขท้ายเป็นส่วนของรหัส ไม่ใช่ไซซ์) ไม่มีไซซ์: ซ่อนแถว Size · ไม่บังคับกรอก · ส่ง Size ว่างเสมอ
   // (เดิมช่อง Size บังคับกรอก พนักงานจึงต้องใส่ 105 → Salesforce ไม่รับ เพราะ Size เสื้อสูทรับได้ 2 ตัว — บิล SL26102004)
   function skuHasNoSize(code){ code=String(code||'').trim(); if(!code) return false; return /^BL-/i.test(code) || NO_SIZE_TYPE_CODES.has(parseSkuMeta(code).typeCode); }
@@ -7339,6 +7340,8 @@
     // เช็ครหัสที่ hardcode ไว้ว่าเป็น Accessory ก่อนเสมอ (รหัสพวกนี้ไม่มี prefix บอกประเภทแบบปกติ auto-detect ทางปกติจะจับพลาด)
     const codeUpper=String(code).trim().toUpperCase();
     if(HARDCODED_ACCESSORY_SKUS.has(codeUpper)) return {type:'Accessory อื่นๆ',size:null,baseCode:code};
+    // [2026-10-21 ตามที่ขอ "หมวดหมู่ต้องเป็น Accessory อื่นๆ"] รหัสขึ้นต้น BL- (เช่น BL-25014-105, BL-33001-BLK) = Accessory อื่นๆ · ไม่มีไซซ์ (เลขท้ายเป็นส่วนของรหัส) · เช็กเฉพาะ BL- ต้นรหัส ไม่กระทบ NT-BL-…/BT-L-BL-… ที่เป็น Accessory อยู่แล้ว
+    if(/^BL-/.test(codeUpper)) return {type:'Accessory อื่นๆ',size:null,baseCode:code,typeCode:'BL'};
     // [ใหม่ตามที่ขอ] เช็ครหัสรองเท้าฐาน+ไซซ์ท้ายรหัส (เช่น "C292-Y06-CF-39") ก่อน auto-detect ปกติเช่นกัน — รหัสพวกนี้ไม่มี prefix ประเภทแบบ J/P/V/SH เลย จับไม่ได้ถ้าไม่ hardcode
     const shoeSizeMatch = codeUpper.match(/^(.+)-(\d{2,3})$/);
     if(shoeSizeMatch && HARDCODED_SHOE_BASE_SKUS.has(shoeSizeMatch[1])){
@@ -7416,6 +7419,7 @@
   function normalizeAccessorySku(block){
     const chip=block&&block.querySelector('.type-select'), sku=block&&block.querySelector('.sku-input'), sizeEl=block&&block.querySelector('.size-input');
     if(!chip||!sku||chip.value!==ACC_TYPE_NAME) return false;
+    if(/^BL-/i.test(sku.value.trim())) return false;   // [2026-10-21] BL- เลขท้ายเป็นส่วนของรหัส (BL-25014-105) ไม่ใช่ไซซ์ — ห้ามตัดเป็น BL-25014 + Size 105
     const m=/^(.+)-(\d{2,3}(?:\.\d)?)$/.exec(sku.value.trim());
     if(!m) return false;
     const base=m[1], tail=m[2], cur=sizeEl?sizeEl.value.trim():'';
@@ -8037,16 +8041,43 @@
     if(_pendingReloadAfterResult){ _pendingReloadAfterResult=false; location.reload(); }
   }
   // โชว์รูปใบสรุป (เหมือนที่แนบเข้า Lark Base) ไว้ในป๊อปอัพผลลัพธ์เลย ไม่ต้องไปเปิด Lark เช็คเอง — กดปุ่มใต้รูปเพื่อบันทึกรูปลงเครื่องได้เลย
+  // [2026-10-21-5 ตามที่ขอ "ตอนกดบันทึกรูป บันทึกได้ตามจำนวนสินค้าทั้งหมดในบิล" + feedback หน้าร้าน "บันทึกรูปลง iPad ไม่ได้ ต้องแคปหน้าจอ"]
+  // เดิม: ปุ่มบันทึกแยกทุกรูป (ลิงก์ดาวน์โหลด) — เว็บในแอป Lark บน iPad ไม่รับลิงก์ดาวน์โหลด กดแล้วเงียบ และพนักงานมักกดแค่รูปแรก
+  // ใหม่: ปุ่มเดียวใต้รูปทั้งหมด → iPad/มือถือ = เมนูแชร์ของเครื่องพร้อมทุกรูป (เลือก "บันทึกรูปภาพ") · แชร์ไม่ได้ = เปิดรูปทั้งหมดเต็มจอให้กดค้างบันทึก · คอม = ดาวน์โหลดทุกรูป
+  let _resultImgs=[];
+  const RCPT_TOUCH=(()=>{ const u=navigator.userAgent||''; return /iPad|iPhone|iPod|Android/i.test(u)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1); })();
+  function rcptFileName(img,i,n){ const b=String(img.billNo||'').trim()||'บิล'; return 'ใบสรุป_'+b+(img.productCode?'_'+String(img.productCode).replace(/\s+/g,''):(n>1?'_'+(i+1):''))+'.png'; }
+  function rcptToFile(b64,name){ const bin=atob(String(b64||'')); const u=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i); return new File([u],name,{type:'image/png'}); }
+  function rcptShowAll(imgs){
+    let ov=document.getElementById('rcptSaveOv'); if(ov) ov.remove();
+    ov=document.createElement('div'); ov.id='rcptSaveOv';
+    ov.style.cssText='position:fixed;inset:0;z-index:2147483000;background:rgba(20,18,15,.92);display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px;overflow:auto;-webkit-overflow-scrolling:touch';
+    ov.innerHTML='<div style="display:flex;align-items:center;gap:10px;width:100%;max-width:520px;color:#fff;font-weight:600;font-size:16px;line-height:1.4"><span style="flex:1">กดค้างที่รูป แล้วเลือก “บันทึกรูปภาพ” ('+imgs.length+' รูป)</span><button type="button" data-rcpt-x style="flex:none;height:40px;padding:0 18px;border:0;border-radius:999px;background:#C9A24B;color:#fff;font:inherit;font-size:15px">ปิด</button></div>'
+      + imgs.map(im=>'<img alt="ใบสรุป" src="data:image/png;base64,'+im.imageBase64+'" style="display:block;max-width:min(520px,100%);height:auto;background:#fff;border-radius:8px;-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto">').join('');
+    ov.addEventListener('click',e=>{ if(e.target===ov||(e.target.closest&&e.target.closest('[data-rcpt-x]'))) ov.remove(); });
+    document.body.appendChild(ov);
+  }
+  function rcptSaveAll(){
+    const imgs=_resultImgs.filter(im=>im&&im.imageBase64); if(!imgs.length) return;
+    const names=imgs.map((im,i)=>rcptFileName(im,i,imgs.length));
+    if(!RCPT_TOUCH){   // คอม: ดาวน์โหลดทุกรูป (เว้นจังหวะให้เบราว์เซอร์รับครบ)
+      imgs.forEach((im,i)=>setTimeout(()=>{ const a=document.createElement('a'); a.href='data:image/png;base64,'+im.imageBase64; a.download=names[i]; document.body.appendChild(a); a.click(); a.remove(); }, i*400));
+      return;
+    }
+    let files=null; try{ files=imgs.map((im,i)=>rcptToFile(im.imageBase64,names[i])); }catch(_e){}
+    let can=false; try{ can=!!(files&&navigator.share&&navigator.canShare&&navigator.canShare({files})); }catch(_e){}
+    if(can){ navigator.share({files}).catch(err=>{ if(!(err&&err.name==='AbortError')) rcptShowAll(imgs); }); return; }
+    rcptShowAll(imgs);
+  }
   function renderResultReceipts(images){
     const box=document.getElementById('resultReceipts'); if(!box) return;
-    box.innerHTML = images.map((img,i)=>{
-      const src='data:image/png;base64,'+img.imageBase64;
-      const filename=(img.billNo||('ใบสรุป'+(i+1)))+'.png';
-      return '<div class="receipt-item"><img src="'+src+'" alt="ใบสรุป">'
-        + '<a class="receipt-save" href="'+src+'" download="'+filename+'">'
-        + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m-4-4l4 4 4-4M4 21h16"/></svg>'
-        + 'บันทึกรูปใบสรุป</a></div>';
-    }).join('');
+    _resultImgs=(images||[]).slice();
+    if(!_resultImgs.length){ box.innerHTML=''; return; }
+    box.innerHTML = _resultImgs.map(img=>'<div class="receipt-item"><img src="data:image/png;base64,'+img.imageBase64+'" alt="ใบสรุป"></div>').join('')
+      + '<button type="button" class="receipt-save" data-rcpt-all>'
+      + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m-4-4l4 4 4-4M4 21h16"/></svg>'
+      + (_resultImgs.length>1?'บันทึกรูปใบสรุป (ทั้งหมด '+_resultImgs.length+' รูป)':'บันทึกรูปใบสรุป')+'</button>';
+    const btn=box.querySelector('[data-rcpt-all]'); if(btn) btn.addEventListener('click',rcptSaveAll);
   }
   if(resultOkBtn) resultOkBtn.addEventListener('click', closeResultPop);
   if(resultPop) resultPop.addEventListener('click', e=>{ if(e.target===resultPop) closeResultPop(); });
