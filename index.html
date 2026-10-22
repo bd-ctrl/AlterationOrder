@@ -152,6 +152,19 @@
   .stitchlbl input{width:18px;height:18px;accent-color:var(--gold);cursor:pointer;margin:0}
   /* [ใหม่ 2026-10-19 ผู้ใช้เลือกแบบ A "วงกลมติ๊ก" จาก mockup] ช่องติ๊กในก้อนสินค้า 4 ช่อง (เย็บย้ำกระดุม/ลูกค้าใช้งานก่อนปรับแก้/งานทีม/ใช้ช่างหน้าร้าน) เปลี่ยนจากสี่เหลี่ยมเป็นวงกลม — ติ๊กแล้วเต็มวงสีทอง เครื่องหมายถูกขาว · input จริงยังอยู่ (ซ่อนด้วย opacity) ใช้คีย์บอร์ด/JS เดิมได้ทุกอย่าง */
   .frow.stitch-row,.frow.used-row,.frow.team-row,.frow.shop-row{padding-top:11px;padding-bottom:11px}
+  /* [2026-10-22-3 ตามที่ขอ] ติ๊ก "เปลี่ยนรหัสกระดุม" + ช่องรหัสกระดุม (พิมพ์อิสระ) · ติ๊ก "ตลอดแนว" ใต้โคนขา/ต้นขา (โชว์เฉพาะตอนเลือก "แก้ไข") · รูปย่อของรูปที่แนบ */
+  .frow.btncode-row{padding-top:11px;padding-bottom:11px;gap:12px;flex-wrap:wrap}
+  .btncode-input{margin-left:auto;flex:1 1 140px;max-width:58%;border:none;border-bottom:1px solid var(--rule);background:transparent;font-family:inherit;font-size:15px;color:var(--ink);padding:6px 2px;text-align:right;outline:none}
+  .btncode-input:focus{border-bottom-color:var(--gold)}
+  .mitem .along-row{display:none;justify-content:flex-end;padding:8px 0 10px}   /* [2026-10-22-4] เว้นจากเส้นใต้ปุ่ม แก้ไข (ไอแพดแนวนอนชิดกัน) */
+  .mitem.editing .along-row{display:flex}
+  .along-row .stitchlbl.rchk{gap:9px;font-size:14px}
+  .along-row .rchk .ind{width:22px;height:22px}
+  .att-thumbs{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin:-2px 0 8px}
+  .att-thumbs[hidden]{display:none}
+  .att-th{position:relative;width:62px;height:62px;border-radius:10px;overflow:hidden;border:1px solid var(--rule);background:#fff;flex:0 0 auto}
+  .att-th img{width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in}
+  .att-th .x{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(20,18,14,.72);color:#fff;font-size:15px;line-height:22px;padding:0;cursor:pointer}
   .stitchlbl.rchk{position:relative;gap:12px;user-select:none}
   .stitchlbl.rchk input{position:absolute;opacity:0;width:25px;height:25px;margin:0;pointer-events:none}
   .rchk .ind{width:25px;height:25px;border-radius:50%;border:1.7px solid #c9bfa3;background:#fff;display:grid;place-items:center;flex:0 0 auto;transition:background .18s,border-color .18s,transform .18s}
@@ -899,6 +912,21 @@
   .ra2-up.note{background:rgba(163,127,48,.13);color:var(--goldink)}
   .ra2-up.sf{margin-top:6px;font-size:12.5px}
   .ra2-up.sf.ok{background:transparent;padding:2px 12px;color:var(--t2)}
+  /* [2026-10-22-2 ตามที่ขอ] แนบรูปภาพในฟอร์มนำกลับมาแก้ + ดูตัวอย่าง */
+  .ra2-frow.ph{align-items:flex-start}
+  .ra2-ph{margin-left:auto;display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;max-width:72%}
+  .ra2-th{position:relative;width:66px;height:66px;border-radius:10px;overflow:hidden;border:1px solid var(--rule);background:var(--paper);flex:0 0 auto}
+  .ra2-th img{width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in}
+  .ra2-th .x{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(20,18,14,.72);color:#fff;font-size:15px;line-height:22px;padding:0;cursor:pointer}
+  .ra2-th.add{border:1.5px dashed var(--gold);color:var(--goldink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:11.5px;cursor:pointer;background:transparent}
+  .ra2-th.add svg{width:20px;height:20px}
+  .ra2-th.busy{display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--t2)}
+  .ra2-phmsg{flex-basis:100%;text-align:right;font-size:12px;color:var(--red)}
+  .ra2-lb{position:fixed;inset:0;z-index:100000;background:rgba(10,9,7,.88);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;padding:16px;cursor:zoom-out}
+  .ra2-lb img{max-width:94vw;max-height:84vh;border-radius:8px;object-fit:contain;background:#fff}
+  .ra2-lb .cap{color:#fff;font-size:14px}
+  .ra2-phdone{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+  .ra2-phdone .ra2-th{width:48px;height:48px}
   .ra2-toast{position:fixed;left:50%;bottom:18px;z-index:9999;transform:translate(-50%,16px);max-width:min(92vw,440px);padding:10px 16px;border-radius:12px;background:var(--ink);color:#fff;font-size:13.5px;line-height:1.5;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
   .ra2-toast.show{opacity:1;transform:translate(-50%,0)}
   .ra2-toast.bad{background:var(--red)}
@@ -2833,8 +2861,8 @@
 <div class="hp-item"><div class="hp-name"><span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v8M8 12h8"></path></svg>แนบรูป (ถ้ามี)</span> <span class="hp-kind">เลือกรูปจากเครื่อง · ไม่บังคับ</span></div><div class="hp-desc">
 <ul class="hp-list">
 <li>แตะแล้วเลือกรูปจากเครื่อง เลือกหลายรูปพร้อมกันได้ ระบบย่อรูปให้เล็กเองระหว่างนั้นขึ้นคำว่า “กำลังบีบอัดรูป…”</li>
-<li>แนบแล้วป้ายจะเปลี่ยนเป็น “แนบรูปแล้ว (1 รูป) · กดล้าง” (ตัวเลขเปลี่ยนตามจำนวนรูป) ถ้าแตะที่ป้ายนี้ รูปทั้งหมดของสินค้าชิ้นนั้นจะถูกล้างทันที ไม่มีถามซ้ำ</li>
-<li>พื้นที่เก็บรูปรวมทั้งบิลมีจำกัด (ประมาณ 3 รูปต่อบิล) ถ้าเต็มจะขึ้นข้อความ “แนบรูปไม่สำเร็จ” พร้อมเหตุผล เช่น “พื้นที่เก็บรูปในบิลนี้เต็มแล้ว” ให้ล้างรูปเดิมออกก่อน หรือแนบน้อยลง</li>
+<li>แนบแล้วป้ายจะเปลี่ยนเป็น “แนบรูปแล้ว (1 รูป) · เพิ่มรูป” (ตัวเลขเปลี่ยนตามจำนวนรูป) แตะป้ายอีกครั้งเพื่อแนบรูปเพิ่ม · ใต้หัวสินค้ามีรูปย่อให้ดู แตะรูปย่อเพื่อดูเต็มจอ กด × บนรูปเพื่อลบรูปนั้น</li>
+<li>แนบได้สูงสุด 6 รูปต่อบิล (รวมทุกชิ้น) ถ้าเกินจะขึ้นข้อความ “แนบรูปไม่สำเร็จ … แนบได้สูงสุด 6 รูปต่อบิล” ให้กด × ลบรูปเดิมออกก่อน หรือแนบน้อยลง</li>
 <li>ไฟล์ที่เบราว์เซอร์เปิดไม่ได้ (เช่น รูปแบบ HEIC บางเครื่อง) จะขึ้นข้อความ “เปิดไฟล์รูปไม่สำเร็จ” ให้ลองถ่ายหรือเลือกรูปใหม่</li>
 <li>รูปที่แนบไม่ถูกเก็บในร่างที่กด <span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path><path d="M17 21v-8H7v8"></path><path d="M7 3v5h8"></path></svg>บันทึกร่าง</span> ถ้าเปิดร่างกลับมาต้องแนบรูปใหม่</li>
 </ul></div></div>
@@ -4991,6 +5019,8 @@
           </div>
           <label class="attachbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg><span class="attachbtn-label">แนบรูป <span class="opt">(ถ้ามี)</span></span><input type="file" class="attach-file-input hidden" accept="image/*" multiple></label>
           <button class="itemdel" title="ลบสินค้าชิ้นนี้"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-14M10 11v6M14 11v6"/></svg></button></div>
+        <!-- [2026-10-22-3 ตามที่ขอ] รูปย่อของรูปที่แนบ — แตะดูเต็มจอ · × ลบทีละรูป (สร้างด้วย renderAttachThumbs) -->
+        <div class="att-thumbs" hidden></div>
         <div class="frow codewrap"><span class="k">รหัสสินค้า</span><input class="sku-input emph" placeholder="พิมพ์เพื่อค้นหา หรือสแกน" autocomplete="off">
           <button class="scanbtn" title="สแกนบาร์โค้ด / QR"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M3 12h18"/></svg></button>
           <div class="suggest sku-suggest"></div></div>
@@ -5002,6 +5032,8 @@
         <div class="frow codewrap contact-row hidden"><span class="k">ชื่อพนักงานที่ติดต่อ</span><input class="contact-input" placeholder="พิมพ์แล้วเลือกชื่อ" autocomplete="off"><div class="suggest contact-suggest"></div></div>
         <!-- [ใหม่ตามที่ขอ] ติ๊ก "เย็บย้ำกระดุม" เหนือหมายเหตุ — โชว์เฉพาะเสื้อสูท/กางเกง (คุมด้วย JS ใน renderMeasureSection) ติ๊กแล้วเติมคำนี้ลงหมายเหตุอัตโนมัติ ซึ่งไปรวมกับหมายเหตุที่ส่ง Salesforce (Field20__c) อยู่แล้วตามปกติ -->
         <div class="frow stitch-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="stitch-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">เย็บย้ำกระดุม</span></label></div>
+        <!-- [2026-10-22-3 ตามที่ขอ] ติ๊ก "เปลี่ยนรหัสกระดุม" — โชว์เฉพาะเสื้อสูท/กางเกง/เสื้อกั๊ก (คุมใน renderMeasureSection) · ติ๊กแล้วมีช่องพิมพ์รหัสกระดุม · เติม "เปลี่ยนรหัสกระดุม (รหัส)" ลงหมายเหตุ (ไป Salesforce + ใบสรุป) ดู wireButtonCodeCheckbox -->
+        <div class="frow btncode-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="btncode-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">เปลี่ยนรหัสกระดุม</span></label><input class="btncode-input hidden" type="text" placeholder="รหัสกระดุม" autocomplete="off" maxlength="40" aria-label="รหัสกระดุม"></div>
         <!-- [ใหม่ 2026-09-23 ตามที่ขอ] ติ๊ก "ลูกค้าใช้งานก่อนปรับแก้" เหนือหมายเหตุ — กลไกเดียวกับ "เย็บย้ำกระดุม" ทุกอย่าง (ติ๊กแล้วเติมคำนี้ลงหมายเหตุอัตโนมัติ) ต่างกันแค่ไม่จำกัดประเภทสินค้า (ใช้ได้ทุกประเภท ไม่ใช่แค่เสื้อสูท/กางเกง) ดู wireUsedCheckbox -->
         <div class="frow used-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="used-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">ลูกค้าใช้งานก่อนปรับแก้</span></label></div>
         <!-- [ใหม่ 2026-10-06 ตามที่ขอ] ติ๊ก "งานทีม" เหนือหมายเหตุ — กลไกเดียวกับ "เย็บย้ำกระดุม" (ติ๊กแล้วเติมคำนี้ลงหมายเหตุอัตโนมัติ เอาติ๊กออกแล้วลบคำนี้) ต่างแค่โชว์ทุกประเภทสินค้า (พิมพ์ชื่อทีมต่อท้ายในหมายเหตุได้เอง เช่น "งานทีม K.Wind") -->
@@ -5197,7 +5229,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-22-1';
+  const APP_VERSION = '2026-10-22-4';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -6240,8 +6272,7 @@
       // อันตรายกว่านั้นคือถ้าบันทึกทับซ้ำ (ไม่ได้แตะรูปเลย) block._attachedImages จะว่างเปล่า → เขียนทับข้อมูลเดิมด้วยค่าว่าง รูปที่เคยแนบไว้จริงๆ หายไปถาวร
       const loadedImgs=(data['รายการ'+n+'_รูป']||'').split(' ').filter(Boolean);
       block._attachedImages=loadedImgs;
-      const attachLabelEl=block.querySelector('.attachbtn-label');
-      if(attachLabelEl) attachLabelEl.innerHTML = loadedImgs.length ? ('แนบรูปแล้ว ('+loadedImgs.length+' รูป)') : 'แนบรูป <span class="opt">(ถ้ามี)</span>';
+      renderAttachThumbs(block);   // [2026-10-22-3] ป้าย + รูปย่อ
       renderMeasureSection(block, type);
       const bc=branchContactKeysForTypeName(type);
       if(bc){
@@ -6999,6 +7030,77 @@
     // Worker ยังไม่มีช่องเก็บวิธีจัดส่ง/ที่อยู่ของงานแก้ซ้ำ และรับ pickupBranch เป็นตัวอักษรอังกฤษ/ตัวเลขเท่านั้น → "ขนส่งเอกชน" ส่ง pickupBranch ว่าง
     const RA_DELIV=['Messenger','ขนส่งเอกชน'], isDel=v=>RA_DELIV.includes(String(v||''));
     const delivTxt=()=>{ const f=S.form; return f&&isDel(f.branch)&&String(f.addr||'').trim()?' · จัดส่ง '+f.branch+' – '+cleanTxt(String(f.addr).trim()):''; };
+    // [2026-10-22-2 ตามที่ขอ "ต้องมีเพิ่มรูปภาพด้วย และให้มี preview รูป"] รูปเก็บในเครื่องจนกดบันทึก → หลังบันทึกสำเร็จแนบเข้า Salesforce Product ชื่อ "นำกลับมาแก้_P#<n>_ครั้งที่<r>_รูป<i>.jpg"
+    // (ไม่ใส่ในคอลัมน์ใบสรุปของ Lark — คอลัมน์นั้นโปรแกรมปริ้นใช้พิมพ์ · ชื่อไฟล์ไม่ขึ้นต้น "ใบสรุป_" จึงไม่ถูก /attach-product-file ลบทิ้ง)
+    const PH_MAX=5;
+    function phInner(f){
+      const ph=(f&&f.photos)||[];
+      return ph.map((p,i)=>'<div class="ra2-th"><img src="'+p.url+'" alt="รูปที่ '+(i+1)+'" data-ra2-pv="'+i+'"><button type="button" class="x" data-ra2-phdel="'+i+'" aria-label="ลบรูปที่ '+(i+1)+'">×</button></div>').join('')
+        + (f&&f.phBusy?'<div class="ra2-th busy"><span class="ra2-spin"></span></div>':'')
+        + (ph.length+((f&&f.phBusy)||0)<PH_MAX?'<label class="ra2-th add" aria-label="เพิ่มรูป"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg><span>เพิ่มรูป</span><input type="file" accept="image/*" multiple hidden data-ra2-phin></label>':'')
+        + (f&&f.phMsg?'<div class="ra2-phmsg">'+esc(f.phMsg)+'</div>':'');
+    }
+    function paintPh(){ const w=view.querySelector('[data-ra2-ph]'); if(w&&S.form) w.innerHTML=phInner(S.form); }
+    function phCompress(file){
+      return new Promise((res,rej)=>{
+        const im=new Image(), u=URL.createObjectURL(file);
+        im.onload=()=>{ URL.revokeObjectURL(u);
+          const ow=im.naturalWidth||im.width, oh=im.naturalHeight||im.height; if(!ow||!oh) return rej(new Error('อ่านขนาดรูปไม่ได้'));
+          let url='';
+          for(const maxDim of [1600,1280,1024]){
+            const k=Math.min(1,maxDim/Math.max(ow,oh)), c=document.createElement('canvas'); c.width=Math.round(ow*k); c.height=Math.round(oh*k);
+            const g=c.getContext('2d'); g.fillStyle='#fff'; g.fillRect(0,0,c.width,c.height); g.drawImage(im,0,0,c.width,c.height);
+            url=c.toDataURL('image/jpeg',0.82); if(url.length<=1400000) break;   // ~1 MB ต่อรูป
+          }
+          res(url); };
+        im.onerror=()=>{ URL.revokeObjectURL(u); rej(new Error('เปิดไฟล์รูปไม่สำเร็จ')); };
+        im.src=u;
+      });
+    }
+    async function addPhotos(files){
+      const f=S.form; if(!f) return;
+      const list=[...(files||[])].filter(x=>x&&/^image\//.test(x.type||'image/'));
+      const room=PH_MAX-f.photos.length; f.phMsg='';
+      if(list.length>room) f.phMsg='แนบได้สูงสุด '+PH_MAX+' รูป';
+      for(const file of list.slice(0,Math.max(0,room))){
+        f.phBusy++; paintPh();
+        try{ const url=await phCompress(file); if(S.form===f) f.photos.push({url,b64:url.split(',')[1]}); }
+        catch(e){ f.phMsg=(e&&e.message)||'แนบรูปไม่สำเร็จ'; }
+        finally{ f.phBusy--; if(S.form===f) paintPh(); }
+      }
+    }
+    function openLightbox(src,cap){
+      const lb=document.createElement('div'); lb.className='ra2-lb'; lb.setAttribute('role','dialog'); lb.setAttribute('aria-label','ดูรูป');
+      lb.innerHTML='<img alt=""><div class="cap"></div>'; lb.querySelector('img').src=src; lb.querySelector('.cap').textContent=cap+' · แตะเพื่อปิด';
+      const close=()=>{ lb.remove(); document.removeEventListener('keydown',onKey,true); };
+      const onKey=e=>{ if(e.key==='Escape'){ e.stopPropagation(); close(); } };
+      lb.addEventListener('click',close); document.addEventListener('keydown',onKey,true); document.body.appendChild(lb);
+    }
+    const phFileName=(code,round,i)=>'นำกลับมาแก้_P#'+digitsOf(code)+'_ครั้งที่'+round+'_รูป'+(i+1)+'.jpg';
+    function setPh(d){
+      if(S.done!==d||S.view!=='done') return;
+      const el=view.querySelector('[data-ra2-phup]'); if(!el) return;
+      const n=d.f.photos.length, ok=d.phDone.filter(Boolean).length; el.hidden=!n; if(!n) return;
+      const thumbs='<div class="ra2-phdone">'+d.f.photos.map((p,i)=>'<div class="ra2-th"><img src="'+p.url+'" alt="รูปที่ '+(i+1)+'" data-ra2-pv="'+i+'"></div>').join('')+'</div>';
+      el.className='ra2-up sf'+(d.phRun?'':(ok===n?' ok':' fail'));
+      el.innerHTML=(d.phRun?'<span class="ra2-spin"></span><span class="sp">กำลังแนบรูปภาพเข้า Salesforce… ('+ok+'/'+n+')</span>'
+        :ok===n?IC.tick+'<span class="sp">แนบรูปภาพ '+n+' รูปเข้า Salesforce แล้ว</span>'
+        :IC.warn+'<span class="sp">แนบรูปภาพเข้า Salesforce ได้ '+ok+'/'+n+' รูป'+(d.phErr?' — '+esc(d.phErr):'')+'</span><button type="button" class="rt" data-ra2="rephoto">ลองใหม่</button>')+thumbs;
+    }
+    async function uploadPhotos(d){
+      const ph=d.f.photos||[]; if(!ph.length||d.phRun) return;
+      d.phDone=d.phDone||ph.map(()=>false); d.phRun=true; d.phErr=''; setPh(d);
+      for(let i=0;i<ph.length;i++){
+        if(d.phDone[i]) continue;
+        try{
+          const j=await getJSON(WORKER+'/attach-product-file',{method:'POST',headers:JSON_H,body:JSON.stringify({productCode:d.f.code,imageBase64:ph[i].b64,filename:phFileName(d.f.code,d.round,i)})},60000);
+          if(!j||j.success!==true) throw new Error((j&&j.error)||'ระบบไม่ยืนยันการแนบรูป');
+          d.phDone[i]=true;
+        }catch(e){ d.phErr=(e&&e.message)||String(e); }
+        setPh(d);
+      }
+      d.phRun=false; setPh(d);
+    }
     function setView(v){ S.view=v; card.classList.toggle('ra2-on',v!=='list'); view.hidden=v==='list'; if(v==='list') view.innerHTML=''; }
     function backToList(){ S.form=null; S.done=null; S.err=''; setView('list');
       if(S.q&&!histList.querySelector(':scope>[data-ra2-res]')) renderSearch(); else decorate();
@@ -7013,7 +7115,7 @@
       const staffEl=document.getElementById('staffInput');
       S.form={code,o,p,n,larkId:String(p.larkRecordId||(o&&o.id)||''),type:p.type||d.type||'',sku:p.sku||d.sku||'',size:p.size||d.size||'',custName:nm||p.custName||'',custShow:(nm||p.custName||'—')+(c.nickname?' ('+c.nickname+')':''),
         nick:c.nickname||'',phone:c.phone||p.custPhone||'',billNo:o?(o.orderNo||''):String(p.billNo||''),orderCode:p.orderCode||oCodeOf(o)||'',branch,date:isoPlus(7),inspDefault:(staffEl&&staffEl.value.trim())||'',inspector:'',
-        urgent:false,approver:'',urgentManual:false,addr:''};
+        urgent:false,approver:'',urgentManual:false,addr:'',photos:[],phBusy:0,phMsg:''};
       S.form.inspector=canonInsp(S.form.inspDefault); S.err=''; S.listTop=histList.scrollTop;
       setView('form'); view.innerHTML=formHtml(); wireForm(); loadLatest(code); loadInspectors().then(onInspReady,onInspReady);
     }
@@ -7029,6 +7131,7 @@
             + (hasM?'<div class="measure-list ra2-measure">'+cfg.items.map(buildMitemHtml).join('')+'</div><div class="ra2-off">ไม่แก้ขนาด — กด “แก้ไขขนาด” เพื่อเลือกจุด</div>'
                    :'<div class="ra2-off">สินค้าประเภทนี้ไม่มีจุดวัด — เขียนรายละเอียดในหมายเหตุ</div>')
             + '<div class="ra2-frow note"><span class="k">หมายเหตุ'+(hasM?'':' <span class="req">*</span>')+'</span><div class="ra2-nwrap"><textarea class="note-input" data-ra2-note rows="2" maxlength="'+LIMIT+'" placeholder="เพิ่มหมายเหตุ" aria-label="หมายเหตุ"></textarea><span class="ra2-cnt" data-ra2-cnt></span></div></div>'
+            + '<div class="ra2-frow ph"><span class="k">รูปภาพ <span class="opt">(ถ้ามี · สูงสุด '+PH_MAX+' รูป)</span></span><div class="ra2-ph" data-ra2-ph>'+phInner(f)+'</div></div>'
             + '<div class="ra2-hint" data-ra2-over role="alert" hidden></div>'
             + '<div class="ra2-hint mut">ระบบจะเติม “บิลใหม่ …” ไว้ต้นรายละเอียดให้ (นับรวมในเลข '+LIMIT+' ตัวแล้ว) · เลขบิลใหม่ออกในนามสาขา '+esc(workBranch()||'—')+'</div>'
           + '</div>'
@@ -7094,7 +7197,8 @@
       [...list.querySelectorAll('.mitem')].forEach((m,i)=>{ const d=defs[i]; if(!d||!m.classList.contains('editing')) return;
         const num=m.querySelector('.numonly:not(.takein-input)'), v=num?getMitemValue(num):0;
         if(v){ const w=v<0?'เก็บเข้า':'ขยายออก';
-          if(d.dir) rows.push({label:d.label,dir:true,now:w+' '+fmtInch(Math.abs(v)),prev:prevText(d.label,true),rl:d.label+' '+w,rv:fmtInch(Math.abs(v))});
+          const al=d.along&&m.querySelector('.along-check')?.checked?' ตลอดแนว':'';   // [2026-10-22-3] ติ๊กตลอดแนว (โคนขา/ต้นขา)
+          if(d.dir) rows.push({label:d.label+al,dir:true,now:w+' '+fmtInch(Math.abs(v)),prev:prevText(d.label,true),rl:d.label+al+' '+w,rv:fmtInch(Math.abs(v))});
           else rows.push({label:d.label,dir:false,now:fmtInch(v),prev:prevText(d.label,false),rl:d.label,rv:fmtInch(v)}); }
         const ti=m.querySelector('.takein-input'), tv=ti?getMitemValue(ti):0;
         if(tv){ const lb=(d.takeInLabel||d.label.replace(/\s*\(.*\)$/,''))+' เก็บเข้า'; rows.push({label:lb,dir:false,now:fmtInch(Math.abs(tv)),prev:prevText(d.label+' เก็บเข้า',false),rl:lb,rv:fmtInch(Math.abs(tv))}); }
@@ -7333,6 +7437,7 @@
         notes,sfOk:false,sfRun:false,sfErr:'',noSf:false,authLost:false,leaveOk:false};
       view.innerHTML=doneHtml(); setView('done');
       buildReceipt(d);
+      if(f.photos&&f.photos.length){ d.phDone=f.photos.map(()=>false); setPh(d); uploadPhotos(d); }
     }
     const fileName=f=>'ใบสรุป_นำกลับมาแก้_'+digitsOf(f.code)+'_ครั้งที่'+f.n+'.png';   // ไฟล์ที่ผู้ใช้กด "บันทึกรูป" เอง (PNG เต็ม) — ชื่อที่อัปโหลดเข้า Salesforce เป็นหน้าที่ของ Worker (ห้ามขึ้นต้น "ใบสรุป_")
     function imgInner(d){ return d.img?'<img alt="ใบสรุป สินค้านำกลับมาแก้" src="data:image/png;base64,'+d.img+'">'
@@ -7350,6 +7455,7 @@
         + (d.notes||[]).map(n=>'<div class="ra2-up note" data-ra2-note role="status">'+IC.warn+'<span class="sp">'+esc(n)+'</span></div>').join('')
         + '<div class="ra2-img" data-ra2-img>'+imgInner(d)+'</div>'
         + '<div class="ra2-up" data-ra2-up role="status" aria-live="polite" hidden></div>'
+        + '<div class="ra2-up sf" data-ra2-phup role="status" aria-live="polite" hidden></div>'
         + '<div class="ra2-up sf" data-ra2-sf role="status" aria-live="polite" hidden></div>'
         + '<div class="ra2-foot end"><a class="ra2-dl" data-ra2-dl aria-disabled="true" download="'+esc(fileName(f))+'">'+IC.dl+'บันทึกรูป</a><button type="button" class="ra2-fin" data-ra2="fin"'+(d.busy?' disabled':'')+'>เสร็จสิ้น</button></div>';
     }
@@ -7555,6 +7661,13 @@
       else if(t.matches('[data-ra2-insp]')){ f.inspector=t.value; fitInsp(t); showSug(t.value); }
       changed();
     });
+    view.addEventListener('change',e=>{ if(S.form&&S.view==='form'&&e.target.matches('[data-ra2-phin]')){ e.stopPropagation(); const fl=e.target.files; addPhotos(fl).then(()=>{}); e.target.value=''; return; } });
+    view.addEventListener('click',e=>{
+      const pv=e.target.closest('[data-ra2-pv]'), del=e.target.closest('[data-ra2-phdel]');
+      const src=S.view==='done'?(S.done&&S.done.f):S.form;
+      if(del&&S.form&&S.view==='form'){ e.preventDefault(); e.stopPropagation(); S.form.photos.splice(+del.dataset.ra2Phdel,1); S.form.phMsg=''; paintPh(); return; }
+      if(pv&&src&&src.photos){ e.preventDefault(); e.stopPropagation(); const i=+pv.dataset.ra2Pv; const p=src.photos[i]; if(p) openLightbox(p.url,'รูปที่ '+(i+1)+' / '+src.photos.length); return; }
+    },true);
     view.addEventListener('change',e=>{ e.stopPropagation(); if(S.form&&e.target.matches('[data-ra2-branch]')){ S.form.branch=e.target.value; const ar=view.querySelector('[data-ra2-addrrow]'); if(ar) ar.hidden=!isDel(S.form.branch); changed(); } });
     view.addEventListener('focusin',e=>{ if(e.target.matches&&e.target.matches('[data-ra2-insp]')){ e.target.select(); showSug(''); } });
     view.addEventListener('focusout',e=>{ if(e.target.matches&&e.target.matches('[data-ra2-insp]')) setTimeout(()=>{ const a=document.activeElement; if(!a||!a.matches||!a.matches('[data-ra2-insp]')){ snapInsp(); hideSug(); } },150); });
@@ -7570,6 +7683,7 @@
       if(a==='back'||a==='fin'){ if(holding()) return; if(leaveBlocked()){ askLeave(()=>{ if(S.view==='done') backToList(); }); return; } backToList(); }
       else if(a==='reup') retryUp();
       else if(a==='resf') retrySf();
+      else if(a==='rephoto'){ const d=S.done; if(d&&S.view==='done') uploadPhotos(d); }
       else if(a==='inspretry') retryInsp();
       else if(a==='save') submit();
       else if(a==='recheck') submit({recheck:true});
@@ -8204,7 +8318,7 @@
       // [แก้บั๊ก] เจอจริง — โคนขา/ต้นขา หายไปจากฟอร์ม (ไม่มีใน items เลย) ทั้งที่ applyMeasuresToBlock/readMeasureValues/getPrintMeasureRows ทุกจุดยังอ้างถึงป้าย 'โคนขา'/'ต้นขา' อยู่ (แม็ปกับฟิลด์ Salesforce 'กางเกง - เก็บโคนขา'/'กางเกง - ต้นขา' ด้วย) — เพิ่มกลับเข้ามาก่อนรอบนี้
       // [แก้ตามที่ขอ] ลูกค้ายืนยันว่า "ต้นขา" กับ "โคนขา" คือจุดวัดเดียวกัน (แค่มีคนละชื่อเรียกจากคนละที่มาในโค้ดเดิม) เหลือช่องเดียวพอ
       // [แก้ตามที่ขอ] ตั้งชื่อป้ายเป็น "โคนขา/ต้นขา" ให้พนักงานจำได้ทั้ง 2 ชื่อ — ยังเป็นช่องเดียว/ค่าเดียว แค่ป้ายโชว์ 2 ชื่อ (label ตัวนี้เป็นทั้ง key ที่ readMeasureValues/applyMeasuresToBlock/getPrintMeasureRows ใช้อ้างอิงด้วย ต้องตรงกันทุกจุด)
-      {label:'โคนขา/ต้นขา', kind:'tape', dir:true},
+      {label:'โคนขา/ต้นขา', kind:'tape', dir:true, along:true},   // [2026-10-22-3] along = ติ๊ก "ตลอดแนว" ใต้แถว
       {label:'ต่ำเข่า', kind:'num'},
       {label:'ปลายขา', kind:'tape', dir:true},
       // [แก้ตามที่ขอ] ย้าย "ความยาวขา" มาไว้หลัง "ปลายขา" แทน (เดิมอยู่ก่อนต่ำเข่า/ปลายขา)
@@ -8269,6 +8383,7 @@
       + '</div>'
       + '<div class="toggle"><button>แก้ไข</button><button class="on">ไม่แก้ไข</button></div>'
       + '</div></div>'
+      + (item.along?'<div class="along-row"><label class="stitchlbl rchk"><input type="checkbox" class="along-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">ตลอดแนว</span></label></div>':'')
       + '</div>';
   }
   function wireGroupToggles(block){
@@ -8400,6 +8515,8 @@
   function wireMeasureItems(block){
     block.querySelectorAll('.mitem:not(.group-toggle-row) .toggle').forEach(g=>wireSimpleToggle(g,(i,b)=>{
       const item=g.closest('.mitem'); if(item) item.classList.toggle('editing', i===0);
+      // [2026-10-22-3] เลือก "ไม่แก้ไข" ที่โคนขา/ต้นขา = เอาติ๊ก "ตลอดแนว" ออก (และลบคำออกจากหมายเหตุ)
+      const al=item&&i!==0&&item.querySelector('.along-check'); if(al&&al.checked){ al.checked=false; setAlongWord(block,false); }
     }));
     wireDirNumInputs(block);
     wireGroupToggles(block);
@@ -8408,6 +8525,8 @@
     wireUsedCheckbox(block);
     wireTeamCheckbox(block);
     wireShopCheckbox(block);
+    wireAlongCheckbox(block);
+    wireButtonCodeCheckbox(block);
   }
   // [ใหม่ 2026-09-29 ตามที่ขอ] ความยาวขา (กางเกง) น้อยกว่า 32 นิ้ว → ถามใต้ช่องทันทีที่กรอกเสร็จ (mockup แบบ B):
   // "แน่ใจหรือเปล่าที่จะบันทึกข้อมูลความยาวขาเท่ากับ X นิ้ว" [แน่ใจ] [ไม่แน่ใจ] — ไม่มีข้อความบอกเกณฑ์ 32 ตามที่ขอ
@@ -8604,12 +8723,55 @@
     });
   }
   // [แก้บั๊ก 2026-09-24] ตอนโหลดร่าง/โหลดบิลเดิมมาแก้ ช่องติ๊ก (เย็บย้ำกระดุม/ลูกค้าใช้งานก่อนปรับแก้) ต้องตรงกับหมายเหตุที่โหลดเข้ามา — เดิมไม่แตะเลย ติ๊กที่ค้างจากก่อนหน้าเลยโชว์ติ๊กอยู่ทั้งที่หมายเหตุไม่มีคำนั้น (หรือกลับกัน)
+  // [2026-10-22-3 ตามที่ขอ] ติ๊ก "ตลอดแนว" (โคนขา/ต้นขา) — เก็บเป็นคำ "โคนขาตลอดแนว" ในหมายเหตุกางเกง (ไปถึง Salesforce + กู้คืนตอนเปิดร่าง/บิลเก่า + พิมพ์ซ้ำจาก Salesforce ได้)
+  // บนใบสรุปย้ายไปต่อท้ายป้าย "เก็บโคนขา/ต้นขา ตลอดแนว" แทน ไม่ซ้ำในหมายเหตุ (alongReceiptView) · ฟอร์มนำกลับมาแก้ใช้ป้ายในรายละเอียดเอง (readChanges) ไม่ใส่คำในหมายเหตุ
+  const ALONG_WORD='โคนขาตลอดแนว';
+  const isRa2Scope=el=>!!(el && (el.id==='ra2View' || (el.closest && el.closest('#ra2View'))));
+  function setAlongWord(block,on){
+    if(isRa2Scope(block)) return;
+    const noteInput=block.querySelector('.note-input'); if(!noteInput) return;
+    let words=noteInput.value.split(/\s+/).filter(Boolean).filter(w=>w!==ALONG_WORD);
+    if(on) words.push(ALONG_WORD);
+    noteInput.value=words.join(' ');
+    resizeNoteInput(noteInput);
+  }
+  function wireAlongCheckbox(block){
+    block.querySelectorAll('.along-check').forEach(cb=>{
+      if(cb.dataset.wired) return; cb.dataset.wired='1';
+      cb.addEventListener('change', ()=>setAlongWord(block, cb.checked));
+    });
+  }
+  // [2026-10-22-3 ตามที่ขอ] ติ๊ก "เปลี่ยนรหัสกระดุม" + ช่องรหัสกระดุม — หมายเหตุมีวลีเดียว "เปลี่ยนรหัสกระดุม (รหัส)" (ไม่มีรหัส = แค่คำ) แก้/ลบด้วย BTNCODE_RE
+  const BTNCODE_WORD='เปลี่ยนรหัสกระดุม', BTNCODE_RE=/เปลี่ยนรหัสกระดุม(?:\s*\([^)]*\))?/g;
+  const BTNCODE_TYPES=['เสื้อสูท (สำเร็จรูป)','กางเกง (สำเร็จรูป)','เสื้อกั๊ก (สำเร็จรูป)'];
+  function btnCodePhrase(code){ code=String(code||'').replace(/[()|\r\n]/g,' ').replace(/\s+/g,' ').trim(); return BTNCODE_WORD+(code?' ('+code+')':''); }
+  function applyButtonCodeToNote(block){
+    const cb=block.querySelector('.btncode-check'), inp=block.querySelector('.btncode-input'), noteInput=block.querySelector('.note-input');
+    if(!cb||!noteInput) return;
+    let v=noteInput.value.replace(BTNCODE_RE,' ').replace(/[ \t]{2,}/g,' ').replace(/^[ \t]+|[ \t]+$/g,'');
+    if(cb.checked) v=(v?v+' ':'')+btnCodePhrase(inp?inp.value:'');
+    noteInput.value=v;
+    resizeNoteInput(noteInput);
+  }
+  function wireButtonCodeCheckbox(block){
+    const cb=block.querySelector('.btncode-check'), inp=block.querySelector('.btncode-input');
+    if(!cb || cb.dataset.wired) return;
+    cb.dataset.wired='1';
+    cb.addEventListener('change', ()=>{
+      if(inp){ inp.classList.toggle('hidden', !cb.checked); if(cb.checked) setTimeout(()=>{ try{ inp.focus(); }catch(e){} },0); else inp.value=''; }
+      applyButtonCodeToNote(block);
+    });
+    if(inp) inp.addEventListener('input', ()=>{ if(inp.value.indexOf('|')>=0||/[()]/.test(inp.value)) inp.value=inp.value.replace(/[|()]/g,' '); if(cb.checked) applyButtonCodeToNote(block); });
+  }
   function syncNoteCheckboxes(block){
     const words=(block.querySelector('.note-input')?.value||'').split(/\s+/).filter(Boolean);
     const st=block.querySelector('.stitch-check'); if(st) st.checked=words.includes('เย็บย้ำกระดุม');
     const us=block.querySelector('.used-check'); if(us) us.checked=words.includes('ลูกค้าใช้งานก่อนปรับแก้');
     const tm=block.querySelector('.team-check'); if(tm) tm.checked=words.includes('งานทีม');
     const sh=block.querySelector('.shop-check'); if(sh) sh.checked=words.includes(SHOP_TAILOR_WORD);
+    if(!isRa2Scope(block)) block.querySelectorAll('.along-check').forEach(cb=>{ cb.checked=words.includes(ALONG_WORD); });
+    const bcb=block.querySelector('.btncode-check'), binp=block.querySelector('.btncode-input');
+    if(bcb){ const m=/เปลี่ยนรหัสกระดุม(?:\s*\(([^)]*)\))?/.exec(block.querySelector('.note-input')?.value||''); bcb.checked=!!m; if(binp){ binp.value=m&&m[1]?m[1].trim():''; binp.classList.toggle('hidden', !m); } }
   }
   function renderMeasureSection(block, typeValue){
     block.dataset.measureRendered=typeValue; // จำประเภทที่ build ช่องวัดตัวไว้ล่าสุด — ให้ applySku รู้ว่าสแกน/พิมพ์รหัสประเภทเดิมซ้ำแล้วไม่ต้อง build ใหม่ทับค่าที่กรอกไว้
@@ -8629,6 +8791,13 @@
         resizeNoteInput(noteInput);
       }
     }
+    // [2026-10-22-3] "เปลี่ยนรหัสกระดุม" เฉพาะเสื้อสูท/กางเกง/เสื้อกั๊ก — ประเภทอื่น = ซ่อน + เอาติ๊ก/รหัส/วลีในหมายเหตุออก
+    const bcRow=block.querySelector('.btncode-row'), bcCb=block.querySelector('.btncode-check');
+    const bcSupported=BTNCODE_TYPES.includes(typeValue);
+    if(bcRow) bcRow.classList.toggle('hidden', !bcSupported);
+    if(bcCb && !bcSupported && bcCb.checked){ bcCb.checked=false; const bi=block.querySelector('.btncode-input'); if(bi){ bi.value=''; bi.classList.add('hidden'); } applyButtonCodeToNote(block); }
+    // [2026-10-22-3] "โคนขาตลอดแนว" มีเฉพาะกางเกง — เปลี่ยนเป็นประเภทอื่น = ลบคำออกจากหมายเหตุ
+    if(typeValue!=='กางเกง (สำเร็จรูป)' && !isRa2Scope(block)){ const ni=block.querySelector('.note-input'); if(ni && ni.value.split(/\s+/).includes(ALONG_WORD)) setAlongWord(block,false); }
     // ซิงก์ปุ่ม+เมนู dropdown ประเภทสินค้าที่มองเห็นให้ตรงกับค่าจริงเสมอ — เรียกจุดเดียวนี้ครอบคลุมทุกทางที่ประเภทสินค้าเปลี่ยน (สแกน SKU/รีเซ็ตก้อน/โหลดร่าง/โหลดบิลแก้ไข/เลือกเองจากเมนู)
     const typeLabelEl=block.querySelector('.type-picker-label'); if(typeLabelEl) typeLabelEl.textContent=typeValue;
     block.querySelectorAll('.type-picker-opt').forEach(o=>o.classList.toggle('on', o.dataset.value===typeValue));
@@ -8647,6 +8816,7 @@
     ml.classList.add('hidden');
     ml.innerHTML = cfg.items.map(buildMitemHtml).join('');
     wireMeasureItems(block);
+    if(!isRa2Scope(block)){ const w=(block.querySelector('.note-input')?.value||'').split(/\s+/); block.querySelectorAll('.along-check').forEach(cb=>{ cb.checked=w.includes(ALONG_WORD); }); }   // [2026-10-22-3] สร้างช่องวัดใหม่ = ติ๊กตามหมายเหตุ
   }
   // รายการเริ่มต้น (เผื่อโหลดจาก Google Sheet ไม่ทัน/ไม่สำเร็จ) — จะถูกแทนที่ด้วยรหัสจริงทั้งหมดเมื่อโหลดเสร็จ
   // หมายเหตุ: ดึงผ่าน Worker (/sku-list) แทนการยิงตรงไปที่ Google Sheets จากเบราว์เซอร์ เพราะ Google
@@ -8838,7 +9008,7 @@
   function wireProduct(block){
     wireNoteInput(block);
     // [แก้บั๊ก 2026-09-24] ช่องติ๊ก (เย็บย้ำกระดุม/ลูกค้าใช้งานก่อนปรับแก้) เดิมถูกเชื่อมแค่ผ่าน renderMeasureSection→wireMeasureItems ซึ่งก้อนแรกของหน้า (ประเภทเริ่มต้น = เสื้อสูท) ไม่เคยผ่านเลยจนกว่าจะสแกน/เลือกประเภทก่อน — ติ๊กบนก้อนแรกที่ยังไม่ได้แตะอะไรเลยไม่เติมหมายเหตุ (ประเภทอื่นใช้ได้เพราะต้องเลือกประเภท = ผ่าน render แล้ว) เชื่อมตั้งแต่ตอนผูกก้อนเลย (guard dataset.wired กันซ้ำอยู่แล้ว)
-    wireStitchCheckbox(block); wireUsedCheckbox(block); wireTeamCheckbox(block); wireShopCheckbox(block);
+    wireStitchCheckbox(block); wireUsedCheckbox(block); wireTeamCheckbox(block); wireShopCheckbox(block); wireButtonCodeCheckbox(block);   // [2026-10-22-3] เปลี่ยนรหัสกระดุม
     // [แก้ 2026-10-19] ช่องติ๊ก "ใช้ช่างหน้าร้าน" โชว์/ซ่อนตาม สินค้าใช้ของสาขา (.branch-prod ของก้อนนี้) + ประเภทของก้อนนี้ — ฟังที่ .branch-prod และตอนเปลี่ยนประเภท (renderMeasureSection) · ไม่ผูกกับสาขาที่ซื้อ (header) แล้ว
     updateShopTailorRow(block);
     const sku=block.querySelector('.sku-input'), sug=block.querySelector('.sku-suggest');
@@ -8986,18 +9156,18 @@
     function updateAttachLabel(busy){
       if(!attachLabel) return;
       if(busy){ attachLabel.innerHTML=scLd({size:14,words:false,inline:true})+'กำลังบีบอัดรูป…'; return; }
-      const n=block._attachedImages.length;
-      // [ใหม่] มีรูปแล้ว → กดที่ป้ายเพื่อล้างรูปทั้งหมดของชิ้นนี้ (เผื่อพื้นที่เต็ม / แนบผิด)
-      attachLabel.innerHTML = n ? ('แนบรูปแล้ว ('+n+' รูป) · <u>กดล้าง</u>') : 'แนบรูป <span class="opt">(ถ้ามี)</span>';
+      // [2026-10-22-3 ตามที่ขอ] เลิก "กดล้าง" ทั้งชุด — ป้ายนี้กดแล้วเพิ่มรูปได้อีก · ลบทีละรูปที่ × บนรูปย่อ (renderAttachThumbs)
+      renderAttachThumbs(block);
     }
-    if(attachLabel){
-      attachLabel.addEventListener('click', (e)=>{
-        if(!block._attachedImages.length) return;
-        e.preventDefault(); e.stopPropagation();
-        block._attachedImages = [];
-        updateAttachLabel(false);
-      });
-    }
+    // รูปย่อ: แตะ = ดูเต็มจอ · × = ลบรูปนั้น
+    const thumbBox=block.querySelector('.att-thumbs');
+    if(thumbBox) thumbBox.addEventListener('click', e=>{
+      const del=e.target.closest('[data-att-del]');
+      if(del){ e.preventDefault(); e.stopPropagation(); block._attachedImages.splice(+del.dataset.attDel,1); renderAttachThumbs(block); return; }
+      const pv=e.target.closest('[data-att-pv]');
+      if(pv){ const i=+pv.dataset.attPv; openPhotoLightbox(block._attachedImages[i], 'รูปที่ '+(i+1)+' / '+block._attachedImages.length); }
+    });
+    renderAttachThumbs(block);
     if(attachBtn && attachInput){
       // attachBtn เป็น <label> ครอบ input file ไว้จริง — คลิกที่ label แล้ว browser จะเปิดตัวเลือกไฟล์ให้เองตามธรรมชาติ
       // (ของเดิมเคยใช้ปุ่มแยก + JS สั่ง .click() แทน ซึ่งเว็บวิวในแอป Lark บางเวอร์ชันบล็อกการสั่งเปิดไฟล์แบบนี้ กดแล้วไม่มีอะไรเกิดขึ้น)
@@ -9007,6 +9177,8 @@
         attachInput.value='';
         updateAttachLabel(true);
         const failed=[];
+        // [2026-10-22-3 ตามที่ขอ "แนบได้มากกว่า 3 รูป"] เลิกเพดานรวม 85,000 ตัวอักษร — Worker (sh2 · ผูก R2 "IMAGES" แล้ว ตรวจกับแถวจริง 09-18 → 10-22) อัปรูปเข้า R2 แล้วเก็บแค่ลิงก์สั้นๆ ในข้อมูลดิบ
+        // จำกัดเป็นจำนวนรูปแทน PHOTO_BILL_MAX (6) ต่อบิล — แต่ละรูปตอนยืนยันเข้า Salesforce ใช้ subrequest 2 ครั้ง (โหลดจาก R2 + สร้างไฟล์) แพ็กเกจ Free มี 50 ต่อครั้ง
         // เผื่อพื้นที่ ~85,000 ตัวอักษรสำหรับรูปทั้งหมดในบิลนี้ (Lark จำกัด ~100,000/ช่อง เหลือให้ข้อมูลบิลส่วนอื่นในก้อน JSON เดียวกัน)
         const TOTAL_BUDGET=85000;
         const currentTotal=()=>[...document.querySelectorAll('#productsWrap .product-block')]
@@ -9014,8 +9186,8 @@
         for(const file of files){
           try{
             const url=await compressImageFile(file, 28000);
-            if(currentTotal()+url.length > TOTAL_BUDGET){
-              failed.push(file.name+': พื้นที่เก็บรูปในบิลนี้เต็มแล้ว — กด "กดล้าง" ที่รูปเดิมออกก่อน หรือแนบรูปน้อยลง');
+            if(billPhotoCount() >= PHOTO_BILL_MAX){
+              failed.push(file.name+': แนบได้สูงสุด '+PHOTO_BILL_MAX+' รูปต่อบิล — กด × ที่รูปเดิมเพื่อลบก่อน หรือแนบรูปน้อยลง');
             }else{
               block._attachedImages.push(url);
             }
@@ -9025,6 +9197,7 @@
         }
         updateAttachLabel(false);
         if(failed.length) alert('แนบรูปไม่สำเร็จ:\n'+failed.join('\n'));
+        void TOTAL_BUDGET; void currentTotal;
       });
     }
 
@@ -9103,6 +9276,27 @@
   }
 
   // รีเซ็ตก้อนสินค้าหนึ่งก้อนกลับเป็นค่าว่างเริ่มต้น (ใช้ทั้งตอนกด "เพิ่มสินค้า" และตอนโหลดร่าง)
+  // [2026-10-22-3 ตามที่ขอ "เพิ่ม preview รูปภาพ" + "แนบได้มากกว่า 3 รูป"] รูปย่อใต้หัวก้อนสินค้า (แตะดูเต็มจอ · × ลบทีละรูป) · สูงสุด PHOTO_BILL_MAX รูปต่อบิล
+  // รูปที่โหลดจากร่าง/บิลเก่าเป็นลิงก์ R2 (https://…) — แสดงได้ตรงๆ · ตั้ง src ทางพร็อพเพอร์ตี (ไม่ต่อ base64 ยาวลง HTML)
+  const PHOTO_BILL_MAX=6;
+  function billPhotoCount(){ return [...document.querySelectorAll('#productsWrap .product-block')].reduce((s,b)=>s+((b._attachedImages||[]).length),0); }
+  function renderAttachThumbs(block){
+    const imgs=block._attachedImages||[];
+    const lbl=block.querySelector('.attachbtn-label');
+    if(lbl) lbl.innerHTML = imgs.length ? ('แนบรูปแล้ว ('+imgs.length+' รูป) · เพิ่มรูป') : 'แนบรูป <span class="opt">(ถ้ามี)</span>';
+    const box=block.querySelector('.att-thumbs'); if(!box) return;
+    box.hidden=!imgs.length;
+    box.innerHTML=imgs.map((u,i)=>'<div class="att-th"><img alt="รูปที่ '+(i+1)+'" data-att-pv="'+i+'"><button type="button" class="x" data-att-del="'+i+'" aria-label="ลบรูปที่ '+(i+1)+'">×</button></div>').join('');
+    box.querySelectorAll('img').forEach((im,i)=>{ im.src=imgs[i]; });
+  }
+  function openPhotoLightbox(src,cap){
+    if(!src) return;
+    const lb=document.createElement('div'); lb.className='ra2-lb'; lb.setAttribute('role','dialog'); lb.setAttribute('aria-label','ดูรูป');
+    lb.innerHTML='<img alt=""><div class="cap"></div>'; lb.querySelector('img').src=src; lb.querySelector('.cap').textContent=cap+' · แตะเพื่อปิด';
+    const close=()=>{ lb.remove(); document.removeEventListener('keydown',onKey,true); };
+    const onKey=e=>{ if(e.key==='Escape'){ e.stopPropagation(); close(); } };
+    lb.addEventListener('click',close); document.addEventListener('keydown',onKey,true); document.body.appendChild(lb);
+  }
   function resetProductBlockToEmpty(block){
     block.querySelector('.sku-input').value='';
     block.querySelector('.size-input').value='';
@@ -9111,11 +9305,12 @@
     block.querySelector('.branch-prod').value='OFFICE';
     const noteInp=block.querySelector('.note-input'); if(noteInp){ noteInp.value=''; resizeNoteInput(noteInp); }
     // ล้างหมายเหตุแล้วต้องเอาติ๊กออกด้วย (เย็บย้ำกระดุม/ลูกค้าใช้งานก่อนปรับแก้) ไม่งั้นก้อนใหม่ที่โคลนมาจากก้อนที่ติ๊กไว้จะโชว์ติ๊กค้างทั้งที่หมายเหตุว่าง
-    block.querySelectorAll('.stitch-check,.used-check,.team-check,.shop-check').forEach(cb=>{ cb.checked=false; });
+    block.querySelectorAll('.stitch-check,.used-check,.team-check,.shop-check,.btncode-check').forEach(cb=>{ cb.checked=false; });
+    const bcInp=block.querySelector('.btncode-input'); if(bcInp){ bcInp.value=''; bcInp.classList.add('hidden'); }
     const contactInp=block.querySelector('.contact-input'); if(contactInp) contactInp.value='';
     const sugEl=block.querySelector('.sku-suggest'); if(sugEl){ sugEl.classList.remove('show'); sugEl.innerHTML=''; }
     block._attachedImages=[];
-    const attachLabelEl=block.querySelector('.attachbtn-label'); if(attachLabelEl) attachLabelEl.innerHTML='แนบรูป <span class="opt">(ถ้ามี)</span>';
+    renderAttachThumbs(block);
     const attachInputEl=block.querySelector('.attach-file-input'); if(attachInputEl) attachInputEl.value='';
     renderMeasureSection(block, TYPE_MAP.J);
   }
@@ -9136,7 +9331,7 @@
     // firstProductBlock มีปุ่ม "เพิ่มสินค้า" อยู่ใน colL ด้วย — cloneNode เลยติดสำเนาปุ่มมาด้วยเสมอ ต้องทิ้งสำเนานี้ทิ้ง (ตัวจริงจะถูกย้ายมาแทนที่ด้วย placeAddProductBtn ด้านล่าง)
     const dupBtn=clone.querySelector('#addProductBtn'); if(dupBtn) dupBtn.remove();
     // [แก้บั๊ก 2026-09-24] cloneNode คัดลอก data-wired="1" ของช่องติ๊ก (เย็บย้ำกระดุม/ลูกค้าใช้งานก่อนปรับแก้) ไปด้วย แต่ไม่คัดลอกตัวฟัง event — ก้อนที่ 2 เป็นต้นไปเลยกดติ๊กแล้วไม่มีอะไรเกิดขึ้นเลย (guard dataset.wired คิดว่าเชื่อมแล้ว) ต้องล้างธงนี้ในสำเนา ให้ wireMeasureItems เชื่อมใหม่
-    clone.querySelectorAll('.stitch-check,.used-check,.team-check,.shop-check').forEach(cb=>{ delete cb.dataset.wired; });
+    clone.querySelectorAll('.stitch-check,.used-check,.team-check,.shop-check,.btncode-check').forEach(cb=>{ delete cb.dataset.wired; });
     resetProductBlockToEmpty(clone);
     wrap.appendChild(clone);
     wireProduct(clone);
@@ -9852,6 +10047,13 @@
   // [แก้ 2026-09-29 ตามที่ขอ] Worker ต่อท้ายหมายเหตุใน Salesforce (Field20__c) ด้วย "อก: เก็บเข้า 2 นิ้ว" / "เอว: ..." / "สะโพก: ..." / "ต้นแขน: เก็บเข้า ..." / "ต่ำเข่า: ..."
   // (ให้ช่างเห็นทิศทางในใบงาน เพราะฟิลด์ค่าวัดเป็นตัวเลขล้วนใส่คำไม่ได้ — ฝั่ง Salesforce ยังต้องมีเหมือนเดิม) แต่ใบสรุปพิมพ์ซ้ำ/ดึงข้อมูลล่าสุด/?auto=1 ดึงหมายเหตุนี้มาทั้งก้อน
   // เลยซ้ำกับแถวค่าวัดด้านบนของใบ (เจอจริง R326092601) — ตัดเฉพาะท่อนที่มีแถวเดียวกันอยู่ด้านบนแล้ว (ชื่อจุดวัด+ทิศทาง+ตัวเลขตรงกันทุกอย่าง) ท่อนที่ไม่ตรง/ข้อความอื่นเก็บไว้ครบ
+  // [2026-10-22-3 ตามที่ขอ] หมายเหตุมีคำ "โคนขาตลอดแนว" + มีแถว "เก็บโคนขา/ต้นขา" → ป้ายแถวเป็น "เก็บโคนขา/ต้นขา ตลอดแนว" และตัดคำออกจากหมายเหตุ (ไม่ซ้ำ) · ไม่มีแถว (ค่า 0) = คงคำไว้ในหมายเหตุ ไม่ให้ข้อมูลหาย
+  function alongReceiptView(item){
+    const rows=item.measureRows||[], note=String(item.note||'');
+    if(note.split(/\s+/).indexOf('โคนขาตลอดแนว')<0 || !rows.some(r=>r.label==='เก็บโคนขา/ต้นขา')) return {rows, note};
+    return { rows:rows.map(r=>r.label==='เก็บโคนขา/ต้นขา'?Object.assign({},r,{label:'เก็บโคนขา/ต้นขา ตลอดแนว'}):r),
+      note:note.replace(/(^|[ \t])โคนขาตลอดแนว(?=\s|$)/g,'$1').replace(/[ \t]{2,}/g,' ').replace(/^[ \t]+|[ \t]+$/gm,'').trim() };
+  }
   function stripNoteDupMeasures(note, rows){
     if(!note || !rows || !rows.length) return note;
     const have=new Set(rows.map(r=>String(r.label).trim()+'|'+parseFloat(r.value)));
@@ -9907,11 +10109,12 @@
     // [แก้ตามที่ขอ] "สินค้าใช้ของสาขา ..." (branchCenter) ตรงนี้ย้ายไปเป็น "ใช้สินค้าจาก" ในกลุ่มลูกค้าด้านบนแล้ว
     lines.push({kind:'dash'});
     // [แก้ตามที่ขอ] ตัดเส้นประบางๆ ใต้แต่ละแถวค่าวัดตัวออก (dotted) — เหลือแค่เส้นประหลักคร่อม SKU/หลังสัดส่วนเท่านั้น
-    item.measureRows.forEach((r)=>lines.push({kind:'measure', label:r.label, value:r.value+' นิ้ว'}));
+    const _along=alongReceiptView(item);   // [2026-10-22-3] ตลอดแนว
+    _along.rows.forEach((r)=>lines.push({kind:'measure', label:r.label, value:r.value+' นิ้ว'}));
     lines.push({kind:'dash'});
     // [แก้ตามที่ขอ] ย้าย "หมายเหตุ" ขึ้นมาไว้เหนือสถานะการชำระเงิน/วันนัดรับ + ใส่เส้นประคั่นท้ายหมายเหตุ (ก่อนหน้านี้ย้ายแล้วแต่ลืมใส่เส้นคั่น เนื้อหาเลยเบียดกับ "ชำระเงินแล้ว")
     // ส่ง noteLine เป็นข้อความดิบก้อนเดียว ไม่ตัดบรรทัดล่วงหน้าแบบนับตัวอักษร — renderReceiptCanvasBase64 จะตัดบรรทัดตามความกว้างจริงของกระดาษเอง (วัดด้วย ctx.measureText)
-    const noteText=String(stripNoteDupMeasures(String(item.note||''), item.measureRows)||'').trim();
+    const noteText=String(stripNoteDupMeasures(_along.note, _along.rows)||'').trim();
     if(noteText){
       lines.push({kind:'noteLabel', text:'หมายเหตุ'});
       lines.push({kind:'noteLine', text:noteText});
@@ -10276,8 +10479,9 @@
     const sku=pd(item.sku||'-')+((sizeClean && sizeClean!=='-') ? '-'+sizeClean : '');
     const ids=[item.orderCode,item.productCode].filter(Boolean).join(' · ');
     const idsLine=ids ? ids+' (ชิ้นที่ '+(item.itemIndex||1)+')' : '';
-    const cells=(item.measureRows||[]).map(r=>({label:pd(r.label), value:pd(r.value)}));
-    const noteText=pd(stripNoteDupMeasures(pd(item.note||''), item.measureRows)).trim();
+    const _along=alongReceiptView(item);   // [2026-10-22-3] ตลอดแนว (ใบ 4×6 ใช้เหมือนใบเล็ก)
+    const cells=_along.rows.map(r=>({label:pd(r.label), value:pd(r.value)}));
+    const noteText=pd(stripNoteDupMeasures(_along.note, _along.rows)).trim();
     const custName=order.nickname ? pd(order.custName||'-')+' ('+order.nickname+')' : pd(order.custName||'-');
     const phone=pd(order.phone).trim();
     const pk=(()=>{ const p=pd(order.pickupDate).split('-').map(Number); if(!p[0]||!p[1]||!p[2]) return {dm:'',day:''};
