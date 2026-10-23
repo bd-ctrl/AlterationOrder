@@ -1159,6 +1159,7 @@
   .draft-count-line{font-size:12.5px;color:var(--t2);padding:2px 4px 12px;border-bottom:1px solid var(--rule2);margin-bottom:8px}
   .hist-list{overflow:auto;display:flex;flex-direction:column;gap:10px}
   .hist-state{padding:30px 4px;text-align:center;color:var(--t2);font-size:13.5px;font-style:italic}
+  .hist-allcap{padding:2px 2px 8px;color:var(--t2);font-size:12.5px}
   /* [แก้ตามที่ขอ] แต่ละบิลเป็นกล่องสี่เหลี่ยมขอบมน+เงาจริง ไม่ใช่แค่แถบสีสลับ+เส้นคั่นเหมือนเดิม */
   /* [แก้ตามที่ขอ] รีดีไซน์: .hist-row เดิมเป็นการ์ดใบเดียว → ตอนนี้เป็นแค่ wrapper จัดระยะห่าง ส่วนการ์ดจริง (เงา/ขอบ/มุมโค้ง) ย้ายไปอยู่ที่ .hist-ordercard กับ .hist-itemcard แยกกันแทน ให้ข้อมูลออเดอร์กับรายการแก้ทรงแต่ละชิ้นเป็นคนละกล่อง ตามที่ขอ */
   .hist-row{position:relative;display:flex;flex-direction:column;gap:10px}
@@ -1660,7 +1661,7 @@
   }
   /* [2026-10-22-5 ตามที่ขอ] บัญชีอ่านอย่างเดียว — เส้นทางเดียวกับที่ Worker sh3 ปฏิเสธ (AUTH_RO_BLOCK) · GET ผ่านเสมอ */
   var RO_PATHS={'/create-order':1,'/update-order':1,'/cancel-order':1,'/update-note':1,'/queue-reprint':1,'/mark-reprint-queue':1,'/attach-summary-image':1,'/attach-product-file':1,
-    '/repeat-alteration-submit':1,'/repeat-alteration-receipt':1,'/draft-save':1,'/draft-delete':1,'/print-control':1,'/confirm-order':1,'/repeat-alteration-confirm':1};
+    '/repeat-alteration-submit':1,'/repeat-alteration-receipt':1,'/repeat-alteration-photo':1,'/draft-save':1,'/draft-delete':1,'/print-control':1,'/confirm-order':1,'/repeat-alteration-confirm':1};
   var RO_MSG='บัญชีนี้อ่านอย่างเดียว — แก้ไขหรือบันทึกไม่ได้';
   function roBlocked(path,input,init){
     var m=(init && init.method) || ((typeof Request!=='undefined' && input instanceof Request) ? input.method : 'GET');
@@ -5323,9 +5324,9 @@
     if(WFEAT.v) return Promise.resolve(WFEAT.v);
     if(WFEAT.p) return WFEAT.p;
     WFEAT.p=fetch(WORKER+'/version').then(r=>r.json()).then(j=>{
-      WFEAT.v={raReprint:!!(j&&j.raReprint===true), printStation:!!(j&&j.printStation===true), findByCustomer:!!(j&&j.findByCustomer===true), ra2Auto:!!(j&&j.ra2Auto&&j.ra2Auto.on===true), build:String((j&&j.build)||'')};
+      WFEAT.v={raReprint:!!(j&&j.raReprint===true), printStation:!!(j&&j.printStation===true), findByCustomer:!!(j&&j.findByCustomer===true), findByBill:!!(j&&j.findByBill===true), raPhotoLark:!!(j&&j.raPhotoLark===true), ra2Auto:!!(j&&j.ra2Auto&&j.ra2Auto.on===true), build:String((j&&j.build)||'')};
       return WFEAT.v;
-    },()=>({raReprint:false,printStation:false,findByCustomer:false,ra2Auto:false,build:''})).finally(()=>{ WFEAT.p=null; });
+    },()=>({raReprint:false,printStation:false,findByCustomer:false,findByBill:false,raPhotoLark:false,ra2Auto:false,build:''})).finally(()=>{ WFEAT.p=null; });
     return WFEAT.p;
   }
   const wfeat=k=>!!(WFEAT.v&&WFEAT.v[k]);
@@ -5334,7 +5335,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-23-5';
+  const APP_VERSION = '2026-10-23-6';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -6207,6 +6208,7 @@
     return s;
   }
   function renderHistList(orders, query){
+    if(histAllMode()) query='';   // [2026-10-23-6] โหมด "ทั้งหมด" — Worker หาให้ตรงคำค้นแล้ว (เลขบิลใหม่/เบอร์/P# อาจไม่อยู่ในข้อความการ์ด) ไม่กรองข้อความซ้ำ
     const qRaw=(query||'').trim().toLowerCase();
     const qCanon=canonBill(query);
     let filtered = qRaw ? orders.filter(o=>{
@@ -6217,9 +6219,9 @@
     }) : orders;
     if(_histEditFilter==='editable') filtered=filtered.filter(orderIsEditable);
     else if(_histEditFilter==='locked') filtered=filtered.filter(o=>!orderIsEditable(o));
-    if(!filtered.length){ histList.innerHTML='<div class="hist-state">ไม่พบรายการที่ตรงกับการค้นหา</div>'; return; }
+    if(!filtered.length){ histList.innerHTML=histAllCapHtml()+'<div class="hist-state">ไม่พบรายการที่ตรงกับการค้นหา</div>'; return; }
     // [แก้บั๊ก 2026-09-23] เดิมส่ง buildHistRowHtml ตรงๆ เข้า .map() — .map ส่ง (item, index, array) ให้ callback เสมอ ทำให้ index หลุดเข้าไปเป็นพารามิเตอร์ showArrival (index>=1 = truthy!) แถวที่ 2 เป็นต้นไปในแท็บ "ประวัติ" เลยโชว์สี/ไอคอน/คำอธิบายของแท็บ "รายการที่นัดรับ" ผิดๆ ไปด้วย ทั้งที่ตั้งใจให้โชว์เฉพาะแท็บ "รายการที่นัดรับ" เท่านั้น (showArrival:true ชัดเจนที่บรรทัด renderPickupRangeList ด้านล่าง)
-    histList.innerHTML = filtered.map(o=>buildHistRowHtml(o)).join('');
+    histList.innerHTML = histAllCapHtml() + filtered.map(o=>buildHistRowHtml(o)).join('');
   }
   // แท็บ "รายการที่นัดรับ" — กรองตามช่วงวันที่นัดรับอย่างเดียว (ไม่มีช่องค้นหา)
   // แท็บ "รายการที่นัดรับ" เลือกสาขาแยกเป็นของตัวเองได้ (ไม่ผูกกับสาขาบนแถบหัวหรือแท็บ "ประวัติ") ตามที่ขอ — ต้องดึงข้อมูลแยกต่างหากเป็น cache ของตัวเอง
@@ -6258,7 +6260,64 @@
   // แท็บ "ประวัติ" — [แก้ 2026-10-07 ตามที่ขอ] กรองด้วย "สาขาที่ซื้อ" (สาขาที่บันทึกบิล) ให้ขึ้นเฉพาะสาขาที่เลือก — เดิมกรองด้วยสาขาที่นัดรับ (บิลที่ซื้อสาขาหนึ่งแต่นัดรับอีกสาขาจึงโผล่ในประวัติของสาขาที่รับสินค้า) ผู้ใช้เห็นแล้วงงว่าทำไมมีบิลของสาขาอื่น
   // วิธี: ดึงจาก /list-orders ทุกสาขา (branch ว่าง) แล้วกรองฝั่งหน้าเว็บด้วย o.branch (สาขาที่ซื้อ) เทียบกับ dropdown "สาขาที่ซื้อ" ของแท็บนี้
   // [แก้ตามที่ขอ] dropdown เลือกสาขาได้ (ค่าเริ่มต้น = สาขาบนแถบหัว เหมือนเดิม / เปลี่ยนดูสาขาอื่นได้ ไม่มีตัวเลือก "ทุกสาขา") — เดิมเคยล็อกตามแถบหัวเปลี่ยนไม่ได้เลย
+  // ── [2026-10-23-6 ตามที่ขอ "สาขาที่ซื้อจะต้องเลือกทั้งหมดได้สิ"] สาขาที่ซื้อ = ทั้งหมด ─────────────────────────
+  // ไม่โหลด /list-orders ทุกสาขา (ตารางใหญ่เกินเพดาน CPU ของ Worker) — ค้นทุกสาขาเฉพาะสิ่งที่พิมพ์ ดูจากรูปแบบคำค้น:
+  //   ตัวอักษร+ตัวเลข (KK26101902) หรือเลขล้วน ≥7 หลักไม่ขึ้นต้น 0 = เลขที่บิล → GET /find-by-bill (รวมเลขบิลใหม่ของงานนำกลับมาแก้)
+  //   เลขล้วน 3–6 หลัก / "P# …" = เลขสินค้า → GET /find-by-pnum · ขึ้นต้น 0 ครบ 10 หลัก = เบอร์ · ตัวหนังสือ ≥2 ตัว = ชื่อ → GET /find-by-customer (ใช้เฉพาะ orders)
+  // ตัวเลือกนี้โผล่เฉพาะเมื่อ Worker บอก findByBill (sh9 ขึ้นไป) — Worker เก่า = เหมือนเดิมทุกอย่าง · ผลค้นเก็บใน _histOrders → ปุ่มบนการ์ด/ชิปกรองใช้ได้ตามเดิม
+  const HIST_ALL='__ALL__';
+  const HIST_ALL_HINT='พิมพ์เลขบิล ชื่อ เบอร์ หรือ P# เพื่อค้นทุกสาขา';
+  const HALL={seq:0,t:null,cap:''};
+  function histAllMode(){ const s=document.getElementById('histLiveBranch'); return !!(s&&s.value===HIST_ALL); }
+  function histAllCapHtml(){ return histAllMode()&&HALL.cap ? '<div class="hist-allcap">'+escapeHtml(HALL.cap)+'</div>' : ''; }
+  function ensureHistAllOption(){
+    workerFeat().then(w=>{
+      const s=document.getElementById('histLiveBranch'); if(!s||!w||!w.findByBill) return;
+      if(![...s.options].some(o=>o.value===HIST_ALL)){ const o=new Option('ทั้งหมด',HIST_ALL); s.insertBefore(o,s.firstChild); }
+      if(_histTab==='live'&&histPop.classList.contains('show')) refreshHistBranchTag();
+    });
+  }
+  function histAllClassify(raw){
+    const t=String(raw||'').trim(); if(!t) return null;
+    const c=t.toUpperCase().replace(/[\s\-]/g,'');
+    if(/^0\d*$/.test(c)){ if(c.length===10) return {kind:'phone',q:c,what:'เบอร์ '+c.slice(0,3)+'-'+c.slice(3,6)+'-'+c.slice(6)}; return {bad:c.length>10?'เบอร์ยาวเกิน 10 หลัก — ตรวจเบอร์อีกครั้ง':'เบอร์ยังไม่ครบ ขาดอีก '+(10-c.length)+' ตัว'}; }
+    if(/^P#?\d+$/.test(c) || /^\d{3,6}$/.test(c)){ const d=c.replace(/\D/g,''); return d.length>=3&&d.length<=6 ? {kind:'pnum',q:d,what:'P# '+d} : {bad:'เลข P# ต้องมี 3–6 หลัก'}; }
+    if(/^\d{7,}$/.test(c) || /^[A-Z]{1,4}\d{2,}[A-Z0-9]*$/.test(c)){ return c.length>=4&&c.length<=24 ? {kind:'bill',q:c,what:'เลขที่บิล '+c} : {bad:'พิมพ์เลขที่บิลอย่างน้อย 4 ตัว'}; }
+    const n=t.replace(/\s+/g,' ');
+    if(n.length<2) return {bad:'พิมพ์ชื่ออย่างน้อย 2 ตัว'};
+    if(!wfeat('findByCustomer')) return {bad:'ทุกสาขาค้นได้ด้วยเลขบิลหรือ P# เท่านั้น'};
+    return {kind:'name',q:n,what:'ชื่อ “'+n+'”'};
+  }
+  function histAllSearch(delay){
+    clearTimeout(HALL.t);
+    const seq=++HALL.seq;
+    _histOrders=null; _histLoadedBranch=HIST_ALL; HALL.cap='';
+    const k=histAllClassify(histSearchInput.value);
+    if(!k){ histList.innerHTML='<div class="hist-state">'+escapeHtml(HIST_ALL_HINT)+'</div>'; return; }
+    if(k.bad){ histList.innerHTML='<div class="hist-state">'+escapeHtml(k.bad)+'</div>'; return; }
+    histList.innerHTML='<div class="hist-state sc-stack">'+scLd({size:30})+'<span>กำลังค้น'+escapeHtml(k.what)+' ทุกสาขา…</span></div>';
+    HALL.t=setTimeout(async()=>{
+      const url = k.kind==='bill' ? '/find-by-bill?q='+encodeURIComponent(k.q)
+        : k.kind==='pnum' ? '/find-by-pnum?q='+encodeURIComponent(k.q)
+        : '/find-by-customer?q='+encodeURIComponent(k.q)+'&kind='+k.kind;
+      try{
+        const res=await fetch(WORKER+url); const d=await res.json();
+        if(seq!==HALL.seq || _histTab!=='live' || !histAllMode()) return;   // พิมพ์ต่อ/สลับแท็บ/เปลี่ยนสาขาไปแล้ว — ผลเก่าทิ้ง
+        if(!d || !d.success || !Array.isArray(d.orders)){ histList.innerHTML='<div class="hist-state">ค้นไม่สำเร็จ: '+escapeHtml(d&&d.error||'ไม่ทราบสาเหตุ')+'</div>'; return; }
+        const list=d.orders.filter(o=>o&&!o.isDraft);   // /find-by-customer: ใช้เฉพาะ orders (บิลในแอป) ไม่เอา sfOrders
+        _histOrders=list;
+        HALL.cap = list.length ? ('ทุกสาขา · '+k.what+' · พบ '+list.length+' บิล'+(d.truncated?' (แสดงเฉพาะที่ใหม่สุด '+list.length+' บิล — พิมพ์ให้ละเอียดขึ้น)':'')) : '';
+        const nb=list.filter(o=>o.matchedNewBill).map(o=>o.orderNo).filter(Boolean);   // /find-by-bill: เลขที่พิมพ์เป็น "บิลใหม่" ของงานนำกลับมาแก้ → การ์ดที่ขึ้นคือบิลเดิม
+        if(nb.length) HALL.cap+=' · '+k.q+' = เลขบิลใหม่ของงานนำกลับมาแก้ (บิลเดิม '+nb.join(', ')+')';
+        if(!list.length){ histList.innerHTML='<div class="hist-state">ไม่พบบิลของ'+escapeHtml(k.what)+' ในทุกสาขา</div>'; return; }
+        renderHistList(_histOrders, '');
+      }catch(e){
+        if(seq===HALL.seq && _histTab==='live') histList.innerHTML='<div class="hist-state">เชื่อมต่อระบบไม่สำเร็จ — ลองใหม่อีกครั้ง</div>';
+      }
+    }, delay==null?450:delay);
+  }
   async function loadLiveOrders(branch){
+    if(branch===HIST_ALL){ histAllSearch(0); return; }
     if(_histLoading) return;
     _histLoading=true; _histLoadedBranch=branch;
     histList.innerHTML='<div class="hist-state sc-stack">'+scLd({size:30})+'<span>กำลังโหลด…</span></div>';
@@ -6294,6 +6353,7 @@
     // ค่าเริ่มต้นแท็บ "ประวัติ" และแท็บ "รายการที่นัดรับ" = สาขาเดียวกับแถบหัวก่อน แต่เลือกเปลี่ยนเป็นสาขาอื่นได้อิสระในแต่ละแท็บ
     const liveBranchSel=document.getElementById('histLiveBranch');
     if(liveBranchSel && branch) liveBranchSel.value=branch;
+    ensureHistAllOption();
     const pickupBranchSel=document.getElementById('histPickupBranch');
     if(pickupBranchSel && branch) pickupBranchSel.value=branch;
     // [แก้ตามที่ขอ] "สาขาที่นัดรับ" default = สาขาที่ซื้อ (ค่าปัจจุบันของ pickupBranchSel เอง ไม่ใช่รอ branchTop ตรงๆ — pickupBranchSel มีค่าเสมออยู่แล้วแม้ branchTop จะว่าง เพราะ option แรกคือ R3) เปลี่ยนเป็นสาขาอื่น/Messenger/ขนส่งเอกชนเองทีหลังได้ตามปกติ
@@ -6320,13 +6380,14 @@
     histBtn.addEventListener('click', openHistory);
     histClose.addEventListener('click',()=>histPop.classList.remove('show'));
     histPop.addEventListener('click',e=>{ if(e.target===histPop) histPop.classList.remove('show'); });
-    histSearchInput.addEventListener('input',()=>{ if(_histOrders) renderHistList(_histOrders, histSearchInput.value); });
+    histSearchInput.addEventListener('input',()=>{ if(histAllMode()){ histAllSearch(); return; } if(_histOrders) renderHistList(_histOrders, histSearchInput.value); });
     // [ใหม่ตามที่ขอ] ปุ่มกรอง "แก้ไขได้/แก้ไขไม่ได้/ทั้งหมด"
     document.querySelectorAll('#histEditFilterRow .hist-editfilter-btn').forEach(btn=>{
       btn.addEventListener('click',()=>{
         _histEditFilter=btn.dataset.editfilter;
         document.querySelectorAll('#histEditFilterRow .hist-editfilter-btn').forEach(b=>b.classList.toggle('on', b===btn));
         if(_histOrders) renderHistList(_histOrders, histSearchInput.value);
+        else if(_histTab==='live' && histAllMode()) histAllSearch(0);
         else if(_histTab==='live' && !_histLoading){ const s=document.getElementById('histLiveBranch'); loadLiveOrders(s?s.value:''); }
       });
     });
@@ -6392,6 +6453,7 @@
   const histScanBtn=document.getElementById('histScanBtn');
   if(histScanBtn) histScanBtn.addEventListener('click', ()=>openScanner(code=>{
     histSearchInput.value=code;
+    if(histAllMode()){ histAllSearch(0); return; }
     if(_histOrders) renderHistList(_histOrders, histSearchInput.value);
   }));
 
@@ -6866,7 +6928,7 @@
     const top=document.getElementById('branchTop')?.value||'';
     const src=_histTab==='live'?liveSel:(_histTab==='pickup'?pickSel:null);
     const b=src?src.value:top;
-    histBranchTagText.textContent=b?('สาขา '+b):'';
+    histBranchTagText.textContent=b===HIST_ALL?'ทุกสาขา':(b?('สาขา '+b):'');
     histBranchTag.classList.toggle('empty', !b);
     histBranchTag.classList.toggle('static', !src);
     histBranchTagSel.innerHTML='';
@@ -7416,27 +7478,46 @@
       lb.addEventListener('click',close); document.addEventListener('keydown',onKey,true); document.body.appendChild(lb);
     }
     const phFileName=(code,round,i)=>'นำกลับมาแก้_P#'+digitsOf(code)+'_ครั้งที่'+round+'_รูป'+(i+1)+'.jpg';
+    // [2026-10-23-6 ตามที่เจ้าของสั่ง] รูปขึ้น Lark ด้วย (คอลัมน์ "รูปสินค้านำกลับมาแก้" ของแถวที่บันทึก · ไม่ใช่คอลัมน์ใบสรุปที่ปริ้น) — เฉพาะเมื่อ Worker บอก raPhotoLark
+    // แต่ละรูปส่ง 2 ที่แยกกัน: Salesforce (d.phDone) + Lark (d.phLk) · กด "ลองใหม่" ส่งเฉพาะที่ยังไม่สำเร็จ (ชื่อไฟล์เดิม = แทนที่ ไม่ซ้ำ)
+    const phLarkOn=d=>d.phLark===true;
     function setPh(d){
       if(S.done!==d||S.view!=='done') return;
       const el=view.querySelector('[data-ra2-phup]'); if(!el) return;
-      const n=d.f.photos.length, ok=d.phDone.filter(Boolean).length; el.hidden=!n; if(!n) return;
+      const n=d.f.photos.length; el.hidden=!n; if(!n) return;
+      const lk=phLarkOn(d), sfOk=d.phDone.filter(Boolean).length, lkOk=lk?(d.phLk||[]).filter(Boolean).length:n;
+      const ok=d.f.photos.filter((_,i)=>d.phDone[i]&&(!lk||(d.phLk&&d.phLk[i]))).length;
+      const where=lk?'Lark + Salesforce':'Salesforce';
       const thumbs='<div class="ra2-phdone">'+d.f.photos.map((p,i)=>'<div class="ra2-th"><img src="'+p.url+'" alt="รูปที่ '+(i+1)+'" data-ra2-pv="'+i+'"></div>').join('')+'</div>';
+      const part=lk?' (Salesforce '+sfOk+'/'+n+' · Lark '+lkOk+'/'+n+')':'';
       el.className='ra2-up sf'+(d.phRun?'':(ok===n?' ok':' fail'));
-      el.innerHTML=(d.phRun?'<span class="ra2-spin"></span><span class="sp">กำลังแนบรูปภาพเข้า Salesforce… ('+ok+'/'+n+')</span>'
-        :ok===n?IC.tick+'<span class="sp">แนบรูปภาพ '+n+' รูปเข้า Salesforce แล้ว</span>'
-        :IC.warn+'<span class="sp">แนบรูปภาพเข้า Salesforce ได้ '+ok+'/'+n+' รูป'+(d.phErr?' — '+esc(d.phErr):'')+'</span><button type="button" class="rt" data-ra2="rephoto">ลองใหม่</button>')+thumbs;
+      el.innerHTML=(d.phRun?'<span class="ra2-spin"></span><span class="sp">กำลังแนบรูปภาพเข้า '+where+'… ('+ok+'/'+n+')</span>'
+        :ok===n?IC.tick+'<span class="sp">แนบรูปภาพ '+n+' รูปเข้า '+where+' แล้ว</span>'
+        :IC.warn+'<span class="sp">แนบรูปภาพเข้า '+where+' ได้ '+ok+'/'+n+' รูป'+part+(d.phErr?' — '+esc(d.phErr):'')+'</span><button type="button" class="rt" data-ra2="rephoto">ลองใหม่</button>')+thumbs;
     }
     async function uploadPhotos(d){
       const ph=d.f.photos||[]; if(!ph.length||d.phRun) return;
-      d.phDone=d.phDone||ph.map(()=>false); d.phRun=true; d.phErr=''; setPh(d);
+      d.phDone=d.phDone||ph.map(()=>false); d.phRun=true; d.phErr='';
+      if(d.phLark===undefined){ const w=await workerFeat().catch(()=>null); d.phLark=!!(w&&w.raPhotoLark&&/^rec[A-Za-z0-9]+$/.test(String(d.larkId||''))); }
+      if(phLarkOn(d)) d.phLk=d.phLk||ph.map(()=>false);
+      setPh(d);
       for(let i=0;i<ph.length;i++){
-        if(d.phDone[i]) continue;
-        try{
-          const j=await getJSON(WORKER+'/attach-product-file',{method:'POST',headers:JSON_H,body:JSON.stringify({productCode:d.f.code,imageBase64:ph[i].b64,filename:phFileName(d.f.code,d.round,i)})},60000);
-          if(!j||j.success!==true) throw new Error((j&&j.error)||'ระบบไม่ยืนยันการแนบรูป');
-          d.phDone[i]=true;
-        }catch(e){ d.phErr=(e&&e.message)||String(e); }
-        setPh(d);
+        if(!d.phDone[i]){
+          try{
+            const j=await getJSON(WORKER+'/attach-product-file',{method:'POST',headers:JSON_H,body:JSON.stringify({productCode:d.f.code,imageBase64:ph[i].b64,filename:phFileName(d.f.code,d.round,i)})},60000);
+            if(!j||j.success!==true) throw new Error((j&&j.error)||'ระบบไม่ยืนยันการแนบรูป');
+            d.phDone[i]=true;
+          }catch(e){ d.phErr='Salesforce: '+((e&&e.message)||String(e)); }
+          setPh(d);
+        }
+        if(phLarkOn(d)&&!d.phLk[i]){
+          try{
+            const j=await getJSON(WORKER+'/repeat-alteration-photo',{method:'POST',headers:JSON_H,body:JSON.stringify({larkRecordId:d.larkId,productCode:d.f.code,round:d.round,index:i+1,imageBase64:ph[i].b64,mime:'image/jpeg'})},60000);
+            if(!j||j.success!==true) throw new Error((j&&j.error)||'ระบบไม่ยืนยันการแนบรูป');
+            d.phLk[i]=true;
+          }catch(e){ d.phErr='Lark: '+((e&&e.message)||String(e)); }
+          setPh(d);
+        }
       }
       d.phRun=false; setPh(d);
     }
