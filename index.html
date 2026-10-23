@@ -5334,7 +5334,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-23-3';
+  const APP_VERSION = '2026-10-23-5';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -7150,7 +7150,9 @@
     // S.q ของการค้นแบบนี้ = "c:<kind>:<คำค้น>" (ไม่ใช่ตัวเลขล้วน — ส่วนที่เทียบ P# จึงไม่ไปจับ)
     const CCACHE={};
     const phoneFmt=d=>d.length===10?d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6):d;
-    function setPfx(t){ if(!pfx) return; pfx.textContent=t; pfx.classList.toggle('th',t!=='P#'); }
+    function setPfx(t){ if(!pfx) return; pfx.textContent=t; pfx.classList.toggle('th',t!=='P#');
+      // [2026-10-23-5 ตามที่ขอ] ค้นชื่อ (ตัวหนังสือไทย/อังกฤษ) = ฟอนต์ Prompt เหมือนส่วนอื่นของแอป · ตัวเลข (P#/เบอร์) คง Barlow
+      if(input) input.style.fontFamily=(t==='ชื่อ')?"'Prompt',sans-serif":''; }
     function classifyQuery(raw){
       if(!wfeat('findByCustomer')){   // Worker ยังไม่รองรับค้นชื่อ/เบอร์ → ค้น P# อย่างเดียว (เหมือนหน้าเว็บก่อน -23-1)
         const t0=String(raw||'').trim(); if(!t0) return {pfx:'P#',key:''};
@@ -7188,8 +7190,7 @@
     }
     // การ์ดบิลจาก Salesforce: การ์ดเดียวกับรายการ + ขอบ/หัวน้ำเงิน + บรรทัดเล็ก "Salesforce · บิลก่อนมีแอป" · ไม่มีปุ่ม NOTE/แก้ไข/ยกเลิก/พิมพ์ใบใหม่ (บิลไม่อยู่ใน Lark)
     function sfCardHtml(o){
-      return buildHistRowHtml(o,true).replace('<div class="hist-row','<div class="hist-row ra2-sf')
-        .replace(/(<div class="hist-custheader">[\s\S]*?)(<\/div>)/,'$1<span class="ra2-sflabel">Salesforce · บิลก่อนมีแอป</span>$2');
+      return buildHistRowHtml(o,true).replace('<div class="hist-row','<div class="hist-row ra2-sf');   // [2026-10-23-4 ตามที่ขอ] ตัดป้าย "Salesforce · บิลก่อนมีแอป" ในหัวการ์ดออก (สีน้ำเงินบอกอยู่แล้ว)
     }
     function renderCust(){
       const m=/^c:(name|phone|phone4):([\s\S]+)$/.exec(S.q); if(!m) return;
