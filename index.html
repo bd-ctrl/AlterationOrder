@@ -4881,7 +4881,7 @@
         </div>
         <div class="frow"><span class="k">สาขาที่ซื้อ</span>
           <select class="hdrsel" id="histPickupBranch" style="margin-left:auto">
-            <option>R3</option><option>T21</option><option>SQ1</option><option>PM</option><option>SC</option><option>CM</option><option>FP</option><option>KR</option><option>SL</option><option>NW</option><option>CC</option><option>BP</option><option>RCD</option><option>KK</option><option>PK</option><option>MG</option><option>CTW</option><option>WG</option>
+            <option value="__ALL__">ทั้งหมด</option><option>R3</option><option>T21</option><option>SQ1</option><option>PM</option><option>SC</option><option>CM</option><option>FP</option><option>KR</option><option>SL</option><option>NW</option><option>CC</option><option>BP</option><option>RCD</option><option>KK</option><option>PK</option><option>MG</option><option>CTW</option><option>WG</option>
           </select>
         </div>
         <div class="frow" style="border:none"><span class="k">สาขาที่นัดรับ</span>
@@ -5335,7 +5335,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-23-6';
+  const APP_VERSION = '2026-10-23-7';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -6226,12 +6226,25 @@
   // แท็บ "รายการที่นัดรับ" — กรองตามช่วงวันที่นัดรับอย่างเดียว (ไม่มีช่องค้นหา)
   // แท็บ "รายการที่นัดรับ" เลือกสาขาแยกเป็นของตัวเองได้ (ไม่ผูกกับสาขาบนแถบหัวหรือแท็บ "ประวัติ") ตามที่ขอ — ต้องดึงข้อมูลแยกต่างหากเป็น cache ของตัวเอง
   let _pickupOrders=null, _pickupLoading=false, _pickupLoadedBranch='';
+  // [2026-10-23-7 ตามที่ขอ "สาขาที่ซื้อ เพิ่มทั้งหมดด้วย"] สาขาที่ซื้อ = ทั้งหมด → ดึงบิลที่ "สาขาที่นัดรับ" = สาขาที่เลือกจากทุกสาขาที่ซื้อ
+  //   (GET /list-orders?pickupBranch= มีใน Worker ตั้งแต่ sh2 · Lark กรองให้ ไม่ดึงทั้งตาราง) — ถ้าสาขาที่นัดรับ = ทั้งหมดด้วย ไม่โหลด (ทั้งตารางเกินเพดาน CPU) บอกให้เลือกสาขาที่นัดรับก่อน
+  //   cache key = 'ALL:<สาขาที่นัดรับ>' เพื่อให้เปลี่ยนสาขาที่นัดรับแล้วโหลดใหม่ (โหมดปกติ key = สาขาที่ซื้อ เหมือนเดิม)
+  const PICKUP_ALL_RECENT_DAYS=365;
+  function pickupLoadKey(branch){
+    if(branch!==HIST_ALL) return branch;
+    return 'ALL:'+(document.getElementById('histPickupBranchFilter')?.value||'');
+  }
   async function loadPickupOrders(branch){
     if(_pickupLoading) return;
-    _pickupLoading=true; _pickupLoadedBranch=branch;
+    const key=pickupLoadKey(branch);
+    if(key==='ALL:'){ _pickupLoadedBranch=key; _pickupOrders=null; histList.innerHTML='<div class="hist-state">สาขาที่ซื้อ = ทั้งหมด · เลือก "สาขาที่นัดรับ" ก่อน แล้วระบบจะแสดงบิลที่นัดรับที่สาขานั้นจากทุกสาขาที่ซื้อ</div>'; return; }
+    _pickupLoading=true; _pickupLoadedBranch=key;
     histList.innerHTML='<div class="hist-state sc-stack">'+scLd({size:30})+'<span>กำลังโหลด…</span></div>';
     try{
-      const res=await fetch(WORKER+'/list-orders?branch='+encodeURIComponent(branch));
+      const url=branch===HIST_ALL
+        ? WORKER+'/list-orders?pickupBranch='+encodeURIComponent(key.slice(4))+'&recentDays='+PICKUP_ALL_RECENT_DAYS
+        : WORKER+'/list-orders?branch='+encodeURIComponent(branch);
+      const res=await fetch(url);
       const d=await res.json();
       _pickupLoading=false;
       if(_histTab!=='pickup') return; // สลับแท็บไปแล้วระหว่างรอโหลด ไม่ต้อง render ทับ
@@ -6245,7 +6258,8 @@
   function renderPickupRangeList(){
     const branchSel=document.getElementById('histPickupBranch');
     const branch=branchSel?branchSel.value:'';
-    if(branch && branch!==_pickupLoadedBranch){ loadPickupOrders(branch); return; }
+    if(branch && pickupLoadKey(branch)!==_pickupLoadedBranch){ loadPickupOrders(branch); return; }
+    if(_pickupLoadedBranch==='ALL:') return;   // ยังไม่ได้เลือกสาขาที่นัดรับ — ข้อความแนะนำค้างไว้
     if(!_pickupOrders){ histList.innerHTML='<div class="hist-state sc-stack">'+scLd({size:30})+'<span>กำลังโหลด…</span></div>'; return; }
     const histFromDate=document.getElementById('histFromDate'), histToDate=document.getElementById('histToDate');
     let filtered=filterByPickupRange(_pickupOrders, histFromDate?histFromDate.value:'', histToDate?histToDate.value:'');
