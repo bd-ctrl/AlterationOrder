@@ -156,10 +156,14 @@
   .frow.btncode-row{padding-top:11px;padding-bottom:11px;gap:12px;flex-wrap:wrap}
   .btncode-input{margin-left:auto;flex:1 1 140px;max-width:58%;border:none;border-bottom:1px solid var(--rule);background:transparent;font-family:inherit;font-size:15px;color:var(--ink);padding:6px 2px;text-align:right;outline:none}
   .btncode-input:focus{border-bottom-color:var(--gold)}
-  .mitem .along-row{display:none;justify-content:flex-end;padding:8px 0 10px}   /* [2026-10-22-4] เว้นจากเส้นใต้ปุ่ม แก้ไข (ไอแพดแนวนอนชิดกัน) */
-  .mitem.editing .along-row{display:flex}
-  .along-row .stitchlbl.rchk{gap:9px;font-size:14px}
-  .along-row .rchk .ind{width:22px;height:22px}
+  /* [2026-10-22-5 ตามที่ขอ] ติ๊ก "ตลอดแนว" อยู่บรรทัดเดียวกับป้าย "โคนขา/ต้นขา" (ช่องว่างระหว่างป้ายกับตัวปรับ +/−) — เดิมอยู่ใต้ปุ่ม แก้ไข/ไม่แก้ไข
+     คอลัมน์ป้ายแคบไม่พอ = ตัดลงใต้ป้าย ชิดซ้าย (ไม่ไปอยู่ใต้ปุ่ม) · โชว์เฉพาะตอนแถวอยู่ในโหมด แก้ไข เหมือนเดิม */
+  .mtop .mlab{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;min-width:0}
+  .mitem .along-row{display:none;align-items:center}
+  .mitem.editing .along-row{display:inline-flex}
+  .along-row.stitchlbl.rchk{gap:7px;font-size:14px;white-space:nowrap}
+  .mtop .along-row .k{font-size:14px;font-weight:400}
+  .mitem .along-row .ind{width:20px;height:20px}
   .att-thumbs{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin:-2px 0 8px}
   .att-thumbs[hidden]{display:none}
   .att-th{position:relative;width:62px;height:62px;border-radius:10px;overflow:hidden;border:1px solid var(--rule);background:#fff;flex:0 0 auto}
@@ -667,6 +671,25 @@
   .printrange-result-list .r .bill{font-family:'Barlow',sans-serif;font-weight:700;font-size:14px;color:var(--ink)}
   .printrange-result-list .r .ids{font-size:11.5px;color:var(--t2)}
   .printrange-result-empty{padding:16px;text-align:center;font-size:13px;color:var(--t3)}
+  /* [2026-10-23-3 ตามที่ขอ "ปริ้นใบนำกลับมาแก้จากหน้าต่างพิมพ์ใบสั่งแก้"] รายการใบนำกลับมาแก้ที่ตรงกับเลขที่ค้น — ใช้หน้าตาเดียวกับรายการสรุปของหน้าต่างนี้ */
+  .printrange-ra{margin:-4px 0 14px}
+  .printrange-ra[hidden]{display:none}
+  .printrange-ra .pra-h{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px}
+  .printrange-ra .pra-h span{font-weight:400;font-size:12px;color:var(--t2)}
+  .printrange-ra .pra-msg{font-size:12.5px;color:var(--t2);font-style:italic}
+  .printrange-ra .pra-list{border:1px solid var(--rule2);border-radius:10px;background:#fff;max-height:260px;overflow-y:auto}
+  .printrange-ra .pra-r{display:flex;flex-direction:column;gap:3px;padding:10px 14px;border-bottom:1px solid var(--rule2)}
+  .printrange-ra .pra-r:last-child{border-bottom:none}
+  .printrange-ra .pra-t{font-size:13.5px;color:var(--ink)}
+  .printrange-ra .pra-t b{font-family:'Barlow',sans-serif;font-weight:700}
+  .printrange-ra .pra-s{font-size:11.5px;color:var(--t2)}
+  .printrange-ra .pra-b{display:flex;flex-wrap:wrap;gap:8px;margin-top:5px;align-items:center}
+  .printrange-ra .pra-btn{border-radius:999px;font-family:inherit;font-size:12.5px;font-weight:600;padding:6px 13px;cursor:pointer;white-space:nowrap;border:1.5px solid var(--gold);background:#fff;color:var(--goldink)}
+  .printrange-ra .pra-btn.solid{border-color:var(--gold);background:var(--gold);color:var(--ink)}
+  .printrange-ra .pra-btn:disabled{opacity:.55;cursor:default}
+  .printrange-ra .pra-ok{font-size:12px;color:var(--green)}
+  .printrange-ra .pra-bad{font-size:12px;color:var(--red)}
+  html.ro-mode .printrange-ra{display:none}
   .scan-manual{display:flex;gap:8px;margin-top:10px}
   .scan-manual input{flex:1;border:1.5px solid var(--rule);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:14px;outline:none}
   .scan-manual input:focus{border-color:var(--gold)}
@@ -771,6 +794,14 @@
   .ra2-cap b{font-family:'Barlow',sans-serif;font-style:normal;color:var(--goldink)}
   .ra2-cap.busy,.ra2-cap.ok,.ra2-cap.bad{font-style:normal;font-size:12px;color:var(--goldink);overflow-wrap:anywhere}
   .ra2-cap.bad{color:var(--red)}
+  /* [2026-10-23-1] ค้นด้วยเบอร์/ชื่อ: ป้ายหน้าช่องเปลี่ยนตามที่พิมพ์ (P# / เบอร์ / ชื่อ / ค้นหา) · การ์ดบิลจาก Salesforce = การ์ดเดิม ขอบ/หัวสีน้ำเงิน */
+  .ra2-pfx.th{font-family:'Prompt',sans-serif;font-size:14px;font-weight:600;padding:9px 11px}
+  .ra2-cap.ok b{font-family:inherit;color:inherit;font-weight:600}
+  .hist-row.ra2-sf .hist-ordercard{border:1.5px solid var(--blue)}
+  .hist-row.ra2-sf .hist-ordercard>.hist-custheader:first-child{background:#edf2f7;border-bottom-color:#d3dde8}
+  .hist-row.ra2-sf .hist-branch-name{color:var(--blue)}
+  .ra2-sflabel{margin-left:auto;align-self:center;font-size:11.5px;font-weight:500;color:var(--blue);white-space:nowrap}
+  .ra2-count.ra2-sfhead{color:var(--blue);font-weight:500;margin-top:6px}
   /* ผลค้นหา + ป้ายบนการ์ด */
   .ra2-count{font-size:12px;color:var(--t2);padding:0 2px}
   .ra2-oldtag{display:inline-block;font-family:'Prompt',sans-serif;font-size:11px;font-weight:500;color:var(--t2);background:var(--rule2);border-radius:999px;padding:2px 9px;margin-left:8px;vertical-align:3px}
@@ -1336,6 +1367,15 @@
   /* แถบผู้ใช้ท้ายหน้า (ข้างล่างแถบปุ่มของแต่ละหน้า) — "เข้าสู่ระบบด้วย Lark: ชื่อ" + ออกจากระบบ */
   #authBar{flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:0 8px;min-width:0;padding:5px 16px calc(5px + env(safe-area-inset-bottom,0px));background:#fff;border-top:1px solid var(--rule);font-size:12.5px;line-height:1.4}
   #authBar[hidden]{display:none}
+  /* [2026-10-22-5 ตามที่ขอ] บัญชีอ่านอย่างเดียว (Permission "Search, Read" ในตาราง User Mapping) — ดู/ค้นได้ทุกสาขา · ซ่อนปุ่มที่บันทึก/แก้ไข/สั่งปริ้น */
+  #roBanner{display:none}
+  html.ro-mode #roBanner{display:flex;align-items:center;gap:8px;justify-content:center;flex-wrap:wrap;padding:7px 16px;background:#2c2a26;color:#fff;font-family:'Prompt',sans-serif;font-size:13.5px;line-height:1.45;text-align:center}
+  html.ro-mode #roBanner b{color:#f3d58b;font-weight:600}
+  html.ro-mode .foot .draft, html.ro-mode .foot .trash, html.ro-mode #submitBtn,
+  html.ro-mode .hist-edit-btn, html.ro-mode .hist-cancel-btn, html.ro-mode .hist-note-btn,
+  html.ro-mode #printRangeBtn, html.ro-mode #pcStopBtn, html.ro-mode #pcResumeBtn, html.ro-mode #printPauseBannerBtn,
+  html.ro-mode .ra2-save{display:none !important}
+  .ro-toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);z-index:100001;max-width:min(92vw,520px);background:#b5573b;color:#fff;font-family:'Prompt',sans-serif;font-size:14px;line-height:1.5;padding:10px 16px;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.18);text-align:center}
   #authBar .ab-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex:0 0 auto}
   #authBar .ab-txt{min-width:0;flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   #authBar .ab-txt b{font-weight:600}
@@ -1618,6 +1658,53 @@
       return res;
     });
   }
+  /* [2026-10-22-5 ตามที่ขอ] บัญชีอ่านอย่างเดียว — เส้นทางเดียวกับที่ Worker sh3 ปฏิเสธ (AUTH_RO_BLOCK) · GET ผ่านเสมอ */
+  var RO_PATHS={'/create-order':1,'/update-order':1,'/cancel-order':1,'/update-note':1,'/queue-reprint':1,'/mark-reprint-queue':1,'/attach-summary-image':1,'/attach-product-file':1,
+    '/repeat-alteration-submit':1,'/repeat-alteration-receipt':1,'/draft-save':1,'/draft-delete':1,'/print-control':1,'/confirm-order':1,'/repeat-alteration-confirm':1};
+  var RO_MSG='บัญชีนี้อ่านอย่างเดียว — แก้ไขหรือบันทึกไม่ได้';
+  function roBlocked(path,input,init){
+    var m=(init && init.method) || ((typeof Request!=='undefined' && input instanceof Request) ? input.method : 'GET');
+    m=String(m||'GET').toUpperCase();
+    if(m==='GET' || m==='HEAD' || m==='OPTIONS') return false;
+    return !!RO_PATHS[(path && path.pathname) || String(path).split('?')[0]];   // path = URL ของ Worker (workerUrl)
+  }
+  var _roToastAt=0;
+  function roToast(){
+    try{
+      if(Date.now()-_roToastAt<4000) return; _roToastAt=Date.now();
+      var t=document.createElement('div'); t.className='ro-toast'; t.setAttribute('role','alert'); t.textContent=RO_MSG;
+      document.body.appendChild(t); setTimeout(function(){ t.remove(); },5000);
+    }catch(e){}
+  }
+  function roLocalDeny(){
+    roToast();
+    return Promise.resolve(new Response(JSON.stringify({ success:false, code:'read_only', error:RO_MSG }), { status:403, headers:{ 'Content-Type':'application/json' } }));
+  }
+  function applyRo(user){
+    var on=!!(user && user.perm==='read');
+    root.classList.toggle('ro-mode', on);
+    var b=document.getElementById('roBanner');
+    if(on && !b && document.body){
+      b=document.createElement('div'); b.id='roBanner'; b.setAttribute('role','status');
+      b.innerHTML='<b>บัญชีอ่านอย่างเดียว (ดูได้ทุกสาขา)</b><span>ดูประวัติ ค้นหา และดูใบสรุปได้ · บันทึก แก้ไข หรือสั่งปริ้นไม่ได้</span>';
+      document.body.insertBefore(b, document.body.firstChild);
+    }
+    if(on) setNote('อ่านอย่างเดียว · เลือกดูได้ทุกสาขา', true);
+  }
+  // ถามสิทธิ์ล่าสุดจาก Worker (/auth/me) — บัตรที่ออกก่อนตั้ง Permission ก็รู้ว่าเป็นอ่านอย่างเดียว · Worker รุ่นเก่า/ถามไม่ได้ = ใช้ค่าที่เก็บไว้
+  function refreshPerm(a){
+    if(!rawFetch || !a || !a.token) return;
+    rawFetch(WORKER_BASE+'/auth/me',{ headers:{ Authorization:'Bearer '+a.token }, cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
+      if(!j || !j.success || !j.user) return;
+      var o=readStored(); if(!o || o.token!==a.token) return;
+      var want=j.user.perm==='read' ? 'read' : '';
+      if((o.user.perm||'')===want) return;
+      if(want) o.user.perm='read'; else delete o.user.perm;
+      var raw=JSON.stringify(o); if(!sset('localStorage',KEY,raw)) sset('sessionStorage',KEY,raw);
+      applyRo(o.user);
+      if(!want) location.reload();   // เพิ่งได้สิทธิ์เต็มคืน — โหลดหน้าใหม่ให้ปุ่มกลับมาครบ
+    }).catch(function(){});
+  }
   if(rawFetch){
     window.fetch=function(input,init){
       var p=workerUrl(input);
@@ -1629,6 +1716,7 @@
         if(!gate.on){ var had=readStored(); clearStored(); goGate(had ? 'expired' : 'fresh'); }
         return localBlock();
       }
+      if(a.user && a.user.perm==='read' && roBlocked(p, input, init)) return roLocalDeny();   // [2026-10-22-5] อ่านอย่างเดียว: ไม่ส่งคำขอที่บันทึก/สั่งปริ้น
       var auth='Bearer '+a.token;
       if(typeof Request!=='undefined' && input instanceof Request){
         var rq=new Request(input,init); if(!rq.headers.has('Authorization')) rq.headers.set('Authorization',auth);
@@ -1733,6 +1821,7 @@
     if(!exp) return false;
     var u=j.user || {};
     var obj={ token:j.token, expiresAt:exp, user:{ name:String(u.name||''), branch:u.branch||null, role:u.role||'user', mapped:!!u.mapped } };
+    if(u.perm==='read') obj.user.perm='read';   // [2026-10-22-5] บัญชีอ่านอย่างเดียว
     var raw=JSON.stringify(obj);
     if(sset('localStorage',KEY,raw)) return true;
     return sset('sessionStorage',KEY,raw);      // localStorage ใช้ไม่ได้ → เก็บแค่ในแท็บนี้ (รีโหลดได้ ปิดแท็บแล้วหาย)
@@ -1933,7 +2022,7 @@
     splitVersionLabel();
     if(gate.on){ setInert(true); paintAdv(); return; }
     var a=readStored();
-    if(a){ paintBar(a.user); lockBranch(a.user); }
+    if(a){ paintBar(a.user); lockBranch(a.user); applyRo(a.user); refreshPerm(a); }   // [2026-10-22-5] อ่านอย่างเดียว
     paintAdv();
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',afterBoot); else afterBoot();
@@ -1941,6 +2030,7 @@
   window.suitcubeAuth={
     mount:mount, logout:logout, login:startLogin,
     user:function(){ var o=readStored(); return o ? o.user : null; },
+    readOnly:function(){ var o=readStored(); return !!(o && o.user && o.user.perm==='read'); },   // [2026-10-22-5]
     gateOn:function(){ return gate.on; }, gateState:function(){ return gate.name; }, storageKey:KEY,
     softMode:function(){ return autoMode ? 'auto' : (offSw ? 'noauth' : ''); }
   };
@@ -4804,8 +4894,8 @@
         <button type="button" id="histDateClear" class="hist-date-clear hidden">ล้างตัวกรองวันที่</button>
         <!-- [ใหม่ Phase 2 · 2026-09-30] สินค้านำกลับมาแก้ — ช่องค้น P# ใต้ "สาขาที่นัดรับ" (ค้นทุกวันที่/ทุกสาขา · ยิงเครื่องสแกนที่ QR บนใบสรุปในช่องนี้ได้) ต่อสายใน wireRepeatAlterationPickup -->
         <div class="ra2-hero">
-          <label class="ra2-field"><span class="ra2-pfx" aria-hidden="true">P#</span>
-            <input class="ra2-input" id="ra2PidInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" lang="en" enterkeyhint="search" inputmode="numeric" placeholder="เช่น 399665" aria-label="P# ที่นำกลับมาแก้">
+          <label class="ra2-field"><span class="ra2-pfx" id="ra2PidPfx" aria-hidden="true">P#</span>
+            <input class="ra2-input" id="ra2PidInput" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" lang="en" enterkeyhint="search" inputmode="numeric" placeholder="เช่น 399665" aria-label="ค้นหาสินค้าที่นำกลับมาแก้ ด้วยเลขสินค้า เบอร์โทร หรือชื่อลูกค้า">
             <button type="button" class="ra2-clear" id="ra2PidClear" aria-label="ล้างคำค้น" hidden>&times;</button>
           </label>
           <button type="button" class="ra2-qr" id="ra2PidScan" title="สแกน QR บนใบสรุป" aria-label="สแกน QR บนใบสรุป"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M3 12h18"/></svg></button>
@@ -4879,6 +4969,7 @@
       <h3>พิมพ์ใบสั่งแก้ปรับทรงสำเร็จรูป <span class="x" id="printRangeClose">&times;</span></h3>
       <div class="printrange-desc">สำหรับทีมสั่งตัด — ค้นหาจากเลขที่บิล, Suitcube Order, Suitcube Product, หรือจากสาขาได้</div>
       <div class="printrange-count" id="printRangeCount"></div>
+      <div class="printrange-ra" id="printRangeRa" hidden></div>
       <!-- [ใหม่ 2026-10-16 ตามที่ขอ] สถานะการพิมพ์ + ปุ่ม หยุดพิมพ์ / เริ่มพิมพ์ต่อ (สั่งผ่าน Worker → Lark → โปรแกรมพิมพ์ที่เครื่องพิมพ์) -->
       <div class="pc-strip" id="pcStrip" hidden>
         <span class="pc-dot" aria-hidden="true"></span>
@@ -5225,11 +5316,25 @@
   var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],f={},c=function(t,r){o=function(t){for(var r=new Array(t),e=0;e<t;e+=1){r[e]=new Array(t);for(var n=0;n<t;n+=1)r[e][n]=null}return r}(i=4*e+17),l(0,0),l(i-7,0),l(0,i-7),s(),h(),d(t,r),e>=7&&v(t),null==a&&(a=p(e,n,u)),w(a,r)},l=function(t,r){for(var e=-1;e<=7;e+=1)if(!(t+e<=-1||i<=t+e))for(var n=-1;n<=7;n+=1)r+n<=-1||i<=r+n||(o[t+e][r+n]=0<=e&&e<=6&&(0==n||6==n)||0<=n&&n<=6&&(0==e||6==e)||2<=e&&e<=4&&2<=n&&n<=4)},h=function(){for(var t=8;t<i-8;t+=1)null==o[t][6]&&(o[t][6]=t%2==0);for(var r=8;r<i-8;r+=1)null==o[6][r]&&(o[6][r]=r%2==0)},s=function(){for(var t=B.getPatternPosition(e),r=0;r<t.length;r+=1)for(var n=0;n<t.length;n+=1){var i=t[r],a=t[n];if(null==o[i][a])for(var u=-2;u<=2;u+=1)for(var f=-2;f<=2;f+=1)o[i+u][a+f]=-2==u||2==u||-2==f||2==f||0==u&&0==f}},v=function(t){for(var r=B.getBCHTypeNumber(e),n=0;n<18;n+=1){var a=!t&&1==(r>>n&1);o[Math.floor(n/3)][n%3+i-8-3]=a}for(n=0;n<18;n+=1){a=!t&&1==(r>>n&1);o[n%3+i-8-3][Math.floor(n/3)]=a}},d=function(t,r){for(var e=n<<3|r,a=B.getBCHTypeInfo(e),u=0;u<15;u+=1){var f=!t&&1==(a>>u&1);u<6?o[u][8]=f:u<8?o[u+1][8]=f:o[i-15+u][8]=f}for(u=0;u<15;u+=1){f=!t&&1==(a>>u&1);u<8?o[8][i-u-1]=f:u<9?o[8][15-u-1+1]=f:o[8][15-u-1]=f}o[i-8][8]=!t},w=function(t,r){for(var e=-1,n=i-1,a=7,u=0,f=B.getMaskFunction(r),c=i-1;c>0;c-=2)for(6==c&&(c-=1);;){for(var g=0;g<2;g+=1)if(null==o[n][c-g]){var l=!1;u<t.length&&(l=1==(t[u]>>>a&1)),f(n,c-g)&&(l=!l),o[n][c-g]=l,-1==(a-=1)&&(u+=1,a=7)}if((n+=e)<0||i<=n){n-=e,e=-e;break}}},p=function(t,r,e){for(var n=A.getRSBlocks(t,r),o=b(),i=0;i<e.length;i+=1){var a=e[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var u=0;for(i=0;i<n.length;i+=1)u+=n[i].dataCount;if(o.getLengthInBits()>8*u)throw"code length overflow. ("+o.getLengthInBits()+">"+8*u+")";for(o.getLengthInBits()+4<=8*u&&o.put(0,4);o.getLengthInBits()%8!=0;)o.putBit(!1);for(;!(o.getLengthInBits()>=8*u||(o.put(236,8),o.getLengthInBits()>=8*u));)o.put(17,8);return function(t,r){for(var e=0,n=0,o=0,i=new Array(r.length),a=new Array(r.length),u=0;u<r.length;u+=1){var f=r[u].dataCount,c=r[u].totalCount-f;n=Math.max(n,f),o=Math.max(o,c),i[u]=new Array(f);for(var g=0;g<i[u].length;g+=1)i[u][g]=255&t.getBuffer()[g+e];e+=f;var l=B.getErrorCorrectPolynomial(c),h=k(i[u],l.getLength()-1).mod(l);for(a[u]=new Array(l.getLength()-1),g=0;g<a[u].length;g+=1){var s=g+h.getLength()-a[u].length;a[u][g]=s>=0?h.getAt(s):0}}var v=0;for(g=0;g<r.length;g+=1)v+=r[g].totalCount;var d=new Array(v),w=0;for(g=0;g<n;g+=1)for(u=0;u<r.length;u+=1)g<i[u].length&&(d[w]=i[u][g],w+=1);for(g=0;g<o;g+=1)for(u=0;u<r.length;u+=1)g<a[u].length&&(d[w]=a[u][g],w+=1);return d}(o,n)};f.addData=function(t,r){var e=null;switch(r=r||"Byte"){case"Numeric":e=M(t);break;case"Alphanumeric":e=x(t);break;case"Byte":e=m(t);break;case"Kanji":e=L(t);break;default:throw"mode:"+r}u.push(e),a=null},f.isDark=function(t,r){if(t<0||i<=t||r<0||i<=r)throw t+","+r;return o[t][r]},f.getModuleCount=function(){return i},f.make=function(){if(e<1){for(var t=1;t<40;t++){for(var r=A.getRSBlocks(t,n),o=b(),i=0;i<u.length;i++){var a=u[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var g=0;for(i=0;i<r.length;i++)g+=r[i].dataCount;if(o.getLengthInBits()<=8*g)break}e=t}c(!1,function(){for(var t=0,r=0,e=0;e<8;e+=1){c(!0,e);var n=B.getLostPoint(f);(0==e||t>n)&&(t=n,r=e)}return r}())},f.createTableTag=function(t,r){t=t||2;var e="";e+='<table style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: "+(r=void 0===r?4*t:r)+"px;",e+='">',e+="<tbody>";for(var n=0;n<f.getModuleCount();n+=1){e+="<tr>";for(var o=0;o<f.getModuleCount();o+=1)e+='<td style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: 0px;",e+=" width: "+t+"px;",e+=" height: "+t+"px;",e+=" background-color: ",e+=f.isDark(n,o)?"#000000":"#ffffff",e+=";",e+='"/>';e+="</tr>"}return e+="</tbody>",e+="</table>"},f.createSvgTag=function(t,r,e,n){var o={};"object"==typeof arguments[0]&&(t=(o=arguments[0]).cellSize,r=o.margin,e=o.alt,n=o.title),t=t||2,r=void 0===r?4*t:r,(e="string"==typeof e?{text:e}:e||{}).text=e.text||null,e.id=e.text?e.id||"qrcode-description":null,(n="string"==typeof n?{text:n}:n||{}).text=n.text||null,n.id=n.text?n.id||"qrcode-title":null;var i,a,u,c,g=f.getModuleCount()*t+2*r,l="";for(c="l"+t+",0 0,"+t+" -"+t+",0 0,-"+t+"z ",l+='<svg version="1.1" xmlns="http://www.w3.org/2000/svg"',l+=o.scalable?"":' width="'+g+'px" height="'+g+'px"',l+=' viewBox="0 0 '+g+" "+g+'" ',l+=' preserveAspectRatio="xMinYMin meet"',l+=n.text||e.text?' role="img" aria-labelledby="'+y([n.id,e.id].join(" ").trim())+'"':"",l+=">",l+=n.text?'<title id="'+y(n.id)+'">'+y(n.text)+"</title>":"",l+=e.text?'<description id="'+y(e.id)+'">'+y(e.text)+"</description>":"",l+='<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>',l+='<path d="',a=0;a<f.getModuleCount();a+=1)for(u=a*t+r,i=0;i<f.getModuleCount();i+=1)f.isDark(a,i)&&(l+="M"+(i*t+r)+","+u+c);return l+='" stroke="transparent" fill="black"/>',l+="</svg>"},f.createDataURL=function(t,r){t=t||2,r=void 0===r?4*t:r;var e=f.getModuleCount()*t+2*r,n=r,o=e-r;return I(e,e,(function(r,e){if(n<=r&&r<o&&n<=e&&e<o){var i=Math.floor((r-n)/t),a=Math.floor((e-n)/t);return f.isDark(a,i)?0:1}return 1}))},f.createImgTag=function(t,r,e){t=t||2,r=void 0===r?4*t:r;var n=f.getModuleCount()*t+2*r,o="";return o+="<img",o+=' src="',o+=f.createDataURL(t,r),o+='"',o+=' width="',o+=n,o+='"',o+=' height="',o+=n,o+='"',e&&(o+=' alt="',o+=y(e),o+='"'),o+="/>"};var y=function(t){for(var r="",e=0;e<t.length;e+=1){var n=t.charAt(e);switch(n){case"<":r+="&lt;";break;case">":r+="&gt;";break;case"&":r+="&amp;";break;case'"':r+="&quot;";break;default:r+=n}}return r};return f.createASCII=function(t,r){if((t=t||1)<2)return function(t){t=void 0===t?2:t;var r,e,n,o,i,a=1*f.getModuleCount()+2*t,u=t,c=a-t,g={"██":"█","█ ":"▀"," █":"▄","  ":" "},l={"██":"▀","█ ":"▀"," █":" ","  ":" "},h="";for(r=0;r<a;r+=2){for(n=Math.floor((r-u)/1),o=Math.floor((r+1-u)/1),e=0;e<a;e+=1)i="█",u<=e&&e<c&&u<=r&&r<c&&f.isDark(n,Math.floor((e-u)/1))&&(i=" "),u<=e&&e<c&&u<=r+1&&r+1<c&&f.isDark(o,Math.floor((e-u)/1))?i+=" ":i+="█",h+=t<1&&r+1>=c?l[i]:g[i];h+="\n"}return a%2&&t>0?h.substring(0,h.length-a-1)+Array(a+1).join("▀"):h.substring(0,h.length-1)}(r);t-=1,r=void 0===r?2*t:r;var e,n,o,i,a=f.getModuleCount()*t+2*r,u=r,c=a-r,g=Array(t+1).join("██"),l=Array(t+1).join("  "),h="",s="";for(e=0;e<a;e+=1){for(o=Math.floor((e-u)/t),s="",n=0;n<a;n+=1)i=1,u<=n&&n<c&&u<=e&&e<c&&f.isDark(o,Math.floor((n-u)/t))&&(i=0),s+=i?g:l;for(o=0;o<t;o+=1)h+=s+"\n"}return h.substring(0,h.length-1)},f.renderTo2dContext=function(t,r){r=r||2;for(var e=f.getModuleCount(),n=0;n<e;n++)for(var o=0;o<e;o++)t.fillStyle=f.isDark(n,o)?"black":"white",t.fillRect(n*r,o*r,r,r)},f};t.stringToBytes=(t.stringToBytesFuncs={default:function(t){for(var r=[],e=0;e<t.length;e+=1){var n=t.charCodeAt(e);r.push(255&n)}return r}}).default,t.createStringToBytes=function(t,r){var e=function(){for(var e=S(t),n=function(){var t=e.read();if(-1==t)throw"eof";return t},o=0,i={};;){var a=e.read();if(-1==a)break;var u=n(),f=n()<<8|n();i[String.fromCharCode(a<<8|u)]=f,o+=1}if(o!=r)throw o+" != "+r;return i}(),n="?".charCodeAt(0);return function(t){for(var r=[],o=0;o<t.length;o+=1){var i=t.charCodeAt(o);if(i<128)r.push(i);else{var a=e[t.charAt(o)];"number"==typeof a?(255&a)==a?r.push(a):(r.push(a>>>8),r.push(255&a)):r.push(n)}}return r}};var r,e,n,o,i,a=1,u=2,f=4,c=8,g={L:1,M:0,Q:3,H:2},l=0,h=1,s=2,v=3,d=4,w=5,p=6,y=7,B=(r=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],e=1335,n=7973,i=function(t){for(var r=0;0!=t;)r+=1,t>>>=1;return r},(o={}).getBCHTypeInfo=function(t){for(var r=t<<10;i(r)-i(e)>=0;)r^=e<<i(r)-i(e);return 21522^(t<<10|r)},o.getBCHTypeNumber=function(t){for(var r=t<<12;i(r)-i(n)>=0;)r^=n<<i(r)-i(n);return t<<12|r},o.getPatternPosition=function(t){return r[t-1]},o.getMaskFunction=function(t){switch(t){case l:return function(t,r){return(t+r)%2==0};case h:return function(t,r){return t%2==0};case s:return function(t,r){return r%3==0};case v:return function(t,r){return(t+r)%3==0};case d:return function(t,r){return(Math.floor(t/2)+Math.floor(r/3))%2==0};case w:return function(t,r){return t*r%2+t*r%3==0};case p:return function(t,r){return(t*r%2+t*r%3)%2==0};case y:return function(t,r){return(t*r%3+(t+r)%2)%2==0};default:throw"bad maskPattern:"+t}},o.getErrorCorrectPolynomial=function(t){for(var r=k([1],0),e=0;e<t;e+=1)r=r.multiply(k([1,C.gexp(e)],0));return r},o.getLengthInBits=function(t,r){if(1<=r&&r<10)switch(t){case a:return 10;case u:return 9;case f:case c:return 8;default:throw"mode:"+t}else if(r<27)switch(t){case a:return 12;case u:return 11;case f:return 16;case c:return 10;default:throw"mode:"+t}else{if(!(r<41))throw"type:"+r;switch(t){case a:return 14;case u:return 13;case f:return 16;case c:return 12;default:throw"mode:"+t}}},o.getLostPoint=function(t){for(var r=t.getModuleCount(),e=0,n=0;n<r;n+=1)for(var o=0;o<r;o+=1){for(var i=0,a=t.isDark(n,o),u=-1;u<=1;u+=1)if(!(n+u<0||r<=n+u))for(var f=-1;f<=1;f+=1)o+f<0||r<=o+f||0==u&&0==f||a==t.isDark(n+u,o+f)&&(i+=1);i>5&&(e+=3+i-5)}for(n=0;n<r-1;n+=1)for(o=0;o<r-1;o+=1){var c=0;t.isDark(n,o)&&(c+=1),t.isDark(n+1,o)&&(c+=1),t.isDark(n,o+1)&&(c+=1),t.isDark(n+1,o+1)&&(c+=1),0!=c&&4!=c||(e+=3)}for(n=0;n<r;n+=1)for(o=0;o<r-6;o+=1)t.isDark(n,o)&&!t.isDark(n,o+1)&&t.isDark(n,o+2)&&t.isDark(n,o+3)&&t.isDark(n,o+4)&&!t.isDark(n,o+5)&&t.isDark(n,o+6)&&(e+=40);for(o=0;o<r;o+=1)for(n=0;n<r-6;n+=1)t.isDark(n,o)&&!t.isDark(n+1,o)&&t.isDark(n+2,o)&&t.isDark(n+3,o)&&t.isDark(n+4,o)&&!t.isDark(n+5,o)&&t.isDark(n+6,o)&&(e+=40);var g=0;for(o=0;o<r;o+=1)for(n=0;n<r;n+=1)t.isDark(n,o)&&(g+=1);return e+=Math.abs(100*g/r/r-50)/5*10},o),C=function(){for(var t=new Array(256),r=new Array(256),e=0;e<8;e+=1)t[e]=1<<e;for(e=8;e<256;e+=1)t[e]=t[e-4]^t[e-5]^t[e-6]^t[e-8];for(e=0;e<255;e+=1)r[t[e]]=e;var n={glog:function(t){if(t<1)throw"glog("+t+")";return r[t]},gexp:function(r){for(;r<0;)r+=255;for(;r>=256;)r-=255;return t[r]}};return n}();function k(t,r){if(void 0===t.length)throw t.length+"/"+r;var e=function(){for(var e=0;e<t.length&&0==t[e];)e+=1;for(var n=new Array(t.length-e+r),o=0;o<t.length-e;o+=1)n[o]=t[o+e];return n}(),n={getAt:function(t){return e[t]},getLength:function(){return e.length},multiply:function(t){for(var r=new Array(n.getLength()+t.getLength()-1),e=0;e<n.getLength();e+=1)for(var o=0;o<t.getLength();o+=1)r[e+o]^=C.gexp(C.glog(n.getAt(e))+C.glog(t.getAt(o)));return k(r,0)},mod:function(t){if(n.getLength()-t.getLength()<0)return n;for(var r=C.glog(n.getAt(0))-C.glog(t.getAt(0)),e=new Array(n.getLength()),o=0;o<n.getLength();o+=1)e[o]=n.getAt(o);for(o=0;o<t.getLength();o+=1)e[o]^=C.gexp(C.glog(t.getAt(o))+r);return k(e,0).mod(t)}};return n}var A=function(){var t=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12,7,37,13],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]],r=function(t,r){var e={};return e.totalCount=t,e.dataCount=r,e},e={};return e.getRSBlocks=function(e,n){var o=function(r,e){switch(e){case g.L:return t[4*(r-1)+0];case g.M:return t[4*(r-1)+1];case g.Q:return t[4*(r-1)+2];case g.H:return t[4*(r-1)+3];default:return}}(e,n);if(void 0===o)throw"bad rs block @ typeNumber:"+e+"/errorCorrectionLevel:"+n;for(var i=o.length/3,a=[],u=0;u<i;u+=1)for(var f=o[3*u+0],c=o[3*u+1],l=o[3*u+2],h=0;h<f;h+=1)a.push(r(c,l));return a},e}(),b=function(){var t=[],r=0,e={getBuffer:function(){return t},getAt:function(r){var e=Math.floor(r/8);return 1==(t[e]>>>7-r%8&1)},put:function(t,r){for(var n=0;n<r;n+=1)e.putBit(1==(t>>>r-n-1&1))},getLengthInBits:function(){return r},putBit:function(e){var n=Math.floor(r/8);t.length<=n&&t.push(0),e&&(t[n]|=128>>>r%8),r+=1}};return e},M=function(t){var r=a,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+2<r.length;)t.put(o(r.substring(n,n+3)),10),n+=3;n<r.length&&(r.length-n==1?t.put(o(r.substring(n,n+1)),4):r.length-n==2&&t.put(o(r.substring(n,n+2)),7))}},o=function(t){for(var r=0,e=0;e<t.length;e+=1)r=10*r+i(t.charAt(e));return r},i=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);throw"illegal char :"+t};return n},x=function(t){var r=u,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+1<r.length;)t.put(45*o(r.charAt(n))+o(r.charAt(n+1)),11),n+=2;n<r.length&&t.put(o(r.charAt(n)),6)}},o=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);if("A"<=t&&t<="Z")return t.charCodeAt(0)-"A".charCodeAt(0)+10;switch(t){case" ":return 36;case"$":return 37;case"%":return 38;case"*":return 39;case"+":return 40;case"-":return 41;case".":return 42;case"/":return 43;case":":return 44;default:throw"illegal char :"+t}};return n},m=function(r){var e=f,n=t.stringToBytes(r),o={getMode:function(){return e},getLength:function(t){return n.length},write:function(t){for(var r=0;r<n.length;r+=1)t.put(n[r],8)}};return o},L=function(r){var e=c,n=t.stringToBytesFuncs.SJIS;if(!n)throw"sjis not supported.";!function(){var t=n("友");if(2!=t.length||38726!=(t[0]<<8|t[1]))throw"sjis not supported."}();var o=n(r),i={getMode:function(){return e},getLength:function(t){return~~(o.length/2)},write:function(t){for(var r=o,e=0;e+1<r.length;){var n=(255&r[e])<<8|255&r[e+1];if(33088<=n&&n<=40956)n-=33088;else{if(!(57408<=n&&n<=60351))throw"illegal char at "+(e+1)+"/"+n;n-=49472}n=192*(n>>>8&255)+(255&n),t.put(n,13),e+=2}if(e<r.length)throw"illegal char at "+(e+1)}};return i},D=function(){var t=[],r={writeByte:function(r){t.push(255&r)},writeShort:function(t){r.writeByte(t),r.writeByte(t>>>8)},writeBytes:function(t,e,n){e=e||0,n=n||t.length;for(var o=0;o<n;o+=1)r.writeByte(t[o+e])},writeString:function(t){for(var e=0;e<t.length;e+=1)r.writeByte(t.charCodeAt(e))},toByteArray:function(){return t},toString:function(){var r="";r+="[";for(var e=0;e<t.length;e+=1)e>0&&(r+=","),r+=t[e];return r+="]"}};return r},S=function(t){var r=t,e=0,n=0,o=0,i={read:function(){for(;o<8;){if(e>=r.length){if(0==o)return-1;throw"unexpected end of file./"+o}var t=r.charAt(e);if(e+=1,"="==t)return o=0,-1;t.match(/^\s$/)||(n=n<<6|a(t.charCodeAt(0)),o+=6)}var i=n>>>o-8&255;return o-=8,i}},a=function(t){if(65<=t&&t<=90)return t-65;if(97<=t&&t<=122)return t-97+26;if(48<=t&&t<=57)return t-48+52;if(43==t)return 62;if(47==t)return 63;throw"c:"+t};return i},I=function(t,r,e){for(var n=function(t,r){var e=t,n=r,o=new Array(t*r),i={setPixel:function(t,r,n){o[r*e+t]=n},write:function(t){t.writeString("GIF87a"),t.writeShort(e),t.writeShort(n),t.writeByte(128),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(255),t.writeByte(255),t.writeByte(255),t.writeString(","),t.writeShort(0),t.writeShort(0),t.writeShort(e),t.writeShort(n),t.writeByte(0);var r=a(2);t.writeByte(2);for(var o=0;r.length-o>255;)t.writeByte(255),t.writeBytes(r,o,255),o+=255;t.writeByte(r.length-o),t.writeBytes(r,o,r.length-o),t.writeByte(0),t.writeString(";")}},a=function(t){for(var r=1<<t,e=1+(1<<t),n=t+1,i=u(),a=0;a<r;a+=1)i.add(String.fromCharCode(a));i.add(String.fromCharCode(r)),i.add(String.fromCharCode(e));var f,c,g,l=D(),h=(f=l,c=0,g=0,{write:function(t,r){if(t>>>r!=0)throw"length over";for(;c+r>=8;)f.writeByte(255&(t<<c|g)),r-=8-c,t>>>=8-c,g=0,c=0;g|=t<<c,c+=r},flush:function(){c>0&&f.writeByte(g)}});h.write(r,n);var s=0,v=String.fromCharCode(o[s]);for(s+=1;s<o.length;){var d=String.fromCharCode(o[s]);s+=1,i.contains(v+d)?v+=d:(h.write(i.indexOf(v),n),i.size()<4095&&(i.size()==1<<n&&(n+=1),i.add(v+d)),v=d)}return h.write(i.indexOf(v),n),h.write(e,n),h.flush(),l.toByteArray()},u=function(){var t={},r=0,e={add:function(n){if(e.contains(n))throw"dup key:"+n;t[n]=r,r+=1},size:function(){return r},indexOf:function(r){return t[r]},contains:function(r){return void 0!==t[r]}};return e};return i}(t,r),o=0;o<r;o+=1)for(var i=0;i<t;i+=1)n.setPixel(i,o,e(i,o));var a=D();n.write(a);for(var u=function(){var t=0,r=0,e=0,n="",o={},i=function(t){n+=String.fromCharCode(a(63&t))},a=function(t){if(t<0);else{if(t<26)return 65+t;if(t<52)return t-26+97;if(t<62)return t-52+48;if(62==t)return 43;if(63==t)return 47}throw"n:"+t};return o.writeByte=function(n){for(t=t<<8|255&n,r+=8,e+=1;r>=6;)i(t>>>r-6),r-=6},o.flush=function(){if(r>0&&(i(t<<6-r),t=0,r=0),e%3!=0)for(var o=3-e%3,a=0;a<o;a+=1)n+="="},o.toString=function(){return n},o}(),f=a.toByteArray(),c=0;c<f.length;c+=1)u.writeByte(f[c]);return u.flush(),"data:image/gif;base64,"+u};return t}();qrcode.stringToBytesFuncs["UTF-8"]=function(t){return function(t){for(var r=[],e=0;e<t.length;e++){var n=t.charCodeAt(e);n<128?r.push(n):n<2048?r.push(192|n>>6,128|63&n):n<55296||n>=57344?r.push(224|n>>12,128|n>>6&63,128|63&n):(e++,n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>>6&63,128|63&n))}return r}(t)},function(t){"function"==typeof define&&define.amd?define([],t):"object"==typeof exports&&(module.exports=t())}((function(){return qrcode}));
 
   const WORKER='https://suitcube-sf-rtw-order.ba-bd5.workers.dev';
+  // [2026-10-23-3] ความสามารถของ Worker ที่ทำงานอยู่ (GET /version) — ส่วนที่ต้องใช้ Worker รุ่นใหม่โชว์เฉพาะเมื่อ Worker รองรับ
+  // (push หน้าเว็บก่อนวาง Worker ได้: Worker เก่า = หน้าทำตัวเหมือนเดิม) · ถามไม่สำเร็จ = ถือว่าไม่มี และถามใหม่ครั้งหน้า
+  const WFEAT={v:null,p:null};
+  function workerFeat(){
+    if(WFEAT.v) return Promise.resolve(WFEAT.v);
+    if(WFEAT.p) return WFEAT.p;
+    WFEAT.p=fetch(WORKER+'/version').then(r=>r.json()).then(j=>{
+      WFEAT.v={raReprint:!!(j&&j.raReprint===true), printStation:!!(j&&j.printStation===true), findByCustomer:!!(j&&j.findByCustomer===true), ra2Auto:!!(j&&j.ra2Auto&&j.ra2Auto.on===true), build:String((j&&j.build)||'')};
+      return WFEAT.v;
+    },()=>({raReprint:false,printStation:false,findByCustomer:false,ra2Auto:false,build:''})).finally(()=>{ WFEAT.p=null; });
+    return WFEAT.p;
+  }
+  const wfeat=k=>!!(WFEAT.v&&WFEAT.v[k]);
+  workerFeat();
 
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-22-4';
+  const APP_VERSION = '2026-10-23-3';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -5390,6 +5495,150 @@
         printRangeCount.className='printrange-count'+(total===0?' zero':' found');
       }).catch(()=>{ if(seq===_printCountSeq){ printRangeCount.textContent='นับจำนวนงานไม่สำเร็จ'; printRangeCount.className='printrange-count loading'; } });
   }
+  // ── [2026-10-23-3 ตามที่ขอ "ปริ้นใบนำกลับมาแก้จากหน้าต่างพิมพ์ใบสั่งแก้" · เลือกแบบ ก+ข] ใบนำกลับมาแก้ที่ตรงกับเลขที่ค้น ──
+  // ปุ่ม "สั่งพิมพ์" เดิมพิมพ์ใบสรุปปกติ (ทุกชิ้นของบิล) ผ่านโปรแกรมปริ้น — ใบนำกลับมาแก้แยกเป็นรายการของมันเอง พิมพ์เฉพาะใบนั้น:
+  //   ก. "พิมพ์จากเครื่องนี้" = หน้าต่างพิมพ์ของเครื่องที่เปิดอยู่ (เครื่องต่อ EPSON) — ใช้ได้กับ Worker ทุกรุ่น
+  //      Worker เก่า: หาจาก P#/เลขบิลเดิม/O# (/queue-reprint + /repeat-alteration-product = เฉพาะครั้งที่ยังไม่ส่ง Salesforce) แล้ววาดใบใหม่ด้วยตัววาดเดียวกับหน้าผลบันทึก
+  //      Worker ใหม่ (raReprint): หาด้วยเลขบิลใหม่ได้ + ทุกครั้ง (ส่งแล้วด้วย) + ใช้รูปจริงใน Lark (ผ่าน /print-station/image)
+  //   ข. "ส่งไปเครื่อง EPSON" = ให้หน้าปริ้นบนเว็บ (เครื่องต่อ EPSON) พิมพ์ — โชว์เมื่อ Worker บอก raReprint + printStation
+  const printRangeRa=document.getElementById('printRangeRa');
+  let _praSeq=0, _praT=null, _praList=[];
+  const praTerms=()=>[printRangeBillNo, printRangeOrderId, printRangeProductId].map(el=>String((el&&el.value)||'').trim());
+  const praFileOf=e=>e.file||('นำกลับมาแก้_P#'+e.digits+'_ครั้งที่'+e.round+'.png');
+  function updatePrintRangeRa(){
+    if(!printRangeRa) return;
+    clearTimeout(_praT); _praSeq++;
+    const [b,o,p]=praTerms();
+    if(!b&&!o&&!p){ printRangeRa.hidden=true; printRangeRa.innerHTML=''; _praList=[]; return; }
+    _praT=setTimeout(()=>loadPrintRangeRa(b,o,p),400);
+  }
+  async function praJson(url,opt){ const r=await fetch(url,opt); let j=null; try{ j=await r.json(); }catch(e){} if(!r.ok||!j||j.success===false) throw new Error((j&&(j.error||j.code))||('HTTP '+r.status)); return j; }
+  async function praFindNew(b,o,p){   // Worker ใหม่: /print-station/ra-search ต่อคำค้น
+    const out=new Map();
+    for(const q of [b,o,p].filter(x=>x&&x.length>=3)){
+      const j=await praJson(WORKER+'/print-station/ra-search?q='+encodeURIComponent(q));
+      (j.entries||[]).forEach(e=>{ const k=e.recordId+'|'+e.digits+'|'+e.round; if(!out.has(k)) out.set(k,Object.assign({src:'lark'},e)); });
+    }
+    return [...out.values()];
+  }
+  async function praFindLive(b,o,p){  // Worker เก่า: บิลจาก /queue-reprint (ค้นเฉยๆ ไม่ตั้งคิว) → P# ของบิล → รายการค้างของแต่ละ P#
+    const codes=new Map();
+    const pd=String(p||'').replace(/\D/g,''); if(pd.length>=5) codes.set('P# '+pd,null);
+    let orders=[];
+    try{ const j=await praJson(WORKER+'/queue-reprint',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({branch:'',billNo:b,orderId:o,productId:p,from:'',to:''})}); orders=(j.list||[]).slice(0,6); }catch(e){ if(!codes.size) throw e; }
+    orders.forEach(od=>{ (String(od.productCode||'').match(/P#\s*\d+/g)||[]).forEach(c=>{ const k='P# '+c.replace(/\D/g,''); if(!codes.has(k)||!codes.get(k)) codes.set(k,od); }); });
+    const out=[];
+    for(const [code,od] of [...codes.entries()].slice(0,8)){
+      let pr=null; try{ pr=(await praJson(WORKER+'/repeat-alteration-product?code='+encodeURIComponent(code))).product; }catch(e){ continue; }
+      (pr&&pr.pending||[]).forEach(l=>{
+        const ord=orders.find(x=>x.id===l.recordId)||od||null, c=(ord&&ord.customer)||{};
+        out.push({src:'live', recordId:l.recordId, bill:(ord&&ord.orderNo)||pr.billNo||'', branch:(ord&&ord.branch)||'', pickupBranch:(ord&&ord.pickupBranch)||'',
+          firstname:c.firstname||'', lastname:c.lastname||'', nickname:c.nickname||'', phone:c.phone||pr.custPhone||'', custName:pr.custName||'',
+          orderCode:pr.orderCode||'', round:Number(l.round), digits:code.replace(/\D/g,''), code, billNoNew:l.billNoNew||'', inspector:l.inspector||'', pickupDate:l.pickupDate||'',
+          detail:l.detail||'', sent:false, file:'', printed:'', product:pr});
+      });
+    }
+    return out;
+  }
+  async function loadPrintRangeRa(b,o,p){
+    const seq=++_praSeq;
+    printRangeRa.hidden=false;
+    printRangeRa.innerHTML='<div class="pra-h">ใบนำกลับมาแก้</div><div class="pra-msg">'+scLd({size:13,words:false,inline:true})+'กำลังหาใบนำกลับมาแก้ของเลขนี้…</div>';
+    try{
+      const f=await workerFeat();
+      const list=f.raReprint?await praFindNew(b,o,p):await praFindLive(b,o,p);
+      if(seq!==_praSeq) return;
+      _praList=list; renderPrintRangeRa(f,b);
+    }catch(e){
+      if(seq!==_praSeq) return;
+      printRangeRa.innerHTML='<div class="pra-h">ใบนำกลับมาแก้</div><div class="pra-msg">หาใบนำกลับมาแก้ไม่สำเร็จ ('+escapeHtml(e.message||'')+')</div>';
+    }
+  }
+  const praDate=iso=>{ const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso||'')); return m?toThaiDateWithDay(m[0]):''; };
+  function renderPrintRangeRa(f,b){
+    const list=_praList;
+    if(!list.length){
+      if(f.raReprint||!b){ printRangeRa.hidden=true; printRangeRa.innerHTML=''; return; }
+      printRangeRa.innerHTML='<div class="pra-msg">ใบนำกลับมาแก้: ตอนนี้หาได้จาก P# หรือเลขบิลเดิม (เฉพาะงานที่ยังไม่ส่ง Salesforce) — ค้นด้วยเลขบิลใหม่ได้หลังอัปเดตระบบ</div>';
+      return;
+    }
+    const epson=f.raReprint&&f.printStation;
+    printRangeRa.innerHTML='<div class="pra-h">ใบนำกลับมาแก้ '+list.length+' ใบ <span>· พิมพ์เฉพาะใบนี้ ไม่พิมพ์ชิ้นอื่นของบิล</span></div><div class="pra-list">'
+      + list.map((e,i)=>{
+        const st=[e.bill?'บิลเดิม '+e.bill:'', e.sent?'ส่ง Salesforce แล้ว':'ยังไม่ส่ง Salesforce', e.printed?('ปริ้นแล้ว '+String(e.printed).split(' · ปริ้น ')[1]||''):''].filter(Boolean).join(' · ');
+        const canEpson=epson&&e.printable;
+        return '<div class="pra-r" data-pra="'+i+'"><div class="pra-t">ใบนำกลับมาแก้ ครั้งที่ <b>'+e.round+'</b> · บิลใหม่ <b>'+escapeHtml(e.billNoNew||'-')+'</b> · <b>'+escapeHtml(e.code||('P# '+e.digits))+'</b></div>'
+          + '<div class="pra-s">'+escapeHtml(st)+(e.pickupDate?' · นัดรับ '+escapeHtml(praDate(e.pickupDate)):'')+'</div>'
+          + '<div class="pra-b"><button type="button" class="pra-btn solid" data-pra-local="'+i+'">พิมพ์จากเครื่องนี้</button>'
+          + (canEpson?'<button type="button" class="pra-btn" data-pra-epson="'+i+'">ส่งไปเครื่อง EPSON</button>':'')
+          + '<span class="pra-st" data-pra-st="'+i+'"></span></div></div>';
+      }).join('')+'</div>';
+  }
+  // รายละเอียดที่บันทึก ("ป้าย [ค่าเดิม→]ค่าใหม่, …, หมายเหตุ" · ขึ้นต้นป้ายงานด่วนได้ · ต่อท้าย " · จัดส่ง X – ที่อยู่" ได้) → แถวค่าวัด + หมายเหตุ ของใบสรุป
+  function praParseDetail(detail){
+    let t=String(detail||'').trim(), urgent=false, deliv=null;
+    const um=/^!! งานด่วน !!(?: \(อนุมัติ: [^)]*\))?\s*/.exec(t); if(um){ urgent=true; t=t.slice(um[0].length); }
+    const dm=/ · จัดส่ง (Messenger|ขนส่งเอกชน) – (.*)$/.exec(t); if(dm){ deliv={method:dm[1],place:dm[2].trim()}; t=t.slice(0,dm.index); }
+    const labels=[];
+    Object.values(typeof MEASURE_CONFIG!=='undefined'?MEASURE_CONFIG:{}).forEach(c=>(c.items||[]).forEach(d=>{ if(!d||!d.label||d.kind==='legStyle'||d.kind==='group') return; labels.push(d.label); if(d.takeIn) labels.push((d.takeInLabel||d.label.replace(/\s*\(.*\)$/,''))+' เก็บเข้า'); }));
+    labels.sort((a,b)=>b.length-a.length);
+    const parts=t.split(', '), rows=[]; let i=0;
+    for(;i<parts.length;i++){
+      const p=parts[i], lab=labels.find(l=>p===l||p.startsWith(l+' ')); if(!lab) break;
+      let rest=p.slice(lab.length).trim(), label=lab, word='';
+      if(rest.startsWith('ตลอดแนว ')){ label+=' ตลอดแนว'; rest=rest.slice(8).trim(); }
+      const w1=/^(เก็บเข้า|ขยายออก|เอาเข้า)\s+/.exec(rest); if(w1){ word=w1[1]; rest=rest.slice(w1[0].length); }
+      let now=rest.includes('→')?rest.slice(rest.lastIndexOf('→')+1).trim():rest;
+      const w2=/^(เก็บเข้า|ขยายออก|เอาเข้า)\s+/.exec(now); if(w2){ word=w2[1]; now=now.slice(w2[0].length); }
+      rows.push({label:word?label+' '+word:label, value:now});
+    }
+    return {rows, note:parts.slice(i).join(', ').trim(), urgent, deliv};
+  }
+  const praBillDate=bill=>{ const m=/(\d{2})(\d{2})(\d{2})\d{2,3}$/.exec(String(bill||'')); return m?('20'+m[1]+'-'+m[2]+'-'+m[3]):''; };
+  async function praRebuild(e){   // วาดใบนำกลับมาแก้ใหม่ จากข้อมูลจริง (ตัววาดเดียวกับหน้าผลบันทึก)
+    let pr=e.product;
+    if(!pr){ pr=(await praJson(WORKER+'/repeat-alteration-product?code='+encodeURIComponent('P# '+e.digits))).product; }
+    let lt={};
+    try{ const j=await praJson(WORKER+'/product-latest?codes='+encodeURIComponent('P# '+e.digits)); lt=((j&&j.items)||[]).find(x=>x&&String(x.code||'').replace(/\D/g,'')===e.digits)||{}; }catch(x){}
+    const d=praParseDetail(e.detail);
+    const name=[e.firstname,e.lastname].filter(Boolean).join(' ')||e.custName||pr.custName||'-';
+    const order={billNo:e.billNoNew||'-', sentDate:praBillDate(e.billNoNew)||toISO(new Date()), custName:name, phone:e.phone||pr.custPhone||'', nickname:e.nickname||'', staff:e.inspector, payStatus:'', urgent:d.urgent,
+      pickupLabel:d.deliv?d.deliv.method:(String(e.pickupBranch||'').split(' – ')[0]||e.branch||''), deliveryPlace:d.deliv?d.deliv.place:'', pickupDate:e.pickupDate, branch:e.branch||''};
+    const item={type:pr.type||'สินค้า', sku:pr.sku||'', size:pr.size||'', measureRows:d.rows, orderCode:e.orderCode||pr.orderCode||'', productCode:'P# '+e.digits,
+      branch:lt.stockBranch||e.branch||'', note:d.note, itemIndex:1, itemTotal:1};
+    return await renderReceiptCanvasBase64(repeatReceiptLines(order,item,{bill:e.billNoNew||'-',round:e.round,inspector:e.inspector}));
+  }
+  const praB64=buf=>{ const u=new Uint8Array(buf); let s2=''; for(let i=0;i<u.length;i+=0x8000) s2+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000)); return btoa(s2); };
+  async function praImageOf(e){
+    const f=await workerFeat();
+    if(f.raReprint&&e.printable&&/\.png$/i.test(e.file||'')){
+      try{ const r=await fetch(WORKER+'/print-station/image?rec='+encodeURIComponent(e.recordId)+'&name='+encodeURIComponent(e.file)); if(r.ok) return {b64:praB64(await r.arrayBuffer()), real:true}; }catch(x){}
+    }
+    return {b64:await praRebuild(e), real:false};
+  }
+  const praStatus=(i,msg,bad)=>{ const el=printRangeRa&&printRangeRa.querySelector('[data-pra-st="'+i+'"]'); if(el){ el.className=bad?'pra-bad':'pra-ok'; el.textContent=msg; } };
+  if(printRangeRa) printRangeRa.addEventListener('click', async ev=>{
+    const lb=ev.target.closest('[data-pra-local]'), eb=ev.target.closest('[data-pra-epson]');
+    if(!lb&&!eb) return;
+    const btn=lb||eb, i=Number(lb?lb.dataset.praLocal:eb.dataset.praEpson), e=_praList[i]; if(!e) return;
+    const label=btn.textContent; btn.disabled=true;
+    try{
+      if(lb){
+        scBusy(btn,'กำลังเตรียมใบ…');
+        const im=await praImageOf(e);
+        printReceiptsNow([im.b64]);
+        praStatus(i,'เปิดหน้าต่างพิมพ์แล้ว'+(im.real?'':' (วาดใบจากข้อมูลล่าสุด)'));
+        const f=await workerFeat();
+        if(f.printStation) fetch(WORKER+'/print-station/done?station=dialog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({recordId:e.recordId,name:praFileOf(e)})}).catch(()=>{});
+      }else{
+        scBusy(btn,'กำลังส่ง…');
+        const j=await praJson(WORKER+'/print-station/enqueue',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({recordId:e.recordId,name:e.file})});
+        praStatus(i,j.online?'ส่งไปเครื่อง EPSON แล้ว — ใบจะออกภายในไม่กี่วินาที':'เข้าคิวแล้ว — หน้าปริ้นที่เครื่อง EPSON ยังไม่เปิด ใบจะออกเมื่อเปิดหน้าปริ้น');
+      }
+    }catch(x){ praStatus(i,(lb?'พิมพ์ไม่สำเร็จ: ':'ส่งไม่สำเร็จ: ')+(x.message||''),true); }
+    finally{ btn.disabled=false; btn.textContent=label; }
+  });
+  [printRangeBillNo, printRangeOrderId, printRangeProductId].forEach(el=>{ if(el) el.addEventListener('input', updatePrintRangeRa); });
   [printRangeBranch, printRangeBillNo, printRangeOrderId, printRangeProductId, printFromDate, printToDate].forEach(el=>{
     if(el) el.addEventListener('input', updatePrintRangeCount);
     if(el && el.tagName==='SELECT') el.addEventListener('change', updatePrintRangeCount);
@@ -5430,6 +5679,7 @@
       updateHistDateDisplay(printToDate, printToDisplayEl);
       printRangePop.classList.add('show');
       updatePrintRangeCount();
+      updatePrintRangeRa();
     });
     printRangeClose.addEventListener('click', hidePrintRangePop);
     printRangeCancelBtn.addEventListener('click', hidePrintRangePop);
@@ -5869,7 +6119,7 @@
       + '</div>';
     // ปุ่มดึงข้อมูลล่าสุดจาก Salesforce มาพิมพ์ใบสรุปใหม่ — ต้องมี Product ID (Salesforce) ถึงจะไปดึงค่าวัดตัวล่าสุดกลับมาได้ และต้องมาจาก Lark จริง (ไม่ใช่ร่างที่ยังไม่ส่ง)
     const resyncBtn = (o._fromLark && o.productCode)
-      ? '<button type="button" class="hist-resync-btn" data-id="'+escapeHtml(o.id)+'">ดึงข้อมูลล่าสุด + พิมพ์ใบสรุปใหม่</button>'
+      ? '<button type="button" class="hist-resync-btn" data-id="'+escapeHtml(o.id)+'">'+resyncLabel()+'</button>'
       : '';
     // ไอคอนแก้ไข — โชว์เฉพาะบิลที่ "ยังไม่มี" ทั้ง Order ID และ Product ID (ยังไม่ยืนยันเข้า Salesforce) ตามเงื่อนไขที่ขอ
     const canEdit = orderIsEditable(o);
@@ -6717,8 +6967,8 @@
     const card=histPop?histPop.querySelector('.histcard'):null;
     const input=document.getElementById('ra2PidInput'), view=document.getElementById('ra2View');
     if(!card||!input||!view||!histList) return;
-    const clearBtn=document.getElementById('ra2PidClear'), scanBtn=document.getElementById('ra2PidScan'), cap=document.getElementById('ra2PidCap');
-    const CAP_HTML=cap.innerHTML, LIMIT=255, SHOW_MAX=40, BILL_RESERVE=20, UP_HARD=300*1024;   // BILL_RESERVE = "บิลใหม่ " (8) + เลขบิล 10 ตัว + เว้นวรรค (1) ที่ Worker ต่อหน้ารายละเอียดใน Editdetail + เผื่อ 1 ตัวเมื่อเลขวิ่งถึง 3 หลัก (เลขบิล 11 ตัว) = 20 [phase2-33 · P4]
+    const clearBtn=document.getElementById('ra2PidClear'), scanBtn=document.getElementById('ra2PidScan'), cap=document.getElementById('ra2PidCap'), pfx=document.getElementById('ra2PidPfx');
+    let CAP_HTML=cap.innerHTML; const LIMIT=255, SHOW_MAX=40, BILL_RESERVE=20, UP_HARD=300*1024;   // BILL_RESERVE = "บิลใหม่ " (8) + เลขบิล 10 ตัว + เว้นวรรค (1) ที่ Worker ต่อหน้ารายละเอียดใน Editdetail + เผื่อ 1 ตัวเมื่อเลขวิ่งถึง 3 หลัก (เลขบิล 11 ตัว) = 20 [phase2-33 · P4]
     const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     const sv=d=>'<svg class="ra2-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg>';
     const IC={chev:sv('<path d="M9 6l6 6-6 6"/>'), chevL:sv('<path d="M15 18l-6-6 6-6"/>'), left:sv('<path d="M19 12H5M11 6l-6 6 6 6"/>'), down:sv('<path d="M6 9l6 6 6-6"/>'),
@@ -6759,6 +7009,13 @@
     const baseFindHistOrder=findHistOrder;
     findHistOrder=id=>baseFindHistOrder(id)||(ALL||[]).find(o=>o.id===id)||null;
     function setCap(msg,kind){ if(!msg){ cap.className='ra2-cap'; cap.innerHTML=CAP_HTML; return; } cap.className='ra2-cap '+(kind||''); cap.textContent=msg; }
+    // [2026-10-23-3] ค้นชื่อ/เบอร์ต้องใช้ Worker ที่มี /find-by-customer — Worker บอก findByCustomer แล้วค่อยเปลี่ยนช่องเป็นแบบ 3 อย่าง
+    const CAP_CUST='เช่น <b>367699</b> · <b>0891234567</b> · <b>พิสณ</b> — หรือยิงเครื่องสแกนที่ QR บนใบสรุป';
+    workerFeat().then(w=>{
+      if(!w||!w.findByCustomer) return;
+      input.placeholder='เลขสินค้า เบอร์โทร หรือชื่อลูกค้า'; input.setAttribute('inputmode','text'); input.removeAttribute('lang');
+      CAP_HTML=CAP_CUST; if(!input.value){ setCap(); setPfx('ค้นหา'); }
+    });
     // แป้นพิมพ์โหมดไทย (เกษมณี) → ปุ่มภาษาอังกฤษ: ตารางเรียงตามแป้น [ปุ่มอังกฤษ, ตัวที่ออกในโหมดไทย] แถวไม่กด Shift 4 แถว + กด Shift 4 แถว แล้วกลับด้านเป็นตาราง ไทย → อังกฤษ
     // แปลงเมื่อข้อความมีอักษรไทย (U+0E00–U+0E7F) อย่างน้อย 1 ตัว และแปลง "ทุกตัว" — ในโหมดไทย "/" มาจากปุ่ม 2, "-" จากปุ่ม 3, "." จาก Shift+' ฯลฯ (เช่น 396241 → "-ตุ/ภๅ")
     const KEDMANEE=[
@@ -6883,10 +7140,88 @@
     }).observe(histList,{childList:true});
 
     // ---------- ค้นหา ----------
+    // [2026-10-23-1 ตามที่ขอ "ค้นหาจากชื่อ และเบอร์โทรได้ด้วย นอกจาก P#" + "พิมพ์อะไรลงไปอยากให้บอกด้วย"]
+    // ช่องเดียวรับ 3 อย่าง — ระบบดูจากสิ่งที่พิมพ์ และบอกในบรรทัดใต้ช่องทุกครั้ง:
+    //   ตัวเลขไม่ขึ้นต้น 0 = เลข P# (เหมือนเดิม · 4 หลักแล้วไม่เจอ P# → หาเบอร์ที่ลงท้าย 4 ตัวนี้แทน)
+    //   ขึ้นต้น 0 ครบ 10 หลัก = เบอร์โทร · ยังไม่ครบ = บอกว่าขาดอีกกี่ตัว (ยังไม่ค้น)
+    //   มีตัวหนังสือ (ไทย/อังกฤษ) ≥ 2 ตัว = ชื่อ/นามสกุล/ชื่อเล่น
+    // เบอร์/ชื่อ → Worker GET /find-by-customer?q=&kind=name|phone → {success,q,kind,orders,sfOrders,truncated,limit}
+    //   orders = บิลในแอป (รูปเดียวกับ /find-by-pnum) · sfOrders = บิลที่มีแต่ใน Salesforce (รูปเดียวกัน + _sf:true · ไม่มี note) — การ์ดเดิม ขอบน้ำเงิน
+    // S.q ของการค้นแบบนี้ = "c:<kind>:<คำค้น>" (ไม่ใช่ตัวเลขล้วน — ส่วนที่เทียบ P# จึงไม่ไปจับ)
+    const CCACHE={};
+    const phoneFmt=d=>d.length===10?d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6):d;
+    function setPfx(t){ if(!pfx) return; pfx.textContent=t; pfx.classList.toggle('th',t!=='P#'); }
+    function classifyQuery(raw){
+      if(!wfeat('findByCustomer')){   // Worker ยังไม่รองรับค้นชื่อ/เบอร์ → ค้น P# อย่างเดียว (เหมือนหน้าเว็บก่อน -23-1)
+        const t0=String(raw||'').trim(); if(!t0) return {pfx:'P#',key:''};
+        if(!/^[\dp#\s\-]*$/i.test(t0)) return {pfx:'P#',key:'',cap:'ช่องนี้ค้นด้วยเลข P# (ตัวเลข) หรือสแกน QR บนใบสรุป',bad:true};
+        const d0=digitsOf(t0); if(!d0) return {pfx:'P#',key:''};
+        return {pfx:'P#',key:d0,cap:d0.length<3?'พิมพ์เลขสินค้าอย่างน้อย 3 หลัก':''};
+      }
+      const t=String(raw||'').trim(); if(!t) return {pfx:'ค้นหา',key:''};
+      if(/^[\dp#\s\-]*$/i.test(t)){
+        const d=digitsOf(t); if(!d) return {pfx:'ค้นหา',key:''};
+        if(d[0]==='0'){
+          if(d.length===10) return {pfx:'เบอร์',key:'c:phone:'+d,cap:'หาเบอร์ '+phoneFmt(d)+' · ทุกบิลของเบอร์นี้'};
+          if(d.length>10) return {pfx:'เบอร์',key:'',cap:'เบอร์ยาวเกิน 10 หลัก — ตรวจเบอร์อีกครั้ง',bad:true};
+          return {pfx:'เบอร์',key:'',cap:'เบอร์ยังไม่ครบ ขาดอีก '+(10-d.length)+' ตัว (หรือพิมพ์ 4 ตัวท้าย)',bad:true};
+        }
+        return {pfx:'P#',key:d,cap:d.length<3?'พิมพ์เลขสินค้าอย่างน้อย 3 หลัก':(d.length===4?'หาสินค้า P# ที่มีเลข '+d+' · ไม่เจอจะหาเบอร์ที่ลงท้าย '+d:'หาสินค้า P# '+d)};
+      }
+      const n=t.replace(/\s+/g,' ');
+      if(n.length<2) return {pfx:'ชื่อ',key:'',cap:'พิมพ์ชื่ออย่างน้อย 2 ตัว',bad:true};
+      return {pfx:'ชื่อ',key:'c:name:'+n,cap:'หาชื่อ “'+n+'” · ชื่อ นามสกุล หรือชื่อเล่น'};
+    }
+    function searchCust(kind,q){
+      const key=kind+':'+q, e=CCACHE[key]||(CCACHE[key]={});
+      if(e.v) return Promise.resolve(e.v);
+      if(e.p) return e.p;
+      const ses=QSES;
+      e.p=getJSON(WORKER+'/find-by-customer?q='+encodeURIComponent(q)+'&kind='+encodeURIComponent(kind==='phone4'?'phone':kind)).then(j=>{
+        if(!j||!j.success||!Array.isArray(j.orders)) throw new Error((j&&j.error)||'ค้นไม่สำเร็จ');
+        const ok=o=>o&&!o.cancelled&&!o.isDraft&&codesOf(o).length;
+        const orders=j.orders.filter(ok), sf=(Array.isArray(j.sfOrders)?j.sfOrders:[]).filter(ok).map(o=>Object.assign({},o,{_sf:true,_fromLark:false}));
+        if(ses===QSES){ const byId=new Map((ALL||[]).map(o=>[o.id,o])); orders.concat(sf).forEach(o=>byId.set(o.id,o)); ALL=[...byId.values()]; }
+        e.v={orders,sf,truncated:!!j.truncated}; e.p=null; return e.v;
+      }).catch(err=>{ if(CCACHE[key]===e) delete CCACHE[key]; throw err; });
+      return e.p;
+    }
+    // การ์ดบิลจาก Salesforce: การ์ดเดียวกับรายการ + ขอบ/หัวน้ำเงิน + บรรทัดเล็ก "Salesforce · บิลก่อนมีแอป" · ไม่มีปุ่ม NOTE/แก้ไข/ยกเลิก/พิมพ์ใบใหม่ (บิลไม่อยู่ใน Lark)
+    function sfCardHtml(o){
+      return buildHistRowHtml(o,true).replace('<div class="hist-row','<div class="hist-row ra2-sf')
+        .replace(/(<div class="hist-custheader">[\s\S]*?)(<\/div>)/,'$1<span class="ra2-sflabel">Salesforce · บิลก่อนมีแอป</span>$2');
+    }
+    function renderCust(){
+      const m=/^c:(name|phone|phone4):([\s\S]+)$/.exec(S.q); if(!m) return;
+      const kind=m[1], q=m[2], tk=++S.tk; clearTimeout(_stT);
+      const hit=CCACHE[kind+':'+q]&&CCACHE[kind+':'+q].v;
+      const what=kind==='name'?'ชื่อ “'+q+'”':(kind==='phone4'?'เบอร์ที่ลงท้าย '+q:'เบอร์ '+phoneFmt(q));
+      if(!hit){
+        histList.innerHTML=stateHtml('กำลังหา'+esc(what)+'…');
+        _stT=setTimeout(()=>{ if(tk!==S.tk) return;
+          searchCust(kind,q).then(()=>{ if(tk===S.tk) renderCust(); },e=>{ if(tk===S.tk) histList.innerHTML=stateHtml('ค้นไม่สำเร็จ ('+esc(e.message)+') — พิมพ์ใหม่อีกครั้งเพื่อลองใหม่'); });
+        },kind==='name'?400:250);
+        return;
+      }
+      const pk=o=>(o.dates&&o.dates.pickup)||'';
+      const app=hit.orders.slice().sort((a,b)=>pk(b).localeCompare(pk(a))), sf=hit.sf.slice().sort((a,b)=>pk(b).localeCompare(pk(a)));
+      const total=app.length+sf.length;
+      if(!total){ histList.innerHTML=stateHtml('ไม่พบบิลของ'+esc(what)+(kind==='name'?' — ลองพิมพ์ชื่อเล่น นามสกุล หรือเบอร์โทรแทน':'')); return; }
+      const appShown=app.slice(0,SHOW_MAX), sfShown=sf.slice(0,Math.max(0,SHOW_MAX-appShown.length));
+      const cut=(appShown.length+sfShown.length<total)||hit.truncated;
+      histList.innerHTML='<div class="ra2-count" data-ra2-res>พบ '+total+(hit.truncated?'+':'')+' บิล · ทุกสาขา · 2 ปีล่าสุด'+(cut?' · แสดง '+(appShown.length+sfShown.length)+' บิลแรก — พิมพ์ให้เจาะจงขึ้น':'')+'</div>'
+        + appShown.map(o=>buildHistRowHtml(o,true)).join('')
+        + (sfShown.length?'<div class="ra2-count ra2-sfhead" data-ra2-res>จาก Salesforce · บิลก่อนมีแอป หรือหลังบ้านเปิดให้ · '+sf.length+' บิล</div>'+sfShown.map(sfCardHtml).join(''):'');
+      decorate();
+      const need=[...new Set(appShown.concat(sfShown).flatMap(codesOf))].filter(c=>!STATUS_DONE.has(c));
+      if(need.length) _stT=setTimeout(()=>{ ensureStatuses(need).then(()=>{ if(tk===S.tk) renderCust(); },()=>{
+        if(tk!==S.tk) return; const c=histList.querySelector(':scope>.ra2-count'); if(c) c.textContent+=' · ดึงสถานะจาก Salesforce ไม่สำเร็จ'; }); },250);
+    }
     const stateHtml=t=>'<div class="hist-state" data-ra2-res>'+t+'</div>';   // ทุกอย่างที่ส่วนนี้วาดลง #histList ขึ้นต้นด้วย data-ra2-res
     let _stT=null;
     function renderSearch(){
       if(_histTab!=='pickup'||S.view!=='list'||!S.q) return;
+      if(S.q.startsWith('c:')) return renderCust();
       const q=S.q, tk=++S.tk; clearTimeout(_stT);
       if(q.length<3){ histList.innerHTML=stateHtml('พิมพ์ P# อย่างน้อย 3 หลัก'); return; }
       if(q.length>6){ histList.innerHTML=stateHtml('ไม่พบ P# ที่มีเลข “'+esc(q)+'”'); return; }
@@ -6901,7 +7236,9 @@
       const from=histFromDateEl?histFromDateEl.value:'', to=histToDateEl?histToDateEl.value:'';
       const inRange=o=>filterByPickupRange([o],from,to).length>0, pk=o=>(o.dates&&o.dates.pickup)||'';
       const m=hit.orders.filter(o=>codesOf(o).some(c=>matchCode(c,q))).sort((a,b)=>(inRange(b)-inRange(a))||pk(b).localeCompare(pk(a)));
-      if(!m.length){ if(q.length===6) fallback(q,tk); else histList.innerHTML=stateHtml('ไม่พบ P# ที่มีเลข “'+esc(q)+'”'); return; }
+      if(!m.length){ if(q.length===6) fallback(q,tk);
+        else if(q.length===4&&wfeat('findByCustomer')){ S.q='c:phone4:'+q; setCap('ไม่พบ P# ที่มีเลข '+q+' · หาเบอร์ที่ลงท้าย '+q+' แทน','ok'); renderCust(); }   // [2026-10-23-1] 4 ตัวท้ายของเบอร์
+        else histList.innerHTML=stateHtml('ไม่พบ P# ที่มีเลข “'+esc(q)+'”'); return; }
       const shown=m.slice(0,SHOW_MAX);
       histList.innerHTML='<div class="ra2-count" data-ra2-res>พบ '+m.length+(hit.truncated?'+':'')+' บิล · ค้นทุกวันที่'+((m.length>shown.length||hit.truncated)?' · แสดง '+shown.length+' บิลแรก — พิมพ์เลขเพิ่มให้แคบลง':'')+'</div>'
         + shown.map(o=>buildHistRowHtml(o,true)).join('');
@@ -6945,12 +7282,13 @@
       const en=toEnglish(raw);   // พิมพ์/ยิงตอนเครื่องอยู่โหมดไทย → ใช้ข้อความที่แปลงเป็นปุ่มภาษาอังกฤษแล้วก่อนกรอง
       // ได้เป็นเลข P# → เขียนกลับลงช่องเป็นภาษาอังกฤษเลย (ลิงก์ที่เครื่องยิงยังพิมพ์ไม่จบ ปล่อยไว้ก่อน รอ Enter)
       if(en!==raw&&/^[\dp#\s]*$/i.test(en)){ const pos=input.selectionStart; input.value=en; try{ if(pos!=null) input.setSelectionRange(pos,pos); }catch(e){} }
-      raw=en;
+      if(/^[\dp#\s\-]*$/i.test(en)||/https?:|Suitcube_Product__c/i.test(en)) raw=en;   // [2026-10-23-1] ตัวเลข/ลิงก์ที่ยิงตอนแป้นไทย → ปุ่มอังกฤษ · ชื่อภาษาไทยใช้ตามที่พิมพ์
       clearBtn.hidden=!raw;
-      if(cap.className!=='ra2-cap') setCap();
-      if(/https?:|Suitcube_Product__c/i.test(raw)) return;   // เครื่องยิงกำลังพิมพ์ลิงก์ใน QR — รอ Enter ค่อยแปลงเป็น P#
-      const q=digitsOf(raw);
-      if(q===S.q){ if(q&&!cachedFor(q)&&!(QCACHE[q]&&QCACHE[q].p)) renderSearch(); return; }
+      if(/https?:|Suitcube_Product__c/i.test(raw)){ setPfx('P#'); return; }   // เครื่องยิงกำลังพิมพ์ลิงก์ใน QR — รอ Enter ค่อยแปลงเป็น P#
+      const k=classifyQuery(raw); setPfx(k.pfx);
+      if(k.cap) setCap(k.cap,k.bad?'bad':'ok'); else setCap();
+      const q=k.key;
+      if(q===S.q){ if(q&&!q.startsWith('c:')&&!cachedFor(q)&&!(QCACHE[q]&&QCACHE[q].p)) renderSearch(); return; }
       S.q=q; S.why={};
       if(q) renderSearch(); else { S.tk++; clearTimeout(_stT); if(_histTab==='pickup'&&S.view==='list') renderPickupRangeList(); }
     }
@@ -7113,7 +7451,7 @@
       const br=branchOptions(), pk=String((o&&o.pickupBranch)||'').trim();
       let branch=''; if(o&&br.includes(pk)) branch=pk; else if(o&&br.includes(o.branch)) branch=o.branch; else { const t=document.getElementById('branchTop'); if(t&&br.includes(t.value)) branch=t.value; }
       const staffEl=document.getElementById('staffInput');
-      S.form={code,o,p,n,larkId:String(p.larkRecordId||(o&&o.id)||''),type:p.type||d.type||'',sku:p.sku||d.sku||'',size:p.size||d.size||'',custName:nm||p.custName||'',custShow:(nm||p.custName||'—')+(c.nickname?' ('+c.nickname+')':''),
+      S.form={code,o,p,n,larkId:String(p.larkRecordId||(o&&!o._sf&&o.id)||''),type:p.type||d.type||'',sku:p.sku||d.sku||'',size:p.size||d.size||'',custName:nm||p.custName||'',custShow:(nm||p.custName||'—')+(c.nickname?' ('+c.nickname+')':''),
         nick:c.nickname||'',phone:c.phone||p.custPhone||'',billNo:o?(o.orderNo||''):String(p.billNo||''),orderCode:p.orderCode||oCodeOf(o)||'',branch,date:isoPlus(7),inspDefault:(staffEl&&staffEl.value.trim())||'',inspector:'',
         urgent:false,approver:'',urgentManual:false,addr:'',photos:[],phBusy:0,phMsg:''};
       S.form.inspector=canonInsp(S.form.inspDefault); S.err=''; S.listTop=histList.scrollTop;
@@ -7408,7 +7746,7 @@
       // สำเร็จ: ใช้รอบ/เลขบิลใหม่ตามที่ Worker ออกให้จริง · สินค้านี้มีงานค้างแล้ว → ป้ายเป็น "รอหลังบ้านส่ง" จนกว่าจะโหลดใหม่ (Worker ปฏิเสธซ้ำอยู่แล้ว)
       const rn=(Number.isInteger(+j.round)&&+j.round>0)?+j.round:f.n; f.n=rn;
       const pp=PROD[f.code]&&PROD[f.code].p;
-      if(pp) pp.blocked={code:'pending_exists',message:'บันทึกงานแก้ครั้งที่ '+rn+' แล้ว — รอหลังบ้านลงชื่อและส่งข้อมูลไป Salesforce'};
+      if(pp) pp.blocked={code:'pending_exists',message:(rn===2&&wfeat('ra2Auto'))?'บันทึกงานแก้ครั้งที่ 2 แล้ว — ระบบกำลังส่งเข้า Salesforce ให้อัตโนมัติ':'บันทึกงานแก้ครั้งที่ '+rn+' แล้ว — รอหลังบ้านลงชื่อและส่งข้อมูลไป Salesforce'};   // [2026-10-23-2] ครั้งที่ 2 ส่งเอง
       paintChips(f.code);
       S.sending=false; S.checking=false; S.form=null;
       // [P4] Worker ตัดรายละเอียดให้พอดี 255 ตัวรวมเลขบิลใหม่ — ถ้าที่ Worker เก็บสั้นกว่าที่ส่ง (หลังยุบช่องว่าง) บอกผู้ใช้บนหน้าสำเร็จ
@@ -7451,6 +7789,8 @@
     function doneHtml(){ const d=S.done, f=d.f;
       return '<button type="button" class="ra2-back" data-ra2="fin" aria-disabled="'+(d.busy?'true':'false')+'">'+IC.chevL+'รายการที่นัดรับ</button>'
         + '<div class="ra2-ok"><span class="ic">'+IC.tick+'</span><div><div class="t">บันทึกนำกลับมาแก้ ครั้งที่ '+f.n+' แล้ว</div><div class="s">'+esc(f.code)+' · '+esc(typeShort(f.type))+' · '+esc(f.custShow)+'</div></div></div>'
+        // [2026-10-23-2 เจ้าของระบบสั่ง] ครั้งที่ 2: ไม่ต้องรอหลังบ้านลงชื่อ — Worker ส่งเข้า Salesforce เอง แล้วใบสรุปปริ้นที่หน้าปริ้น
+        + ((f.n===2&&wfeat('ra2Auto'))?'<div class="ra2-up ok" data-ra2-auto role="status">'+IC.tick+'<span class="sp">ส่งเข้า Salesforce ให้อัตโนมัติ — ไม่ต้องรอหลังบ้านลงชื่อ · ใบสรุปจะปริ้นที่เครื่องปริ้นเมื่อส่งสำเร็จ</span></div>':'<div class="ra2-up note" data-ra2-auto role="status">'+IC.warn+'<span class="sp">ครั้งที่ '+f.n+' — รอหลังบ้านลงชื่อและส่งข้อมูลไป Salesforce</span></div>')
         + cmpHtml(d)
         + (d.notes||[]).map(n=>'<div class="ra2-up note" data-ra2-note role="status">'+IC.warn+'<span class="sp">'+esc(n)+'</span></div>').join('')
         + '<div class="ra2-img" data-ra2-img>'+imgInner(d)+'</div>'
@@ -7468,13 +7808,7 @@
           pickupLabel:f.branch, deliveryPlace:isDel(f.branch)?String(f.addr||'').trim():'', pickupDate:f.date, branch:(o&&o.branch)||''};
         const item={type:f.type||'สินค้า', sku:f.sku, size:f.size, measureRows:d.rows.map(r=>({label:r.rl,value:r.rv})), orderCode:f.orderCode, productCode:f.code,
           branch:lt.stockBranch||(o&&o.branch)||'', note:d.note, itemIndex:1, itemTotal:1};
-        const lines=buildReceiptLines(order,item).map(l=>{
-          if(l.kind==='title'&&l.text==='ใบสั่งแก้ปรับทรงสำเร็จรูป') return Object.assign({},l,{text:'สินค้านำกลับมาแก้'});
-          if(l.kind==='right'&&l.big) return Object.assign({},l,{text:bill+' · ครั้งที่ '+f.n});
-          if(l.kind==='right'&&/^ส่งแก้ /.test(l.text)) return Object.assign({},l,{text:l.text.replace(/^ส่งแก้/,'นำกลับมาแก้')});
-          if(l.kind==='right'&&/ \(ชิ้นที่ 1\)$/.test(l.text)) return Object.assign({},l,{text:l.text.replace(/ \(ชิ้นที่ 1\)$/,'')});
-          if(l.kind==='kv'&&l.label==='พนักงานขาย') return Object.assign({},l,{label:'พนักงานตรวจสอบ',value:f.inspector||'-'});
-          return l; }).filter(l=>!(l.kind==='center'&&(!l.text||l.text==='-')));   // ไม่มีสถานะชำระเงิน → ตัดบรรทัดว่าง
+        const lines=repeatReceiptLines(order,item,{bill,round:f.n,inspector:f.inspector});   // [2026-10-23-3] ย้ายไปใช้ร่วมกับหน้าต่างพิมพ์
         d.img=await Promise.race([renderReceiptCanvasBase64(lines), new Promise((_,no)=>setTimeout(()=>no(new Error('วาดรูปนานเกินไป')),25000))]);
       }catch(e){ d.err=(e&&e.message)||String(e); }
       if(S.done===d&&S.view==='done'){
@@ -7704,7 +8038,7 @@
     // เปิดป๊อปอัปใหม่ = เริ่มใหม่ (สถานะ/รอบเปลี่ยนได้ตลอด — โหลดใหม่ทุกครั้งที่เปิด)
     histBtn.addEventListener('click',()=>{
       S.tk++; S.scanTk++; clearTimeout(_stT); S.q=''; S.why={}; S.err='';
-      ALL=null; QSES++; Object.keys(QCACHE).forEach(k=>delete QCACHE[k]); STATUS_DONE.clear(); QUEUE.length=0;
+      ALL=null; QSES++; Object.keys(QCACHE).forEach(k=>delete QCACHE[k]); Object.keys(CCACHE).forEach(k=>delete CCACHE[k]); STATUS_DONE.clear(); QUEUE.length=0; setPfx('ค้นหา');
       Object.keys(PROD).forEach(k=>delete PROD[k]); Object.keys(LATEST).forEach(k=>delete LATEST[k]);
       input.value=''; S.kbTh=false; clearBtn.hidden=true; setCap(); S.form=null; S.done=null; setView('list');
     },true);
@@ -7878,6 +8212,9 @@
   function findHistOrder(recId){
     return (_histOrders||[]).find(x=>x.id===recId) || (_pickupOrders||[]).find(x=>x.id===recId) || null;
   }
+  // [2026-10-22-5] บัญชีอ่านอย่างเดียว: สร้างใบสรุปจากข้อมูลล่าสุดให้ดู/บันทึกรูปลงเครื่องเท่านั้น (ไม่แนบเข้า Lark/Salesforce ไม่เข้าคิวพิมพ์)
+  const isReadOnly=()=>document.documentElement.classList.contains('ro-mode');
+  const resyncLabel=()=>isReadOnly()?'ดูใบสรุปล่าสุด':'ดึงข้อมูลล่าสุด + พิมพ์ใบสรุปใหม่';
   async function resyncAndReprint(recId){
     const o=findHistOrder(recId);
     if(!o){ alert('ไม่พบข้อมูลบิลนี้ — ลองปิดแล้วเปิดหน้าประวัติใหม่อีกครั้ง'); return; }
@@ -7885,13 +8222,14 @@
     if(btn){ btn.disabled=true; scBusy(btn,'กำลังดึงข้อมูล…'); }
     try{
       const images=await regenerateReceiptsFromLatest(o);
+      if(isReadOnly()){ showResult(true, 'ใบสรุปล่าสุดจาก Salesforce '+images.length+' ใบ (บัญชีอ่านอย่างเดียว — ดูและบันทึกรูปลงเครื่องได้ ไม่ได้บันทึกเข้าระบบ)'); renderResultReceipts(images); return; }
       showResult(true, 'ดึงข้อมูลล่าสุดจาก Salesforce สำเร็จ — สร้างใบสรุปใหม่แล้ว '+images.length+' ใบ (แนบเข้า Lark Base เรียบร้อย)');
       renderResultReceipts(images);
       await attachReceiptImages(images);
     }catch(e){
       alert('ดึงข้อมูล/สร้างใบสรุปใหม่ไม่สำเร็จ: '+e.message);
     }finally{
-      if(btn){ btn.disabled=false; btn.textContent='ดึงข้อมูลล่าสุด + พิมพ์ใบสรุปใหม่'; }
+      if(btn){ btn.disabled=false; btn.textContent=resyncLabel(); }
     }
   }
   // [ใหม่] บิลที่กำลังแก้ไขอยู่ (ถ้ามี) — ไม่ null แปลว่ากดปุ่ม "บันทึก" แล้วจะบันทึกทับ record เดิมแทนการสร้างบิลใหม่
@@ -8374,8 +8712,10 @@
     // จุดวัดที่มีทิศทาง (เดิมเป็นสายวัด) — แตะฝั่งซ้าย/ขวาของช่องตัวเลขเองเพื่อลด/เพิ่มทีละ 0.25 พร้อมบอกทิศทาง ขยายออก/เก็บเข้า (เลิกใช้ปุ่ม +/- แยกข้างๆ แล้ว)
     // item.max (ถ้ามี) = เพิ่ม/ลดได้ไม่เกินกี่นิ้ว (อก/เอว/สะโพก จำกัดไว้ที่ 3 (เดิม 2 นิ้ว — ปรับเป็น 3 ตามที่ขอ 2026-10-14)) — เก็บเป็น data-max ให้ stepMitemValue/setMitemValue อ่านไปคลัมป์ค่า
     const maxAttr = item.max!=null ? ' data-max="'+item.max+'"' : '';
+    // [2026-10-22-5] item.along: ป้าย + ติ๊ก ตลอดแนว อยู่ในคอลัมน์ป้ายเดียวกัน (.mlab) — ป้ายยังเป็น .k ตัวแรกของแถว (โค้ด/ทดสอบที่หา .k แรกยังได้ชื่อจุดวัด)
+    const alongHtml = item.along ? '<label class="stitchlbl rchk along-row"><input type="checkbox" class="along-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">ตลอดแนว</span></label>' : '';
     return '<div class="mitem"'+groupAttr+'>'
-      + '<div class="mtop"><span class="k">'+item.label+'</span>'
+      + '<div class="mtop">'+(item.along ? '<div class="mlab"><span class="k">'+item.label+'</span>'+alongHtml+'</div>' : '<span class="k">'+item.label+'</span>')
       + '<div class="num-toggle-wrap">'
       + '<div class="numstep">'
       + '<div class="field-wrap"><div class="tapzone l" data-d="1"></div><input class="numonly" value="" placeholder="0" inputmode="decimal" readonly'+maxAttr+'><div class="tapzone r" data-d="-1"></div></div>'
@@ -8383,7 +8723,6 @@
       + '</div>'
       + '<div class="toggle"><button>แก้ไข</button><button class="on">ไม่แก้ไข</button></div>'
       + '</div></div>'
-      + (item.along?'<div class="along-row"><label class="stitchlbl rchk"><input type="checkbox" class="along-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">ตลอดแนว</span></label></div>':'')
       + '</div>';
   }
   function wireGroupToggles(block){
@@ -10187,6 +10526,17 @@
   // [แก้บั๊ก+ตามที่ขอ] เดิมวาดด้วย renderReceiptHtml (ตัวอักษรจริงของเบราว์เซอร์) — เจอจริงว่าปริ้นออกมาจางกว่าโหมด "ดึงเป็นรูป" (renderReceiptCanvasBase64) ชัดเจน
   // เพราะโหมดรูปภาพผ่านการแปลงเป็นขาว-ดำล้วน+ขยายเส้นให้หนาก่อนส่งออกแล้ว (ดู renderReceiptCanvasBase64) แต่โหมดตัวอักษรจริงพิมพ์ผ่าน driver เครื่องพิมพ์ตรงๆ ไม่ผ่านการแปลงนี้เลย
   // แก้โดยเปลี่ยนมาใช้รูปภาพชุดเดียวกับโหมด "ดึงเป็นรูป" เป๊ะๆ แทน (แปะเป็น <img> แล้วสั่งพิมพ์) ให้ผลลัพธ์ออกมาเหมือนกันไม่ว่าจะพิมพ์ทางไหน
+  // [2026-10-23-3] บรรทัดใบสรุป "สินค้านำกลับมาแก้" = ใบสรุปปกติที่เปลี่ยนหัว/เลขบิล/วันที่/พนักงาน — ใช้ร่วมกันระหว่างหน้าผลบันทึก (wireRepeatAlterationPickup)
+  // กับหน้าต่าง "พิมพ์ใบสั่งแก้ปรับทรงสำเร็จรูป" (วาดใหม่จากข้อมูลจริงเพื่อพิมพ์ซ้ำ) ให้ได้ใบหน้าตาเดียวกันเป๊ะ
+  function repeatReceiptLines(order, item, o){
+    return buildReceiptLines(order,item).map(l=>{
+      if(l.kind==='title'&&l.text==='ใบสั่งแก้ปรับทรงสำเร็จรูป') return Object.assign({},l,{text:'สินค้านำกลับมาแก้'});
+      if(l.kind==='right'&&l.big) return Object.assign({},l,{text:o.bill+' · ครั้งที่ '+o.round});
+      if(l.kind==='right'&&/^ส่งแก้ /.test(l.text)) return Object.assign({},l,{text:l.text.replace(/^ส่งแก้/,'นำกลับมาแก้')});
+      if(l.kind==='right'&&/ \(ชิ้นที่ 1\)$/.test(l.text)) return Object.assign({},l,{text:l.text.replace(/ \(ชิ้นที่ 1\)$/,'')});
+      if(l.kind==='kv'&&l.label==='พนักงานขาย') return Object.assign({},l,{label:'พนักงานตรวจสอบ',value:o.inspector||'-'});
+      return l; }).filter(l=>!(l.kind==='center'&&(!l.text||l.text==='-')));   // ไม่มีสถานะชำระเงิน → ตัดบรรทัดว่าง
+  }
   function printReceiptsNow(imagesBase64){
     const area=document.getElementById('receiptPrintArea');
     if(!area || !imagesBase64.length) return;
@@ -11469,6 +11819,198 @@
     document.addEventListener('visibilitychange', function(){ if(document.visibilityState==='visible' && Date.now()-lastFetch>20000) refresh(); });
     window.suitcubePrintControl={ isPaused:function(){ return !!(st && st.state==='pause'); }, refresh:refresh };
   })();
+</script>
+
+<!-- [2026-10-23-2 เจ้าของระบบสั่ง] หน้าปริ้นบนเว็บ (index.html?print=1) — แทนโปรแกรมปริ้นสำหรับ "ใบนำกลับมาแก้" ที่ส่งเข้า Salesforce แล้ว
+     เปิดค้างไว้ที่เครื่องที่ต่อ EPSON ใน Edge ที่เปิดด้วย --kiosk-printing (พิมพ์ทันทีไม่ถาม) + ตั้ง EPSON เป็นเครื่องพิมพ์หลัก
+     ทุก 5 วิ: ถาม Worker /print-station/pending → แจ้งเริ่มปริ้น (/print-station/printing) → โหลดรูป (/print-station/image) → พิมพ์ผ่าน iframe → จดว่าปริ้นแล้ว (/print-station/done)
+     เคารพปุ่ม "หยุดพิมพ์" บนหน้าเว็บ (GET /print-control) · มีเสียงพูดภาษาไทย (เสียงผู้หญิง Premwadee ก่อน) ต้องกด "เปิดเสียง" 1 ครั้งต่อการเปิดหน้า -->
+<style>
+  #psRoot{position:fixed;inset:0;z-index:2147483000;background:var(--paper,#f7f4ec);color:var(--ink,#232220);font-family:'Prompt',sans-serif;display:flex;flex-direction:column;overflow:auto}
+  #psRoot[hidden]{display:none}
+  .ps-top{background:var(--header-cream,#EFEADA);padding:16px 22px 14px;border-bottom:1px solid var(--rule,#ddd6c4);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .ps-top h1{font-size:19px;font-weight:600;margin:0}
+  .ps-top .who{font-size:13px;color:var(--t2,#8a8474)}
+  .ps-state{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500}
+  .ps-dot{width:10px;height:10px;border-radius:50%;background:var(--green,#5c7f4f)}
+  .ps-dot.pause{background:var(--orange,#d9772e)}.ps-dot.err{background:var(--red,#b5573b)}
+  .ps-body{max-width:860px;width:100%;margin:0 auto;padding:18px 22px 40px;display:flex;flex-direction:column;gap:14px}
+  .ps-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .ps-btn{font-family:inherit;font-size:14px;font-weight:500;border:1.5px solid var(--gold,#C9A24B);color:#7a5d1d;background:#fff;border-radius:12px;padding:9px 16px;cursor:pointer}
+  .ps-btn.dark{background:var(--ink,#232220);border-color:var(--ink,#232220);color:#fff}
+  .ps-btn.on{background:#f3ead6}
+  .ps-vol{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t2,#8a8474)}
+  .ps-vol input{width:110px;accent-color:var(--gold,#C9A24B)}
+  .ps-warn{border-radius:12px;padding:11px 14px;font-size:14px;line-height:1.5;background:#fbeeea;color:#8f3a22;border:1px solid #efcabd}
+  .ps-warn.info{background:#f6efdc;color:#6b531c;border-color:#e6d6ae}
+  .ps-warn[hidden]{display:none}
+  .ps-card{background:#fff;border:1px solid var(--rule2,#e8e2d4);border-radius:16px;padding:6px 16px}
+  .ps-card h2{font-size:14px;font-weight:600;margin:10px 0 4px;color:var(--t2,#6f6a5c)}
+  .ps-log{list-style:none;margin:0;padding:0}
+  .ps-log li{display:grid;grid-template-columns:62px 1fr auto;gap:12px;align-items:baseline;padding:10px 0;border-top:1px solid var(--rule2,#e8e2d4);font-size:14px}
+  .ps-log li:first-child{border-top:none}
+  .ps-log .t{font-family:'Barlow',sans-serif;color:var(--t2,#6f6a5c)}
+  .ps-log .w b{font-family:'Barlow',sans-serif}
+  .ps-log .s{font-size:13px;color:var(--green,#5c7f4f)}.ps-log .s.err{color:var(--red,#b5573b)}.ps-log .s.go{color:#7a5d1d}
+  .ps-empty{color:var(--t2,#8a8474);font-size:14px;padding:14px 0}
+  .ps-help{font-size:13px;color:var(--t2,#6f6a5c);line-height:1.6}
+</style>
+<div id="psRoot" hidden aria-live="polite">
+  <div class="ps-top">
+    <h1>หน้าปริ้นใบนำกลับมาแก้</h1><span class="who" id="psWho"></span>
+    <div class="ps-state"><span class="ps-dot" id="psDot"></span><span id="psState">กำลังเริ่ม…</span></div>
+  </div>
+  <div class="ps-body">
+    <div class="ps-bar">
+      <button type="button" class="ps-btn dark" id="psSound">เปิดเสียง</button>
+      <label class="ps-vol">ความดัง <input type="range" id="psVol" min="0" max="1" step="0.1"></label>
+      <button type="button" class="ps-btn" id="psTest">ทดสอบพิมพ์</button>
+      <button type="button" class="ps-btn" id="psPause">หยุดพิมพ์ (เครื่องนี้)</button>
+    </div>
+    <div class="ps-warn" id="psWarnSound" hidden>เสียงยังปิดอยู่ — กด “เปิดเสียง” 1 ครั้ง ระบบจะพูดบอกทุกครั้งที่ปริ้นใบนำกลับมาแก้</div>
+    <div class="ps-warn info" id="psWarnVoice" hidden>เครื่องนี้ไม่มีเสียงพูดภาษาไทย — ใช้เสียงกริ่งแทน (ติดตั้งภาษาไทยใน Windows › Settings › Time &amp; language › Speech ถ้าต้องการเสียงพูด)</div>
+    <div class="ps-warn" id="psWarnHidden" hidden>หน้านี้ถูกย่อหรืออยู่แท็บข้างหลัง — Edge จะชะลอการเช็กงาน ให้เปิดหน้านี้ไว้บนจอ</div>
+    <div class="ps-warn" id="psWarnErr" hidden></div>
+    <div class="ps-warn info" id="psWarnPause" hidden></div>
+    <div class="ps-card"><h2>ที่ปริ้นล่าสุด</h2><ul class="ps-log" id="psLog"></ul><div class="ps-empty" id="psEmpty">ยังไม่มีใบปริ้นตั้งแต่เปิดหน้านี้ — ใบนำกลับมาแก้จะออกเองเมื่อส่งเข้า Salesforce แล้ว</div></div>
+    <div class="ps-help">เปิดหน้านี้ค้างไว้บนจอเครื่องที่ต่อ EPSON · ใบนำกลับมาแก้ที่ส่งเข้า Salesforce แล้วจะปริ้นออกเองภายในไม่กี่วินาที และจดเวลาในคอลัมน์ “ปริ้นใบนำกลับมาแก้แล้ว” ใน Lark · ใบสรุปบิลปกติยังปริ้นทางเดิม</div>
+  </div>
+</div>
+<script>
+(function(){
+  if(!/[?&]print=1(&|$)/.test(location.search)) return;
+  var WORKER='https://suitcube-sf-rtw-order.ba-bd5.workers.dev', POLL_MS=5000;
+  var $=function(id){ return document.getElementById(id); };
+  var LS={ get:function(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }, set:function(k,v){ try{ localStorage.setItem(k,v); }catch(e){} } };
+  var station=LS.get('ps_station_id'); if(!station){ station='ps'+Math.random().toString(36).slice(2,10); LS.set('ps_station_id',station); }
+  var S={ busy:false, paused:LS.get('ps_paused')==='1', sound:LS.get('ps_sound')==='on', unlocked:false, vol:Math.min(1,Math.max(0,parseFloat(LS.get('ps_vol')||'1'))), voice:null, voiceChecked:false, log:[], lastErr:'' };
+  function auth(){ try{ return JSON.parse(LS.get('suitcube_auth_v1')||'null'); }catch(e){ return null; } }
+  function show(){ var r=$('psRoot'); if(r){ r.hidden=false; document.title='หน้าปริ้น · SUITCUBE'; } }
+  function setState(txt,kind){ $('psState').textContent=txt; $('psDot').className='ps-dot'+(kind?' '+kind:''); }
+  function hm(d){ d=d||new Date(); return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2); }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function addLog(e){ S.log.unshift(e); S.log=S.log.slice(0,60); paintLog(); }
+  function paintLog(){
+    var ul=$('psLog'); $('psEmpty').hidden=S.log.length>0;
+    ul.innerHTML=S.log.map(function(e){ return '<li><span class="t">'+esc(e.t)+'</span><span class="w">'+(e.test?'ทดสอบพิมพ์':'บิล <b>'+esc(e.bill||'-')+'</b> · P# '+esc(e.digits)+' · ครั้งที่ '+esc(e.round))+'</span><span class="s'+(e.err?' err':(e.go?' go':''))+'">'+esc(e.msg)+'</span></li>'; }).join('');
+  }
+  function showErr(t){ var w=$('psWarnErr'); w.hidden=!t; w.textContent=t||''; }
+
+  // ── เสียง: Premwadee (หญิง) ก่อน → เสียงไทยผู้หญิงอื่น → เสียงไทยใดก็ได้ (ไม่เลือก Niwat ถ้ามีตัวเลือกอื่น) · ไม่มีไทย = เสียงกริ่ง · พูดไม่ได้ = บี๊บ
+  var FEMALE=/premwadee|pattara|achara|kanya|narisa|female|ผู้หญิง|google\s*(ไทย|thai)/i;
+  function pickVoice(){
+    if(!('speechSynthesis' in window)) return null;
+    var vs=window.speechSynthesis.getVoices()||[], th=vs.filter(function(v){ return /^th(-|_|$)/i.test(v.lang||''); });
+    if(!th.length) return null;
+    return th.find(function(v){ return /premwadee/i.test(v.name); })
+      || th.find(function(v){ return FEMALE.test(v.name) && !/niwat/i.test(v.name); })
+      || th.find(function(v){ return !/niwat/i.test(v.name); })
+      || th[0];
+  }
+  function refreshVoice(){ S.voice=pickVoice(); S.voiceChecked=true; $('psWarnVoice').hidden=!!S.voice || !S.sound; }
+  if('speechSynthesis' in window){ try{ window.speechSynthesis.onvoiceschanged=refreshVoice; }catch(e){} }
+  var AC=null;
+  function tone(seq){ try{ AC=AC||new (window.AudioContext||window.webkitAudioContext)(); var t=AC.currentTime;
+    seq.forEach(function(n){ var o=AC.createOscillator(), g=AC.createGain(); o.type='sine'; o.frequency.value=n[0]; g.gain.setValueAtTime(0.0001,t+n[1]); g.gain.exponentialRampToValueAtTime(Math.max(0.0002,0.35*S.vol),t+n[1]+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+n[1]+n[2]); o.connect(g); g.connect(AC.destination); o.start(t+n[1]); o.stop(t+n[1]+n[2]+0.05); }); }catch(e){} }
+  var chime=function(){ tone([[880,0,0.35],[660,0.28,0.5]]); }, beep=function(){ tone([[1000,0,0.25]]); };
+  function speak(text){
+    if(!S.sound || !S.unlocked || S.vol<=0) return false;
+    if(!S.voiceChecked) refreshVoice();
+    if(!S.voice || !('speechSynthesis' in window)){ chime(); return 'chime'; }
+    try{
+      var u=new SpeechSynthesisUtterance(text); u.voice=S.voice; u.lang=S.voice.lang||'th-TH'; u.rate=0.95; u.volume=S.vol;
+      u.onerror=function(){ beep(); };
+      window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); return 'speech';
+    }catch(e){ beep(); return 'beep'; }
+  }
+  function spellBill(b){ return String(b||'').replace(/\s+/g,'').split('').join(' '); }
+  function sayJobs(jobs){
+    if(!jobs.length) return;
+    if(jobs.length===1){ var j=jobs[0]; speak('สินค้านำกลับมาแก้ ครั้งที่ '+j.round+' กำลังปริ้น บิล '+spellBill(j.billNew||j.bill)); }
+    else speak('สินค้านำกลับมาแก้ กำลังปริ้น '+jobs.length+' ใบ');
+  }
+  function paintSound(){
+    var b=$('psSound');
+    if(!S.sound){ b.textContent='เปิดเสียง'; b.className='ps-btn dark'; }
+    else if(!S.unlocked){ b.textContent='กดเพื่อเปิดเสียง'; b.className='ps-btn dark'; }
+    else { b.textContent='ปิดเสียง'; b.className='ps-btn on'; }
+    $('psWarnSound').hidden=S.sound && S.unlocked;
+    $('psVol').value=String(S.vol);
+    if(S.voiceChecked) $('psWarnVoice').hidden=!!S.voice || !S.sound;
+  }
+  $('psSound').addEventListener('click',function(){
+    if(S.sound && S.unlocked){ S.sound=false; LS.set('ps_sound','off'); try{ window.speechSynthesis && window.speechSynthesis.cancel(); }catch(e){} paintSound(); return; }
+    S.sound=true; S.unlocked=true; LS.set('ps_sound','on'); refreshVoice(); paintSound();
+    try{ AC=AC||new (window.AudioContext||window.webkitAudioContext)(); AC.resume && AC.resume(); }catch(e){}
+    speak('เปิดเสียงแล้ว');
+  });
+  $('psVol').addEventListener('input',function(e){ S.vol=Math.min(1,Math.max(0,parseFloat(e.target.value)||0)); LS.set('ps_vol',String(S.vol)); });
+
+  // ── พิมพ์รูปผ่าน iframe (กว้าง 72 มม. ตามเครื่อง TM-U220 · Edge --kiosk-printing = ไม่ถาม)
+  function printBlob(blob){
+    return new Promise(function(resolve,reject){
+      var url=URL.createObjectURL(blob), old=$('psPrintFrame'); if(old) old.remove();
+      var f=document.createElement('iframe'); f.id='psPrintFrame'; f.setAttribute('aria-hidden','true');
+      f.style.cssText='position:fixed;right:0;bottom:0;width:1px;height:1px;border:0;opacity:0;pointer-events:none';
+      document.body.appendChild(f);
+      var d=f.contentWindow.document;
+      d.open(); d.write('<!doctype html><html><head><meta charset="utf-8"><style>@page{size:80mm auto;margin:0}html,body{margin:0;padding:0}img{display:block;width:72mm;height:auto;margin:0 auto}</style></head><body><img id="i"></body></html>'); d.close();
+      var img=d.getElementById('i'), done=false;
+      var go=function(){ if(done) return; done=true; try{ f.contentWindow.focus(); f.contentWindow.print(); setTimeout(function(){ URL.revokeObjectURL(url); },60000); resolve(); }catch(e){ reject(e); } };
+      img.onload=function(){ setTimeout(go,150); }; img.onerror=function(){ if(!done){ done=true; reject(new Error('เปิดรูปไม่ได้')); } };
+      img.src=url;
+    });
+  }
+  function api(path,opt){ return fetch(WORKER+path+(path.indexOf('?')>=0?'&':'?')+'station='+station, opt).then(function(r){ return r.json().catch(function(){ return { success:false, error:'HTTP '+r.status }; }).then(function(j){ j.__s=r.status; return j; }); }); }
+  function printJob(j){
+    var e={ t:hm(), bill:j.billNew||j.bill, digits:j.digits, round:j.round, msg:'กำลังปริ้น…', go:true }; addLog(e);
+    var body=JSON.stringify({ recordId:j.recordId, name:j.name });
+    return api('/print-station/printing',{ method:'POST', headers:{'Content-Type':'application/json'}, body:body }).catch(function(){})
+      .then(function(){ return fetch(WORKER+'/print-station/image?rec='+encodeURIComponent(j.recordId)+'&name='+encodeURIComponent(j.name)+'&station='+station); })
+      .then(function(r){ if(!r.ok) throw new Error('โหลดรูปไม่สำเร็จ (HTTP '+r.status+')'); return r.blob(); })
+      .then(printBlob)
+      .then(function(){ return api('/print-station/done',{ method:'POST', headers:{'Content-Type':'application/json'}, body:body }); })
+      .then(function(r){ if(!r || r.success!==true) throw new Error((r&&r.error)||'จดว่าปริ้นแล้วไม่สำเร็จ'); e.msg='ปริ้นแล้ว '+hm(); e.go=false; paintLog(); })
+      .catch(function(err){ e.msg='ไม่สำเร็จ: '+((err&&err.message)||err)+' · ลองใหม่อัตโนมัติ'; e.err=true; e.go=false; paintLog(); });
+  }
+  function poll(){
+    if(S.busy) return; S.busy=true;
+    var a=auth();
+    if(!a || !a.token || +a.expiresAt<=Date.now()){ $('psRoot').hidden=true; S.busy=false; return; }   // ยังไม่ได้เข้าสู่ระบบ: ซ่อนหน้าปริ้น ให้หน้าเข้าสู่ระบบของแอปแสดง แล้วเช็กใหม่รอบหน้า
+    show();
+    if(a.user && a.user.perm==='read'){ setState('ใช้ไม่ได้','err'); showErr('บัญชีนี้อ่านอย่างเดียว — ใช้หน้าปริ้นไม่ได้ ให้เข้าสู่ระบบด้วยบัญชีหลังบ้าน'); S.busy=false; return; }
+    $('psWho').textContent='เข้าสู่ระบบ: '+((a.user&&(a.user.name||a.user.branch))||'-');
+    if(S.paused){ setState('หยุดพิมพ์ (เครื่องนี้)','pause'); $('psWarnPause').hidden=false; $('psWarnPause').textContent='หยุดพิมพ์อยู่ — กด “พิมพ์ต่อ” เมื่อพร้อม · ใบที่รอจะไม่หาย'; S.busy=false; return; }
+    fetch(WORKER+'/print-control').then(function(r){ return r.json(); }).catch(function(){ return { state:'run' }; }).then(function(pc){
+      if(pc && pc.state==='pause'){ setState('หยุดพิมพ์ (จากหน้าเว็บ)','pause'); $('psWarnPause').hidden=false; $('psWarnPause').textContent='มีคนกด “หยุดพิมพ์” บนหน้าเว็บ — รอกด “เริ่มพิมพ์ต่อ” · ใบที่รอจะไม่หาย'; return null; }
+      $('psWarnPause').hidden=true;
+      return api('/print-station/pending');
+    }).then(function(j){
+      if(!j) return;
+      if(j.success!==true){ setState('เช็กงานไม่สำเร็จ','err'); showErr('เช็กงานไม่สำเร็จ: '+(j.error||('HTTP '+j.__s))+' · จะลองใหม่เอง'); return; }
+      showErr(''); setState(j.waiting>j.jobs.length ? 'กำลังปริ้น (มีอีกเครื่องรับงานด้วย)' : (j.jobs.length?'กำลังปริ้น '+j.jobs.length+' ใบ':'พร้อม · รอใบใหม่'), '');
+      if(!j.jobs.length) return;
+      sayJobs(j.jobs);
+      return j.jobs.reduce(function(p,job){ return p.then(function(){ return printJob(job); }); }, Promise.resolve());
+    }).catch(function(err){ setState('เช็กงานไม่สำเร็จ','err'); showErr('เช็กงานไม่สำเร็จ: '+((err&&err.message)||err)+' · จะลองใหม่เอง'); })
+      .then(function(){ S.busy=false; });
+  }
+  function paintPause(){ $('psPause').textContent=S.paused?'พิมพ์ต่อ (เครื่องนี้)':'หยุดพิมพ์ (เครื่องนี้)'; $('psPause').className='ps-btn'+(S.paused?' on':''); if(!S.paused) $('psWarnPause').hidden=true; }
+  $('psPause').addEventListener('click',function(){ S.paused=!S.paused; LS.set('ps_paused',S.paused?'1':'0'); paintPause(); poll(); });
+  $('psTest').addEventListener('click',function(){
+    var c=document.createElement('canvas'); c.width=576; c.height=300; var g=c.getContext('2d');
+    g.fillStyle='#fff'; g.fillRect(0,0,c.width,c.height); g.fillStyle='#000'; g.textAlign='center';
+    g.font='bold 40px Prompt, sans-serif'; g.fillText('ทดสอบพิมพ์',288,80);
+    g.font='28px Prompt, sans-serif'; g.fillText('หน้าปริ้นใบนำกลับมาแก้ · SUITCUBE',288,140); g.fillText(new Date().toLocaleString('th-TH'),288,190);
+    g.font='24px Prompt, sans-serif'; g.fillText('ถ้าเห็นใบนี้ = พิมพ์จากหน้าเว็บได้',288,245);
+    var e={ t:hm(), test:true, msg:'กำลังปริ้น…', go:true }; addLog(e);
+    if(S.sound && S.unlocked) speak('ทดสอบ สินค้านำกลับมาแก้ ครั้งที่ 2 กำลังปริ้น');
+    c.toBlob(function(b){ printBlob(b).then(function(){ e.msg='ส่งเข้าเครื่องพิมพ์แล้ว '+hm(); e.go=false; paintLog(); }, function(err){ e.msg='ไม่สำเร็จ: '+err.message; e.err=true; e.go=false; paintLog(); }); },'image/png');
+  });
+  document.addEventListener('visibilitychange',function(){ $('psWarnHidden').hidden=document.visibilityState!=='hidden'; });
+  function start(){ paintSound(); paintPause(); paintLog(); refreshVoice(); paintSound(); poll(); setInterval(poll,POLL_MS); window.__psPoll=poll; }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
+})();
 </script>
 
 </html>
