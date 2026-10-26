@@ -5335,7 +5335,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-23-7';
+  const APP_VERSION = '2026-10-26-1';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -5474,8 +5474,18 @@
   // [ใหม่ตามที่ขอ] บอกจำนวนงานทั้งหมดที่ตรงกับเงื่อนไขปัจจุบัน (default เปิดมาคือ "เมื่อวาน") — เรียก /queue-reprint แบบเดียวกับตอนสั่งพิมพ์จริง
   // แต่ตัวเอนด์พอยต์นี้แค่ "ค้นหา" คืนรายการกลับมาเฉยๆ (ไม่ตั้งคิวปริ้น/ไม่ยิงอะไรออกเครื่องพิมพ์) เรียกเพื่อนับดูเฉยๆ ได้อย่างปลอดภัย ไม่กระทบข้อมูลจริง
   let _printCountSeq=0;
+  // [2026-10-26-1 ตามที่ขอ "สินค้านำกลับมาแก้จะปรินต์ใน สั่งพิมพ์"] นับรวมใบนำกลับมาแก้ที่ตรงกับคำค้นด้วย (ไม่มีการ์ด/ปุ่มแยกแล้ว)
+  let _prCount=null;
+  function renderPrintRangeCountText(){
+    if(!printRangeCount || !_prCount) return;
+    const ra=_praList.length, total=_prCount.total+ra;
+    printRangeCount.innerHTML = 'พบทั้งหมด <b>'+total+'</b> งาน'+(ra?' (ใบนำกลับมาแก้ '+ra+')':'')+(_prCount.yesterday?' (เมื่อวาน)':'');
+    // [ใหม่ตามที่ขอ+mockup confirmed] 0 งาน = เบาๆ ตัวหนังสือแดง / เจองาน = ป้ายทองเด่นๆ เตือนว่ามีงานรอปริ้น
+    printRangeCount.className='printrange-count'+(total===0?' zero':' found');
+  }
   function updatePrintRangeCount(){
     if(!printRangeCount) return;
+    _prCount=null;
     const branch=printRangeBranch?.value||'';
     const billNo=(printRangeBillNo?.value||'').trim();
     const orderId=(printRangeOrderId?.value||'').trim();
@@ -5488,12 +5498,9 @@
       .then(r=>r.json()).then(json=>{
         if(seq!==_printCountSeq) return; // เปลี่ยนเงื่อนไขใหม่แซงไปแล้ว ผลรอบนี้ตกไป
         if(!json || !json.success){ printRangeCount.textContent='นับจำนวนงานไม่สำเร็จ'; printRangeCount.className='printrange-count loading'; return; }
-        const total=(json.list||[]).length;
         const y=new Date(); y.setDate(y.getDate()-1);
-        const isYesterdayOnly = !billNo && !orderId && !productId && from===toISO(y) && to===toISO(y);
-        printRangeCount.innerHTML = 'พบทั้งหมด <b>'+total+'</b> งาน'+(isYesterdayOnly?' (เมื่อวาน)':'');
-        // [ใหม่ตามที่ขอ+mockup confirmed] 0 งาน = เบาๆ ตัวหนังสือแดง / เจองาน = ป้ายทองเด่นๆ เตือนว่ามีงานรอปริ้น
-        printRangeCount.className='printrange-count'+(total===0?' zero':' found');
+        _prCount={ total:(json.list||[]).length, yesterday: !billNo && !orderId && !productId && from===toISO(y) && to===toISO(y) };
+        renderPrintRangeCountText();
       }).catch(()=>{ if(seq===_printCountSeq){ printRangeCount.textContent='นับจำนวนงานไม่สำเร็จ'; printRangeCount.className='printrange-count loading'; } });
   }
   // ── [2026-10-23-3 ตามที่ขอ "ปริ้นใบนำกลับมาแก้จากหน้าต่างพิมพ์ใบสั่งแก้" · เลือกแบบ ก+ข] ใบนำกลับมาแก้ที่ตรงกับเลขที่ค้น ──
@@ -5510,7 +5517,7 @@
     if(!printRangeRa) return;
     clearTimeout(_praT); _praSeq++;
     const [b,o,p]=praTerms();
-    if(!b&&!o&&!p){ printRangeRa.hidden=true; printRangeRa.innerHTML=''; _praList=[]; return; }
+    if(!b&&!o&&!p){ printRangeRa.hidden=true; printRangeRa.innerHTML=''; _praList=[]; renderPrintRangeCountText(); return; }
     _praT=setTimeout(()=>loadPrintRangeRa(b,o,p),400);
   }
   async function praJson(url,opt){ const r=await fetch(url,opt); let j=null; try{ j=await r.json(); }catch(e){} if(!r.ok||!j||j.success===false) throw new Error((j&&(j.error||j.code))||('HTTP '+r.status)); return j; }
@@ -5541,19 +5548,20 @@
     }
     return out;
   }
+  // [2026-10-26-1 ตามที่ขอ] ไม่โชว์การ์ด "ใบนำกลับมาแก้" + ปุ่มแยกแล้ว — หาไว้เงียบๆ เพื่อนับรวมใน "พบทั้งหมด" และพิมพ์พร้อมกันตอนกด "สั่งพิมพ์"
+  async function praFindFor(b,o,p){ const f=await workerFeat(); return f.raReprint?await praFindNew(b,o,p):await praFindLive(b,o,p); }
   async function loadPrintRangeRa(b,o,p){
     const seq=++_praSeq;
-    printRangeRa.hidden=false;
-    printRangeRa.innerHTML='<div class="pra-h">ใบนำกลับมาแก้</div><div class="pra-msg">'+scLd({size:13,words:false,inline:true})+'กำลังหาใบนำกลับมาแก้ของเลขนี้…</div>';
+    printRangeRa.hidden=true; printRangeRa.innerHTML='';
     try{
-      const f=await workerFeat();
-      const list=f.raReprint?await praFindNew(b,o,p):await praFindLive(b,o,p);
+      const list=await praFindFor(b,o,p);
       if(seq!==_praSeq) return;
-      _praList=list; renderPrintRangeRa(f,b);
+      _praList=list;
     }catch(e){
       if(seq!==_praSeq) return;
-      printRangeRa.innerHTML='<div class="pra-h">ใบนำกลับมาแก้</div><div class="pra-msg">หาใบนำกลับมาแก้ไม่สำเร็จ ('+escapeHtml(e.message||'')+')</div>';
+      _praList=[];
     }
+    renderPrintRangeCountText();
   }
   const praDate=iso=>{ const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso||'')); return m?toThaiDateWithDay(m[0]):''; };
   function renderPrintRangeRa(f,b){
@@ -5627,7 +5635,7 @@
       if(lb){
         scBusy(btn,'กำลังเตรียมใบ…');
         const im=await praImageOf(e);
-        printReceiptsNow([im.b64]);
+        printReceiptsNow([{b64:im.b64, compact:true}]);
         praStatus(i,'เปิดหน้าต่างพิมพ์แล้ว'+(im.real?'':' (วาดใบจากข้อมูลล่าสุด)'));
         const f=await workerFeat();
         if(f.printStation) fetch(WORKER+'/print-station/done?station=dialog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({recordId:e.recordId,name:praFileOf(e)})}).catch(()=>{});
@@ -5706,6 +5714,9 @@
         const json=await res.json();
         if(!json || !json.success) throw new Error(json&&json.error||'ค้นหาไม่สำเร็จ');
         const list=json.list||[];
+        // [2026-10-26-1 ตามที่ขอ] ใบนำกลับมาแก้ที่ตรงกับคำค้น (เลขบิลใหม่/เลขบิลเดิม/P#/O#) พิมพ์รวมในรอบเดียวกันนี้ — ค้นช่วงวันที่อย่างเดียวไม่รวม
+        let raList=[];
+        if(hasSearchTerm){ try{ raList=await praFindFor(billNo,orderId,productId); }catch(e){ raList=[]; } }
         // ดึงข้อมูลล่าสุดจาก Salesforce + วาดใบสรุปใหม่ + แนบเข้า Lark + ตั้งคิวปริ้น ทีละบิล (กันพิมพ์รูปเก่าที่ยังไม่อัปเดต)
         const results=[];
         // [แก้บั๊ก+ตามที่ขอ] เดิมเก็บแค่ lines (ไปวาดเป็น HTML ทีหลัง) — เปลี่ยนเก็บ imageBase64 ที่วาดเสร็จแล้วจากขั้นตอน regenerateReceiptsFromLatest ตรงๆ เลย (ไม่ต้องวาดซ้ำ) ให้พิมพ์ออกมาเหมือนโหมด "ดึงเป็นรูป" เป๊ะๆ ไม่จางกว่ากัน
@@ -5721,6 +5732,19 @@
             results.push({ billNo:o.orderNo, orderCode:o.orderCode, productCode:o.productCode, ok:true });
           }catch(e){
             results.push({ billNo:o.orderNo, orderCode:o.orderCode, productCode:o.productCode, ok:false, error:e.message });
+          }
+        }
+        const feat=raList.length?await workerFeat():{};
+        for(let i=0;i<raList.length;i++){
+          const e=raList[i], label=(e.billNoNew||'-')+' (นำกลับมาแก้ ครั้งที่ '+e.round+')';
+          scBusy(printRangeSubmitBtn,'กำลังเตรียมใบนำกลับมาแก้ '+(i+1)+'/'+raList.length+'…');
+          try{
+            const im=await praImageOf(e);
+            allImages.push({b64:im.b64, compact:true});
+            if(feat.printStation) fetch(WORKER+'/print-station/done?station=dialog',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({recordId:e.recordId,name:praFileOf(e)})}).catch(()=>{});
+            results.push({ billNo:label, orderCode:e.orderCode||'', productCode:'P# '+e.digits, ok:true });
+          }catch(x){
+            results.push({ billNo:label, orderCode:e.orderCode||'', productCode:'P# '+e.digits, ok:false, error:x.message });
           }
         }
         // [ใหม่ตามที่ขอ] พิมพ์ตรงจากเบราว์เซอร์ทันที — เปิดหน้าต่างพิมพ์ของ Windows ให้เลือกเครื่องพิมพ์/กดพิมพ์ได้เลย ไม่ต้องรอ print-agent เช็ค queue (ยังตั้งคิวไว้เผื่อ print-agent พิมพ์ซ้ำ/แบ็คอัพด้วยเหมือนเดิม)
@@ -10633,11 +10657,22 @@
       if(l.kind==='kv'&&l.label==='พนักงานขาย') return Object.assign({},l,{label:'พนักงานตรวจสอบ',value:o.inspector||'-'});
       return l; }).filter(l=>!(l.kind==='center'&&(!l.text||l.text==='-')));   // ไม่มีสถานะชำระเงิน → ตัดบรรทัดว่าง
   }
-  function printReceiptsNow(imagesBase64){
+  // [2026-10-26-1 ตามที่ขอ "ลดขอบในใบสินค้านำกลับมาแก้"] รายการเป็น base64 (ใบสรุปปกติ เหมือนเดิมทุกอย่าง) หรือ {b64, compact:true} (ใบนำกลับมาแก้)
+  //   compact = เต็มความกว้าง 72mm (เดิมกรอบ 227px + padding ≈ 55mm) + ขอบบน 1 ซม. (เดิม 6 ซม.) ผ่าน named page "ra"
+  //   ถ้าทุกใบเป็น compact ใส่ @page ทั่วไปชั่วคราวด้วย (เผื่อเบราว์เซอร์ที่ไม่รองรับ named page) แล้วถอดออกหลังพิมพ์ (กฎหลังสุดชนะ)
+  function printReceiptsNow(items){
     const area=document.getElementById('receiptPrintArea');
-    if(!area || !imagesBase64.length) return;
-    area.innerHTML = imagesBase64.map(b64=>'<div class="receipt-page"><img src="data:image/png;base64,'+b64+'" style="width:100%;display:block"></div>').join('');
+    if(!area || !items.length) return;
+    const list=items.map(x=>typeof x==='string'?{b64:x,compact:false}:x);
+    area.innerHTML = list.map(x=>'<div class="receipt-page'+(x.compact?' ra':'')+'"><img src="data:image/png;base64,'+x.b64+'" style="width:100%;display:block"></div>').join('');
+    let tmp=null;
+    if(list.some(x=>x.compact)){
+      tmp=document.createElement('style');
+      tmp.textContent='@page ra{size:auto; margin:1cm 0 0 0} .receipt-page.ra{page:ra;width:72mm;padding:0}'+(list.every(x=>x.compact)?' @page{size:auto; margin:1cm 0 0 0}':'');
+      document.head.appendChild(tmp);
+    }
     window.print();
+    if(tmp) setTimeout(()=>{ if(tmp.parentNode) tmp.parentNode.removeChild(tmp); }, 1000);
   }
   async function renderReceiptCanvasBase64(lines){
     // [แก้ตามที่ขอ] ฟอนต์ใบสรุปเปลี่ยนเป็น Sarabun (ฟอนต์ "มีหัว" — ฟอนต์เอกสารราชการไทย) น้ำหนักปกติ 400
