@@ -1226,6 +1226,13 @@
   .hist-custheader{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding-bottom:12px;margin-bottom:4px;border-bottom:1px solid var(--rule2)}
   .hist-custheader .hist-branch-name{font-size:19px;margin-top:0}
   .hist-custheader .hist-branch-phone{font-size:13px;color:var(--t2)}
+  /* [2026-10-27-9 ตามที่ขอ] ปุ่มกระดาษ "ทำใบสรุปใหม่" มุมขวาบนการ์ด (บิลที่ยังไม่ยืนยันเข้า Salesforce) — สีเดียวกับปุ่มแก้ไข · พื้นที่กด ~44px ด้วย padding (margin ติดลบ ไม่ดันความสูงแถว) */
+  .hist-redraw-btn{border:none;background:none;color:var(--goldink);cursor:pointer;padding:14px;margin:-14px -14px -14px auto;display:flex;flex:0 0 auto;align-self:center;border-radius:12px}
+  .hist-redraw-btn svg{width:18px;height:18px}
+  .hist-redraw-btn:disabled{opacity:.4;cursor:default}
+  .hist-redraw-status{font-size:12px;line-height:1.5;color:var(--goldink);margin:2px 0 6px;text-align:right}
+  .hist-redraw-status.ok{color:var(--green)}
+  .hist-redraw-status.fail{color:var(--red)}
   .hist-resync-btn{align-self:flex-start;margin-top:4px;background:none;border:1px solid var(--gold);border-radius:8px;color:var(--goldink);font-family:inherit;font-size:12px;padding:7px 12px;cursor:pointer}
   .hist-resync-btn:disabled{opacity:.5;cursor:default}
   /* [แก้บั๊ก] เดิม align-items:center — ตอนสาขาที่ซื้อ/สาขาที่นัดรับ/ชื่อลูกค้า ยังสั้นแค่ 1-2 บรรทัด ไม่มีปัญหา แต่พอเพิ่มชื่อลูกค้าเป็นบรรทัดที่ 3 (สูงขึ้นมาก) ฝั่งขวาสูงกว่าเลขที่บิลฝั่งซ้ายเยอะ center เลยดันเลขที่บิลลงมากึ่งกลาง เหลือช่องว่างด้านบนเป็นแถบว่างๆ — เปลี่ยนเป็น flex-start ให้ทั้งสองฝั่งเริ่มจากขอบบนเดียวกัน */
@@ -1431,7 +1438,7 @@
   html.ro-mode #roBanner{display:flex;align-items:center;gap:8px;justify-content:center;flex-wrap:wrap;padding:7px 16px;background:#2c2a26;color:#fff;font-family:'Prompt',sans-serif;font-size:13.5px;line-height:1.45;text-align:center}
   html.ro-mode #roBanner b{color:#f3d58b;font-weight:600}
   html.ro-mode .foot .draft, html.ro-mode .foot .trash, html.ro-mode #submitBtn,
-  html.ro-mode .hist-edit-btn, html.ro-mode .hist-cancel-btn, html.ro-mode .hist-note-btn,
+  html.ro-mode .hist-edit-btn, html.ro-mode .hist-cancel-btn, html.ro-mode .hist-note-btn, html.ro-mode .hist-redraw-btn,
   html.ro-mode #printRangeBtn, html.ro-mode #pcStopBtn, html.ro-mode #pcResumeBtn, html.ro-mode #printPauseBannerBtn,
   html.ro-mode .ra2-save{display:none !important}
   .ro-toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);z-index:100001;max-width:min(92vw,520px);background:#b5573b;color:#fff;font-family:'Prompt',sans-serif;font-size:14px;line-height:1.5;padding:10px 16px;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.18);text-align:center}
@@ -3734,7 +3741,7 @@
       <div class="info-panel hidden" data-info-panel="history">
         <h3 class="hp-title">ประวัติใบสั่งแก้</h3>
 <p class="hp-lead">หน้าต่าง <b>ประวัติใบสั่งแก้สำเร็จรูป</b> ใช้ดูบิลที่บันทึกไปแล้ว และดูฟอร์มที่บันทึกร่างค้างไว้ โดยไม่ต้องออกจากหน้ากรอกบิล หน้าต่างนี้มี 3 <span class="nb">แท็บ</span> และ​<span class="nb">แท็บ</span>​แรกคือ <span class="hp-field">รายการที่นัดรับ</span> ใช้ดูว่าสาขามีสินค้าอะไรกำลังจะถึงวันนัดรับ ในวันไหน และสินค้าแต่ละชิ้นมาถึงสาขาแล้วหรือยัง หัวข้อนี้อธิบายภาพรวมของหน้าต่าง และ​<span class="nb">แท็บ</span> <span class="hp-field">รายการที่นัดรับ</span> ทั้งหมด ส่วน​<span class="nb">แท็บ</span> <span class="hp-field">ประวัติ</span> และ <span class="hp-field">ร่างที่บันทึกไว้</span> ดูหัวข้อถัดลงไปด้านล่าง</p>
-<details class="hp-toc" id="hp-toc-history"><summary>สารบัญหน้านี้ — กดหัวข้อเพื่อข้ามไปอ่าน (23 หัวข้อ)</summary><ul class="hp-toc-list"><li><a class="hp-jump" href="#hp-history-1">เปิดหน้าต่างนี้ได้อย่างไร</a></li><li><a class="hp-jump" href="#hp-history-2">หน้าต่างนี้มี 3 <span class="nb">แท็บ</span> ใช้เมื่อไหร่</a></li><li><a class="hp-jump" href="#hp-history-3">ป้ายสาขาที่หัวหน้าต่าง (ข้างชื่อ ประวัติใบสั่งแก้สำเร็จรูป)</a></li><li><a class="hp-jump" href="#hp-history-4"><span class="nb">แท็บ</span> รายการที่นัดรับ</a></li><li><a class="hp-jump" href="#hp-history-5">หน้าตาของ​<span class="nb">แท็บ</span>​นี้ (เรียงจากบนลงล่าง)</a></li><li><a class="hp-jump" href="#hp-history-6">สถานการณ์ที่พบบ่อย</a></li><li><a class="hp-jump" href="#hp-history-7">ข้อควรจำของ​<span class="nb">แท็บ</span>​นี้</a></li><li class="hp-toc-part"><a class="hp-jump" href="#hp-history-8">ต่อไป: <span class="nb">แท็บ</span> “ประวัติ” และ​<span class="nb">แท็บ</span> “ร่างที่บันทึกไว้”</a></li><li class="hp-toc-part"><a class="hp-jump" href="#hp-history-9">ส่วนที่ 1 · <span class="nb">แท็บ</span> “ประวัติ”</a></li><li><a class="hp-jump" href="#hp-history-10">สรุป 7 ข้อ ก่อนอ่านรายละเอียด</a></li><li><a class="hp-jump" href="#hp-history-11">เปิด​<span class="nb">แท็บ</span> “ประวัติ” ทีละขั้น</a></li><li><a class="hp-jump" href="#hp-history-12">ส่วนควบคุมด้านบน อธิบายทีละอัน</a></li><li><a class="hp-jump" href="#hp-history-13">กติกา: บิลแบบไหน “แก้ไขได้” / “แก้ไขไม่ได้”</a></li><li><a class="hp-jump" href="#hp-history-14">การ์ดบิล: อ่านอย่างไร</a></li><li><a class="hp-jump" href="#hp-history-15">สิ่งที่ทำได้กับการ์ด 1: แก้ไขบิล</a></li><li><a class="hp-jump" href="#hp-history-16">เรื่องที่ควรรู้ตอนแก้ไขบิล</a></li><li><a class="hp-jump" href="#hp-history-17">สิ่งที่ทำได้กับการ์ด 2: ยกเลิกบิล</a></li><li><a class="hp-jump" href="#hp-history-18">สิ่งที่ทำได้กับการ์ด 3: ดึงข้อมูลล่าสุด + พิมพ์ใบสรุปใหม่</a></li><li><a class="hp-jump" href="#hp-history-19">รายการที่เห็นอัปเดตเมื่อไร และถ้าหาบิลไม่เจอ</a></li><li><a class="hp-jump" href="#hp-history-20">ข้อความที่ขึ้นเมื่อไม่มีรายการ (ใน​<span class="nb">แท็บ</span> “ประวัติ”)</a></li><li class="hp-toc-part"><a class="hp-jump" href="#hp-history-21">ส่วนที่ 2 · <span class="nb">แท็บ</span> “ร่างที่บันทึกไว้”</a></li><li><a class="hp-jump" href="#hp-history-22">การบันทึกร่าง</a></li><li><a class="hp-jump" href="#hp-history-23">หน้าตาและการใช้งาน​<span class="nb">แท็บ</span> “ร่างที่บันทึกไว้”</a></li></ul><p class="hp-toc-hint">อ่านไปแล้วอยากกลับมาที่สารบัญนี้ กดปุ่มวงกลมสีดำที่มีลูกศรชี้ขึ้น มุมขวาล่างของหน้าต่าง</p></details>
+<details class="hp-toc" id="hp-toc-history"><summary>สารบัญหน้านี้ — กดหัวข้อเพื่อข้ามไปอ่าน (23 หัวข้อ)</summary><ul class="hp-toc-list"><li><a class="hp-jump" href="#hp-history-1">เปิดหน้าต่างนี้ได้อย่างไร</a></li><li><a class="hp-jump" href="#hp-history-2">หน้าต่างนี้มี 3 <span class="nb">แท็บ</span> ใช้เมื่อไหร่</a></li><li><a class="hp-jump" href="#hp-history-3">ป้ายสาขาที่หัวหน้าต่าง (ข้างชื่อ ประวัติใบสั่งแก้สำเร็จรูป)</a></li><li><a class="hp-jump" href="#hp-history-4"><span class="nb">แท็บ</span> รายการที่นัดรับ</a></li><li><a class="hp-jump" href="#hp-history-5">หน้าตาของ​<span class="nb">แท็บ</span>​นี้ (เรียงจากบนลงล่าง)</a></li><li><a class="hp-jump" href="#hp-history-6">สถานการณ์ที่พบบ่อย</a></li><li><a class="hp-jump" href="#hp-history-7">ข้อควรจำของ​<span class="nb">แท็บ</span>​นี้</a></li><li class="hp-toc-part"><a class="hp-jump" href="#hp-history-8">ต่อไป: <span class="nb">แท็บ</span> “ประวัติ” และ​<span class="nb">แท็บ</span> “ร่างที่บันทึกไว้”</a></li><li class="hp-toc-part"><a class="hp-jump" href="#hp-history-9">ส่วนที่ 1 · <span class="nb">แท็บ</span> “ประวัติ”</a></li><li><a class="hp-jump" href="#hp-history-10">สรุป 7 ข้อ ก่อนอ่านรายละเอียด</a></li><li><a class="hp-jump" href="#hp-history-11">เปิด​<span class="nb">แท็บ</span> “ประวัติ” ทีละขั้น</a></li><li><a class="hp-jump" href="#hp-history-12">ส่วนควบคุมด้านบน อธิบายทีละอัน</a></li><li><a class="hp-jump" href="#hp-history-13">กติกา: บิลแบบไหน “แก้ไขได้” / “แก้ไขไม่ได้”</a></li><li><a class="hp-jump" href="#hp-history-14">การ์ดบิล: อ่านอย่างไร</a></li><li><a class="hp-jump" href="#hp-history-15">สิ่งที่ทำได้กับการ์ด 1: แก้ไขบิล</a></li><li><a class="hp-jump" href="#hp-history-16">เรื่องที่ควรรู้ตอนแก้ไขบิล</a></li><li><a class="hp-jump" href="#hp-history-17">สิ่งที่ทำได้กับการ์ด 2: ยกเลิกบิล</a></li><li><a class="hp-jump" href="#hp-history-17b">สิ่งที่ทำได้กับการ์ด: ทำใบสรุปใหม่ (บิลที่ยังไม่ส่งเข้า Salesforce)</a></li><li><a class="hp-jump" href="#hp-history-18">สิ่งที่ทำได้กับการ์ด 3: ดึงข้อมูลล่าสุด + พิมพ์ใบสรุปใหม่</a></li><li><a class="hp-jump" href="#hp-history-19">รายการที่เห็นอัปเดตเมื่อไร และถ้าหาบิลไม่เจอ</a></li><li><a class="hp-jump" href="#hp-history-20">ข้อความที่ขึ้นเมื่อไม่มีรายการ (ใน​<span class="nb">แท็บ</span> “ประวัติ”)</a></li><li class="hp-toc-part"><a class="hp-jump" href="#hp-history-21">ส่วนที่ 2 · <span class="nb">แท็บ</span> “ร่างที่บันทึกไว้”</a></li><li><a class="hp-jump" href="#hp-history-22">การบันทึกร่าง</a></li><li><a class="hp-jump" href="#hp-history-23">หน้าตาและการใช้งาน​<span class="nb">แท็บ</span> “ร่างที่บันทึกไว้”</a></li></ul><p class="hp-toc-hint">อ่านไปแล้วอยากกลับมาที่สารบัญนี้ กดปุ่มวงกลมสีดำที่มีลูกศรชี้ขึ้น มุมขวาล่างของหน้าต่าง</p></details>
 <h4 class="hp-h" id="hp-history-1">เปิดหน้าต่างนี้ได้อย่างไร</h4>
 <ol class="hp-steps">
   <li>ที่แถบด้านบนของแอป เลือก <span class="hp-field">สาขา</span> ของคุณก่อน (ถ้ายังไม่เลือก ช่อง <span class="hp-field">สาขาที่ซื้อ</span> ในหน้าต่างจะขึ้นเป็น R3 ไปก่อน ซึ่งอาจไม่ใช่สาขาของคุณ)</li>
@@ -4142,6 +4149,7 @@
 <tr><td>5</td><td>ประเภทสินค้า</td><td>ตัวหนังสือสีเทา คั่นด้วยเครื่องหมายจุลภาค</td><td>ชื่อประเภทของสินค้าแต่ละชิ้น (ไม่มีคำว่า “สำเร็จรูป”) ระบบอ่านประเภทจากรหัส SKU ก่อน ถ้าไม่ตรงกับที่บันทึกไว้จะขึ้นเป็นสีแดงมีเครื่องหมายเตือน (ดูภาพการ์ดพิเศษด้านล่าง)</td></tr>
 <tr><td>6</td><td>ไอคอนดินสอ</td><td>สีทอง</td><td>กดเพื่อแก้ไขบิล มีเฉพาะบิลที่แก้ไขได้</td></tr>
 <tr><td>7</td><td>วงกลมขีดทแยง</td><td>สีแดง</td><td>กดเพื่อยกเลิกบิล มีเฉพาะบิลที่แก้ไขได้</td></tr>
+<tr><td>ใหม่</td><td>ไอคอนกระดาษ <span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg></span></td><td>สีทอง มุมขวาบนของการ์ด บรรทัดเดียวกับชื่อลูกค้าและเบอร์โทร (ยังไม่มีในรูปด้านบน)</td><td>กดเพื่อทำใบสรุปใหม่ มีเฉพาะบิลที่แก้ไขได้และยังไม่ยกเลิก (ดูหัวข้อ “ทำใบสรุปใหม่” ด้านล่าง)</td></tr>
 <tr><td>8</td><td>รหัสสินค้า</td><td>ตัวหนา สีดำ ขึ้นต้นด้วยคำว่า SKU</td><td>1 บรรทัดต่อสินค้า 1 ชิ้น ส่วนท้ายสุดต่อด้วยไซซ์ เช่น “SKU UF259-1-J-52” คือรหัส UF259-1-J ไซซ์ 52</td></tr>
 <tr><td>9</td><td>กลุ่มข้อความชิดขวา</td><td>ตัวหนังสือสีเทา</td><td>บรรทัดบนสุดคือชื่อพนักงานขาย ถัดมา “สาขาที่ซื้อ …” และ “สาขาที่นัดรับ …”</td></tr>
 <tr><td>10</td><td>กล่องสัดส่วนที่ปรับ</td><td>กล่องสีครีม แยกกล่องตามประเภท ชื่อกล่องสีทอง</td><td>แสดงเฉพาะจุดที่ถูกปรับ ชื่อจุดอยู่ซ้าย ค่าอยู่ขวา (หน่วยนิ้ว) จุดอก เอว สะโพก เอวล่าง บอกทิศทาง “ขยายออก” หรือ “เก็บเข้า” ด้วย แยกกล่อง “เสื้อสูท” กับ “กางเกง” ถ้าบิลมีสูทหรือกางเกงหลายชิ้น กล่องของประเภทนั้นรวมค่าไว้กล่องเดียว และมีป้าย SKU/P# ของชิ้นแรกที่หัวกล่อง</td></tr>
@@ -4256,6 +4264,19 @@
 <li>ระบบจดการยกเลิกและการย้อนกลับไว้ใน “ประวัติการแก้ไข” ของบิล (จะเห็นบนการ์ดเมื่อโหลดรายการใหม่)</li>
 <li>ถ้าบิลถูกส่งเข้า Salesforce ไปแล้วระหว่างที่หน้าจอยังไม่อัปเดต จะขึ้น “ยกเลิกบิลไม่สำเร็จ: บิลนี้ยืนยันเข้า Salesforce ไปแล้ว ยกเลิกไม่ได้แล้ว”</li>
 <li>การยกเลิกไม่ใช่การลบ ถ้าต้องการให้บิลหายจากรายการจริงๆ แอปนี้ไม่มีปุ่มลบ</li>
+</ul>
+
+<h4 class="hp-h" id="hp-history-17b">สิ่งที่ทำได้กับการ์ด: ทำใบสรุปใหม่ (บิลที่ยังไม่ส่งเข้า Salesforce)</h4>
+<div class="hp-item"><div class="hp-name">ไอคอนกระดาษ <span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg></span> <span class="hp-kind">เฉพาะบิลที่ยังไม่มี O# และ P# และยังไม่ยกเลิก</span></div><div class="hp-desc">ใช้เมื่อใบสรุปใน Lark ของบิลนี้ผิดเพี้ยนหรือไม่ครบ ระบบวาดใบใหม่จากข้อมูลที่บันทึกไว้ (หน้าตาเดียวกับตอนกดบันทึก) แล้วแทนใบเดิมใน Lark บนคอมพิวเตอร์ ถ้าเอาเมาส์ชี้ที่ไอคอนจะขึ้นคำว่า “ทำใบสรุปใหม่”</div></div>
+<ol class="hp-steps">
+<li>กดไอคอนกระดาษที่มุมขวาบนของการ์ด</li>
+<li>ขึ้นหน้าต่างถามว่า “ทำใบสรุปใหม่ของบิล … ? ใบเดิมใน Lark จะถูกแทนด้วยใบที่วาดใหม่” กด <span class="hp-btn">ทำใบสรุปใหม่</span></li>
+<li>ใต้ชื่อลูกค้าขึ้น “กำลังวาดใบสรุปใหม่…” ตามด้วย “กำลังส่งใบสรุปเข้า Lark …”</li>
+<li>เสร็จแล้วขึ้น “ทำใบสรุปใหม่แล้ว … ใบ (แทนใบเดิมใน Lark)” และเปิดหน้าต่างพิมพ์ให้ทันที ถ้าขึ้นตัวแดง “ไม่สำเร็จ” ให้ลองกดใหม่อีกครั้ง</li>
+</ol>
+<ul class="hp-list">
+<li>ไม่แก้ข้อมูลบิล ไม่ส่งเข้า Salesforce และไม่เข้าคิวพิมพ์ซ้ำ</li>
+<li>สิ่งที่กรอกค้างไว้ในฟอร์มไม่หาย</li>
 </ul>
 
 <h4 class="hp-h" id="hp-history-18">สิ่งที่ทำได้กับการ์ด 3: ดึงข้อมูลล่าสุด + พิมพ์ใบสรุปใหม่</h4>
@@ -5394,7 +5415,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-27-8';
+  const APP_VERSION = '2026-10-27-9';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -5974,6 +5995,10 @@
   }
   // [ใหม่ตามที่ขอ] แยกออกมาเป็นฟังก์ชันกลาง ใช้ทั้งตอนสร้างแถว (ปุ่มแก้ไข) และตอนกรองรายการตาม "แก้ไขได้/แก้ไขไม่ได้" ในแท็บประวัติ กันตรรกะสองจุดเพี้ยนไม่ตรงกัน
   function orderIsEditable(o){ return !!(o._fromLark && !extractCode(o.orderCode) && !extractCode(o.productCode)); }
+  // [2026-10-27-9] สถานะปุ่ม "ทำใบสรุปใหม่" ต่อบิล (record id → {kind,text}) — เก็บไว้ให้การ์ดที่วาดใหม่ยังเห็นผลล่าสุด (ดู redrawReceiptsForUnconfirmed)
+  const _redrawStatus={}; let _redrawBusyId=null;
+  const REDRAW_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>';
+  function redrawStatusHtml(id){ const st=_redrawStatus[id]; return st ? '<div class="hist-redraw-status '+st.kind+'">'+escapeHtml(st.text)+'</div>' : ''; }
   // สร้าง HTML แถวเดียวของรายการ — ใช้ร่วมกันทั้งแท็บ "ประวัติ" (ค้นหา) และแท็บ "รายการที่นัดรับ" (กรองวันที่) กันโค้ดซ้ำ
   // [ใหม่ตามที่ขอ] จัดรูปแบบเบอร์โทรไทย 10 หลักเป็น 3-3-4 (เช่น 0811111111 -> 081-111-1111) — เบอร์รูปแบบอื่นที่ไม่ใช่ 10 หลัก (เช่นเบอร์บ้าน) ปล่อยผ่านตามเดิม ไม่พยายามเดา
   function formatThaiPhone(p){
@@ -6202,9 +6227,15 @@
     // [2026-10-21-8 ตามที่ขอ] NOTE ระดับบิล — มี NOTE = กระดาษโน้ตมีเส้น (หัว NOTE แดง · ข้อความ · บรรทัดผู้เขียน/ผู้แก้ล่าสุด + ปุ่ม "✎ แก้ NOTE")
     // ไม่มี NOTE = การ์ดเหมือนเดิม + ปุ่มเล็ก "+ เพิ่ม NOTE" · Worker รุ่นเก่า (ไม่มีคีย์ note ในรายการ) = ไม่แสดงอะไรเลย (ยังแก้ NOTE ไม่ได้)
     const billNoteBlock = buildBillNoteHtml(o);
+    // [2026-10-27-9 ตามที่ขอ] ไอคอนกระดาษ "ทำใบสรุปใหม่" มุมขวาบน — เฉพาะบิลที่ยังไม่ยืนยันเข้า Salesforce และยังไม่ยกเลิก
+    const redrawBtn = (orderIsEditable(o) && !o.cancelled)
+      ? '<button type="button" class="hist-redraw-btn" data-id="'+escapeHtml(o.id)+'" title="ทำใบสรุปใหม่" aria-label="ทำใบสรุปใหม่"'+(_redrawBusyId===o.id?' disabled':'')+'>'+REDRAW_ICON+'</button>'
+      : '';
     const custHeaderHtml = '<div class="hist-custheader"><span class="hist-branch-name">'+escapeHtml(fullName||'—')+nick+'</span>'
       + (phoneFormatted ? '<span class="hist-branch-phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'+escapeHtml(phoneFormatted)+'</span>' : '')
-      + '</div>';
+      + redrawBtn
+      + '</div>'
+      + redrawStatusHtml(o.id);
     // ปุ่มดึงข้อมูลล่าสุดจาก Salesforce มาพิมพ์ใบสรุปใหม่ — ต้องมี Product ID (Salesforce) ถึงจะไปดึงค่าวัดตัวล่าสุดกลับมาได้ และต้องมาจาก Lark จริง (ไม่ใช่ร่างที่ยังไม่ส่ง)
     const resyncBtn = (o._fromLark && o.productCode)
       ? '<button type="button" class="hist-resync-btn" data-id="'+escapeHtml(o.id)+'">'+resyncLabel()+'</button>'
@@ -8734,7 +8765,75 @@
       if(cancelBtn) cancelBtn.disabled=false;
     }
   }
+  // [2026-10-27-9 ตามที่ขอ] ปุ่มกระดาษ "ทำใบสรุปใหม่" — บิลที่ยังไม่ยืนยันเข้า Salesforce: วาดใบสรุปใหม่จากข้อมูลดิบที่บันทึกไว้ (/order-raw) ด้วยตัววาดชุดเดียวกับตอนบันทึก
+  // (ใบ 4×6 KK · บรรทัดประเภทสินค้า J1/P1 · หลายชิ้น) → แทนไฟล์ชื่อเดิมในช่อง "ใบสรุป" ของ Lark (/attach-summary-image ลบไฟล์ชื่อซ้ำก่อนแนบ) → เปิดหน้าต่างพิมพ์
+  // ไม่ตั้งคิวพิมพ์ซ้ำ · ไม่แตะ Salesforce · ไม่แก้ข้อมูลบิล
+  function paintRedrawStatus(recId){
+    histList.querySelectorAll('.hist-row[data-id="'+recId+'"]').forEach(row=>{
+      const btn=row.querySelector('.hist-redraw-btn'); if(btn) btn.disabled=(_redrawBusyId===recId);
+      const html=redrawStatusHtml(recId), old=row.querySelector('.hist-redraw-status');
+      if(old) old.outerHTML=html; else if(html) row.querySelector('.hist-custheader')?.insertAdjacentHTML('afterend', html);
+    });
+  }
+  // ตัววาด (buildAllReceipts) อ่านค่าวัดตัวจากฟอร์ม → โหลดข้อมูลดิบเข้าฟอร์มชั่วคราว วาด แล้วคืนฟอร์มเดิมทันที (ที่พนักงานกรอกค้างไว้ไม่หาย · ไม่เก็บ autosave ของบิลนี้)
+  async function buildReceiptImagesFromRaw(raw){
+    const snap=collectFormState();
+    const snapImgs=[...document.querySelectorAll('#productsWrap .product-block')].map(b=>(b._attachedImages||[]).slice());
+    const prevSup=_autosaveSuppressed, prevUrgent=urgentManuallySet;
+    _autosaveSuppressed=true; clearTimeout(_autosaveTimer);
+    try{
+      applyRawDataToForm(raw);
+      return await buildReceiptImages(raw, null);
+    }finally{
+      try{
+        applyFormState(snap);
+        const bt=document.getElementById('branchTop'); if(bt && bt.value!==snap.branchTop){ bt.value=snap.branchTop; updateSelectPlaceholderState(bt); fitSelectWidth(bt); notifyBranchTopChange(); }
+        const bp=document.getElementById('branchPickup'); if(bp && bp.value!==snap.branchPickup){ bp.value=snap.branchPickup; updateDeliveryVisibility(); }
+        const pd=document.getElementById('pickupDate'); if(pd){ pd.value=snap.pickupDate; updatePickupDayLabel(); }
+        [...document.querySelectorAll('#productsWrap .product-block')].forEach((b,i)=>{ b._attachedImages=snapImgs[i]||[]; renderAttachThumbs(b); });
+      }catch(e){ try{ console.warn('[ทำใบสรุปใหม่] คืนฟอร์มเดิมไม่ครบ:', e && e.message); }catch(_e){} }
+      urgentManuallySet=prevUrgent;
+      clearTimeout(_autosaveTimer); _autosaveSuppressed=prevSup;
+    }
+  }
+  async function redrawReceiptsForUnconfirmed(recId){
+    if(_redrawBusyId) return;
+    const o=findHistOrder(recId);
+    const bill=String(o&&o.orderNo||'').trim();
+    if(!o || !bill){ alert('ไม่พบข้อมูลบิลนี้ — ลองปิดแล้วเปิดหน้าประวัติใหม่อีกครั้ง'); return; }
+    const ok=await confirmDialog('ทำใบสรุปใหม่ของบิล '+bill+' ? ใบเดิมใน Lark จะถูกแทนด้วยใบที่วาดใหม่', 'ทำใบสรุปใหม่');
+    if(!ok) return;
+    _redrawBusyId=recId;
+    const setStatus=(kind,text)=>{ _redrawStatus[recId]={kind,text}; paintRedrawStatus(recId); };
+    setStatus('busy','กำลังวาดใบสรุปใหม่…');
+    try{
+      const res=await fetch(WORKER+'/order-raw?record_id='+encodeURIComponent(recId));
+      const json=await res.json().catch(()=>null);
+      if(!json || !json.success) throw new Error(json&&json.error||'ดึงข้อมูลไม่สำเร็จ');
+      const raw=Object.assign({}, json.data, {'เลขที่บิล':bill});
+      const images=await buildReceiptImagesFromRaw(raw);
+      if(!images.length) throw new Error('วาดใบสรุปไม่สำเร็จ');
+      let sent=0; const errs=[];
+      for(const img of images){
+        setStatus('busy','กำลังส่งใบสรุปเข้า Lark '+(sent+errs.length+1)+'/'+images.length+'…');
+        try{
+          const r=await fetch(WORKER+'/attach-summary-image', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ orderNo:img.billNo, imageBase64:img.imageBase64, itemIndex:img.itemIndex||1 }) });
+          const j=await r.json().catch(()=>null);
+          if(j && j.success) sent++; else errs.push('ใบที่ '+(img.itemIndex||1)+': '+(j&&j.error||'ไม่ทราบสาเหตุ'));
+        }catch(e){ errs.push('ใบที่ '+(img.itemIndex||1)+': เชื่อมต่อไม่สำเร็จ'); }
+      }
+      if(errs.length) setStatus('fail','ส่งใบสรุปเข้า Lark ได้ '+sent+'/'+images.length+' ใบ — '+errs.join(' · '));
+      else setStatus('ok','ทำใบสรุปใหม่แล้ว '+images.length+' ใบ (แทนใบเดิมใน Lark)');
+      printReceiptsNow(images.map(i=>i.imageBase64));
+    }catch(e){
+      setStatus('fail','ทำใบสรุปใหม่ไม่สำเร็จ: '+e.message);
+    }finally{
+      _redrawBusyId=null; paintRedrawStatus(recId);
+    }
+  }
   histList.addEventListener('click', async e=>{
+    const redrawBtn=e.target.closest('.hist-redraw-btn');
+    if(redrawBtn){ e.stopPropagation(); redrawReceiptsForUnconfirmed(redrawBtn.dataset.id); return; }
     const noteBtn=e.target.closest('.hist-note-btn');
     if(noteBtn){ e.stopPropagation(); openNoteEditor(noteBtn.dataset.id); return; } // [2026-10-21-8] แก้/เพิ่ม NOTE
     const resyncBtn=e.target.closest('.hist-resync-btn');
