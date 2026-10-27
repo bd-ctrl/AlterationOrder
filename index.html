@@ -5389,7 +5389,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-27-3';
+  const APP_VERSION = '2026-10-27-4';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -7755,8 +7755,69 @@
         edit:{recordId:String(ent.recordId||''),round:+ent.round,billNoNew:String(ent.billNoNew||''),sent:!!ent.sent,origDate:String(ent.pickupDate||''),origInspector:String(ent.inspector||''),origDetail:String(ent.detail||'').trim(),body}};
       S.err=''; S.listTop=histList.scrollTop;
       setView('form'); view.innerHTML=formHtml(); wireForm();
-      const t=view.querySelector('[data-ra2-note]'); if(t){ t.value=body; resizeNoteInput(t); }
+      prefillEdit(body);   // [2026-10-27-4] จุดวัด/เก็บเข้า/ตลอดแนว/FB-NB-HB จากบรรทัดเดิม · ที่เหลือ = หมายเหตุ
       syncStitch(); setUrgent(urgent); paintApprover(); loadLatest(code); loadInspectors().then(onInspReady,onInspReady); changed();
+    }
+    // [2026-10-27-4 ตามที่ขอ "แก้ไขรายละเอียดครั้งที่ 2 หมายถึงรายละเอียดทั้งหมดรวมสัดส่วนด้วย"] แยกบรรทัดเดิม (รูปแบบเดียวกับ composeBody) กลับเป็นจุดวัด
+    //   ส่วนหน้า = จุดวัดตามลำดับฟอร์ม ("ป้าย [ค่าเดิม→]ค่าใหม่" · "ป้าย[ ตลอดแนว] เก็บเข้า/ขยายออก …" · "ต้นแขน เก็บเข้า …") · เจอส่วนที่ไม่ใช่จุดวัด = ที่เหลือทั้งหมดเป็นหมายเหตุ
+    //   ค่าเดิม (ครั้งที่ 1) ของแต่ละจุดเก็บไว้ใน f.edit.prev → บันทึกโดยไม่แก้อะไร ได้บรรทัดเดิมตรงตัว (ไม่หยิบค่าใหม่จาก Salesforce มาแทน)
+    //   ลำดับในบรรทัดไม่ตรงกับลำดับฟอร์ม / ตัวเลขเขียนต่างจากที่ระบบเขียน → ไม่แยก (ทั้งก้อนเป็นหมายเหตุเหมือนเดิม) กันบรรทัดเปลี่ยนเอง
+    const RA_NUM='(-?\\d+(?:\\.\\d+)?)', RA_W='(เก็บเข้า|ขยายออก)';
+    const RA_DIR_A=new RegExp('^'+RA_W+' '+RA_NUM+'→'+RA_NUM+'$'), RA_DIR_B=new RegExp('^((?:เก็บเข้า|ขยายออก) '+RA_NUM.slice(1,-1)+')→'+RA_W+' '+RA_NUM+'$'),
+      RA_DIR_C=new RegExp('^'+RA_W+' '+RA_NUM+'$'), RA_NUMV=new RegExp('^(?:'+RA_NUM+'→)?'+RA_NUM+'$');
+    function parseEditBody(body){
+      const defs=measureDefs(), cands=[];
+      defs.forEach((d,i)=>{
+        if(d.dir){ if(d.along) cands.push({i,d,kind:'dir',along:true,label:d.label+' ตลอดแนว'}); cands.push({i,d,kind:'dir',label:d.label}); }
+        else cands.push({i,d,kind:'num',label:d.label});
+        if(d.takeIn) cands.push({i,d,kind:'take',label:(d.takeInLabel||d.label.replace(/\s*\(.*\)$/,''))+' เก็บเข้า'});
+      });
+      cands.sort((a,b)=>b.label.length-a.label.length);
+      const parts=String(body||'').split(', '), rows=[], used=new Set(); let k=0;
+      const ok=s=>fmtInch(Math.abs(parseFloat(s)))===s.replace(/^-/,'');   // ตัวเลขต้องเขียนแบบเดียวกับที่ระบบเขียน (fmtInch) ถึงจะแยก
+      for(;k<parts.length;k++){
+        const p=parts[k]; let hit=null;
+        for(const c of cands){
+          if(!p.startsWith(c.label+' ')) continue; const key=c.kind+':'+c.i; if(used.has(key)) continue;
+          const r=p.slice(c.label.length+1); let m;
+          if(c.kind==='dir'){
+            if((m=RA_DIR_A.exec(r))&&ok(m[3])) hit={c,v:(m[1]==='เก็บเข้า'?-1:1)*parseFloat(m[3]),prev:m[1]+' '+m[2]};
+            else if((m=RA_DIR_B.exec(r))&&ok(m[3])) hit={c,v:(m[2]==='เก็บเข้า'?-1:1)*parseFloat(m[3]),prev:m[1]};
+            else if((m=RA_DIR_C.exec(r))&&ok(m[2])) hit={c,v:(m[1]==='เก็บเข้า'?-1:1)*parseFloat(m[2]),prev:''};
+          }else if((m=RA_NUMV.exec(r))&&ok(m[2])&&parseFloat(m[2])) hit={c,v:parseFloat(m[2]),prev:m[1]||''};
+          if(hit){ used.add(key); break; }
+        }
+        if(!hit) break;
+        rows.push(hit);
+      }
+      const ord=h=>h.c.i*2+(h.c.kind==='take'?1:0);
+      for(let i=1;i<rows.length;i++) if(ord(rows[i])<=ord(rows[i-1])) return {rows:[],note:String(body||'')};
+      return {rows,note:parts.slice(k).join(', ')};
+    }
+    function prefillEdit(body){
+      const f=S.form, list=view.querySelector('.ra2-measure'), t=view.querySelector('[data-ra2-note]'); let note=String(body||'');
+      if(f&&f.edit&&list){
+        const pr=parseEditBody(note), items=[...list.querySelectorAll('.mitem')]; f.edit.prev={};
+        if(pr.rows.length){ note=pr.note;
+          pr.rows.forEach(h=>{ const m=items[h.c.i]; if(!m) return;
+            if(!m.classList.contains('editing')){ const b0=m.querySelector('.toggle button'); if(b0) b0.click(); }
+            if(h.c.kind==='take'){
+              const add=m.querySelector('.takein-add'); if(add&&add.style.display!=='none') add.click();
+              const ti=m.querySelector('.takein-input'); if(ti){ ti.dataset.dir='pos'; ti.value=String(Math.abs(h.v)); }
+              f.edit.prev[h.c.d.label+' เก็บเข้า']=h.prev;
+            }else{
+              const num=m.querySelector('.numonly:not(.takein-input)');
+              if(num){ if(h.c.kind==='num'&&h.v<0){ delete num.dataset.dir; num.value=String(h.v); } else { num.dataset.dir=h.v<0?'neg':'pos'; num.value=String(Math.abs(h.v)); }
+                if(num.closest('.numstep')&&num.closest('.numstep').querySelector('.dirword')) updateDirNum(num); }
+              if(h.c.along){ const al=m.querySelector('.along-check'); if(al) al.checked=true; }
+              f.edit.prev[h.c.d.label]=h.prev;
+            } });
+        }
+        // ระดับความยาว FB/NB/HB (กางเกง) — คำอยู่ในหมายเหตุ → ติดปุ่มให้ตรง (ไม่แก้ข้อความ)
+        const lw=list.querySelector('.legstyle-chips'); if(lw){ const w=note.split(/\s+/); const v=['FB','NB','HB'].find(x=>w.includes(x));
+          if(v){ lw.dataset.selected=v; lw.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.val===v)); } }
+      }
+      if(t){ t.value=note; resizeNoteInput(t); }
     }
     // ติ๊ก "เย็บย้ำกระดุม" ของฟอร์มนำกลับมาแก้ — ประเภทเดียวกับฟอร์มหลัก (สูท กางเกง เชิ้ต กั๊ก) · เติม/ลบคำในหมายเหตุ
     const RA_STITCH='เย็บย้ำกระดุม', raStitchOk=t=>/^(เสื้อสูท|กางเกง|เสื้อเชิ้ต|เสื้อกั๊ก)/.test(String(t||''));
@@ -7764,18 +7825,18 @@
     function setStitch(on){ const t=view.querySelector('[data-ra2-note]'); if(!t) return;
       let w=t.value.split(/\s+/).filter(Boolean).filter(x=>x!==RA_STITCH); if(on) w.push(RA_STITCH); t.value=w.join(' '); resizeNoteInput(t); changed(); }
     function formHtml(){
-      const f=S.form, cfg=typeCfg(f.type), hasM=cfg.items.length>0&&!f.edit, br=branchOptions(), ed=f.edit;
+      const f=S.form, cfg=typeCfg(f.type), hasM=cfg.items.length>0, br=branchOptions(), ed=f.edit;   // [2026-10-27-4 ตามที่ขอ] โหมดแก้ไขใช้ฟอร์มเต็มเหมือนบันทึกใหม่ (จุดวัด/เก็บเข้า/ตลอดแนว) — เติมค่าจากบรรทัดเดิมใน prefillEdit
       return '<button type="button" class="ra2-back" data-ra2="back">'+IC.chevL+'รายการที่นัดรับ</button>'
         + '<div class="ra2-sum"><div class="m"><div class="p">'+esc(f.code)+'<span class="ok" role="img" aria-label="ถึงสาขาแล้ว">'+HIST_STORE_ICON_SVG+'</span></div>'
           + '<div class="s">'+esc(typeShort(f.type))+' · <span class="nw">'+esc(skuText(f))+'</span>'+(f.billNo?' · บิล <span class="nw">'+esc(f.billNo)+'</span>':'')+'</div>'
           + '<div class="c">'+esc(f.custShow)+'</div></div><span class="rd">'+(ed?'แก้ไข ':'')+'ครั้งที่ '+f.n+'</span></div>'
-        + (ed?'<div class="ra2-editnote" role="note">แก้ไขรายการที่บันทึกแล้ว (บิลใหม่ <b>'+esc(ed.billNoNew||'-')+'</b>) — แก้ใน Lark เท่านั้น ไม่ส่งเข้า Salesforce'+(ed.sent?' · รายการนี้ส่งเข้า Salesforce แล้ว ข้อมูลใน Salesforce จะยังเป็นแบบเดิม':'')+'</div>':'')
+        + (ed?'<div class="ra2-editnote" role="note">กำลังแก้ไขบิลเลขที่ <b>'+esc(ed.billNoNew||'-')+'</b></div>':'')   // [2026-10-27-4 ตามที่ขอ] เหลือข้อความสั้นๆ แค่นี้
         + '<div class="ra2-body" data-ra2-body>'
           + '<div class="ra2-sec"><div class="seclabel"><span class="n serif">01</span><span class="t">รายละเอียด</span>'
             + (hasM?'<div class="toptoggle"><button type="button" class="on">แก้ไขขนาด</button><button type="button">ไม่แก้ไข</button></div>':'')+'</div>'
             + (hasM?'<div class="measure-list ra2-measure">'+cfg.items.map(buildMitemHtml).join('')+'</div><div class="ra2-off">ไม่แก้ขนาด — กด “แก้ไขขนาด” เพื่อเลือกจุด</div>'
-                   :'<div class="ra2-off">'+(ed?'แก้ข้อความด้านล่างได้ตรงๆ (จุดที่แก้ + หมายเหตุ อยู่ในช่องเดียวกัน)':'สินค้าประเภทนี้ไม่มีจุดวัด — เขียนรายละเอียดในหมายเหตุ')+'</div>')
-            + '<div class="ra2-frow note"><span class="k">'+(ed?'รายละเอียด':'หมายเหตุ')+(hasM?'':' <span class="req">*</span>')+'</span><div class="ra2-nwrap"><textarea class="note-input" data-ra2-note rows="2" maxlength="'+LIMIT+'" placeholder="เพิ่มหมายเหตุ" aria-label="หมายเหตุ"></textarea><span class="ra2-cnt" data-ra2-cnt></span></div></div>'
+                   :'<div class="ra2-off">สินค้าประเภทนี้ไม่มีจุดวัด — เขียนรายละเอียดในหมายเหตุ</div>')
+            + '<div class="ra2-frow note"><span class="k">หมายเหตุ'+(hasM?'':' <span class="req">*</span>')+'</span><div class="ra2-nwrap"><textarea class="note-input" data-ra2-note rows="2" maxlength="'+LIMIT+'" placeholder="เพิ่มหมายเหตุ" aria-label="หมายเหตุ"></textarea><span class="ra2-cnt" data-ra2-cnt></span></div></div>'
             + '<div class="ra2-frow tick" data-ra2-stitchrow'+(raStitchOk(f.type)?'':' hidden')+'><label class="stitchlbl rchk"><input type="checkbox" data-ra2-stitch><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">เย็บย้ำกระดุม</span></label></div>'
             + (ed?'':'<div class="ra2-frow ph"><span class="k">รูปภาพ <span class="opt">(ถ้ามี · สูงสุด '+PH_MAX+' รูป)</span></span><div class="ra2-ph" data-ra2-ph>'+phInner(f)+'</div></div>')
             + '<div class="ra2-hint" data-ra2-over role="alert" hidden></div>'
@@ -7822,6 +7883,7 @@
       return o;
     };
     function prevText(label,dir){ const n=parseFloat(mvOf()[label]); if(isNaN(n)||!n) return ''; return dir?(n<0?'เก็บเข้า ':'ขยายออก ')+fmtInch(Math.abs(n)):fmtInch(n); }
+    const prevTextSf=prevText;
     const measureDefs=()=>typeCfg(S.form.type).items.filter(x=>x.kind!=='legStyle'&&x.kind!=='group');
     // [แก้ 2026-09-30 ตามที่ขอ] ป้าย "ค่าปัจจุบันใน Salesforce:" → "แก้ไขครั้งที่ 1:" (ค่าวัดใน Salesforce = ค่าที่สั่งแก้ในบิลแรก) ใต้ชื่อจุดวัด (ตัวเอียงสีแดง) — มาจาก /product-latest
     function paintPv(){
@@ -7840,6 +7902,8 @@
     function readChanges(){
       const rows=[], list=view.querySelector('.ra2-measure'); if(!S.form||!list||list.classList.contains('hidden')) return rows;
       const defs=measureDefs();
+      // [2026-10-27-4] โหมดแก้ไข: จุดที่มีในบรรทัดเดิม ใช้ค่าเดิม (ครั้งที่ 1) ตามที่บันทึกไว้ (รวมกรณีเดิมไม่มี) — จุดที่เพิ่มใหม่ใช้ค่าจาก Salesforce ตามปกติ
+      const ep=S.form.edit&&S.form.edit.prev, prevText=(key,dir)=>(ep&&Object.prototype.hasOwnProperty.call(ep,key))?ep[key]:prevTextSf(key,dir);
       [...list.querySelectorAll('.mitem')].forEach((m,i)=>{ const d=defs[i]; if(!d||!m.classList.contains('editing')) return;
         const num=m.querySelector('.numonly:not(.takein-input)'), v=num?getMitemValue(num):0;
         if(v){ const w=v<0?'เก็บเข้า':'ขยายออก';
@@ -7882,7 +7946,7 @@
     // [2026-10-26-2] โหมดแก้ไข: ไม่ต้องเลือกสาขา (ไม่ได้เก็บในบรรทัด) · วันเดิมที่ผ่านไปแล้วใช้ต่อได้ · ผู้ตรวจเดิมใช้ต่อได้แม้ไม่อยู่ในรายชื่อ · ต้องมีอะไรเปลี่ยน
     const editInspOk=f=>inspOk(f.inspector)||(!!f.edit&&String(f.inspector).trim()===f.edit.origInspector);
     const editDateOk=f=>!!f.date&&(f.date>=isoPlus(0)||(!!f.edit&&f.date===f.edit.origDate));
-    const editDirty=f=>{ const e=f.edit; if(!e) return true; const nz=x=>String(x==null?'':x).replace(/\s+/g,' ').trim(); return nz(composeDetail([]))!==nz(e.origDetail)||String(f.inspector).trim()!==e.origInspector||f.date!==e.origDate; };
+    const editDirty=f=>{ const e=f.edit; if(!e) return true; const nz=x=>String(x==null?'':x).replace(/\s+/g,' ').trim(); return nz(composeDetail())!==nz(e.origDetail)||String(f.inspector).trim()!==e.origInspector||f.date!==e.origDate; };
     function formValid(){ const f=S.form; if(!f) return false; const b=composeBody();
       if(f.edit) return b.length>0&&detailLen()<=LIMIT&&(!isDel(f.branch)||!!String(f.addr||'').trim())&&editDateOk(f)&&editInspOk(f)&&(!f.urgent||!!f.approver)&&!hardOn(f)&&editDirty(f);
       return b.length>0&&detailLen()<=LIMIT&&!!f.branch&&(!isDel(f.branch)||!!String(f.addr||'').trim())&&!!f.date&&f.date>=isoPlus(0)&&inspOk(f.inspector)&&(!f.urgent||!!f.approver)&&!(f.p&&f.p.blocked)&&workBranchOk()&&!hardOn(f); }
@@ -7999,7 +8063,7 @@
     async function submitEdit(){
       const f=S.form; if(!f||S.sending||!f.edit) return;
       if(!formValid()){ showErr('ยังขาด: '+missingText()); return; }
-      const detail=composeDetail([]), staffEl=document.getElementById('staffInput');
+      const rows=readChanges(), detail=composeDetail(rows), note=noteVal().trim(), staffEl=document.getElementById('staffInput');   // [2026-10-27-4] ฟอร์มเต็ม: จุดวัด + หมายเหตุ
       const payload={larkRecordId:f.edit.recordId, productCode:f.code, round:f.edit.round, inspectorName:String(f.inspector).trim(), pickupDate:f.date, detail, urgent:!!f.urgent, editorName:(staffEl&&staffEl.value.trim())||String(f.inspector).trim()};
       if(f.urgent&&f.approver) payload.approver=f.approver;
       S.sending=true; S.err=''; S.errRetry=false; f.hard=null; showErr(''); changed();
@@ -8019,8 +8083,8 @@
       }
       if(PROD[f.code]) PROD[f.code].savedRound=f.edit.round;
       S.form=null;
-      const stored=typeof j.detail==='string'?j.detail:detail, sb=stored.replace(RA_URG_RE,'').replace(RA_DEL_RE,'');
-      const d=S.done={f,rows:[],note:sb,detail:stored,img:'',err:'',billNoNew:String(j.billNoNew||f.edit.billNoNew||''),larkId:f.edit.recordId,round:f.edit.round,busy:true,run:false,upOk:false,upErr:'',small:null,
+      const stored=typeof j.detail==='string'?j.detail:detail, sb=stored.replace(RA_URG_RE,'').replace(RA_DEL_RE,''), same=stored.replace(/\s+/g,' ').trim()===detail.replace(/\s+/g,' ').trim();
+      const d=S.done={f,rows:same?rows:[],note:same?note:sb,detail:stored,img:'',err:'',billNoNew:String(j.billNoNew||f.edit.billNoNew||''),larkId:f.edit.recordId,round:f.edit.round,busy:true,run:false,upOk:false,upErr:'',small:null,
         notes:j.changed===false?['ไม่มีอะไรเปลี่ยน — ข้อมูลใน Lark เป็นแบบนี้อยู่แล้ว']:[],sfOk:false,sfRun:false,sfErr:'',noSf:true,authLost:false,leaveOk:false,edit:{changes:Array.isArray(j.changes)?j.changes:[],sent:!!j.sent}};
       view.innerHTML=doneHtml(); setView('done');
       buildReceipt(d);
