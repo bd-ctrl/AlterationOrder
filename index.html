@@ -961,6 +961,59 @@
   .ra2-toast{position:fixed;left:50%;bottom:18px;z-index:9999;transform:translate(-50%,16px);max-width:min(92vw,440px);padding:10px 16px;border-radius:12px;background:var(--ink);color:#fff;font-size:13.5px;line-height:1.5;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
   .ra2-toast.show{opacity:1;transform:translate(-50%,0)}
   .ra2-toast.bad{background:var(--red)}
+  /* [2026-10-26-2 ตามที่ขอ] ปุ่ม "แก้ไขครั้งที่ N" บนการ์ด (แก้รายการที่บันทึกแล้ว · Lark เท่านั้น) + ติ๊กเย็บย้ำกระดุมในฟอร์มนำกลับมาแก้ + แถบแจ้งโหมดแก้ไข */
+  .ra2-editbtn{display:inline-flex;align-items:center;gap:4px;border:1.5px solid var(--rule);background:#fff;color:var(--goldink);font-family:'Prompt',sans-serif;font-weight:500;font-size:12px;line-height:1.5;border-radius:999px;padding:3px 10px;cursor:pointer;white-space:nowrap;margin-left:6px}
+  .ra2-editbtn svg{width:12px;height:12px}
+  .ra2-editbtn:disabled{opacity:.6;cursor:default}
+  .ra2-frow.tick{border:none;padding:4px 2px 10px}
+  .ra2-frow.tick[hidden]{display:none}
+  .ra2-editnote{flex:0 0 auto;margin-top:10px;padding:9px 12px;border-radius:10px;font-size:13px;line-height:1.5;background:rgba(163,127,48,.13);color:var(--goldink)}
+  .ra2-cmp .raw .lb{display:block;font-size:12.5px;color:var(--t2);margin-top:6px}
+  .ra2-cmp .raw .lb:first-child{margin-top:0}
+  /* [2026-10-26-2 ตามที่ขอ "ป๊อปอัปกรอกข้อมูลครั้งที่ 2 บน iPad เล็กเกินไป"] จอ iPad (768–1366) ตอนเปิดฟอร์ม/ผลบันทึกนำกลับมาแก้: ป๊อปอัปกว้าง/สูงขึ้น · ตัวหนังสือและปุ่มใหญ่ขึ้น */
+  @media (min-width:768px) and (max-width:1366px){
+    /* [2026-10-27-1 ตามที่ขอ "ใหญ่กว่านี้หน่อย"] 920px → เกือบเต็มจอ (สูงสุด 1200px) · สูง 96vh · แถวค่าวัด/ปุ่มแก้ไข-ไม่แก้ไข/ติ๊ก ใหญ่ขึ้น */
+    .histcard.ra2-on{width:min(1200px,97vw);height:96vh;max-height:96vh}
+    .histcard.ra2-on .ra2-measure .mtop{min-height:64px}
+    .histcard.ra2-on .ra2-measure .k{font-size:19px}
+    .histcard.ra2-on .ra2-measure .mtop{grid-template-columns:minmax(0,1fr) auto}
+    .histcard.ra2-on .ra2-measure .toggle button{font-size:18px;padding:10px 14px;min-height:46px}
+    .histcard.ra2-on .ra2-measure .unit{font-size:15px}
+    .histcard.ra2-on .toptoggle,.histcard.ra2-on .toptoggle *{font-size:16px}
+    .histcard.ra2-on .seclabel{font-size:15px}
+    .histcard.ra2-on .ra2-frow.tick,.histcard.ra2-on .ra2-frow.tick *{font-size:18px}
+    .histcard.ra2-on .ra2-frow.tick .ind{width:30px;height:30px}
+    .histcard.ra2-on .ra2-back{font-size:16px}
+    .histcard.ra2-on .ra2-sum{padding:16px 18px}
+    .histcard.ra2-on .ra2-sum .p{font-size:26px}
+    .histcard.ra2-on .ra2-sum .s,.histcard.ra2-on .ra2-sum .c{font-size:15px}
+    .histcard.ra2-on .ra2-sum .rd{font-size:17px;padding:6px 16px}
+    .histcard.ra2-on .ra2-frow{padding:16px 4px;gap:16px}
+    .histcard.ra2-on .ra2-frow>.k{font-size:17px}
+    .histcard.ra2-on .ra2-nwrap{width:66%}
+    .histcard.ra2-on .ra2-nwrap textarea.note-input{font-size:17px;min-height:56px}
+    .histcard.ra2-on .ra2-cnt{font-size:14px}
+    .histcard.ra2-on .ra2-sel{font-size:19px;min-height:44px}
+    .histcard.ra2-on .ra2-date{font-size:17px;min-height:48px;padding:6px 16px}
+    .histcard.ra2-on .ra2-insp{font-size:15.5px;padding:8px 14px;min-height:44px}
+    .histcard.ra2-on .ra2-isug .s{min-height:52px}
+    .histcard.ra2-on .ra2-isug .s b{font-size:17px}
+    .histcard.ra2-on .ra2-cal{max-width:420px}
+    .histcard.ra2-on .ra2-cal .d{min-height:46px;font-size:18px}
+    .histcard.ra2-on .ra2-cal .ti{font-size:16px}
+    .histcard.ra2-on .ra2-off,.histcard.ra2-on .ra2-hint{font-size:14.5px}
+    .histcard.ra2-on .ra2-th{width:84px;height:84px}
+    .histcard.ra2-on .ra2-nb{width:56px;height:56px}
+    .histcard.ra2-on .ra2-fsum{font-size:16px}
+    .histcard.ra2-on .ra2-save,.histcard.ra2-on .ra2-fin{height:56px;padding:0 28px;font-size:17px}
+    .histcard.ra2-on .ra2-dl{height:52px;font-size:16px}
+    .histcard.ra2-on .ra2-ok .t{font-size:17px}
+    .histcard.ra2-on .ra2-ok .s,.histcard.ra2-on .ra2-up{font-size:14.5px}
+    .histcard.ra2-on .ra2-cmp table,.histcard.ra2-on .ra2-cmp .raw{font-size:15.5px}
+    .histcard.ra2-on .ra2-img img{max-width:380px}
+    .histcard.ra2-on .ra2-frow.tick .k{font-size:17px}
+    .histcard.ra2-on .rchk .ind{width:30px;height:30px}
+  }
   @media (max-width:520px){
     .ra2-qr{width:44px;height:44px}
     .ra2-input{font-size:21px;letter-spacing:0}
@@ -3057,17 +3110,18 @@
 </ul>
 </div></div>
 
-<div class="hp-item"><div class="hp-name">เย็บย้ำกระดุม · ลูกค้าใช้งานก่อนปรับแก้ · งานทีม <span class="hp-kind">ช่องติ๊ก 3 ช่อง</span></div><div class="hp-desc">
+<div class="hp-item"><div class="hp-name">เย็บย้ำกระดุม · ลูกค้านำสินค้ากลับมาแก้/ ใช้งานก่อนปรับแก้ · งานทีม <span class="hp-kind">ช่องติ๊ก 3 ช่อง</span></div><div class="hp-desc">
 <p>ทั้ง 3 ช่องเป็นทางลัด ติ๊กแล้วระบบเติมคำนั้นต่อท้ายช่องหมายเหตุให้ เอาติ๊กออกก็ลบคำนั้นออกให้</p>
 <div class="hp-tablewrap"><table class="hp-table"><thead><tr><th>ช่องติ๊ก</th><th>ขึ้นกับประเภทสินค้า</th><th>คำที่เติมในหมายเหตุ</th></tr></thead><tbody>
-<tr><td>เย็บย้ำกระดุม</td><td>เฉพาะเสื้อสูท และกางเกง</td><td>เย็บย้ำกระดุม</td></tr>
-<tr><td>ลูกค้าใช้งานก่อนปรับแก้</td><td>ทุกประเภท</td><td>ลูกค้าใช้งานก่อนปรับแก้</td></tr>
+<tr><td>เย็บย้ำกระดุม</td><td>เสื้อสูท กางเกง เสื้อเชิ้ต และเสื้อกั๊ก (ไม่มีใน Accessory)</td><td>เย็บย้ำกระดุม</td></tr>
+<tr><td>ลูกค้านำสินค้ากลับมาแก้/ ใช้งานก่อนปรับแก้</td><td>ทุกประเภท</td><td>ลูกค้านำสินค้ากลับมาแก้/ ใช้งานก่อนปรับแก้</td></tr>
 <tr><td>งานทีม</td><td>ทุกประเภท</td><td>งานทีม</td></tr>
 </tbody></table></div>
 <ul class="hp-list">
 <li>สิ่งที่ถูกบันทึกคือข้อความในช่องหมายเหตุ ไม่ใช่ตัวติ๊ก ถ้าพิมพ์ลบคำนั้นออกเองในหมายเหตุ ช่องติ๊กจะยังค้างอยู่ แต่ไม่มีผลอะไร</li>
 <li>ต้องการระบุชื่อทีม ให้พิมพ์ต่อท้ายคำว่า งานทีม ในช่องหมายเหตุเอง เช่น “งานทีม A”</li>
-<li>ถ้าเปลี่ยนประเภทเป็นเชิ้ต กั๊ก หรือ Accessory ช่อง เย็บย้ำกระดุม จะหายไป ติ๊กถูกเอาออก และคำนั้นถูกลบจากหมายเหตุ</li>
+<li>ถ้าเปลี่ยนประเภทเป็น Accessory ช่อง เย็บย้ำกระดุม จะหายไป ติ๊กถูกเอาออก และคำนั้นถูกลบจากหมายเหตุ</li>
+<li>ฟอร์มสินค้านำกลับมาแก้ (ครั้งที่ 2–5) ก็มีช่องติ๊ก เย็บย้ำกระดุม เหมือนกัน (สูท กางเกง เชิ้ต กั๊ก) ติ๊กแล้วคำนี้เข้าไปในหมายเหตุของรายการนั้น</li>
 <li>ตอนกดติ๊ก ระบบจัดช่องว่างในหมายเหตุใหม่ ถ้าพิมพ์ขึ้นบรรทัดใหม่ไว้ บรรทัดนั้นจะกลายเป็นเว้นวรรค</li>
 </ul></div></div>
 
@@ -5122,12 +5176,12 @@
         <div class="frow size-row"><span class="k">Size</span><input class="fig emph size-input" placeholder="—"></div>
         <div class="frow"><span class="k">สินค้าใช้ของสาขา</span><select class="frowsel branch-prod"><option>OFFICE</option><option>R3</option><option>T21</option><option>SQ1</option><option>PM</option><option>SC</option><option>CM</option><option>FP</option><option>KR</option><option>SL</option><option>NW</option><option>CC</option><option>BP</option><option>RCD</option><option>KK</option><option>PK</option><option>MG</option><option>CTW</option><option>WG</option></select></div>
         <div class="frow codewrap contact-row hidden"><span class="k">ชื่อพนักงานที่ติดต่อ</span><input class="contact-input" placeholder="พิมพ์แล้วเลือกชื่อ" autocomplete="off"><div class="suggest contact-suggest"></div></div>
-        <!-- [ใหม่ตามที่ขอ] ติ๊ก "เย็บย้ำกระดุม" เหนือหมายเหตุ — โชว์เฉพาะเสื้อสูท/กางเกง (คุมด้วย JS ใน renderMeasureSection) ติ๊กแล้วเติมคำนี้ลงหมายเหตุอัตโนมัติ ซึ่งไปรวมกับหมายเหตุที่ส่ง Salesforce (Field20__c) อยู่แล้วตามปกติ -->
+        <!-- [ใหม่ตามที่ขอ] ติ๊ก "เย็บย้ำกระดุม" เหนือหมายเหตุ — โชว์เฉพาะเสื้อสูท/กางเกง/เสื้อเชิ้ต/เสื้อกั๊ก [2026-10-26-2] (คุมด้วย JS ใน renderMeasureSection) ติ๊กแล้วเติมคำนี้ลงหมายเหตุอัตโนมัติ ซึ่งไปรวมกับหมายเหตุที่ส่ง Salesforce (Field20__c) อยู่แล้วตามปกติ -->
         <div class="frow stitch-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="stitch-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">เย็บย้ำกระดุม</span></label></div>
         <!-- [2026-10-22-3 ตามที่ขอ] ติ๊ก "เปลี่ยนรหัสกระดุม" — โชว์เฉพาะเสื้อสูท/กางเกง/เสื้อกั๊ก (คุมใน renderMeasureSection) · ติ๊กแล้วมีช่องพิมพ์รหัสกระดุม · เติม "เปลี่ยนรหัสกระดุม (รหัส)" ลงหมายเหตุ (ไป Salesforce + ใบสรุป) ดู wireButtonCodeCheckbox -->
         <div class="frow btncode-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="btncode-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">เปลี่ยนรหัสกระดุม</span></label><input class="btncode-input hidden" type="text" placeholder="รหัสกระดุม" autocomplete="off" maxlength="40" aria-label="รหัสกระดุม"></div>
         <!-- [ใหม่ 2026-09-23 ตามที่ขอ] ติ๊ก "ลูกค้าใช้งานก่อนปรับแก้" เหนือหมายเหตุ — กลไกเดียวกับ "เย็บย้ำกระดุม" ทุกอย่าง (ติ๊กแล้วเติมคำนี้ลงหมายเหตุอัตโนมัติ) ต่างกันแค่ไม่จำกัดประเภทสินค้า (ใช้ได้ทุกประเภท ไม่ใช่แค่เสื้อสูท/กางเกง) ดู wireUsedCheckbox -->
-        <div class="frow used-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="used-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">ลูกค้าใช้งานก่อนปรับแก้</span></label></div>
+        <div class="frow used-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="used-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">ลูกค้านำสินค้ากลับมาแก้/ ใช้งานก่อนปรับแก้</span></label></div>
         <!-- [ใหม่ 2026-10-06 ตามที่ขอ] ติ๊ก "งานทีม" เหนือหมายเหตุ — กลไกเดียวกับ "เย็บย้ำกระดุม" (ติ๊กแล้วเติมคำนี้ลงหมายเหตุอัตโนมัติ เอาติ๊กออกแล้วลบคำนี้) ต่างแค่โชว์ทุกประเภทสินค้า (พิมพ์ชื่อทีมต่อท้ายในหมายเหตุได้เอง เช่น "งานทีม K.Wind") -->
         <div class="frow team-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="team-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">งานทีม</span></label></div>
         <!-- [แก้ 2026-10-19] ติ๊ก "ใช้ช่างหน้าร้าน" เหนือหมายเหตุ — โชว์เฉพาะ สินค้าใช้ของสาขา = KK และประเภทของก้อนนี้ = กางเกง (คุมด้วย JS: updateShopTailorRow) · กลไกเดียวกับ "งานทีม" (ติ๊กแล้วเติมคำนี้ลงหมายเหตุ เอาติ๊กออกแล้วลบคำ) -->
@@ -5324,7 +5378,7 @@
     if(WFEAT.v) return Promise.resolve(WFEAT.v);
     if(WFEAT.p) return WFEAT.p;
     WFEAT.p=fetch(WORKER+'/version').then(r=>r.json()).then(j=>{
-      WFEAT.v={raReprint:!!(j&&j.raReprint===true), printStation:!!(j&&j.printStation===true), findByCustomer:!!(j&&j.findByCustomer===true), findByBill:!!(j&&j.findByBill===true), raPhotoLark:!!(j&&j.raPhotoLark===true), ra2Auto:!!(j&&j.ra2Auto&&j.ra2Auto.on===true), build:String((j&&j.build)||'')};
+      WFEAT.v={raReprint:!!(j&&j.raReprint===true), printStation:!!(j&&j.printStation===true), findByCustomer:!!(j&&j.findByCustomer===true), findByBill:!!(j&&j.findByBill===true), raPhotoLark:!!(j&&j.raPhotoLark===true), raEdit:!!(j&&j.raEdit===true), ra2Auto:!!(j&&j.ra2Auto&&j.ra2Auto.on===true), build:String((j&&j.build)||'')};
       return WFEAT.v;
     },()=>({raReprint:false,printStation:false,findByCustomer:false,findByBill:false,raPhotoLark:false,ra2Auto:false,build:''})).finally(()=>{ WFEAT.p=null; });
     return WFEAT.p;
@@ -5335,7 +5389,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-26-1';
+  const APP_VERSION = '2026-10-27-2';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -7073,7 +7127,7 @@
     const sv=d=>'<svg class="ra2-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg>';
     const IC={chev:sv('<path d="M9 6l6 6-6 6"/>'), chevL:sv('<path d="M15 18l-6-6 6-6"/>'), left:sv('<path d="M19 12H5M11 6l-6 6 6 6"/>'), down:sv('<path d="M6 9l6 6 6-6"/>'),
       warn:sv('<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4.5M12 17h.01"/>'),
-      tick:sv('<path d="M5 12.5l4.5 4.5L19 7.5"/>'), user:sv('<circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/>'), dl:sv('<path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 20h14"/>'),
+      tick:sv('<path d="M5 12.5l4.5 4.5L19 7.5"/>'), pen:sv('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'), user:sv('<circle cx="12" cy="8" r="4"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/>'), dl:sv('<path d="M12 4v11M7 10l5 5 5-5"/><path d="M5 20h14"/>'),
       phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'};
     const S={q:'',tk:0,scanTk:0,why:{},view:'list',form:null,done:null,sending:false,err:'',errRetry:false,listTop:0,kbTh:false};
     let ALL=null;                     // บิลที่ค้นเจอแล้วในรอบเปิดป๊อปอัปนี้ (ไม่รวมยกเลิก/ร่าง) — ปุ่มบนการ์ดผลค้นหาหาบิลจากที่นี่
@@ -7187,7 +7241,9 @@
     // ดึงรอบของ P# สีเขียวเฉพาะป้ายที่เลื่อนมาใกล้จอ ทีละไม่เกิน 3 ตัว (เก็บไว้ต่อ P#)
     const QUEUE=[]; let running=0;
     const io=('IntersectionObserver' in window)?new IntersectionObserver(es=>es.forEach(en=>{ if(!en.isIntersecting) return; io.unobserve(en.target); want(en.target.dataset.ra2Chip); }),{root:histList,rootMargin:'600px 0px'}):null;
-    function watchChips(){ if(io) io.disconnect(); histList.querySelectorAll('.ra2-chip').forEach(c=>{ if(!chipState(c.dataset.ra2Chip).unk) return; if(io) io.observe(c); else want(c.dataset.ra2Chip); }); }
+    function watchChips(){ if(io) io.disconnect(); histList.querySelectorAll('.ra2-chip').forEach(c=>{ if(!chipState(c.dataset.ra2Chip).unk) return; if(io) io.observe(c); else want(c.dataset.ra2Chip); });
+      // [2026-10-26-2] P# สีแดงในผลค้นหา: โหลดข้อมูลสินค้าด้วย (เฉพาะตอนค้นหา · Worker บอก raEdit) เพื่อขึ้นปุ่ม "แก้ไขครั้งที่ N" — รายการปกติไม่โหลดเพิ่ม
+      if(S.q&&wfeat('raEdit')) histList.querySelectorAll('[data-ra2-ea]').forEach(b=>{ const code=b.dataset.ra2Ea; if(PROD[code]&&PROD[code].p){ paintEdit(b,code); return; } b.dataset.ra2Chip=code; if(io) io.observe(b); else want(code); }); }
     function want(code){ const e=PROD[code]; if(e&&(e.p||e.pr||e.q||e.fail)) return; (PROD[code]=e||{}).q=true; QUEUE.push(code); pump(); }
     function pump(){
       while(running<3&&QUEUE.length){ const c=QUEUE.shift(); running++;
@@ -7207,8 +7263,24 @@
       if(p.blocked){ const c=p.blocked.code; return {t:c==='full'?'แก้ครบแล้ว':(c==='pending_exists'?'รอหลังบ้านส่ง':'แก้ไม่ได้ตอนนี้'),off:true,why:p.blocked.message}; }
       return {t:'แก้ครั้งที่ '+roundOf(p)}; }
     const chipInner=s=>esc(s.t)+(s.off?'':IC.chev);
-    function paintChip(b){ const s=chipState(b.dataset.ra2Chip); b.className='ra2-chip'+(s.off?' off':''); b.innerHTML=chipInner(s); b.disabled=false; }
-    function paintChips(code){ histList.querySelectorAll('.ra2-chip[data-ra2-chip="'+CSS.escape(code)+'"]').forEach(paintChip); }
+    function paintChip(b){ const s=chipState(b.dataset.ra2Chip); b.className='ra2-chip'+(s.off?' off':''); b.innerHTML=chipInner(s); b.disabled=false; paintEdit(b); }
+    // [2026-10-26-2 ตามที่ขอ "แก้ไขข้อมูลการปรับแก้ครั้งที่ 2 ได้ถ้าลงผิด"] ปุ่ม "แก้ไขครั้งที่ N" ถัดจากป้าย = รายการล่าสุดที่บันทึกไว้ของ P# นี้
+    //   แก้ใน Lark เท่านั้น (เจ้าของระบบสั่ง: ไม่ส่ง Salesforce) — Worker sh10 POST /repeat-alteration-edit · ขึ้นเมื่อ /version บอก raEdit
+    //   รอบที่บันทึกล่าสุด: บรรทัดค้าง (pending) → รอบของบรรทัดนั้น · ไม่มีค้าง → รอบถัดไป − 1 (≥ 2) · แก้ครบแล้ว → 5
+    function savedRoundOf(code){ const e=PROD[code], p=e&&e.p; if(!p) return null;
+      if(e.savedRound) return e.savedRound;
+      const pend=Array.isArray(p.pending)?p.pending.map(x=>+(x&&x.round)||0).filter(Boolean):[]; if(pend.length) return Math.max(...pend);
+      if(p.blocked&&p.blocked.code==='full') return 5;
+      const r=roundOf(p); return r&&r>=3?r-1:null; }
+    let _featAsked=false;
+    function paintEdit(b,codeIn){
+      const code=codeIn||b.dataset.ra2Ea||b.dataset.ra2Chip; let e=b.nextElementSibling; if(!(e&&e.matches&&e.matches('[data-ra2-edit]'))) e=null;
+      if(!WFEAT.v&&!_featAsked){ _featAsked=true; workerFeat().then(()=>{ histList.querySelectorAll('.ra2-chip').forEach(x=>paintEdit(x)); watchChips(); },()=>{}); }
+      const r=wfeat('raEdit')?savedRoundOf(code):null;
+      if(!r){ if(e) e.remove(); return; }
+      if(!e){ b.insertAdjacentHTML('afterend','<button type="button" class="ra2-editbtn" data-ra2-edit="'+esc(code)+'"></button>'); e=b.nextElementSibling; }
+      e.dataset.round=String(r); e.innerHTML=IC.pen+'แก้ไขครั้งที่ '+r; e.disabled=false; }
+    function paintChips(code){ histList.querySelectorAll('.ra2-chip[data-ra2-chip="'+CSS.escape(code)+'"]').forEach(paintChip); histList.querySelectorAll('[data-ra2-ea="'+CSS.escape(code)+'"]').forEach(b=>paintEdit(b,code)); }
     function showWhy(line,code,w){ const old=line.querySelector('.ra2-why'); if(old) old.remove();
       line.insertAdjacentHTML('beforeend','<div class="ra2-why'+(w.gray?' gray':'')+'" role="status">'+IC.warn+'<span>'+esc(w.t)+'</span></div>');
       const b=line.querySelector('[data-ra2-why]'); if(b) b.setAttribute('aria-expanded','true'); }
@@ -7223,7 +7295,7 @@
         const code=normCode(el.textContent), line=el.parentNode;
         if(S.q.length>=3&&matchCode(code,S.q)) el.classList.add('ra2-match');
         if(el.classList.contains('notarrived')){
-          const b=document.createElement('button'); b.type='button'; b.className='ra2-pidbtn'; b.dataset.ra2Why=code; b.title='ดูสถานะตอนนี้'; b.setAttribute('aria-expanded','false');
+          const b=document.createElement('button'); b.type='button'; b.className='ra2-pidbtn'; b.dataset.ra2Why=code; b.dataset.ra2Ea=code; b.title='ดูสถานะตอนนี้'; b.setAttribute('aria-expanded','false');   // [2026-10-26-2] ra2Ea = ที่วางปุ่มแก้ไข
           el.replaceWith(b); b.appendChild(el);
         }else if(el.nextElementSibling&&el.nextElementSibling.classList.contains('hist-pid-icon')){
           el.nextElementSibling.insertAdjacentHTML('afterend','<button type="button" class="ra2-chip" data-ra2-chip="'+esc(code)+'"></button>');
@@ -7471,7 +7543,7 @@
     const delivTxt=()=>{ const f=S.form; return f&&isDel(f.branch)&&String(f.addr||'').trim()?' · จัดส่ง '+f.branch+' – '+cleanTxt(String(f.addr).trim()):''; };
     // [2026-10-22-2 ตามที่ขอ "ต้องมีเพิ่มรูปภาพด้วย และให้มี preview รูป"] รูปเก็บในเครื่องจนกดบันทึก → หลังบันทึกสำเร็จแนบเข้า Salesforce Product ชื่อ "นำกลับมาแก้_P#<n>_ครั้งที่<r>_รูป<i>.jpg"
     // (ไม่ใส่ในคอลัมน์ใบสรุปของ Lark — คอลัมน์นั้นโปรแกรมปริ้นใช้พิมพ์ · ชื่อไฟล์ไม่ขึ้นต้น "ใบสรุป_" จึงไม่ถูก /attach-product-file ลบทิ้ง)
-    const PH_MAX=5;
+    const PH_MAX=6;   // [2026-10-27-2 ตามที่ขอ "6 รูปไม่ได้หรอ"] 5 → 6 (เท่าฟอร์มบิลปกติ) · Worker รับลำดับรูป 1–10 อยู่แล้ว
     function phInner(f){
       const ph=(f&&f.photos)||[];
       return ph.map((p,i)=>'<div class="ra2-th"><img src="'+p.url+'" alt="รูปที่ '+(i+1)+'" data-ra2-pv="'+i+'"><button type="button" class="x" data-ra2-phdel="'+i+'" aria-label="ลบรูปที่ '+(i+1)+'">×</button></div>').join('')
@@ -7577,24 +7649,62 @@
       S.form.inspector=canonInsp(S.form.inspDefault); S.err=''; S.listTop=histList.scrollTop;
       setView('form'); view.innerHTML=formHtml(); wireForm(); loadLatest(code); loadInspectors().then(onInspReady,onInspReady);
     }
+    // [2026-10-26-2] เปิดรายการที่บันทึกแล้วมาแก้: ดึงบรรทัดจริงจาก Lark ผ่าน GET /print-station/ra-search?q=<P#> (มีอยู่แล้วใน Worker sh6+) แล้วใช้ฟอร์มเดิมในโหมดแก้ไข
+    //   รายละเอียดเดิมทั้งก้อน (จุดที่แก้ + หมายเหตุ) อยู่ในช่องหมายเหตุให้แก้ตรงๆ · ป้ายงานด่วน/ผู้อนุมัติ และ " · จัดส่ง …" แยกกลับเป็นช่องของมัน · เลขบิลใหม่คงเดิม · ไม่มีช่องรูป
+    const RA_URG_RE=/^!! งานด่วน !!(?: \(อนุมัติ: ([^)]*)\))?\s*/, RA_DEL_RE=/ · จัดส่ง (Messenger|ขนส่งเอกชน) – (.*)$/;
+    async function openEdit(code,round,oid,btn){
+      if(S.sending) return;
+      const lbl=btn?btn.innerHTML:''; if(btn){ btn.disabled=true; btn.innerHTML='<span class="ra2-spin"></span>กำลังโหลด…'; }
+      let ent=null, err='';
+      try{
+        const j=await getJSON(WORKER+'/print-station/ra-search?q='+encodeURIComponent(digitsOf(code)),null,20000);
+        if(!j||j.success!==true) throw new Error((j&&j.error)||'ค้นรายการไม่สำเร็จ');
+        const mine=(j.entries||[]).filter(x=>x&&String(x.digits)===digitsOf(code));
+        ent=mine.filter(x=>+x.round===round).pop()||mine.sort((a,b)=>(+a.round)-(+b.round)).pop()||null;
+        if(!ent) throw new Error('ไม่พบรายการที่บันทึกไว้ของ '+code);
+      }catch(e2){ err=(e2&&e2.message)||String(e2); }
+      if(btn){ btn.disabled=false; btn.innerHTML=lbl; }
+      if(!ent){ const line=btn&&btn.closest('.hist-skuline'); if(line) toggleWhy(btn,code,{t:'เปิดรายการมาแก้ไม่ได้ — '+err,gray:true}); return; }
+      const p=(PROD[code]&&PROD[code].p)||{}, o=(oid&&findOrder(oid))||null, d=o?((o.skuDetails||[])[codesOf(o).indexOf(code)]||{}):{};
+      const c=(o&&o.customer)||{}, nm=[ent.firstname||c.firstname,ent.lastname||c.lastname].filter(Boolean).join(' ');
+      let body=String(ent.detail||'').trim(), urgent=false, approver='', branch='', addr='';
+      const um=RA_URG_RE.exec(body); if(um){ urgent=true; approver=(um[1]||'').trim(); body=body.slice(um[0].length); }
+      const dm=RA_DEL_RE.exec(body); if(dm){ branch=dm[1]; addr=dm[2].trim(); body=body.slice(0,dm.index); }
+      const br=branchOptions(); if(!branch){ const pk=String(ent.pickupBranch||'').split(' – ')[0].trim(); if(br.includes(pk)) branch=pk; }
+      S.form={code,o,p,n:+ent.round,larkId:String(ent.recordId||''),type:p.type||d.type||'',sku:p.sku||d.sku||'',size:p.size||d.size||'',custName:nm||p.custName||'',custShow:(nm||p.custName||'—')+(ent.nickname||c.nickname?' ('+(ent.nickname||c.nickname)+')':''),
+        nick:ent.nickname||c.nickname||'',phone:ent.phone||c.phone||p.custPhone||'',billNo:String(ent.bill||(o&&o.orderNo)||p.billNo||''),orderCode:ent.orderCode||p.orderCode||oCodeOf(o)||'',branch,date:String(ent.pickupDate||''),inspDefault:'',inspector:String(ent.inspector||''),
+        urgent,approver,urgentManual:true,addr,photos:[],phBusy:0,phMsg:'',
+        edit:{recordId:String(ent.recordId||''),round:+ent.round,billNoNew:String(ent.billNoNew||''),sent:!!ent.sent,origDate:String(ent.pickupDate||''),origInspector:String(ent.inspector||''),origDetail:String(ent.detail||'').trim(),body}};
+      S.err=''; S.listTop=histList.scrollTop;
+      setView('form'); view.innerHTML=formHtml(); wireForm();
+      const t=view.querySelector('[data-ra2-note]'); if(t){ t.value=body; resizeNoteInput(t); }
+      syncStitch(); setUrgent(urgent); paintApprover(); loadLatest(code); loadInspectors().then(onInspReady,onInspReady); changed();
+    }
+    // ติ๊ก "เย็บย้ำกระดุม" ของฟอร์มนำกลับมาแก้ — ประเภทเดียวกับฟอร์มหลัก (สูท กางเกง เชิ้ต กั๊ก) · เติม/ลบคำในหมายเหตุ
+    const RA_STITCH='เย็บย้ำกระดุม', raStitchOk=t=>/^(เสื้อสูท|กางเกง|เสื้อเชิ้ต|เสื้อกั๊ก)/.test(String(t||''));
+    function syncStitch(){ const cb=view.querySelector('[data-ra2-stitch]'), t=view.querySelector('[data-ra2-note]'); if(cb&&t) cb.checked=t.value.split(/\s+/).includes(RA_STITCH); }
+    function setStitch(on){ const t=view.querySelector('[data-ra2-note]'); if(!t) return;
+      let w=t.value.split(/\s+/).filter(Boolean).filter(x=>x!==RA_STITCH); if(on) w.push(RA_STITCH); t.value=w.join(' '); resizeNoteInput(t); changed(); }
     function formHtml(){
-      const f=S.form, cfg=typeCfg(f.type), hasM=cfg.items.length>0, br=branchOptions();
+      const f=S.form, cfg=typeCfg(f.type), hasM=cfg.items.length>0&&!f.edit, br=branchOptions(), ed=f.edit;
       return '<button type="button" class="ra2-back" data-ra2="back">'+IC.chevL+'รายการที่นัดรับ</button>'
         + '<div class="ra2-sum"><div class="m"><div class="p">'+esc(f.code)+'<span class="ok" role="img" aria-label="ถึงสาขาแล้ว">'+HIST_STORE_ICON_SVG+'</span></div>'
           + '<div class="s">'+esc(typeShort(f.type))+' · <span class="nw">'+esc(skuText(f))+'</span>'+(f.billNo?' · บิล <span class="nw">'+esc(f.billNo)+'</span>':'')+'</div>'
-          + '<div class="c">'+esc(f.custShow)+'</div></div><span class="rd">ครั้งที่ '+f.n+'</span></div>'
+          + '<div class="c">'+esc(f.custShow)+'</div></div><span class="rd">'+(ed?'แก้ไข ':'')+'ครั้งที่ '+f.n+'</span></div>'
+        + (ed?'<div class="ra2-editnote" role="note">แก้ไขรายการที่บันทึกแล้ว (บิลใหม่ <b>'+esc(ed.billNoNew||'-')+'</b>) — แก้ใน Lark เท่านั้น ไม่ส่งเข้า Salesforce'+(ed.sent?' · รายการนี้ส่งเข้า Salesforce แล้ว ข้อมูลใน Salesforce จะยังเป็นแบบเดิม':'')+'</div>':'')
         + '<div class="ra2-body" data-ra2-body>'
           + '<div class="ra2-sec"><div class="seclabel"><span class="n serif">01</span><span class="t">รายละเอียด</span>'
             + (hasM?'<div class="toptoggle"><button type="button" class="on">แก้ไขขนาด</button><button type="button">ไม่แก้ไข</button></div>':'')+'</div>'
             + (hasM?'<div class="measure-list ra2-measure">'+cfg.items.map(buildMitemHtml).join('')+'</div><div class="ra2-off">ไม่แก้ขนาด — กด “แก้ไขขนาด” เพื่อเลือกจุด</div>'
-                   :'<div class="ra2-off">สินค้าประเภทนี้ไม่มีจุดวัด — เขียนรายละเอียดในหมายเหตุ</div>')
-            + '<div class="ra2-frow note"><span class="k">หมายเหตุ'+(hasM?'':' <span class="req">*</span>')+'</span><div class="ra2-nwrap"><textarea class="note-input" data-ra2-note rows="2" maxlength="'+LIMIT+'" placeholder="เพิ่มหมายเหตุ" aria-label="หมายเหตุ"></textarea><span class="ra2-cnt" data-ra2-cnt></span></div></div>'
-            + '<div class="ra2-frow ph"><span class="k">รูปภาพ <span class="opt">(ถ้ามี · สูงสุด '+PH_MAX+' รูป)</span></span><div class="ra2-ph" data-ra2-ph>'+phInner(f)+'</div></div>'
+                   :'<div class="ra2-off">'+(ed?'แก้ข้อความด้านล่างได้ตรงๆ (จุดที่แก้ + หมายเหตุ อยู่ในช่องเดียวกัน)':'สินค้าประเภทนี้ไม่มีจุดวัด — เขียนรายละเอียดในหมายเหตุ')+'</div>')
+            + '<div class="ra2-frow note"><span class="k">'+(ed?'รายละเอียด':'หมายเหตุ')+(hasM?'':' <span class="req">*</span>')+'</span><div class="ra2-nwrap"><textarea class="note-input" data-ra2-note rows="2" maxlength="'+LIMIT+'" placeholder="เพิ่มหมายเหตุ" aria-label="หมายเหตุ"></textarea><span class="ra2-cnt" data-ra2-cnt></span></div></div>'
+            + '<div class="ra2-frow tick" data-ra2-stitchrow'+(raStitchOk(f.type)?'':' hidden')+'><label class="stitchlbl rchk"><input type="checkbox" data-ra2-stitch><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">เย็บย้ำกระดุม</span></label></div>'
+            + (ed?'':'<div class="ra2-frow ph"><span class="k">รูปภาพ <span class="opt">(ถ้ามี · สูงสุด '+PH_MAX+' รูป)</span></span><div class="ra2-ph" data-ra2-ph>'+phInner(f)+'</div></div>')
             + '<div class="ra2-hint" data-ra2-over role="alert" hidden></div>'
-            + '<div class="ra2-hint mut">ระบบจะเติม “บิลใหม่ …” ไว้ต้นรายละเอียดให้ (นับรวมในเลข '+LIMIT+' ตัวแล้ว) · เลขบิลใหม่ออกในนามสาขา '+esc(workBranch()||'—')+'</div>'
+            + '<div class="ra2-hint mut">'+(ed?'เลขบิลใหม่คงเดิม ('+esc(ed.billNoNew||'-')+') · ความยาวนับรวมเลขบิลใหม่แล้ว ('+LIMIT+' ตัว)':'ระบบจะเติม “บิลใหม่ …” ไว้ต้นรายละเอียดให้ (นับรวมในเลข '+LIMIT+' ตัวแล้ว) · เลขบิลใหม่ออกในนามสาขา '+esc(workBranch()||'—'))+'</div>'
           + '</div>'
           + '<div class="ra2-sec"><div class="seclabel"><span class="n serif">02</span><span class="t">นัดรับ</span></div>'
-            + '<div class="ra2-frow"><span class="k">สาขาที่นัดรับ <span class="req">*</span></span><select class="ra2-sel" data-ra2-branch aria-label="สาขาที่นัดรับ"><option value="">เลือก…</option>'+[...br,...RA_DELIV].map(b=>'<option'+(b===f.branch?' selected':'')+'>'+esc(b)+'</option>').join('')+'</select></div>'
+            + '<div class="ra2-frow"><span class="k">สาขาที่นัดรับ'+(ed?'':' <span class="req">*</span>')+'</span><select class="ra2-sel" data-ra2-branch aria-label="สาขาที่นัดรับ"><option value="">เลือก…</option>'+[...br,...RA_DELIV].map(b=>'<option'+(b===f.branch?' selected':'')+'>'+esc(b)+'</option>').join('')+'</select></div>'
             + '<div class="ra2-frow note" data-ra2-addrrow'+(isDel(f.branch)?'':' hidden')+'><span class="k">สถานที่ส่ง <span class="req">*</span></span><div class="ra2-nwrap"><textarea class="note-input" data-ra2-addr rows="2" placeholder="ชื่อผู้รับ ที่อยู่ เบอร์โทร" aria-label="สถานที่ส่ง" style="padding-right:0">'+esc(f.addr||'')+'</textarea></div></div>'
             + '<div class="ra2-frow"><span class="k">วันที่นัดรับ <span class="req">*</span></span><button type="button" class="ra2-date" data-ra2="date" aria-expanded="false"><span data-ra2-dth></span>'+IC.down+'</button></div>'
             + '<div class="ra2-cal" data-ra2-cal hidden></div>'
@@ -7610,7 +7720,7 @@
         + '<div class="ra2-err" data-ra2-err role="alert" hidden></div>'
         + '<div class="ra2-foot"><button type="button" class="ra2-nb" data-ra2="back" aria-label="ย้อนกลับไปรายการที่นัดรับ" title="ย้อนกลับ">'+IC.left+'</button>'
           + '<div class="ra2-fsum">'+esc(typeShort(f.type))+' · <span class="p">'+esc(f.code)+'</span></div>'
-          + '<button type="button" class="ra2-save" data-ra2="save" disabled>บันทึกข้อมูล</button></div>';
+          + '<button type="button" class="ra2-save" data-ra2="save" disabled>'+(ed?'บันทึกการแก้ไข':'บันทึกข้อมูล')+'</button></div>';
     }
     function wireForm(){
       const list=view.querySelector('.ra2-measure');
@@ -7691,9 +7801,15 @@
     function closeApprover(){ const pk=view.querySelector('[data-ra2-appr]'); if(!pk) return; pk.classList.remove('open'); const b=pk.querySelector('[data-ra2="apprbtn"]'); if(b) b.setAttribute('aria-expanded','false'); }
     const staffList=()=>INSP.list||[];   // รายชื่อผู้ตรวจจาก Salesforce เท่านั้น (ไม่ใช้ STAFF_LIST ของฟอร์มหลัก)
     function inspOk(name){ name=String(name||'').trim(); if(!name) return false; return staffList().includes(name)&&!INSP.amb.has(name); }   // ต้องตรงตัวกับชื่อในรายชื่อ · ยังไม่มีรายชื่อ = ไม่ผ่าน
+    // [2026-10-26-2] โหมดแก้ไข: ไม่ต้องเลือกสาขา (ไม่ได้เก็บในบรรทัด) · วันเดิมที่ผ่านไปแล้วใช้ต่อได้ · ผู้ตรวจเดิมใช้ต่อได้แม้ไม่อยู่ในรายชื่อ · ต้องมีอะไรเปลี่ยน
+    const editInspOk=f=>inspOk(f.inspector)||(!!f.edit&&String(f.inspector).trim()===f.edit.origInspector);
+    const editDateOk=f=>!!f.date&&(f.date>=isoPlus(0)||(!!f.edit&&f.date===f.edit.origDate));
+    const editDirty=f=>{ const e=f.edit; if(!e) return true; const nz=x=>String(x==null?'':x).replace(/\s+/g,' ').trim(); return nz(composeDetail([]))!==nz(e.origDetail)||String(f.inspector).trim()!==e.origInspector||f.date!==e.origDate; };
     function formValid(){ const f=S.form; if(!f) return false; const b=composeBody();
+      if(f.edit) return b.length>0&&detailLen()<=LIMIT&&(!isDel(f.branch)||!!String(f.addr||'').trim())&&editDateOk(f)&&editInspOk(f)&&(!f.urgent||!!f.approver)&&!hardOn(f)&&editDirty(f);
       return b.length>0&&detailLen()<=LIMIT&&!!f.branch&&(!isDel(f.branch)||!!String(f.addr||'').trim())&&!!f.date&&f.date>=isoPlus(0)&&inspOk(f.inspector)&&(!f.urgent||!!f.approver)&&!(f.p&&f.p.blocked)&&workBranchOk()&&!hardOn(f); }
     function missingText(){ const f=S.form; if(!f) return ''; const b=composeBody(), m=[];
+      if(f.edit){ if(!b) m.push('รายละเอียด'); if(b&&detailLen()>LIMIT) m.push('ข้อความยาวเกิน '+LIMIT+' ตัว'); if(isDel(f.branch)&&!String(f.addr||'').trim()) m.push('สถานที่ส่ง'); if(!editDateOk(f)) m.push('วันที่นัดรับ'); if(f.urgent&&!f.approver) m.push('ชื่อผู้อนุมัติงานด่วน'); if(!editInspOk(f)) m.push('ชื่อผู้ตรวจที่อยู่ในรายชื่อ'); if(hardOn(f)) m.push(f.hard.message); if(b&&!editDirty(f)) m.push('ยังไม่ได้แก้อะไร'); return m.join(' · '); }
       if(!b) m.push(typeCfg(f.type).items.length?'จุดที่แก้หรือหมายเหตุ':'หมายเหตุ'); if(b&&detailLen()>LIMIT) m.push('ข้อความยาวเกิน '+LIMIT+' ตัว'+(f.urgent?' (รวมป้ายงานด่วน)':''));
       if(!f.branch) m.push('สาขาที่นัดรับ'); else if(isDel(f.branch)&&!String(f.addr||'').trim()) m.push('สถานที่ส่ง'); if(!f.date) m.push('วันที่นัดรับ'); if(f.urgent&&!f.approver) m.push('ชื่อผู้อนุมัติงานด่วน');
       if(!inspOk(f.inspector)) m.push(!INSP.list?'รายชื่อผู้ตรวจ (ยังโหลดไม่สำเร็จ)':(f.inspector&&INSP.amb.has(String(f.inspector).trim())?'ชื่อผู้ตรวจอื่น (ชื่อนี้ซ้ำใน Salesforce)':(f.inspector?'ชื่อผู้ตรวจที่อยู่ในรายชื่อ':'ชื่อผู้ตรวจ'))); if(f.p&&f.p.blocked) m.push(f.p.blocked.message); if(!workBranchOk()) m.push('สาขาที่ทำรายการ (ช่อง “สาขา” ด้านบนของหน้าหลัก)'); if(hardOn(f)) m.push(f.hard.message); return m.join(' · '); }
@@ -7714,7 +7830,7 @@
         if(ist._k!==k){ ist._k=k; ist.hidden=!k; ist.className='ra2-hint'+(k==='load'?' mut':'');
           ist.innerHTML=!k?'':(k==='load'?'กำลังโหลดรายชื่อผู้ตรวจจาก Salesforce…':(k==='empty'?'ไม่มีรายชื่อผู้ตรวจในระบบ — บันทึกไม่ได้ (แจ้งผู้ดูแลระบบ)':(k.indexOf('amb:')===0?'ชื่อผู้ตรวจ “'+esc(k.slice(4))+'” ซ้ำกันหลายรายการใน Salesforce — ระบบไม่เลือกให้เอง · เลือกชื่ออื่น หรือแจ้งผู้ดูแลระบบให้แก้ข้อมูลใน Salesforce':'โหลดรายชื่อผู้ตรวจไม่สำเร็จ ('+esc(INSP.fail)+') · <button type="button" class="rt" data-ra2="inspretry">ลองใหม่</button>'))); } }
       const b=view.querySelector('[data-ra2="save"]'); if(!b) return;
-      const ok=formValid(), label=S.sending?'<span class="ra2-spin"></span>'+(S.checking?'กำลังตรวจสอบ…':'กำลังบันทึก…'):(S.err&&S.errRetry?'ลองบันทึกอีกครั้ง':'บันทึกข้อมูล');
+      const ok=formValid(), label=S.sending?'<span class="ra2-spin"></span>'+(S.checking?'กำลังตรวจสอบ…':'กำลังบันทึก…'):(S.err&&S.errRetry?'ลองบันทึกอีกครั้ง':(f.edit?'บันทึกการแก้ไข':'บันทึกข้อมูล'));
       b.disabled=S.sending||!ok; if(b._l!==label){ b.innerHTML=label; b._l=label; }
       if(ok||S.sending) b.removeAttribute('title'); else b.title='ยังขาด: '+missingText();
     }
@@ -7801,8 +7917,39 @@
       }
       return {saved:false,known:false,err:lastErr};
     }
+    // [2026-10-26-2] บันทึกการแก้ไข → POST /repeat-alteration-edit (Lark เท่านั้น) → วาดใบใหม่ + อัปโหลดทับชื่อเดิม (PNG · /repeat-alteration-receipt) · ไม่แนบเข้า Salesforce
+    async function submitEdit(){
+      const f=S.form; if(!f||S.sending||!f.edit) return;
+      if(!formValid()){ showErr('ยังขาด: '+missingText()); return; }
+      const detail=composeDetail([]), staffEl=document.getElementById('staffInput');
+      const payload={larkRecordId:f.edit.recordId, productCode:f.code, round:f.edit.round, inspectorName:String(f.inspector).trim(), pickupDate:f.date, detail, urgent:!!f.urgent, editorName:(staffEl&&staffEl.value.trim())||String(f.inspector).trim()};
+      if(f.urgent&&f.approver) payload.approver=f.approver;
+      S.sending=true; S.err=''; S.errRetry=false; f.hard=null; showErr(''); changed();
+      let j=null, fail=null;
+      try{
+        j=await getJSON(WORKER+'/repeat-alteration-edit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)},30000);
+        if(!j||j.success!==true){ fail=new Error((j&&j.error)||'ระบบไม่ยืนยันการแก้ไข'); fail.code=(j&&j.code)?String(j.code):''; }
+      }catch(e){ fail=e||new Error('บันทึกการแก้ไขไม่สำเร็จ'); }
+      S.sending=false;
+      if(fail){
+        const code=fail.code?String(fail.code):'', msg=fail.message||String(fail);
+        if(HARD_FIELD.test(code)){ f.hard={code,message:msg,cause:hardCause(code,f)}; S.err=msg; S.errRetry=false; }
+        else if(isAuthCode(code)){ S.err='บัตรผ่านเข้าสู่ระบบหมดอายุ — ยังไม่ได้บันทึกการแก้ไข · เข้าสู่ระบบใหม่แล้วแก้อีกครั้ง'; S.errRetry=true; }
+        else{ S.err='บันทึกการแก้ไขไม่สำเร็จ — '+msg+(fail.net?' · ตรวจอินเทอร์เน็ตแล้วลองอีกครั้ง (ถ้าบันทึกไปแล้ว ระบบจะบอกว่าไม่มีอะไรเปลี่ยน)':' · ข้อมูลในฟอร์มยังอยู่ ลองอีกครั้งได้'); S.errRetry=true; }
+        if(S.form===f){ showErr(S.err,code); changed(); }
+        return;
+      }
+      if(PROD[f.code]) PROD[f.code].savedRound=f.edit.round;
+      S.form=null;
+      const stored=typeof j.detail==='string'?j.detail:detail, sb=stored.replace(RA_URG_RE,'').replace(RA_DEL_RE,'');
+      const d=S.done={f,rows:[],note:sb,detail:stored,img:'',err:'',billNoNew:String(j.billNoNew||f.edit.billNoNew||''),larkId:f.edit.recordId,round:f.edit.round,busy:true,run:false,upOk:false,upErr:'',small:null,
+        notes:j.changed===false?['ไม่มีอะไรเปลี่ยน — ข้อมูลใน Lark เป็นแบบนี้อยู่แล้ว']:[],sfOk:false,sfRun:false,sfErr:'',noSf:true,authLost:false,leaveOk:false,edit:{changes:Array.isArray(j.changes)?j.changes:[],sent:!!j.sent}};
+      view.innerHTML=doneHtml(); setView('done');
+      buildReceipt(d);
+    }
     async function submit(opt){
       const f=S.form; if(!f||S.sending) return;   // กันกดซ้ำ
+      if(f.edit) return submitEdit();
       const recheck=!!(opt&&opt.recheck);   // [P9] ปุ่ม "ตรวจสอบอีกครั้ง" = ไม่ส่งบันทึกใหม่ · ถามสถานะสดของ P# นี้อย่างเดียว (พบบรรทัดค้างของ P# นี้ = ถือว่าบันทึกแล้ว)
       if(!recheck&&!formValid()){ showErr('ยังขาด: '+missingText()); return; }
       const rows=readChanges(), detail=composeDetail(rows), note=noteVal().trim();
@@ -7865,6 +8012,7 @@
       }
       // สำเร็จ: ใช้รอบ/เลขบิลใหม่ตามที่ Worker ออกให้จริง · สินค้านี้มีงานค้างแล้ว → ป้ายเป็น "รอหลังบ้านส่ง" จนกว่าจะโหลดใหม่ (Worker ปฏิเสธซ้ำอยู่แล้ว)
       const rn=(Number.isInteger(+j.round)&&+j.round>0)?+j.round:f.n; f.n=rn;
+      if(PROD[f.code]) PROD[f.code].savedRound=rn;   // [2026-10-26-2] ปุ่ม "แก้ไขครั้งที่ N" ขึ้นทันทีหลังบันทึก
       const pp=PROD[f.code]&&PROD[f.code].p;
       if(pp) pp.blocked={code:'pending_exists',message:(rn===2&&wfeat('ra2Auto'))?'บันทึกงานแก้ครั้งที่ 2 แล้ว — ระบบกำลังส่งเข้า Salesforce ให้อัตโนมัติ':'บันทึกงานแก้ครั้งที่ '+rn+' แล้ว — รอหลังบ้านลงชื่อและส่งข้อมูลไป Salesforce'};   // [2026-10-23-2] ครั้งที่ 2 ส่งเอง
       paintChips(f.code);
@@ -7906,7 +8054,17 @@
       const tr=rows.map(r=>'<tr><td>'+esc(r.dir?r.label:r.rl)+'</td><td class="o">'+esc(r.prev||'—')+'</td><td class="a">→</td><td class="n">'+esc(r.now)+'</td></tr>').join('')
         + (note?'<tr><td>หมายเหตุ</td><td class="o">—</td><td class="a">→</td><td class="nt">'+esc(note)+'</td></tr>':'');
       return '<div class="ra2-cmp" data-ra2-cmp><div class="hd">สิ่งที่แก้ในครั้งนี้</div><table><tr><th>จุดที่แก้</th><th>ข้อมูลเก่า (ครั้งที่ 1)</th><th></th><th>ข้อมูลใหม่ (ครั้งที่ '+esc(String(f.n))+')</th></tr>'+tr+'</table></div>'; }
+    function editCmpHtml(d){ const ch=(d.edit&&d.edit.changes)||[]; if(!ch.length) return '';
+      return '<div class="ra2-cmp" data-ra2-cmp><div class="hd">สิ่งที่แก้ไข</div><div class="raw">'+ch.map(c=>{ const i=c.indexOf(': '); return '<span class="lb">'+esc(i>0?c.slice(0,i):'')+'</span>'+esc(i>0?c.slice(i+2):c); }).join('')+'</div></div>'; }
     function doneHtml(){ const d=S.done, f=d.f;
+      if(d.edit) return '<button type="button" class="ra2-back" data-ra2="fin" aria-disabled="'+(d.busy?'true':'false')+'">'+IC.chevL+'รายการที่นัดรับ</button>'
+        + '<div class="ra2-ok"><span class="ic">'+IC.tick+'</span><div><div class="t">แก้ไขรายการนำกลับมาแก้ ครั้งที่ '+f.n+' แล้ว</div><div class="s">'+esc(f.code)+' · บิลใหม่ '+esc(d.billNoNew||'-')+' · '+esc(f.custShow)+'</div></div></div>'
+        + '<div class="ra2-up note" role="status">'+IC.warn+'<span class="sp">แก้ใน Lark เท่านั้น — ไม่ได้ส่งเข้า Salesforce'+(d.edit.sent?' (รายการนี้ส่งเข้า Salesforce ไปแล้ว ข้อมูลใน Salesforce ยังเป็นแบบเดิม)':' · ถ้ายังไม่ได้ส่ง ตอนส่งเข้า Salesforce จะใช้ข้อความที่แก้นี้')+'</span></div>'
+        + editCmpHtml(d)
+        + (d.notes||[]).map(x=>'<div class="ra2-up note" data-ra2-note role="status">'+IC.warn+'<span class="sp">'+esc(x)+'</span></div>').join('')
+        + '<div class="ra2-img" data-ra2-img>'+imgInner(d)+'</div>'
+        + '<div class="ra2-up" data-ra2-up role="status" aria-live="polite" hidden></div>'
+        + '<div class="ra2-foot end"><a class="ra2-dl" data-ra2-dl aria-disabled="true" download="'+esc(fileName(f))+'">'+IC.dl+'บันทึกรูป</a><button type="button" class="ra2-fin" data-ra2="fin"'+(d.busy?' disabled':'')+'>เสร็จสิ้น</button></div>';
       return '<button type="button" class="ra2-back" data-ra2="fin" aria-disabled="'+(d.busy?'true':'false')+'">'+IC.chevL+'รายการที่นัดรับ</button>'
         + '<div class="ra2-ok"><span class="ic">'+IC.tick+'</span><div><div class="t">บันทึกนำกลับมาแก้ ครั้งที่ '+f.n+' แล้ว</div><div class="s">'+esc(f.code)+' · '+esc(typeShort(f.type))+' · '+esc(f.custShow)+'</div></div></div>'
         // [2026-10-23-2 เจ้าของระบบสั่ง] ครั้งที่ 2: ไม่ต้องรอหลังบ้านลงชื่อ — Worker ส่งเข้า Salesforce เอง แล้วใบสรุปปริ้นที่หน้าปริ้น
@@ -7924,7 +8082,8 @@
       const f=d.f, o=f.o, lt=LATEST[f.code]||{}, bill=d.billNoNew||f.billNo||'-';
       d.img=''; d.err=''; d.busy=true;
       try{
-        const order={billNo:bill, sentDate:isoPlus(0), custName:f.custName||'-', phone:f.phone, nickname:f.nick, staff:f.inspector, payStatus:'', urgent:!!f.urgent,
+        const bd=/(\d{2})(\d{2})(\d{2})\d{2,3}$/.exec(String(d.edit?bill:'')), sentDate=bd?('20'+bd[1]+'-'+bd[2]+'-'+bd[3]):isoPlus(0);   // [2026-10-26-2] แก้ไข = วันตามเลขบิลใหม่เดิม
+        const order={billNo:bill, sentDate, custName:f.custName||'-', phone:f.phone, nickname:f.nick, staff:f.inspector, payStatus:'', urgent:!!f.urgent,
           pickupLabel:f.branch, deliveryPlace:isDel(f.branch)?String(f.addr||'').trim():'', pickupDate:f.date, branch:(o&&o.branch)||''};
         const item={type:f.type||'สินค้า', sku:f.sku, size:f.size, measureRows:d.rows.map(r=>({label:r.rl,value:r.rv})), orderCode:f.orderCode, productCode:f.code,
           branch:lt.stockBranch||(o&&o.branch)||'', note:d.note, itemIndex:1, itemTotal:1};
@@ -8096,6 +8255,8 @@
     histList.addEventListener('click',async e=>{
       const w=e.target.closest('[data-ra2-why]');
       if(w&&histList.contains(w)){ const code=w.dataset.ra2Why, st=_pickupStatusMap[code]; toggleWhy(w,code,{t:st?'ยังไม่ถึงสาขา · ตอนนี้: '+st:'ยังไม่ถึงสาขา'}); return; }
+      const ed=e.target.closest('[data-ra2-edit]');
+      if(ed&&histList.contains(ed)){ if(ed.disabled) return; const row=ed.closest('.hist-row'); openEdit(ed.dataset.ra2Edit,+ed.dataset.round||0,(row&&row.dataset.id)||'',ed); return; }
       const c=e.target.closest('[data-ra2-chip]'); if(!c||!histList.contains(c)||c.disabled) return;
       const code=c.dataset.ra2Chip, row=c.closest('.hist-row'), oid=(row&&row.dataset.id)||'';
       if(chipState(code).unk){
@@ -8110,7 +8271,7 @@
     view.addEventListener('input',e=>{
       e.stopPropagation();
       const t=e.target, f=S.form; if(!f||S.view!=='form') return;
-      if(t.matches('[data-ra2-note]')){ if(t.value.indexOf('|')>=0){ const ps=t.selectionStart; t.value=t.value.replace(/\|/g,'/'); try{ t.setSelectionRange(ps,ps); }catch(x){} } resizeNoteInput(t); }
+      if(t.matches('[data-ra2-note]')){ if(t.value.indexOf('|')>=0){ const ps=t.selectionStart; t.value=t.value.replace(/\|/g,'/'); try{ t.setSelectionRange(ps,ps); }catch(x){} } resizeNoteInput(t); syncStitch(); }
       else if(t.matches('[data-ra2-addr]')){ f.addr=t.value; resizeNoteInput(t); }
       else if(t.matches('[data-ra2-insp]')){ f.inspector=t.value; fitInsp(t); showSug(t.value); }
       changed();
@@ -8122,7 +8283,7 @@
       if(del&&S.form&&S.view==='form'){ e.preventDefault(); e.stopPropagation(); S.form.photos.splice(+del.dataset.ra2Phdel,1); S.form.phMsg=''; paintPh(); return; }
       if(pv&&src&&src.photos){ e.preventDefault(); e.stopPropagation(); const i=+pv.dataset.ra2Pv; const p=src.photos[i]; if(p) openLightbox(p.url,'รูปที่ '+(i+1)+' / '+src.photos.length); return; }
     },true);
-    view.addEventListener('change',e=>{ e.stopPropagation(); if(S.form&&e.target.matches('[data-ra2-branch]')){ S.form.branch=e.target.value; const ar=view.querySelector('[data-ra2-addrrow]'); if(ar) ar.hidden=!isDel(S.form.branch); changed(); } });
+    view.addEventListener('change',e=>{ e.stopPropagation(); if(S.form&&S.view==='form'&&e.target.matches('[data-ra2-stitch]')){ setStitch(e.target.checked); return; } if(S.form&&e.target.matches('[data-ra2-branch]')){ S.form.branch=e.target.value; const ar=view.querySelector('[data-ra2-addrrow]'); if(ar) ar.hidden=!isDel(S.form.branch); changed(); } });
     view.addEventListener('focusin',e=>{ if(e.target.matches&&e.target.matches('[data-ra2-insp]')){ e.target.select(); showSug(''); } });
     view.addEventListener('focusout',e=>{ if(e.target.matches&&e.target.matches('[data-ra2-insp]')) setTimeout(()=>{ const a=document.activeElement; if(!a||!a.matches||!a.matches('[data-ra2-insp]')){ snapInsp(); hideSug(); } },150); });
     view.addEventListener('pointerdown',e=>{ if(e.target.closest('[data-ra2-isug]')) e.preventDefault(); });
@@ -9118,6 +9279,7 @@
     });
   }
   // [ใหม่ 2026-09-23 ตามที่ขอ] ติ๊ก "ลูกค้าใช้งานก่อนปรับแก้" เติม/ลบคำนี้ในหมายเหตุอัตโนมัติ — โครงเดียวกับ wireStitchCheckbox เป๊ะ ต่างแค่คำที่เติมกับ class ที่ผูก ใช้ได้ทุกประเภทสินค้า (ไม่มีเงื่อนไขซ่อน/ล้างตามประเภทแบบเย็บย้ำกระดุม)
+  const USED_WORD='ลูกค้านำสินค้ากลับมาแก้/ ใช้งานก่อนปรับแก้', USED_RE=/ลูกค้านำสินค้ากลับมาแก้\/ ใช้งานก่อนปรับแก้|ลูกค้าใช้งานก่อนปรับแก้/g;   // [2026-10-26-2 ตามที่ขอ] ชื่อใหม่ (คำเดิมยังอ่านเป็นติ๊กได้)
   function wireUsedCheckbox(block){
     const cb=block.querySelector('.used-check');
     if(!cb || cb.dataset.wired) return;
@@ -9125,9 +9287,10 @@
     cb.addEventListener('change', ()=>{
       const noteInput=block.querySelector('.note-input');
       if(!noteInput) return;
-      let words=noteInput.value.split(/\s+/).filter(Boolean).filter(w=>w!=='ลูกค้าใช้งานก่อนปรับแก้');
-      if(cb.checked) words.push('ลูกค้าใช้งานก่อนปรับแก้');
-      noteInput.value=words.join(' ');
+      // [2026-10-26-2 ตามที่ขอ] ข้อความใหม่มีเว้นวรรค → ลบ/เติมทั้งวลี (USED_RE จับทั้งข้อความใหม่และคำเดิม "ลูกค้าใช้งานก่อนปรับแก้" ของร่าง/บิลเก่า)
+      let v=noteInput.value.replace(USED_RE,' ').replace(/[ \t]{2,}/g,' ').replace(/^[ \t]+|[ \t]+$/g,'');
+      if(cb.checked) v=(v?v+' ':'')+USED_WORD;
+      noteInput.value=v;
       resizeNoteInput(noteInput);
     });
   }
@@ -9201,6 +9364,7 @@
     });
   }
   // [2026-10-22-3 ตามที่ขอ] ติ๊ก "เปลี่ยนรหัสกระดุม" + ช่องรหัสกระดุม — หมายเหตุมีวลีเดียว "เปลี่ยนรหัสกระดุม (รหัส)" (ไม่มีรหัส = แค่คำ) แก้/ลบด้วย BTNCODE_RE
+  const STITCH_TYPES=['เสื้อสูท (สำเร็จรูป)','กางเกง (สำเร็จรูป)','เสื้อเชิ้ต (สำเร็จรูป)','เสื้อกั๊ก (สำเร็จรูป)'];   // [2026-10-26-2 ตามที่ขอ] ติ๊ก "เย็บย้ำกระดุม" — สูท กางเกง เชิ้ต กั๊ก (ไม่รวม Accessory)
   const BTNCODE_WORD='เปลี่ยนรหัสกระดุม', BTNCODE_RE=/เปลี่ยนรหัสกระดุม(?:\s*\([^)]*\))?/g;
   const BTNCODE_TYPES=['เสื้อสูท (สำเร็จรูป)','กางเกง (สำเร็จรูป)','เสื้อกั๊ก (สำเร็จรูป)'];
   function btnCodePhrase(code){ code=String(code||'').replace(/[()|\r\n]/g,' ').replace(/\s+/g,' ').trim(); return BTNCODE_WORD+(code?' ('+code+')':''); }
@@ -9225,7 +9389,7 @@
   function syncNoteCheckboxes(block){
     const words=(block.querySelector('.note-input')?.value||'').split(/\s+/).filter(Boolean);
     const st=block.querySelector('.stitch-check'); if(st) st.checked=words.includes('เย็บย้ำกระดุม');
-    const us=block.querySelector('.used-check'); if(us) us.checked=words.includes('ลูกค้าใช้งานก่อนปรับแก้');
+    const us=block.querySelector('.used-check'); if(us){ USED_RE.lastIndex=0; us.checked=USED_RE.test(block.querySelector('.note-input')?.value||''); USED_RE.lastIndex=0; }   // [2026-10-26-2] วลีใหม่หรือคำเดิม
     const tm=block.querySelector('.team-check'); if(tm) tm.checked=words.includes('งานทีม');
     const sh=block.querySelector('.shop-check'); if(sh) sh.checked=words.includes(SHOP_TAILOR_WORD);
     if(!isRa2Scope(block)) block.querySelectorAll('.along-check').forEach(cb=>{ cb.checked=words.includes(ALONG_WORD); });
@@ -9240,7 +9404,7 @@
     // [ใหม่ตามที่ขอ] "เย็บย้ำกระดุม" ใช้ได้แค่เสื้อสูท/กางเกง — สลับไปประเภทอื่นแล้วซ่อนแถวนี้ + เอาติ๊กออก + ลบคำออกจากหมายเหตุ กันคำค้างเวลาสลับประเภทไปมา
     const stitchRow=block.querySelector('.stitch-row');
     const stitchCb=block.querySelector('.stitch-check');
-    const stitchSupported = typeValue==='เสื้อสูท (สำเร็จรูป)' || typeValue==='กางเกง (สำเร็จรูป)';
+    const stitchSupported = STITCH_TYPES.includes(typeValue);   // [2026-10-26-2 ตามที่ขอ] เพิ่มเสื้อเชิ้ต + เสื้อกั๊ก (ไม่รวม Accessory)
     if(stitchRow) stitchRow.classList.toggle('hidden', !stitchSupported);
     if(stitchCb && !stitchSupported && stitchCb.checked){
       stitchCb.checked=false;
@@ -10655,7 +10819,8 @@
       if(l.kind==='right'&&/^ส่งแก้ /.test(l.text)) return Object.assign({},l,{text:l.text.replace(/^ส่งแก้/,'นำกลับมาแก้')});
       if(l.kind==='right'&&/ \(ชิ้นที่ 1\)$/.test(l.text)) return Object.assign({},l,{text:l.text.replace(/ \(ชิ้นที่ 1\)$/,'')});
       if(l.kind==='kv'&&l.label==='พนักงานขาย') return Object.assign({},l,{label:'พนักงานตรวจสอบ',value:o.inspector||'-'});
-      return l; }).filter(l=>!(l.kind==='center'&&(!l.text||l.text==='-')));   // ไม่มีสถานะชำระเงิน → ตัดบรรทัดว่าง
+      return l; }).filter(l=>!(l.kind==='center'&&(!l.text||l.text==='-')))   // ไม่มีสถานะชำระเงิน → ตัดบรรทัดว่าง
+      .filter(l=>!(l.kind==='kv'&&l.label==='ใช้สินค้าจาก'));   // [2026-10-26-2 ตามที่ขอ] ใบนำกลับมาแก้ไม่มี "ใช้สินค้าจาก …" (กันสับสน)
   }
   // [2026-10-26-1 ตามที่ขอ "ลดขอบในใบสินค้านำกลับมาแก้"] รายการเป็น base64 (ใบสรุปปกติ เหมือนเดิมทุกอย่าง) หรือ {b64, compact:true} (ใบนำกลับมาแก้)
   //   compact = เต็มความกว้าง 72mm (เดิมกรอบ 227px + padding ≈ 55mm) + ขอบบน 1 ซม. (เดิม 6 ซม.) ผ่าน named page "ra"
