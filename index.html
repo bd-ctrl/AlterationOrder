@@ -972,6 +972,7 @@
   .ra2-frow.tick{border:none;padding:4px 2px 10px}
   .ra2-frow.tick[hidden]{display:none}
   .ra2-editnote{flex:0 0 auto;margin-top:10px;padding:9px 12px;border-radius:10px;font-size:13px;line-height:1.5;background:rgba(163,127,48,.13);color:var(--goldink)}
+  .ra2-editnote.ra2-skuwarn{background:#fbeeea;color:#8f3a22;border:1px solid #efcabd}   /* [2026-10-27-7] เตือน SKU งานเก่า */
   .ra2-cmp .raw .lb{display:block;font-size:12.5px;color:var(--t2);margin-top:6px}
   .ra2-cmp .raw .lb:first-child{margin-top:0}
   /* [2026-10-26-2 ตามที่ขอ "ป๊อปอัปกรอกข้อมูลครั้งที่ 2 บน iPad เล็กเกินไป"] จอ iPad (768–1366) ตอนเปิดฟอร์ม/ผลบันทึกนำกลับมาแก้: ป๊อปอัปกว้าง/สูงขึ้น · ตัวหนังสือและปุ่มใหญ่ขึ้น */
@@ -5393,7 +5394,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-27-6';
+  const APP_VERSION = '2026-10-27-7';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -5673,12 +5674,16 @@
       pickupLabel:d.deliv?d.deliv.method:(String(e.pickupBranch||'').split(' – ')[0]||e.branch||''), deliveryPlace:d.deliv?d.deliv.place:'', pickupDate:e.pickupDate, branch:e.branch||''};
     const item={type:pr.type||'สินค้า', sku:pr.sku||'', size:pr.size||'', measureRows:d.rows, orderCode:e.orderCode||pr.orderCode||'', productCode:'P# '+e.digits,
       branch:lt.stockBranch||e.branch||'', note:d.note, itemIndex:1, itemTotal:1};
+    try{ await Promise.all([loadSkuList(false),loadSkuNames(false)]); }catch(x){}   // [2026-10-27-7] รายการ SKU ต้องมาก่อน (ตรวจ SKU งานเก่า)
     return await renderReceiptCanvasBase64(repeatReceiptLines(order,item,{bill:e.billNoNew||'-',round:e.round,inspector:e.inspector}));
   }
   const praB64=buf=>{ const u=new Uint8Array(buf); let s2=''; for(let i=0;i<u.length;i+=0x8000) s2+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000)); return btoa(s2); };
   async function praImageOf(e){
     const f=await workerFeat();
-    if(f.raReprint&&e.printable&&/\.png$/i.test(e.file||'')){
+    // [2026-10-27-7] สินค้าเก่าที่ SKU ใน Salesforce ไม่มีตัวบอกประเภท → วาดใบใหม่เสมอ (รูปที่เก็บไว้ใน Lark อาจเป็น SKU ขาด เช่น UF949-1-36) · สินค้าปกติใช้รูปจริงเหมือนเดิม
+    try{ if(!e.product) e.product=(await praJson(WORKER+'/repeat-alteration-product?code='+encodeURIComponent('P# '+e.digits))).product; }catch(x){}
+    const oldSku=!!(e.product && e.product.sku && !/-(J|P|V|S|SH|W)(-|$)/i.test(String(e.product.sku)));
+    if(!oldSku&&f.raReprint&&e.printable&&/\.png$/i.test(e.file||'')){
       try{ const r=await fetch(WORKER+'/print-station/image?rec='+encodeURIComponent(e.recordId)+'&name='+encodeURIComponent(e.file)); if(r.ok) return {b64:praB64(await r.arrayBuffer()), real:true}; }catch(x){}
     }
     return {b64:await praRebuild(e), real:false};
@@ -7238,7 +7243,8 @@
     const isoPlus=n=>{ const d=new Date(thaiToday()+'T00:00:00Z'); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); };
     const dayText=iso=>(iso&&toThaiDateWithDay(iso))||'—';
     const typeShort=t=>{ t=String(t||''); if(!t) return 'สินค้า'; const k=shortTypeLabel(t); return k!=='สินค้า'?k:(t.replace(/\s*\(สำเร็จรูป\)\s*/g,'').trim()||'สินค้า'); };
-    const skuText=f=>{ const z=String(f.size||'').trim(); return (f.sku||'—')+(z&&z!=='-'?'-'+z:''); };
+    const skuText=f=>{ const z=String(f.size||'').trim(), fx=raSkuFix(f.sku,f.type,f.size); return (fx.sku||'—')+(z&&z!=='-'?'-'+z:''); };   // [2026-10-27-7] เติม J/P/V ให้ SKU งานเก่า (ตรวจกับรายการ SKU)
+    const skuWarn=f=>raSkuFix(f.sku,f.type,f.size).warn;
     const typeCfg=t=>(typeof MEASURE_CONFIG!=='undefined'&&MEASURE_CONFIG[formatProductType(t)])||{noteLabel:'หมายเหตุ',items:[]};
     const findOrder=id=>(_pickupOrders||[]).find(o=>o.id===id)||(ALL||[]).find(o=>o.id===id)||(_histOrders||[]).find(o=>o.id===id)||null;
     // ปุ่ม "ดึงข้อมูลล่าสุด + พิมพ์ใบสรุปใหม่" บนการ์ดผลค้นหา (บิลนอกช่วงวันที่/สาขาอื่น อยู่ใน ALL ไม่อยู่ใน _histOrders/_pickupOrders) — ให้ findHistOrder ของแอปหาเจอด้วย
@@ -7840,6 +7846,7 @@
         + '<div class="ra2-sum"><div class="m"><div class="p">'+esc(f.code)+'<span class="ok" role="img" aria-label="ถึงสาขาแล้ว">'+HIST_STORE_ICON_SVG+'</span></div>'
           + '<div class="s">'+esc(typeShort(f.type))+' · <span class="nw">'+esc(skuText(f))+'</span>'+(f.billNo?' · บิล <span class="nw">'+esc(f.billNo)+'</span>':'')+'</div>'
           + '<div class="c">'+esc(f.custShow)+'</div></div><span class="rd">'+(ed?'แก้ไข ':'')+'ครั้งที่ '+f.n+'</span></div>'
+        + (skuWarn(f)?'<div class="ra2-editnote ra2-skuwarn" role="alert"><b>'+esc(RA_SKU_WARN)+'</b> — SKU ในระบบเก่าไม่มีตัวบอกประเภท ดูป้ายบนสินค้าจริงก่อนบันทึก</div>':'')
         + (ed?'<div class="ra2-editnote" role="note">กำลังแก้ไขบิลเลขที่ <b>'+esc(ed.billNoNew||'-')+'</b></div>':'')   // [2026-10-27-4 ตามที่ขอ] เหลือข้อความสั้นๆ แค่นี้
         + '<div class="ra2-body" data-ra2-body>'
           + '<div class="ra2-sec"><div class="seclabel"><span class="n serif">01</span><span class="t">รายละเอียด</span>'
@@ -8240,6 +8247,7 @@
           pickupLabel:f.branch, deliveryPlace:isDel(f.branch)?String(f.addr||'').trim():'', pickupDate:f.date, branch:(o&&o.branch)||''};
         const item={type:f.type||'สินค้า', sku:f.sku, size:f.size, measureRows:d.rows.map(r=>({label:r.rl,value:r.rv})), orderCode:f.orderCode, productCode:f.code,
           branch:lt.stockBranch||(o&&o.branch)||'', note:d.note, itemIndex:1, itemTotal:1};
+        try{ await Promise.all([loadSkuList(false),loadSkuNames(false)]); }catch(x){}   // [2026-10-27-7] รายการ SKU ต้องมาก่อน (ตรวจ SKU งานเก่า)
         const lines=repeatReceiptLines(order,item,{bill,round:f.n,inspector:f.inspector});   // [2026-10-23-3] ย้ายไปใช้ร่วมกับหน้าต่างพิมพ์
         d.img=await Promise.race([renderReceiptCanvasBase64(lines), new Promise((_,no)=>setTimeout(()=>no(new Error('วาดรูปนานเกินไป')),25000))]);
       }catch(e){ d.err=(e&&e.message)||String(e); }
@@ -10967,8 +10975,30 @@
   // แก้โดยเปลี่ยนมาใช้รูปภาพชุดเดียวกับโหมด "ดึงเป็นรูป" เป๊ะๆ แทน (แปะเป็น <img> แล้วสั่งพิมพ์) ให้ผลลัพธ์ออกมาเหมือนกันไม่ว่าจะพิมพ์ทางไหน
   // [2026-10-23-3] บรรทัดใบสรุป "สินค้านำกลับมาแก้" = ใบสรุปปกติที่เปลี่ยนหัว/เลขบิล/วันที่/พนักงาน — ใช้ร่วมกันระหว่างหน้าผลบันทึก (wireRepeatAlterationPickup)
   // กับหน้าต่าง "พิมพ์ใบสั่งแก้ปรับทรงสำเร็จรูป" (วาดใหม่จากข้อมูลจริงเพื่อพิมพ์ซ้ำ) ให้ได้ใบหน้าตาเดียวกันเป๊ะ
+  // [2026-10-27-7 ตามที่ขอ "SKU ไม่ครบ"] สินค้าเก่าก่อนมีแอป: Salesforce เก็บ SKU ไม่มีตัวบอกประเภท (เช่น กางเกง "UF949-1" → ใบออก UF949-1-36)
+  //   ไม่มี J/P/V → เติมตามประเภทสินค้า กางเกง=P · เสื้อสูท=J · เสื้อกั๊ก=V ตรงกลางระหว่างรหัสกับไซซ์ (UF949-1-P-36) แล้วต้องเจอในรายการ SKU จริง (StoreHub) ถึงใช้
+  //   ไม่เจอ / ประเภทอื่นที่ไม่มีกฎ (เชิ้ต/Accessory) และรหัสเดิมก็ไม่อยู่ในรายการ → ไม่เดา ใช้ของเดิม + warn (ใบ/หัวฟอร์มขึ้นเตือน) · ไม่แก้ข้อมูลใน Salesforce
+  //   ใช้เฉพาะใบ/หน้าจอสินค้านำกลับมาแก้ · ใบสรุปบิลปกติไม่ผ่านฟังก์ชันนี้
+  const RA_SKU_WARN='⚠ SKU จากระบบเก่า ตรวจสอบก่อนแก้';
+  function raSkuFix(sku, type, size){
+    const s=String(sku||'').trim(), z=String(size||'').trim(), zz=(z&&z!=='-')?z:'';
+    if(!s) return {sku:s, warn:false, fixed:false};
+    if(/-(J|P|V|S|SH|W)(-|$)/i.test(s)) return {sku:s, warn:false, fixed:false};   // มีตัวบอกประเภทแล้ว = ไม่แตะ
+    const pool=()=>{ const set=new Set(); (SKU_LIST||[]).forEach(x=>set.add(String(x).trim().toUpperCase())); (SKU_NAMES_SKUS||[]).forEach(x=>set.add(String(x).trim().toUpperCase())); return set; };
+    const loaded=SKU_LOADED_AT>0 || (SKU_NAMES_SKUS||[]).length>0;
+    const set=loaded?pool():null, has=c=>!!(set&&set.has(String(c).toUpperCase()));
+    const t=String(type||''), L=/กางเกง/.test(t)?'P':(/กั๊ก/.test(t)?'V':(/สูท/.test(t)?'J':''));
+    if(L){
+      const cand=s+'-'+L;
+      if(has(zz?cand+'-'+zz:cand) || (zz && has(cand))) return {sku:cand, warn:false, fixed:true};
+    }
+    if(has(zz?s+'-'+zz:s) || has(s)) return {sku:s, warn:false, fixed:false};   // รหัสเดิมมีอยู่จริงในรายการ (เช่น Accessory) = ใช้ได้
+    return {sku:s, warn:true, fixed:false};
+  }
   function repeatReceiptLines(order, item, o){
-    return buildReceiptLines(order,item).map(l=>{
+    const fx=raSkuFix(item&&item.sku, item&&item.type, item&&item.size);
+    if(item && fx.sku!==item.sku) item=Object.assign({}, item, {sku:fx.sku});
+    const out=buildReceiptLines(order,item).map(l=>{
       if(l.kind==='title'&&l.text==='ใบสั่งแก้ปรับทรงสำเร็จรูป') return Object.assign({},l,{text:'สินค้านำกลับมาแก้'});
       if(l.kind==='right'&&l.big) return Object.assign({},l,{text:o.bill+' · ครั้งที่ '+o.round});
       if(l.kind==='right'&&/^ส่งแก้ /.test(l.text)) return Object.assign({},l,{text:l.text.replace(/^ส่งแก้/,'นำกลับมาแก้')});
@@ -10976,6 +11006,8 @@
       if(l.kind==='kv'&&l.label==='พนักงานขาย') return Object.assign({},l,{label:'พนักงานตรวจสอบ',value:o.inspector||'-'});
       return l; }).filter(l=>!(l.kind==='center'&&(!l.text||l.text==='-')))   // ไม่มีสถานะชำระเงิน → ตัดบรรทัดว่าง
       .filter(l=>!(l.kind==='kv'&&l.label==='ใช้สินค้าจาก'));   // [2026-10-26-2 ตามที่ขอ] ใบนำกลับมาแก้ไม่มี "ใช้สินค้าจาก …" (กันสับสน)
+    if(fx.warn){ const i=out.findIndex(l=>l.kind==='skuCenter'); if(i>=0) out.splice(i+1,0,{kind:'centerBigBoxed', text:'⚠ SKU จากระบบเก่า'},{kind:'center', text:'ตรวจสอบก่อนแก้'}); }
+    return out;
   }
   // [2026-10-26-1 ตามที่ขอ "ลดขอบในใบสินค้านำกลับมาแก้"] รายการเป็น base64 (ใบสรุปปกติ เหมือนเดิมทุกอย่าง) หรือ {b64, compact:true} (ใบนำกลับมาแก้)
   //   compact = เต็มความกว้าง 72mm (เดิมกรอบ 227px + padding ≈ 55mm) + ขอบบน 1 ซม. (เดิม 6 ซม.) ผ่าน named page "ra"
