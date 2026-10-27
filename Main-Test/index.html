@@ -972,7 +972,17 @@
   .ra2-cmp .raw .lb:first-child{margin-top:0}
   /* [2026-10-26-2 ตามที่ขอ "ป๊อปอัปกรอกข้อมูลครั้งที่ 2 บน iPad เล็กเกินไป"] จอ iPad (768–1366) ตอนเปิดฟอร์ม/ผลบันทึกนำกลับมาแก้: ป๊อปอัปกว้าง/สูงขึ้น · ตัวหนังสือและปุ่มใหญ่ขึ้น */
   @media (min-width:768px) and (max-width:1366px){
-    .histcard.ra2-on{width:min(920px,94vw);height:92vh;max-height:92vh}
+    /* [2026-10-27-1 ตามที่ขอ "ใหญ่กว่านี้หน่อย"] 920px → เกือบเต็มจอ (สูงสุด 1200px) · สูง 96vh · แถวค่าวัด/ปุ่มแก้ไข-ไม่แก้ไข/ติ๊ก ใหญ่ขึ้น */
+    .histcard.ra2-on{width:min(1200px,97vw);height:96vh;max-height:96vh}
+    .histcard.ra2-on .ra2-measure .mtop{min-height:64px}
+    .histcard.ra2-on .ra2-measure .k{font-size:19px}
+    .histcard.ra2-on .ra2-measure .mtop{grid-template-columns:minmax(0,1fr) auto}
+    .histcard.ra2-on .ra2-measure .toggle button{font-size:18px;padding:10px 14px;min-height:46px}
+    .histcard.ra2-on .ra2-measure .unit{font-size:15px}
+    .histcard.ra2-on .toptoggle,.histcard.ra2-on .toptoggle *{font-size:16px}
+    .histcard.ra2-on .seclabel{font-size:15px}
+    .histcard.ra2-on .ra2-frow.tick,.histcard.ra2-on .ra2-frow.tick *{font-size:18px}
+    .histcard.ra2-on .ra2-frow.tick .ind{width:30px;height:30px}
     .histcard.ra2-on .ra2-back{font-size:16px}
     .histcard.ra2-on .ra2-sum{padding:16px 18px}
     .histcard.ra2-on .ra2-sum .p{font-size:26px}
@@ -5379,7 +5389,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-26-2';
+  const APP_VERSION = '2026-10-27-1';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
