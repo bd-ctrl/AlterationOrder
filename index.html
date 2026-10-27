@@ -5394,7 +5394,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-27-7';
+  const APP_VERSION = '2026-10-27-8';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -11339,7 +11339,10 @@
     const U=v=>v*SS;
     const mc=document.createElement('canvas').getContext('2d');
     const font=(px,w)=>w+' '+U(px)+'px '+FAM;
-    const wid=(t,px,w)=>{ mc.font=font(px,w); mc.letterSpacing='0px'; return mc.measureText(pd(t)).width/SS; };
+    // [2026-10-27-8 แก้บั๊ก "ใบ 4×6 ตกขอบขวา" KK26102701] บางเครื่อง (WebView ใน iPad/Lark) วัดความกว้างอักษรไทยได้ 0 ตอนฟอนต์ยังโหลดไม่ครบ
+    //   → textAlign right/center ของ canvas วางข้อความไทยเริ่มที่ขอบขวาเลยตกขอบ · ใช้ค่าประมาณแทนเมื่อวัดได้น้อยผิดปกติ และจัดตำแหน่งเอง (ไม่พึ่ง textAlign)
+    const estW=(t,px)=>{ const s=pd(t).replace(/[ัิ-ฺ็-๎]/g,''); let w=0; for(const ch of s) w+=(/[฀-๿]/.test(ch)?0.56:/[A-Z0-9]/.test(ch)?0.62:/\s/.test(ch)?0.28:0.5)*px; return w; };
+    const wid=(t,px,w)=>{ mc.font=font(px,w); mc.letterSpacing='0px'; const m=mc.measureText(pd(t)).width/SS, e=estW(t,px); return (pd(t) && m<e*0.45) ? e : m; };
     const wrapLines=(text,px,w,maxW)=>{ if(!text) return []; mc.font=font(px,w); mc.letterSpacing='0px'; return wrapTextByWidth(mc, text, U(maxW)); };
     const X0=53, X1=1146;                  // ขอบซ้าย/ขวาของเส้นและตัวอักษร (ตามภาพผู้ใช้)
     // ---------- วางแนวตั้ง: วัดจากภาพผู้ใช้ (กรณีมาตรฐาน 4 ช่อง + หมายเหตุ 1 บรรทัด + นัดรับสาขา) แล้วย่อให้พอดีใบเมื่อของเยอะ ----------
@@ -11376,10 +11379,13 @@
     const T=(t,x,y,px,w,opt)=>{
       opt=opt||{}; let size=px;
       if(opt.maxW) while(size>(opt.minPx||px*0.5) && wid(t,size,w)>opt.maxW) size-=0.5;
-      ctx.font=font(size,w); ctx.letterSpacing='0px'; ctx.textAlign=opt.align||'left'; ctx.textBaseline='alphabetic'; ctx.fillStyle='#000';
-      ctx.fillText(pd(t),U(x),U(y));
-      if(opt.bold){ ctx.save(); ctx.lineWidth=U(opt.bold*size); ctx.lineJoin='round'; ctx.strokeStyle='#000'; ctx.strokeText(pd(t),U(x),U(y)); ctx.restore(); }
-      return {size,w:wid(t,size,w)};
+      // จัดตำแหน่งเอง: right = ปลายข้อความชิด x · center = กึ่งกลางที่ x · แล้วกันไม่ให้เลยขอบขวาของภาพ (W0-24)
+      let tw=wid(t,size,w), lx=opt.align==='right' ? x-tw : opt.align==='center' ? x-tw/2 : x;
+      if(lx+tw>W0-24) lx=Math.max(X0, W0-24-tw);
+      ctx.font=font(size,w); ctx.letterSpacing='0px'; ctx.textAlign='left'; ctx.textBaseline='alphabetic'; ctx.fillStyle='#000';
+      ctx.fillText(pd(t),U(lx),U(y));
+      if(opt.bold){ ctx.save(); ctx.lineWidth=U(opt.bold*size); ctx.lineJoin='round'; ctx.strokeStyle='#000'; ctx.strokeText(pd(t),U(lx),U(y)); ctx.restore(); }
+      return {size,w:tw};
     };
     // (1) หัวบิล
     { mc.font=font(50,600); const m=mc.measureText('ใบสั่งแก้ปรับทรงสำเร็จรูป'); const asc=m.actualBoundingBoxAscent/SS;
