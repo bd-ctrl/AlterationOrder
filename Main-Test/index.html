@@ -5389,7 +5389,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-27-4';
+  const APP_VERSION = '2026-10-27-5';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -7355,7 +7355,10 @@
       const code=codeIn||b.dataset.ra2Ea||b.dataset.ra2Chip; let e=b.nextElementSibling; if(!(e&&e.matches&&e.matches('[data-ra2-edit]'))) e=null;
       if(!WFEAT.v&&!_featAsked){ _featAsked=true; workerFeat().then(()=>{ histList.querySelectorAll('.ra2-chip').forEach(x=>paintEdit(x)); watchChips(); },()=>{}); }
       const r=wfeat('raEdit')?savedRoundOf(code):null;
-      if(!r){ if(e) e.remove(); return; }
+      // [2026-10-27-5 ตามที่ขอ] รอบนี้ส่งเข้า Salesforce แล้ว = ไม่มีปุ่มแก้ไข (รู้จริงว่าไม่ค้าง: pendingKnown + รอบนี้ไม่อยู่ในรายการค้าง · หรือเปิดแล้วเจอว่าส่งแล้ว)
+      const pe=PROD[code], pp=pe&&pe.p;
+      const sentNow=!!(r&&pe&&!pe.savedRound&&(pe.lockedRound===r||(pp&&pp.pendingKnown===true&&Array.isArray(pp.pending)&&!pp.pending.some(x=>+(x&&x.round)===r))));
+      if(!r||sentNow){ if(e) e.remove(); return; }
       if(!e){ b.insertAdjacentHTML('afterend','<button type="button" class="ra2-editbtn" data-ra2-edit="'+esc(code)+'"></button>'); e=b.nextElementSibling; }
       e.dataset.round=String(r); e.innerHTML=IC.pen+'แก้ไขครั้งที่ '+r; e.disabled=false; }
     function paintChips(code){ histList.querySelectorAll('.ra2-chip[data-ra2-chip="'+CSS.escape(code)+'"]').forEach(paintChip); histList.querySelectorAll('[data-ra2-ea="'+CSS.escape(code)+'"]').forEach(b=>paintEdit(b,code)); }
@@ -7743,6 +7746,8 @@
       }catch(e2){ err=(e2&&e2.message)||String(e2); }
       if(btn){ btn.disabled=false; btn.innerHTML=lbl; }
       if(!ent){ const line=btn&&btn.closest('.hist-skuline'); if(line) toggleWhy(btn,code,{t:'เปิดรายการมาแก้ไม่ได้ — '+err,gray:true}); return; }
+      // [2026-10-27-5 ตามที่ขอ "ลงข้อมูลไป Salesforce จาก Lark แล้วต้องแก้ไขไม่ได้"] บรรทัดที่ส่งแล้ว (ค้นสด) ไม่เปิดฟอร์ม · ซ่อนปุ่มของ P# นี้
+      if(ent.sent){ if(PROD[code]){ delete PROD[code].savedRound; PROD[code].lockedRound=+ent.round; } const line=btn&&btn.closest('.hist-skuline'); if(line) toggleWhy(btn,code,{t:'ส่งเข้า Salesforce แล้ว แก้ไขไม่ได้',gray:true}); if(btn) btn.remove(); return; }
       const p=(PROD[code]&&PROD[code].p)||{}, o=(oid&&findOrder(oid))||null, d=o?((o.skuDetails||[])[codesOf(o).indexOf(code)]||{}):{};
       const c=(o&&o.customer)||{}, nm=[ent.firstname||c.firstname,ent.lastname||c.lastname].filter(Boolean).join(' ');
       let body=String(ent.detail||'').trim(), urgent=false, approver='', branch='', addr='';
@@ -8077,6 +8082,7 @@
         const code=fail.code?String(fail.code):'', msg=fail.message||String(fail);
         if(HARD_FIELD.test(code)){ f.hard={code,message:msg,cause:hardCause(code,f)}; S.err=msg; S.errRetry=false; }
         else if(isAuthCode(code)){ S.err='บัตรผ่านเข้าสู่ระบบหมดอายุ — ยังไม่ได้บันทึกการแก้ไข · เข้าสู่ระบบใหม่แล้วแก้อีกครั้ง'; S.errRetry=true; }
+        else if(code==='sent_locked'){ S.err='ส่งเข้า Salesforce แล้ว แก้ไขไม่ได้'; S.errRetry=false; if(PROD[f.code]){ delete PROD[f.code].savedRound; PROD[f.code].lockedRound=f.edit.round; } }   // [2026-10-27-5] ส่งระหว่างเปิดฟอร์มค้าง → Worker sh12b ปฏิเสธ
         else{ S.err='บันทึกการแก้ไขไม่สำเร็จ — '+msg+(fail.net?' · ตรวจอินเทอร์เน็ตแล้วลองอีกครั้ง (ถ้าบันทึกไปแล้ว ระบบจะบอกว่าไม่มีอะไรเปลี่ยน)':' · ข้อมูลในฟอร์มยังอยู่ ลองอีกครั้งได้'); S.errRetry=true; }
         if(S.form===f){ showErr(S.err,code); changed(); }
         return;
