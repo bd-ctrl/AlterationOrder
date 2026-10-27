@@ -5378,7 +5378,7 @@
     if(WFEAT.v) return Promise.resolve(WFEAT.v);
     if(WFEAT.p) return WFEAT.p;
     WFEAT.p=fetch(WORKER+'/version').then(r=>r.json()).then(j=>{
-      WFEAT.v={raReprint:!!(j&&j.raReprint===true), printStation:!!(j&&j.printStation===true), findByCustomer:!!(j&&j.findByCustomer===true), findByBill:!!(j&&j.findByBill===true), raPhotoLark:!!(j&&j.raPhotoLark===true), raEdit:!!(j&&j.raEdit===true), ra2Auto:!!(j&&j.ra2Auto&&j.ra2Auto.on===true), build:String((j&&j.build)||'')};
+      WFEAT.v={raReprint:!!(j&&j.raReprint===true), printStation:!!(j&&j.printStation===true), findByCustomer:!!(j&&j.findByCustomer===true), findByBill:!!(j&&j.findByBill===true), raPhotoLark:!!(j&&j.raPhotoLark===true), raEdit:!!(j&&j.raEdit===true), draftsMulti:!!(j&&j.draftsMulti===true), ra2Auto:!!(j&&j.ra2Auto&&j.ra2Auto.on===true), build:String((j&&j.build)||'')};
       return WFEAT.v;
     },()=>({raReprint:false,printStation:false,findByCustomer:false,findByBill:false,raPhotoLark:false,ra2Auto:false,build:''})).finally(()=>{ WFEAT.p=null; });
     return WFEAT.p;
@@ -5389,7 +5389,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-27-2';
+  const APP_VERSION = '2026-10-27-3';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -6809,7 +6809,22 @@
   // [รอบแก้จากผู้ตรวจอิสระ] ไม่ให้คำตอบเก่าทับของใหม่ (สลับสาขา/แท็บเร็วๆ) · ส่งซ้ำแถวเดียวพร้อมกันไม่ได้ · ร่างในเครื่องที่ใหม่กว่าไม่ถูกทับ/ไม่ถูกส่งทับร่างที่ใหม่กว่าบนเซิร์ฟเวอร์ ·
   // คำสั่งลบหลังบันทึกบิลรอให้จบก่อนล้างฟอร์ม (ล้างฟอร์มรีโหลดหน้า) · ทุกคำขอมีเวลาหมด 12 วินาที
   const DRAFT_SYNC={ list:[], ok:null, loading:false, err:'', notice:'', seq:0 };   // list = ร่างของสาขานี้จากเซิร์ฟเวอร์ · ok: null=ยังไม่เคยโหลด / true / false
-  let _openedDraft=null;   // ร่างที่เปิดมาแก้อยู่ {id (ในเครื่อง), srvId, phone} — ลบทิ้งเมื่อบันทึกบิลสำเร็จ (เฉพาะเมื่อบิลเป็นของลูกค้าเบอร์เดียวกัน)
+  // [2026-10-27-3 ตามที่ขอ "บันทึกร่างคนเดียวกัน 2 อันได้ ไม่ทับอันเดิม เช่น กิตติ 1 กิตติ 2"] ร่างที่ผูกกับฟอร์มตอนนี้ (เปิดจากร่าง หรือบันทึกร่างแล้ว)
+  // เก็บใน localStorage คู่กับ autosave (รีโหลดหน้าแล้วยังจำได้) · ล้างพร้อม autosave (ถังขยะ / บันทึกบิลแล้ว / ข้ามวัน)
+  const CUR_DRAFT_KEY='suitcube_cur_draft_v1';
+  let _openedDraft=(()=>{ try{ if(!localStorage.getItem('suitcube_autosave_v1')){ localStorage.removeItem(CUR_DRAFT_KEY); return null; } const o=JSON.parse(localStorage.getItem(CUR_DRAFT_KEY)||'null'); return (o&&typeof o==='object')?o:null; }catch(e){ return null; } })();
+  function setOpenedDraft(o){ _openedDraft=o||null; try{ if(o) localStorage.setItem(CUR_DRAFT_KEY, JSON.stringify(o)); else localStorage.removeItem(CUR_DRAFT_KEY); }catch(e){} }
+  const draftMulti=()=>wfeat('draftsMulti');   // Worker sh11+ — ลูกค้าเบอร์เดียวกันมีได้หลายร่าง (Worker เก่า = แบบเดิม 1 เบอร์ 1 ร่าง)
+  const draftNoOf=d=>{ const n=Number(d&&d.state&&d.state.__draftNo); return n>0?n:0; };   // เลขร่างของลูกค้าคนนั้น (1, 2, 3…) เก็บใน state ไม่เลื่อนเมื่อร่างอื่นถูกลบ
+  const draftPhoneOf=d=>String((d&&d.state&&d.state.custPhone)||'').trim();
+  function nextDraftNo(phone){ if(!phone) return 0; let mx=0; mergedDrafts().forEach(d=>{ if(draftPhoneOf(d)===phone) mx=Math.max(mx, draftNoOf(d)||1); }); return mx+1; }
+  // ชื่อที่แสดง: มีร่างลูกค้าเบอร์เดียวกันมากกว่า 1 อัน (หรือเลขร่าง ≥ 2) → "ชื่อ เลข · เบอร์" เช่น "กิตติ 2 · 0812345678" · ไม่งั้นเหมือนเดิม
+  function draftTitle(d, all){
+    const s0=String((d&&d.summary)||'ร่างที่บันทึกไว้'), no=draftNoOf(d); if(!no) return s0;
+    const ph=draftPhoneOf(d), sib=ph?(all||[]).filter(x=>draftPhoneOf(x)===ph).length:1;
+    if(no<2 && sib<2) return s0;
+    return (String((d.state&&d.state.custName)||'').trim()||'ไม่ระบุชื่อลูกค้า')+' '+no+(ph?(' · '+ph):'');
+  }   // ร่างที่เปิดมาแก้อยู่ {id (ในเครื่อง), srvId, phone} — ลบทิ้งเมื่อบันทึกบิลสำเร็จ (เฉพาะเมื่อบิลเป็นของลูกค้าเบอร์เดียวกัน)
   const draftBranchNow=()=>(document.getElementById('branchTop')?.value||'').trim();
   const DRAFT_API_TIMEOUT_MS=12000;
   async function draftApi(pathAndQuery, body){
@@ -6842,7 +6857,7 @@
     if(_draftPushing.has(key)) return _draftPushing.get(key);
     const p=(async()=>{
       const st=d.state||{};
-      const j=await draftApi('/draft-save',{ id:d.srvId||undefined, branch:draftBranchOf(d), phone:String(st.custPhone||'').trim(), summary:d.summary||'', staff:d.staff||st.staffInput||'', state:st });
+      const j=await draftApi('/draft-save',{ id:d.srvId||undefined, branch:draftBranchOf(d), phone:String(st.custPhone||'').trim(), summary:d.summary||'', staff:d.staff||st.staffInput||'', state:st, multi:draftMulti()||undefined });
       const all=loadDrafts(), cur=all.find(x=>x.id===d.id);
       if(cur){ cur.srvId=j.id; cur.branch=draftBranchOf(d); if(cur.savedAt===d.savedAt) cur.synced=true; saveDrafts(all); }   // แก้ร่างต่อระหว่างรอ → ยังไม่นับว่าซิงก์ (รอบหน้าส่งเนื้อหาล่าสุดอีกครั้ง)
       return j;
@@ -6850,6 +6865,8 @@
     _draftPushing.set(key,p); return p;
   }
   async function saveDraftNow(){
+    await workerFeat();
+    if(draftMulti()) return saveDraftNowMulti();
     const branch=draftBranchNow();
     const state=collectFormState();
     const drafts=loadDrafts();
@@ -6877,6 +6894,49 @@
       return { synced:true, localOk };
     }catch(e){ return { synced:false, localOk, error:e.message }; }
   }
+  // [2026-10-27-3] แบบใหม่: ฟอร์มที่ยังไม่ผูกกับร่าง → ร่างใหม่เสมอ (ไม่ทับร่างอื่นของเบอร์เดียวกัน) · ผูกอยู่แล้ว → ถามว่าบันทึกทับร่างเดิม หรือเป็นร่างใหม่
+  async function saveDraftNowMulti(){
+    const branch=draftBranchNow();
+    const state=collectFormState();
+    const phone=String(state.custPhone||'').trim();
+    const summary=(state.custName||'ไม่ระบุชื่อลูกค้า')+(phone?(' · '+phone):'');
+    const od=_openedDraft;
+    let overwrite=false;
+    if(od){
+      const label=(String(od.name||'').trim()||'ร่างเดิม')+(od.no?(' '+od.no):'');
+      const ans=await confirmDialog('ฟอร์มนี้มาจากร่าง "'+label+'" — จะบันทึกทับร่างเดิม หรือบันทึกเป็นร่างใหม่ (ร่างเดิมยังอยู่)?', 'บันทึกทับร่างเดิม', {cancelLabel:'บันทึกเป็นร่างใหม่', backdropValue:null});
+      if(ans===null) return { cancelled:true };
+      overwrite=ans===true;
+    }
+    // เลขร่างต้องนับร่างของเครื่องอื่นในสาขาด้วย — ยังไม่เคยโหลดรายการจากเซิร์ฟเวอร์ (ไม่ได้เปิดแท็บร่าง) → โหลดก่อน 1 ครั้ง (ล้ม = นับเท่าที่รู้)
+    if(!overwrite && phone && branch && DRAFT_SYNC.ok!==true){ try{ const jl=await draftApi('/draft-list?branch='+encodeURIComponent(branch)); if(branch===draftBranchNow()){ DRAFT_SYNC.list=jl.drafts||[]; DRAFT_SYNC.ok=true; } }catch(e){} }
+    const drafts=loadDrafts();
+    let draft, no;
+    if(overwrite){
+      const i=drafts.findIndex(d=>(od.id&&d.id===od.id)||(od.srvId&&d.srvId===od.srvId));
+      if(i!==-1) [draft]=drafts.splice(i,1); else draft={ id:od.id||('d'+Date.now()), srvId:od.srvId||undefined };   // เปิดจากร่างบนเซิร์ฟเวอร์ที่ไม่มีในเครื่อง → อัปเดตแถวเดิมด้วยรหัสบนเซิร์ฟเวอร์
+      no=od.no||draftNoOf(draft)||nextDraftNo(phone);
+      if(draft.branch && draft.branch!==branch) draft.srvId=undefined;
+    } else {
+      no=nextDraftNo(phone);
+      draft={ id:'d'+Date.now(), savedAt:Date.now() };
+    }
+    if(no) state.__draftNo=no;
+    draft.savedAt=Date.now(); draft.summary=summary; draft.state=state;
+    draft.branch=branch; draft.staff=state.staffInput||''; draft.synced=false;
+    drafts.unshift(draft);
+    if(drafts.length>30) drafts.length=30;
+    const localOk=saveDrafts(drafts);
+    const bind=srvId=>setOpenedDraft({ id:draft.id, srvId:srvId||null, phone, no:no||0, name:String(state.custName||'').trim() });
+    bind(draft.srvId);
+    try{
+      const j=await pushDraftToServer(draft);
+      bind(j.id);
+      const entry={ id:j.id, branch, summary, phone, staff:draft.staff, savedAt:j.savedAt||Date.now(), state };
+      DRAFT_SYNC.list=[entry].concat(DRAFT_SYNC.list.filter(x=>x.id!==j.id));   // ร่างอื่นของเบอร์เดียวกันยังอยู่
+      return { synced:true, localOk, no };
+    }catch(e){ return { synced:false, localOk, error:e.message, no }; }
+  }
   // ส่งร่างในเครื่องที่ยังไม่ซิงก์ของสาขานี้ขึ้นเซิร์ฟเวอร์ (รวมร่างเก่าที่บันทึกไว้ก่อนมีระบบซิงก์ — ใช้สาขาที่ติดอยู่ในร่าง)
   // เทียบกับรายการบนเซิร์ฟเวอร์ก่อน: ลูกค้าเบอร์เดียวกันที่บนเซิร์ฟเวอร์ "ใหม่กว่า" (บันทึกจากเครื่องอื่น) → ไม่ส่งทับ ให้ร่างบนเซิร์ฟเวอร์ชนะ
   const draftIsPushing=d=>[..._draftPushing.keys()].some(k=>k.startsWith(d.id+':'));
@@ -6889,7 +6949,7 @@
         continue;
       }
       const ph=String(d.state?.custPhone||'').trim();
-      const sv=ph ? (serverList||[]).find(x=>x.phone===ph) : null;
+      const sv=draftMulti() ? (d.srvId ? (serverList||[]).find(x=>x.id===d.srvId) : null) : (ph ? (serverList||[]).find(x=>x.phone===ph) : null);
       if(sv && sv.savedAt>d.savedAt){
         const all=loadDrafts(), cur=all.find(x=>x.id===d.id);
         if(cur){ cur.srvId=sv.id; cur.synced=true; cur.branch=branch; saveDrafts(all); }
@@ -6944,7 +7004,22 @@
   function draftsAfterBillSaved(phone, branch){
     let job=Promise.resolve();
     try{
-      phone=String(phone||'').trim(); let od=_openedDraft; _openedDraft=null;
+      phone=String(phone||'').trim(); let od=_openedDraft; setOpenedDraft(null);
+      if(draftMulti()){   // [2026-10-27-3] ลบเฉพาะร่างที่เปิด/บันทึกจากฟอร์มนี้ — ร่างอื่นของลูกค้าคนเดียวกัน (เช่น ชุดที่ 2 นัดรับคนละวัน) ยังอยู่
+        if(od && od.phone && od.phone!==phone) od=null;
+        if(od){
+          const loc=od.id ? loadDrafts().find(d=>d.id===od.id) : null;
+          const srvId=od.srvId||(loc&&loc.srvId)||null;
+          saveDrafts(loadDrafts().filter(d=>!(od.id&&d.id===od.id) && !(srvId&&d.srvId===srvId)));
+          if(srvId){
+            DRAFT_SYNC.list=DRAFT_SYNC.list.filter(x=>x.id!==srvId);
+            const body={ id:srvId, multi:true };
+            job=(async()=>{ try{ await draftApi('/draft-delete', body); }catch(e){ queueDraftDelete(body); } })();
+          }
+        }
+        updateDraftCount();
+        return Promise.race([job, new Promise(r=>setTimeout(r,3000))]);
+      }
       // ร่างที่เปิดมาแก้ ลบเฉพาะเมื่อบิลที่บันทึกเป็นของลูกค้าคนเดียวกัน (เบอร์ตรงกัน) — กันกรณีเปิดร่างแล้วกดถังขยะล้างฟอร์มไปกรอกลูกค้าคนอื่น แล้วบันทึกบิลใหม่ ร่างของคนแรกถูกลบผิด
       if(od && od.phone && od.phone!==phone) od=null;
       const srvIds=new Set(), localIds=new Set();
@@ -6979,7 +7054,8 @@
       let r={ synced:false, localOk:false };
       try{ r=await saveDraftNow(); }catch(e){ /* ไม่ควรเกิด — กันปุ่มค้าง */ }
       finally{ btn.disabled=false; }
-      btn.innerHTML = r.synced ? (tick+'บันทึกแล้ว') : (r.localOk ? (tick+'บันทึกในเครื่องแล้ว · ยังไม่ซิงก์') : 'บันทึกร่างไม่สำเร็จ');
+      if(r && r.cancelled){ btn.innerHTML=original; return; }
+      btn.innerHTML = r.synced ? (tick+'บันทึกแล้ว'+(r.no>1?(' (ร่างที่ '+r.no+')'):'')) : (r.localOk ? (tick+'บันทึกในเครื่องแล้ว · ยังไม่ซิงก์') : 'บันทึกร่างไม่สำเร็จ');
       setTimeout(()=>{ btn.innerHTML=original; }, r.synced?1400:3200);
       updateDraftCount();
     });
@@ -7007,7 +7083,7 @@
       const when=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0')+' '+String(dt.getHours()).padStart(2,'0')+':'+String(dt.getMinutes()).padStart(2,'0');
       // [แก้ตามที่ขอ] .hist-row ไม่มีสไตล์การ์ดของตัวเองแล้ว (ย้ายไปที่ .hist-ordercard) — ร่างก็ต้องห่อด้วย .hist-ordercard เหมือนกัน
       return '<div class="hist-row draft-row" data-id="'+escapeHtml(d.id)+'"><div class="hist-ordercard">'
-        + '<div class="hist-top"><div class="draft-title">'+escapeHtml(d.summary||'ร่างที่บันทึกไว้')+'</div>'
+        + '<div class="hist-top"><div class="draft-title">'+escapeHtml(draftTitle(d, all))+'</div>'
         + '<button class="draft-del" data-id="'+escapeHtml(d.id)+'" title="ลบร่างนี้">&times;</button></div>'
         + '<div class="created">บันทึกเมื่อ '+when+' น.'+(d.staff?(' · '+escapeHtml(d.staff)):'')+(d.localOnly&&branch?' · <span class="draft-local">ในเครื่องนี้ ยังไม่ซิงก์</span>':'')+'</div>'
         + '</div></div>';
@@ -7062,7 +7138,7 @@
   // ── ป็อปอัพยืนยัน (ใช้ทั่วไป เช่น ยืนยันลบร่าง) ──
   const confirmPop=document.getElementById('confirmPop'), confirmMsg=document.getElementById('confirmMsg');
   const confirmOkBtn=document.getElementById('confirmOkBtn'), confirmCancelBtn=document.getElementById('confirmCancelBtn');
-  let _confirmResolve=null;
+  let _confirmResolve=null, _confirmBackdrop=false;   // [2026-10-27-3] opts.cancelLabel / opts.backdropValue (ใช้กับคำถาม บันทึกทับร่างเดิม/ร่างใหม่)
   // opts.showEditorField=true — เพิ่มช่องพิมพ์ "ชื่อผู้แก้ไข" เข้ามาในป็อปอัปยืนยันนี้เลย (ใช้เฉพาะตอนยืนยันเข้าโหมดแก้ไขบิล) กันต้องเข้าไปกรอกทีหลังในฟอร์ม
   function confirmDialog(message, okLabel, opts){
     opts=opts||{};
@@ -7075,6 +7151,8 @@
       const inp=document.getElementById('confirmEditorName');
       if(opts.showEditorField && inp){ inp.value=''; inp.classList.remove('err'); }
     }
+    if(confirmCancelBtn) confirmCancelBtn.textContent=opts.cancelLabel||'ยกเลิก';
+    _confirmBackdrop=('backdropValue' in opts)?opts.backdropValue:false;
     confirmPop.classList.add('show');
     return new Promise(resolve=>{ _confirmResolve=resolve; });
   }
@@ -7090,7 +7168,7 @@
     _settleConfirm(true);
   });
   if(confirmCancelBtn) confirmCancelBtn.addEventListener('click',()=>_settleConfirm(false));
-  if(confirmPop) confirmPop.addEventListener('click', e=>{ if(e.target===confirmPop) _settleConfirm(false); });
+  if(confirmPop) confirmPop.addEventListener('click', e=>{ if(e.target===confirmPop) _settleConfirm(_confirmBackdrop); });
 
   // ── [ใหม่ Phase 2 · 2026-09-30] สินค้านำกลับมาแก้ (ไม่ใช่ครั้งแรก) — ทางเข้าย้ายมาอยู่ในแท็บ "รายการที่นัดรับ" ของป๊อปอัปประวัติ ตาม mockup D
   // (design-demos/repeat-alteration-search/pickup-entry-options.html) แทนแบนเนอร์ในแท็บประวัติ + ป๊อปอัปแยกของ phase2-19 · ใช้ Worker ตัวที่ใช้อยู่ (ไม่แก้ Worker)
@@ -8591,10 +8669,11 @@
       const loc=(dm0&&dm0.localId) ? loadDrafts().find(d=>d.id===dm0.localId) : null;
       const srvId=(dm0&&dm0.srvId)||(loc&&loc.srvId)||null;   // ร่างในเครื่องที่เพิ่งถูกซิงก์ระหว่างรอยืนยัน มี srvId แล้ว
       saveDrafts(loadDrafts().filter(d=>d.id!==delBtn.dataset.id && !(dm0&&dm0.localId&&d.id===dm0.localId) && !(srvId&&d.srvId===srvId)));
+      if(_openedDraft && ((dm0&&dm0.localId&&_openedDraft.id===dm0.localId) || (srvId&&_openedDraft.srvId===srvId))) setOpenedDraft(null);   // [2026-10-27-3]
       if(srvId){
         DRAFT_SYNC.list=DRAFT_SYNC.list.filter(x=>x.id!==srvId);
         const ph=String(dm0&&dm0.state&&dm0.state.custPhone||'').trim(), br=(dm0&&dm0.branch)||draftBranchNow();
-        const delBody=(ph&&br)?{id:srvId,branch:br,phone:ph}:{id:srvId};
+        const delBody=draftMulti()?{id:srvId,multi:true}:((ph&&br)?{id:srvId,branch:br,phone:ph}:{id:srvId});
         draftApi('/draft-delete', delBody).catch(()=>{ queueDraftDelete(delBody); DRAFT_SYNC.notice='ลบร่างบนเซิร์ฟเวอร์ไม่สำเร็จ — ระบบจะลองลบให้ใหม่ตอนเชื่อมต่อได้'; refreshDraftsFromServer(); });
       }
       renderDraftsList(draftSearchInput ? draftSearchInput.value : ''); // คงคำค้นหาเดิมไว้ ไม่รีเซ็ตช่องค้นหาตอนลบ
@@ -8604,7 +8683,7 @@
     if(row){
       const d=mergedDrafts().find(x=>x.id===row.dataset.id);
       if(d){
-        _openedDraft={ id:d.localId||null, srvId:d.srvId||null, phone:String(d.state?.custPhone||'').trim() };
+        setOpenedDraft({ id:d.localId||null, srvId:d.srvId||null, phone:String(d.state?.custPhone||'').trim(), no:draftNoOf(d), name:String(d.state?.custName||'').trim() });
         applyFormState(d.state); histPop.classList.remove('show'); goTo(1);
       }
     }
@@ -11890,7 +11969,7 @@
     }catch(e){}
   }
   function scheduleAutosave(){ clearTimeout(_autosaveTimer); _autosaveTimer=setTimeout(saveAutosave, 600); }
-  function clearAutosave(){ try{ localStorage.removeItem(AUTOSAVE_KEY); }catch(e){} }
+  function clearAutosave(){ try{ localStorage.removeItem(AUTOSAVE_KEY); localStorage.removeItem('suitcube_cur_draft_v1'); }catch(e){} }   // [2026-10-27-3] ล้างฟอร์ม = เลิกผูกกับร่าง
   // [แก้บั๊ก 2026-09-25 ตามที่ขอ] ล้างข้อมูลบิลที่บันทึกแล้วออกจากฟอร์มทันทีที่วาด+ส่งรูปใบสรุปเสร็จ — ใช้การรีเฟรชหน้า (ทางล้างฟอร์มเดิมที่สะอาดครบทุกช่อง)
   // แล้วพาป๊อปอัปผลบันทึก+รูปใบสรุปกลับมาโชว์หลังรีเฟรช (ผ่าน sessionStorage) พนักงานยังเห็น/บันทึกรูปได้เหมือนเดิม
   // เก็บ sessionStorage ไม่ได้ (เต็ม/ถูกบล็อก) → ไม่รีเฟรชตอนนี้ ล้างตอนกดปิดป๊อปอัปแทน (autosave ถูกล้าง+หยุดเก็บแล้ว รีเฟรชเองก็ไม่มีข้อมูลเดิมกลับมา)
