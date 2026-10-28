@@ -2162,7 +2162,7 @@
         <button class="hist-tab" data-info-tab="2" role="tab" aria-selected="false"><span class="tl">หน้าที่ 2</span><span class="tl-sep"> </span><span class="tl">สินค้า</span></button>
         <button class="hist-tab" data-info-tab="3" role="tab" aria-selected="false"><span class="tl">หน้าที่ 3</span><span class="tl-sep"> </span><span class="tl">นัดรับ &amp; บันทึก</span></button>
         <button class="hist-tab" data-info-tab="history" role="tab" aria-selected="false"><span class="tl">ประวัติใบสั่งแก้</span></button>
-        <button class="hist-tab" data-info-tab="repeat" role="tab" aria-selected="false"><span class="tl">สินค้า</span><span class="tl-sep"> </span><span class="tl">นำกลับมาแก้</span></button>
+        <button class="hist-tab" data-info-tab="repeat" role="tab" aria-selected="false"><span class="tl">สินค้าแก้</span><span class="tl-sep"> </span><span class="tl">ครั้งที่ 2, 3, 4, 5</span></button>
         <button class="hist-tab" data-info-tab="more" role="tab" aria-selected="false"><span class="tl">ร่าง · พิมพ์</span><span class="tl-sep"> · </span><span class="tl">ปัญหาที่พบบ่อย</span></button>
         </div>
       </div>
@@ -4452,7 +4452,7 @@
 
       <!-- [2026-10-28-1 ตามที่ขอ "วิธีใช้งานสินค้านำกลับมาแก้ แบบละเอียดที่สุด"] เขียนจากโค้ดจริงของหน้านี้ + Worker sh12b · รูป help_img/repeat-01..12.jpg จากโหมดทดสอบ (ชื่อ/เบอร์ลูกค้าเป็นข้อมูลตัวอย่าง) -->
       <div class="info-panel hidden" data-info-panel="repeat">
-        <h3 class="hp-title">สินค้านำกลับมาแก้</h3>
+        <h3 class="hp-title">สินค้าแก้ครั้งที่ 2, 3, 4, 5</h3>
 <p class="hp-lead">ใช้เมื่อ <b>ลูกค้านำสินค้าสำเร็จรูปที่เคยแก้ไปแล้ว กลับมาให้แก้อีกครั้ง</b> (เช่น รับกางเกงไปแล้ว ยาวขายังไม่พอดี) ระบบจะบันทึกเป็น “ครั้งที่ 2” ถึง “ครั้งที่ 5” ของสินค้าชิ้นเดิม (P# เดิม) ออกเลขที่บิลใหม่ให้ วาดใบสรุปให้ และส่งข้อมูลเข้า Salesforce ต่อให้ โดยไม่ต้องลงบิลใหม่ทั้งบิล หน้านี้อธิบายทุกขั้นตอน ตั้งแต่หาสินค้า กรอกฟอร์ม หลังบันทึก การพิมพ์ การแก้ไข จนถึงข้อความผิดพลาดที่อาจเจอ</p>
 <details class="hp-toc" id="hp-toc-repeat"><summary>สารบัญหน้านี้ — กดหัวข้อเพื่อข้ามไปอ่าน (20 หัวข้อ)</summary><ul class="hp-toc-list"><li><a class="hp-jump" href="#hp-repeat-1">นำกลับมาแก้คืออะไร ใช้เมื่อไหร่</a></li><li><a class="hp-jump" href="#hp-repeat-2">ต่างจากติ๊ก “ลูกค้านำสินค้ากลับมาแก้/ ใช้งานก่อนปรับแก้” อย่างไร</a></li><li><a class="hp-jump" href="#hp-repeat-3">ก่อนเริ่ม: สินค้าต้องพร้อมอะไรบ้าง</a></li><li><a class="hp-jump" href="#hp-repeat-4">เปิดหน้าจอนำกลับมาแก้</a></li><li><a class="hp-jump" href="#hp-repeat-5">ป้ายบนการ์ด แปลว่าอะไร</a></li><li><a class="hp-jump" href="#hp-repeat-6">หาสินค้า: P#, สแกน QR, เบอร์โทร, ชื่อลูกค้า</a></li><li><a class="hp-jump" href="#hp-repeat-7">หาด้วยเลขที่บิล หรือ O#</a></li><li><a class="hp-jump" href="#hp-repeat-8">หัวฟอร์ม และ “ครั้งที่” คืออะไร</a></li><li><a class="hp-jump" href="#hp-repeat-9">ส่วนที่ 01 รายละเอียด (จุดที่แก้ หมายเหตุ เย็บย้ำกระดุม รูป)</a></li><li><a class="hp-jump" href="#hp-repeat-10">ส่วนที่ 02 นัดรับ (สาขา จัดส่ง วันที่ งานด่วน ผู้ตรวจ)</a></li><li><a class="hp-jump" href="#hp-repeat-11">เลขที่บิลใหม่</a></li><li><a class="hp-jump" href="#hp-repeat-12">ปุ่มบันทึกข้อมูล และข้อความ “ยังขาด”</a></li><li><a class="hp-jump" href="#hp-repeat-13">หลังกดบันทึก: หน้าสรุปและใบสรุป</a></li><li><a class="hp-jump" href="#hp-repeat-14">ข้อมูลไปอยู่ที่ไหนใน Lark</a></li><li><a class="hp-jump" href="#hp-repeat-15">ส่งเข้า Salesforce เมื่อไหร่ ใครเป็นคนส่ง</a></li><li><a class="hp-jump" href="#hp-repeat-16">การพิมพ์ใบนำกลับมาแก้</a></li><li><a class="hp-jump" href="#hp-repeat-17">แก้ไขงานนำกลับมาแก้ที่บันทึกแล้ว</a></li><li><a class="hp-jump" href="#hp-repeat-18">งานเก่าก่อนมีระบบอัตโนมัติ และ SKU จากระบบเก่า</a></li><li><a class="hp-jump" href="#hp-repeat-19">ข้อความผิดพลาดที่อาจเจอ และวิธีแก้</a></li><li><a class="hp-jump" href="#hp-repeat-20">สิ่งที่ทำไม่ได้ ข้อจำกัด และติดต่อใคร</a></li></ul></details>
 
@@ -5668,7 +5668,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-28-1';
+  const APP_VERSION = '2026-10-28-2';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
