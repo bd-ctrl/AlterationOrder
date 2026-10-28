@@ -1063,6 +1063,8 @@
   .draft-del:hover{color:var(--red)}
   /* [ใหม่ 2026-10-06] ร่างข้ามเครื่อง: ป้ายบอกว่าร่างนี้ยังอยู่แค่ในเครื่อง (ยังไม่ซิงก์) + บรรทัดสถานะการโหลดจากเซิร์ฟเวอร์ */
   .draft-local{color:var(--red);font-weight:600}
+  /* [2026-10-28-6] ป้าย "บันทึกอัตโนมัติ" บนร่างที่ระบบบันทึกให้เอง (ก่อนเปิดร่างอื่น / โหลดบิลมาแก้ / ข้ามวัน) */
+  .draft-auto{display:inline-block;margin-left:2px;padding:1px 8px;border-radius:999px;background:rgba(201,162,75,.18);color:var(--goldink);font-weight:600;font-size:11px;white-space:nowrap}
   .draft-sync-line{font-size:12.5px;color:var(--t2);padding:2px 4px 8px}
   .draft-sync-line.bad{color:var(--red)}
   .hdrsel.draft-need-branch{box-shadow:0 0 0 2px var(--red)}
@@ -2398,7 +2400,7 @@
       <li>ลบร่างทิ้ง: กด × ที่มุมของร่าง ระบบจะถามยืนยันก่อน</li>
     </ul>
     <div class="hp-warn">แตะร่างแล้ว ข้อมูลของร่างจะ<b>ทับข้อมูลที่กรอกค้างอยู่ในฟอร์มทันที</b> รวมถึงสาขาและพนักงานขายที่แถบบน และระบบไม่ถามยืนยันก่อน ถ้ากำลังกรอกบิลอื่นค้างอยู่ ให้กด บันทึกร่าง เก็บไว้ก่อนเปิดร่างอื่น</div>
-    <div class="hp-warn"><b>อย่าเปิดร่างตอนที่ยังอยู่ในโหมดแก้ไขบิลเก่า</b> ถ้ายังเห็นแถบ “กำลังแก้ไขบิลนี้” หรือปุ่ม “บันทึกการแก้ไข” อยู่ ข้อมูลของร่างจะเข้ามาในฟอร์ม แต่แอปยังคิดว่ากำลังแก้บิลเดิม พอกดบันทึกจะ<b>เขียนทับบิลเก่าใบนั้น</b> ให้กด <span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-14M10 11v6M14 11v6"/></svg>ถังขยะ</span> แล้วกด <span class="hp-btn">ล้างข้อมูล</span> ออกจากโหมดแก้ไขก่อน (บิลเดิมไม่ถูกเปลี่ยน) แล้วค่อยเปิดร่าง</div>
+    <div class="hp-warn"><b>เปิดร่างตอนอยู่ในโหมดแก้ไขบิลเก่า</b> (เห็นแถบ “กำลังแก้ไขบิลนี้” หรือปุ่ม “บันทึกการแก้ไข”) ระบบจะ<b>ออกจากโหมดแก้ไขให้เอง</b> ปุ่มกลับเป็น “บันทึกข้อมูล” — ร่างจะถูกบันทึกเป็นบิลใหม่ ไม่ทับบิลเก่า · สิ่งที่แก้ในบิลเก่าแต่ยังไม่ได้กด “บันทึกการแก้ไข” จะไม่ถูกเก็บ (ระบบไม่ทำร่างจากบิลเก่า) ให้บันทึกการแก้ไขให้เสร็จก่อนเปิดร่าง</div>
   </div>
 </div>
 
@@ -3648,7 +3650,7 @@
 <div class="hp-case"><div class="hp-case-title">สถานการณ์ ไม่อยากแก้ต่อแล้ว</div>
 กดปุ่มถังขยะที่แถบด้านล่าง แล้วกด "ล้างข้อมูล" ฟอร์มจะว่างและออกจากโหมดแก้ไข บิลเดิมไม่ถูกเปลี่ยนแปลงอะไร ถ้าหน้าถูกรีเฟรชกลางคัน ฟอร์มและโหมดแก้ไขจะกลับมาให้เหมือนเดิม</div>
 
-<div class="hp-warn"><b>อย่าเปิดร่างตอนที่ยังอยู่ในโหมดแก้ไขบิลเก่า</b> ถ้ายังเห็นแถบ “กำลังแก้ไขบิลนี้” หรือปุ่ม “บันทึกการแก้ไข” อยู่ ข้อมูลของร่างจะเข้ามาในฟอร์ม แต่แอปยังคิดว่ากำลังแก้บิลเดิม พอกดบันทึกจะ<b>เขียนทับบิลเก่าใบนั้น</b> ให้กด <span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-14M10 11v6M14 11v6"/></svg>ถังขยะ</span> แล้วกด <span class="hp-btn">ล้างข้อมูล</span> ออกจากโหมดแก้ไขก่อน (บิลเดิมไม่ถูกเปลี่ยน) แล้วค่อยเปิดร่าง</div>
+<div class="hp-warn"><b>เปิดร่างตอนอยู่ในโหมดแก้ไขบิลเก่า</b> (เห็นแถบ “กำลังแก้ไขบิลนี้” หรือปุ่ม “บันทึกการแก้ไข”) ระบบจะ<b>ออกจากโหมดแก้ไขให้เอง</b> ปุ่มกลับเป็น “บันทึกข้อมูล” — ร่างจะถูกบันทึกเป็นบิลใหม่ ไม่ทับบิลเก่า · สิ่งที่แก้ในบิลเก่าแต่ยังไม่ได้กด “บันทึกการแก้ไข” จะไม่ถูกเก็บ (ระบบไม่ทำร่างจากบิลเก่า) ให้บันทึกการแก้ไขให้เสร็จก่อนเปิดร่าง</div>
 
 <h4 class="hp-h" id="hp-3-11">ถ้าบันทึกไม่สำเร็จ</h4>
 
@@ -4361,6 +4363,7 @@
 <figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/history-b-11.jpg" width="1536" height="120" alt="แถบล่างของหน้า 1 มีปุ่มถังขยะซ้ายสุด ปุ่มบันทึกร่างและปุ่มลูกศรถัดไปอยู่ด้านขวา"></div><figcaption>แถบล่างของฟอร์มหน้า 1: 1 ปุ่มถังขยะ (ซ้ายสุด) · 2 ปุ่ม “บันทึกร่าง” (ด้านขวา) · 3 ปุ่มลูกศรถัดไป ตัวเลขเล็กๆ ทางซ้ายของปุ่ม บันทึกร่าง คือเลขเวอร์ชันของแอป (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
 
 <ul class="hp-list">
+<li><b>ลืมกดบันทึกร่าง?</b> ตอนแตะเปิดร่างอื่น กดดินสอแก้บิลเก่า หรือผ่านเที่ยงคืน ระบบบันทึกข้อมูลลูกค้าที่กรอกค้างไว้เป็นร่างให้เอง (ป้าย <span class="draft-auto">บันทึกอัตโนมัติ</span> ในแท็บร่าง)</li>
 <li>ลูกค้า 1 เบอร์ในสาขาเดียวกัน มีร่างได้ 1 ร่าง ถ้ากดบันทึกร่างอีกครั้งด้วยเบอร์เดิม ระบบอัปเดตร่างเดิมแทนการสร้างร่างซ้ำ และย้ายขึ้นบนสุด ระบบจับคู่ร่างจากเบอร์โทร ถ้ายังไม่ได้กรอกเบอร์ ทุกครั้งที่กดบันทึกร่างจะได้ร่างใหม่เสมอ จึงควรกรอกเบอร์ก่อนกดบันทึกร่าง</li>
 <li>ร่างเก็บข้อมูลที่กรอกไว้ในฟอร์มทั้ง 3 หน้า แต่ <b>ไม่เก็บรูปที่แนบ</b> ตอนเปิดร่างมาทำต่อต้องแนบรูปใหม่</li>
 <li>เครื่องนี้เก็บร่างได้สูงสุด 30 ร่าง (เก่าสุดถูกตัดออกเมื่อเกิน) รายการร่างของสาขาที่ดึงจากเซิร์ฟเวอร์แสดงสูงสุด 60 ร่าง</li>
@@ -4762,7 +4765,7 @@
 <tr><td>บันทึกบิลสำเร็จ โดยเบอร์โทรลูกค้าตรงกับร่าง</td><td>ร่างของลูกค้าคนนั้นถูกลบให้เอง ทั้งในเครื่องนี้และบนเซิร์ฟเวอร์</td></tr>
 <tr><td>กดปุ่ม × ที่ร่างแล้วยืนยันลบ</td><td>ลบทันที — <span class="nb">ไอแพด</span>​เครื่องอื่นของสาขาก็ไม่เห็นอีก</td></tr>
 <tr><td>กดปุ่ม <span class="hp-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="hp-ico"><path d="M3 6h18M8 6V4h8v2M6 6l1 14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-14M10 11v6M14 11v6"></path></svg>ถังขยะ</span> (ล้างฟอร์ม)</td><td>ร่าง <b>ไม่ถูกลบ</b> — ถังขยะล้างเฉพาะข้อมูลที่กรอกอยู่ในฟอร์ม</td></tr>
-<tr><td>ผ่านเที่ยงคืน</td><td>ร่าง <b>ไม่ถูกลบ</b> (ที่ถูกล้างตอนเที่ยงคืนคือข้อมูลในฟอร์มที่ยังไม่ได้กดบันทึกร่าง — ดูหัวข้อถัดไป)</td></tr>
+<tr><td>ผ่านเที่ยงคืน</td><td>ร่าง <b>ไม่ถูกลบ</b> · ข้อมูลลูกค้าที่กรอกค้างในฟอร์มแต่ยังไม่ได้กดบันทึกร่าง ระบบ<b>บันทึกเป็นร่างให้เอง</b> (ป้าย <span class="draft-auto">บันทึกอัตโนมัติ</span>) ก่อนล้างฟอร์ม</td></tr>
 <tr><td>มีร่างมากเกินไป</td><td>ใน​<span class="nb">ไอแพด</span>​เก็บได้สูงสุด 30 ร่าง (เกินแล้วร่างเก่าสุดหลุดออก) · รายการของสาขาบนเซิร์ฟเวอร์แสดงได้สูงสุด 60 ร่าง</td></tr>
 </tbody>
 </table></div>
@@ -4775,11 +4778,11 @@
 <tr><td>ต้องกดเอง?</td><td>ไม่ต้อง</td><td>ต้องกดปุ่ม</td></tr>
 <tr><td>เก็บได้กี่งาน</td><td>1 งาน (ที่กรอกอยู่ตอนนี้)</td><td>หลายร่าง (1 ลูกค้า = 1 ร่าง)</td></tr>
 <tr><td><span class="nb">ไอแพด</span>​เครื่องอื่นเห็นไหม</td><td>ไม่เห็น (เฉพาะเครื่องนี้)</td><td>เห็นได้ ถ้าเลือกสาขาเดียวกันและ​<span class="nb">ซิงก์</span>​แล้ว</td></tr>
-<tr><td>ถูกล้างเมื่อไหร่</td><td>เที่ยงคืน · กดถังขยะ · บันทึกบิลสำเร็จ</td><td>ครบ 7 วัน · ลบเอง · บันทึกบิลของลูกค้าเบอร์เดียวกัน</td></tr>
+<tr><td>ถูกล้างเมื่อไหร่</td><td>เที่ยงคืน (ถ้ามีข้อมูลลูกค้า ระบบเก็บเป็นร่างอัตโนมัติก่อน) · กดถังขยะ · บันทึกบิลสำเร็จ</td><td>ครบ 7 วัน · ลบเอง · บันทึกบิลของลูกค้าเบอร์เดียวกัน</td></tr>
 <tr><td>รูปที่แนบ</td><td>ไม่เก็บ</td><td>ไม่เก็บ</td></tr>
 </tbody>
 </table></div>
-<div class="hp-warn">งานที่ต้องค้างข้ามคืนหรือข้ามวัน ต้องกด <span class="hp-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="hp-ico"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path><path d="M17 21v-8H7v8"></path><path d="M7 3v5h8"></path></svg>บันทึกร่าง</span> — ถ้าไม่กด ข้อมูลในฟอร์มจะถูกล้างตอนเที่ยงคืน</div>
+<div class="hp-note">งานที่ต้องค้างข้ามคืนหรือข้ามวัน ควรกด <span class="hp-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="hp-ico"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path><path d="M17 21v-8H7v8"></path><path d="M7 3v5h8"></path></svg>บันทึกร่าง</span> ไว้เอง — ถ้าลืมกด ตอนเที่ยงคืน (หรือเปิดแอปครั้งแรกของวันถัดไป) ระบบจะเก็บข้อมูลลูกค้าที่กรอกค้างไว้เป็นร่างให้อัตโนมัติ (ป้าย <span class="draft-auto">บันทึกอัตโนมัติ</span>) แล้วค่อยล้างฟอร์ม</div>
 
 <h4 class="hp-h" id="hp-more-8">เปิดดู ทำต่อ ค้นหา และลบร่าง</h4>
 <p>ร่างอยู่ในหน้าต่าง “ประวัติใบสั่งแก้สำเร็จรูป” ที่เปิดจากปุ่ม <span class="hp-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="hp-ico"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 4v4h4"></path><path d="M12 8v4l3 2"></path></svg>รายการย้อนหลัง</span> มุมขวาบน. หน้าต่างนี้มี 3 <span class="nb">แท็บ</span>​เรียงซ้ายไปขวา: <span class="hp-btn">รายการที่นัดรับ</span> <span class="hp-btn">ประวัติ</span> <span class="hp-btn">ร่างที่บันทึกไว้</span> — หัวข้อนี้อธิบายเฉพาะ​<span class="nb">แท็บ</span>​ร่าง</p>
@@ -4793,9 +4796,16 @@
 
 <figure class="hp-fig"><img data-src="../help_img/more-03.jpg" width="960" height="765" alt="แท็บร่างที่บันทึกไว้มีสามร่าง"><figcaption><span class="nb">แท็บ</span> <b>ร่างที่บันทึกไว้ (3)</b> ของสาขา R3: ป้าย “สาขา R3” มุมขวาบน, ช่องค้นหาจากเบอร์โทรศัพท์, บรรทัด “ร่างของสาขา R3 ทั้งหมด 3 ร่าง”, และแถวร่างเรียงจากใหม่ไปเก่า (ชื่อ · เบอร์ / เวลาที่บันทึก · พนักงานที่บันทึก / ปุ่ม ×) — ข้อมูลในภาพเป็นข้อมูลสมมติ</figcaption></figure>
 
-<div class="hp-warn">แตะแถวร่าง = <b>ข้อมูลในฟอร์มตอนนั้นถูกแทนที่ทันที ไม่มีกล่องถามก่อน และไม่มีปุ่มย้อนกลับ</b>. ถ้าในฟอร์มยังมีงานอื่นค้างอยู่ ให้กด <span class="hp-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="hp-ico"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path><path d="M17 21v-8H7v8"></path><path d="M7 3v5h8"></path></svg>บันทึกร่าง</span> เก็บไว้ก่อนแล้วค่อยเปิดร่างอื่น. นอกจากนี้ วันนัดรับในร่างที่ผ่านมาแล้วจะถูกเปลี่ยนเป็นวันนี้ และรูปที่เคยแนบต้องแนบใหม่</div>
+<div class="hp-item"><div class="hp-name">ร่างอัตโนมัติ <span class="draft-auto">บันทึกอัตโนมัติ</span></div><div class="hp-desc">ถ้าในฟอร์มมีข้อมูลลูกค้า (ชื่อ นามสกุล ชื่อเล่น เบอร์ หรือรหัสสินค้า/จุดวัด) ที่ยังไม่ได้กดบันทึกร่าง แล้ว<b>แตะเปิดร่างอื่น</b> หรือ<b>กดดินสอแก้บิลเก่า</b> ระบบบันทึกข้อมูลที่กรอกค้างไว้เป็นร่างให้ก่อนเอง ไม่ถาม แล้วขึ้นข้อความเล็กด้านล่างจอ “บันทึกร่างอัตโนมัติแล้ว: (ชื่อลูกค้า)”
+<ul class="hp-list">
+<li>ฟอร์มที่เปิดมาจากร่าง แล้วกรอกเพิ่ม → บันทึก<b>ทับร่างเดิม</b> (ไม่เกิดร่างใหม่) · ฟอร์มใหม่ที่ยังไม่เคยบันทึกร่าง → เป็น<b>ร่างใหม่</b></li>
+<li>ถ้าข้อมูลในฟอร์มเหมือนร่างที่มีอยู่แล้วทุกอย่าง ระบบไม่บันทึกซ้ำ — สลับเปิดร่างไปมากี่ครั้งก็ไม่เกิดร่างซ้ำ</li>
+<li>ร่างที่ระบบบันทึกให้มีป้าย <span class="draft-auto">บันทึกอัตโนมัติ</span> ในรายการ ป้ายหายเมื่อเปิดร่างนั้นแล้วกด <span class="hp-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="hp-ico"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path><path d="M17 21v-8H7v8"></path><path d="M7 3v5h8"></path></svg>บันทึกร่าง</span> เอง</li>
+<li>ระบบ<b>ไม่</b>เก็บร่างให้: ตอนกดถังขยะ (ตั้งใจล้าง) · หลังบันทึกบิลสำเร็จ (ข้อมูลอยู่ในบิลแล้ว) · ตอนกำลังแก้ไขบิลเก่า (บิลนั้นอยู่ในระบบแล้ว ร่างจำโหมดแก้ไขไม่ได้)</li>
+</ul></div></div>
+<div class="hp-note">วันนัดรับในร่างที่ผ่านมาแล้วจะถูกเปลี่ยนเป็นวันนี้ และรูปที่เคยแนบต้องแนบใหม่</div>
 
-<div class="hp-warn"><b>อย่าเปิดร่างตอนที่ยังอยู่ในโหมดแก้ไขบิลเก่า</b> ถ้ายังเห็นแถบ “กำลังแก้ไขบิลนี้” หรือปุ่ม “บันทึกการแก้ไข” อยู่ ข้อมูลของร่างจะเข้ามาในฟอร์ม แต่แอปยังคิดว่ากำลังแก้บิลเดิม พอกดบันทึกจะ<b>เขียนทับบิลเก่าใบนั้น</b> ให้กด <span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-14M10 11v6M14 11v6"/></svg>ถังขยะ</span> แล้วกด <span class="hp-btn">ล้างข้อมูล</span> ออกจากโหมดแก้ไขก่อน (บิลเดิมไม่ถูกเปลี่ยน) แล้วค่อยเปิดร่าง</div>
+<div class="hp-warn"><b>เปิดร่างตอนอยู่ในโหมดแก้ไขบิลเก่า</b> (เห็นแถบ “กำลังแก้ไขบิลนี้” หรือปุ่ม “บันทึกการแก้ไข”) ระบบจะ<b>ออกจากโหมดแก้ไขให้เอง</b> ปุ่มกลับเป็น “บันทึกข้อมูล” — ร่างจะถูกบันทึกเป็นบิลใหม่ ไม่ทับบิลเก่า · สิ่งที่แก้ในบิลเก่าแต่ยังไม่ได้กด “บันทึกการแก้ไข” จะไม่ถูกเก็บ (ระบบไม่ทำร่างจากบิลเก่า) ให้บันทึกการแก้ไขให้เสร็จก่อนเปิดร่าง</div>
 
 <div class="hp-item"><div class="hp-name">ป้าย “สาขา R3” มุมขวาบนของหน้าต่าง <span class="hp-kind">ป้ายบอกสาขา</span></div><div class="hp-desc">ใน​<span class="nb">แท็บ</span>​ร่าง ป้ายนี้บอกว่ากำลังดูร่างของสาขาไหน = สาขาที่เลือกที่แถบบน และ <b>กดเปลี่ยนไม่ได้</b> (ไม่มีลูกศรเล็กท้ายป้าย). อยากดูร่างของสาขาอื่น ให้เปลี่ยนช่อง <span class="hp-field">สาขา</span> ที่แถบบนของหน้าหลัก (ป้ายสาขาใน​<span class="nb">แท็บ</span> รายการที่นัดรับ และ ประวัติ ต่างจากนี้ ตรงที่กดเลือกสาขาได้)</div></div>
 <div class="hp-item"><div class="hp-name">ตัวเลขข้างชื่อ​<span class="nb">แท็บ</span> “ร่างที่บันทึกไว้ (3)” <span class="hp-kind">จำนวนร่าง</span></div><div class="hp-desc">นับร่างของสาขาที่เลือกอยู่ (ถ้ายังไม่เลือกสาขา นับร่างที่อยู่ในเครื่องนี้ทั้งหมด)</div></div>
@@ -5655,7 +5665,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-28-5';
+  const APP_VERSION = '2026-10-28-6';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -7207,7 +7217,7 @@
     drafts.unshift(draft);
     if(drafts.length>30) drafts.length=30;
     const localOk=saveDrafts(drafts);
-    const bind=srvId=>setOpenedDraft({ id:draft.id, srvId:srvId||null, phone, no:no||0, name:String(state.custName||'').trim() });
+    const bind=srvId=>setOpenedDraft({ id:draft.id, srvId:srvId||null, phone, no:no||0, name:String(state.custName||'').trim(), sig:draftSig(state) });
     bind(draft.srvId);
     try{
       const j=await pushDraftToServer(draft);
@@ -7317,6 +7327,72 @@
     }catch(e){ /* ล้างร่างไม่สำเร็จ ไม่กระทบการบันทึกบิล */ }
     return Promise.race([job, new Promise(r=>setTimeout(r,3000))]);
   }
+  // ── [2026-10-28-6 ตามที่ขอ "ลงข้อมูลลูกค้าไว้แต่ไม่ได้กดบันทึกร่าง ให้บันทึกร่างอัตโนมัติ — ตอนนี้เปิดร่างอื่นแล้วข้อมูลปัจจุบันหาย"] ──
+  // ก่อนทุกจุดที่ "เอาข้อมูลอื่นมาแทนฟอร์ม" (เปิดร่างจากแท็บร่าง · โหลดบิลเก่ามาแก้ · ล้างตอนเที่ยงคืน · autosave ค้างจากเมื่อวาน)
+  // ถ้าฟอร์มมีข้อมูลลูกค้า (ชื่อ/นามสกุล/ชื่อเล่น/เบอร์ หรือ SKU/จุดวัด) และยังไม่ตรงกับร่างที่ผูกอยู่ → บันทึกเป็นร่างเงียบๆ ไม่ถาม
+  //   ผูกกับร่างอยู่ → ทับร่างนั้น · ไม่ผูก → ร่างใหม่ (เลขร่างแบบหลายร่าง / Worker เก่า = ทับร่างเบอร์เดียวกันเหมือนปุ่มเดิม) · ตรงกับร่างที่มีอยู่แล้วทุกตัวอักษร → ไม่บันทึกซ้ำ
+  // บันทึกในเครื่องก่อน แล้วส่งขึ้นเซิร์ฟเวอร์ (ส่งไม่ได้ = ยังอยู่ในเครื่อง ซิงก์ทีหลังเหมือนร่างปกติ) · ติดป้าย "บันทึกอัตโนมัติ" (state.__auto) จนกว่าจะกดบันทึกร่างเอง
+  // ไม่ทำกับบิลเก่าที่กำลังแก้ไข (_editingRecordId): บิลนั้นอยู่ใน Lark แล้ว และร่างไม่จำโหมดแก้ไข — เปิดร่างนั้นมาบันทึกจะกลายเป็นบิลใหม่ซ้ำ
+  const draftSig=st=>{ try{ const o=Object.assign({},st||{}); delete o.__draftNo; delete o.__auto; return JSON.stringify(o); }catch(e){ return ''; } };
+  function formStateHasData(st){
+    if(!st) return false;
+    if(['custName','custLastName','custNick','custPhone'].some(k=>String(st[k]||'').trim())) return true;
+    return (st.products||[]).some(p=>String(p.sku||'').trim() || (p.measures||[]).some(m=>m && m.editing && ((+m.value)||(+m.takein))));
+  }
+  function draftAutoToast(msg){
+    try{
+      let t=document.getElementById('draftAutoToast');
+      if(!t){ t=document.createElement('div'); t.id='draftAutoToast'; t.className='ra2-toast'; t.setAttribute('role','status'); document.body.appendChild(t); }
+      t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),4500);
+    }catch(e){}
+  }
+  let _autoDraftBusy=null;
+  async function autoDraftCurrentForm(reason, stateIn){
+    if(_autoDraftBusy) await _autoDraftBusy.catch(()=>{});   // กดเร็วๆ ซ้อนกัน → รอตัวก่อนจบ แล้วเทียบใหม่ (ไม่เกิดร่างซ้ำ)
+    const run=(async()=>{
+      if(!stateIn && _editingRecordId) return null;
+      const state=stateIn||collectFormState();
+      if(!formStateHasData(state)) return null;
+      const sig=draftSig(state), od=stateIn?null:_openedDraft;
+      if(od && od.sig && od.sig===sig) return null;
+      try{ await workerFeat(); }catch(e){}
+      const multi=draftMulti(), branch=String(state.branchTop||draftBranchNow()||'').trim();
+      const phone=String(state.custPhone||'').trim();
+      if(multi && !od && phone && branch && branch===draftBranchNow() && DRAFT_SYNC.ok!==true){ try{ const jl=await draftApi('/draft-list?branch='+encodeURIComponent(branch)); if(branch===draftBranchNow()){ DRAFT_SYNC.list=jl.drafts||[]; DRAFT_SYNC.ok=true; } }catch(e){} }   // เลขร่างนับร่างของเครื่องอื่นด้วย (เหมือนปุ่มบันทึกร่าง)
+      const all=mergedDrafts();
+      if(od){ const cur=all.find(d=>(od.id&&d.localId===od.id)||(od.srvId&&d.srvId===od.srvId)); if(cur && cur.state && draftSig(cur.state)===sig) return null; }
+      else if(all.some(d=>d.state && draftSig(d.state)===sig) || loadDrafts().some(d=>d.state && draftSig(d.state)===sig)) return null;
+      const drafts=loadDrafts(); let draft=null, no=0;
+      if(od){
+        const i=drafts.findIndex(d=>(od.id&&d.id===od.id)||(od.srvId&&d.srvId===od.srvId));
+        if(i!==-1) [draft]=drafts.splice(i,1); else draft={ id:od.id||('d'+Date.now()), srvId:od.srvId||undefined };
+        no=multi?(od.no||draftNoOf(draft)||nextDraftNo(phone)):0;
+        if(draft.branch && draft.branch!==branch) draft.srvId=undefined;
+      } else if(!multi && phone){ const i=drafts.findIndex(d=>draftPhoneOf(d)===phone); if(i!==-1) [draft]=drafts.splice(i,1); }
+      if(!draft){ draft={ id:'d'+Date.now() }; if(multi) no=nextDraftNo(phone); }
+      const st=Object.assign({}, state, { __auto:true }); if(no) st.__draftNo=no; else delete st.__draftNo;
+      const summary=(st.custName||'ไม่ระบุชื่อลูกค้า')+(phone?(' · '+phone):'');
+      draft.savedAt=Date.now(); draft.summary=summary; draft.state=st; draft.branch=branch; draft.staff=st.staffInput||''; draft.synced=false;
+      drafts.unshift(draft); if(drafts.length>30) drafts.length=30;
+      if(!saveDrafts(drafts)) return null;
+      if(od) setOpenedDraft(Object.assign({}, od, { id:draft.id, srvId:draft.srvId||od.srvId||null, no:no||od.no||0, sig }));
+      updateDraftCount(); renderDraftsIfOpen();
+      const nm=(String(st.custName||'').trim()||'ไม่ระบุชื่อลูกค้า')+(no>1?(' '+no):'');
+      draftAutoToast('บันทึกร่างอัตโนมัติแล้ว: '+nm+(reason==='stale'?' (ข้อมูลที่ค้างจากวันก่อน)':''));
+      if(branch){
+        const push=pushDraftToServer(draft).then(j=>{
+          if(branch===draftBranchNow()){ DRAFT_SYNC.list=[{ id:j.id, branch, summary, phone, staff:draft.staff, savedAt:j.savedAt||Date.now(), state:st }].concat(DRAFT_SYNC.list.filter(x=>x.id!==j.id && (multi || !phone || x.phone!==phone))); }
+          if(_openedDraft && _openedDraft.id===draft.id) setOpenedDraft(Object.assign({}, _openedDraft, { srvId:j.id }));
+          updateDraftCount(); renderDraftsIfOpen();
+        }).catch(()=>{});   // ส่งไม่ได้ = ร่างยังอยู่ในเครื่อง (ป้าย "ยังไม่ซิงก์") ระบบส่งให้ใหม่ตอนเปิดแท็บร่าง
+        await Promise.race([push, new Promise(r=>setTimeout(r,4000))]);
+      }
+      return draft;
+    })();
+    _autoDraftBusy=run;
+    try{ return await run; }catch(e){ try{ console.warn('[ร่างอัตโนมัติ]', e && e.message); }catch(_e){} return null; }
+    finally{ if(_autoDraftBusy===run) _autoDraftBusy=null; }
+  }
   document.querySelectorAll('.draft').forEach(btn=>{
     const original=btn.innerHTML;
     const tick='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>';
@@ -7365,7 +7441,7 @@
       return '<div class="hist-row draft-row" data-id="'+escapeHtml(d.id)+'"><div class="hist-ordercard">'
         + '<div class="hist-top"><div class="draft-title">'+escapeHtml(draftTitle(d, all))+'</div>'
         + '<button class="draft-del" data-id="'+escapeHtml(d.id)+'" title="ลบร่างนี้">&times;</button></div>'
-        + '<div class="created">บันทึกเมื่อ '+when+' น.'+(d.staff?(' · '+escapeHtml(d.staff)):'')+(d.localOnly&&branch?' · <span class="draft-local">ในเครื่องนี้ ยังไม่ซิงก์</span>':'')+'</div>'
+        + '<div class="created">บันทึกเมื่อ '+when+' น.'+(d.staff?(' · '+escapeHtml(d.staff)):'')+(d.localOnly&&branch?' · <span class="draft-local">ในเครื่องนี้ ยังไม่ซิงก์</span>':'')+(d.state&&d.state.__auto?' <span class="draft-auto">บันทึกอัตโนมัติ</span>':'')+'</div>'
         + '</div></div>';
     }).join('');
   }
@@ -8959,6 +9035,8 @@
       const res=await fetch(WORKER+'/order-raw?record_id='+encodeURIComponent(recId));
       const json=await res.json();
       if(!json || !json.success) throw new Error(json&&json.error||'ดึงข้อมูลไม่สำเร็จ');
+      await autoDraftCurrentForm('edit-bill');   // [2026-10-28-6] ข้อมูลที่กรอกค้างอยู่ → เก็บเป็นร่างก่อนโหลดบิลเก่าทับ
+      setOpenedDraft(null);                      // ฟอร์มนี้คือบิลเก่า ไม่ใช่ร่าง (กันบันทึกการแก้ไขแล้วไปลบร่างที่เคยผูกไว้)
       applyRawDataToForm(json.data);
       { const _no=findHistOrder(recId); const _bn=document.getElementById('billNote'); if(_bn && noteSupported(_no)) _bn.value=_no.note||''; } // [2026-10-21-8] NOTE ล่าสุดจากคอลัมน์ Lark (อาจถูกแก้ผ่าน "แก้ NOTE" หลังบันทึก — ข้อมูลดิบเก่ากว่า)
       _editingRecordId=recId;
@@ -9095,8 +9173,16 @@
     if(row){
       const d=mergedDrafts().find(x=>x.id===row.dataset.id);
       if(d){
-        setOpenedDraft({ id:d.localId||null, srvId:d.srvId||null, phone:String(d.state?.custPhone||'').trim(), no:draftNoOf(d), name:String(d.state?.custName||'').trim() });
-        applyFormState(d.state); histPop.classList.remove('show'); goTo(1);
+        if(row.dataset.opening) return; row.dataset.opening='1';
+        const od=_openedDraft;
+        const same=od && ((d.localId&&od.id===d.localId)||(d.srvId&&od.srvId===d.srvId));
+        try{ if(!same) await autoDraftCurrentForm('open-draft'); }finally{ delete row.dataset.opening; }   // [2026-10-28-6] ฟอร์มปัจจุบันยังไม่ได้บันทึกร่าง → บันทึกให้ก่อนเปิดร่างนี้ทับ
+        const d2=mergedDrafts().find(x=>x.id===row.dataset.id || (d.srvId&&x.srvId===d.srvId) || (d.localId&&x.localId===d.localId)) || d;
+        setOpenedDraft({ id:d2.localId||null, srvId:d2.srvId||null, phone:String(d2.state?.custPhone||'').trim(), no:draftNoOf(d2), name:String(d2.state?.custName||'').trim() });
+        if(_editingRecordId){ _editingRecordId=null; const sb=document.getElementById('submitBtn'); if(sb) sb.textContent='บันทึกข้อมูล'; const eb=document.getElementById('editorBanner'); if(eb) eb.classList.add('hidden'); }   // [2026-10-28-6 แก้บั๊ก] ร่างไม่ใช่บิลเก่า — เดิมเปิดร่างตอนอยู่โหมดแก้ไขบิล ปุ่มยังเป็น "บันทึกการแก้ไข" กดแล้วข้อมูลร่างไปทับบิลเก่า
+        applyFormState(d2.state); histPop.classList.remove('show'); goTo(1);
+        if(_openedDraft) setOpenedDraft(Object.assign({}, _openedDraft, { sig:draftSig(collectFormState()) }));
+        scheduleAutosave();   // autosave = ฟอร์มที่เพิ่งเปิด (ไม่ใช่ของเดิม/โหมดแก้ไขเดิม) — รีโหลดแล้วได้ร่างนี้กลับมา   // ลายเซ็นของฟอร์มหลังเปิด — ไว้รู้ว่าแก้อะไรต่อหรือยัง
       }
     }
   });
@@ -12488,7 +12574,7 @@
   (function scheduleMidnightClear(){
     const now=new Date();
     const nextMidnight=new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, 0,0,5); // +5 วิ กันเคสนาฬิกาเครื่องคลาดเคลื่อนเล็กน้อยแล้ว fire ก่อนเที่ยงคืนจริง
-    setTimeout(()=>{ clearAutosave(); location.reload(); }, nextMidnight-now);
+    setTimeout(async ()=>{ try{ await Promise.race([autoDraftCurrentForm('midnight'), new Promise(r=>setTimeout(r,8000))]); }catch(e){} clearAutosave(); location.reload(); }, nextMidnight-now);   // [2026-10-28-6] เก็บเป็นร่างก่อนล้าง
   })();
   // เคสที่ 2: ปิดเบราว์เซอร์ค้างคืนแล้วเพิ่งมาเปิดใหม่ตอนเช้า — ไม่มีการรีเฟรชตอนเที่ยงคืนจริงเพราะแท็บปิดอยู่ ต้องเช็คเองว่า autosave ที่ค้างอยู่เป็นของเมื่อวาน/ก่อนหน้าไหม ถ้าใช่ให้ล้างทิ้งก่อน restoreAutosave() จะได้ไม่ดึงข้อมูลเก่าข้ามวันกลับมา
   (function clearStaleAutosaveFromPreviousDay(){
@@ -12496,7 +12582,10 @@
     if(!raw) return;
     try{
       const payload=JSON.parse(raw);
-      if(payload && payload.savedAt && new Date(payload.savedAt).toDateString()!==new Date().toDateString()) clearAutosave();
+      if(payload && payload.savedAt && new Date(payload.savedAt).toDateString()!==new Date().toDateString()){
+        clearAutosave();   // ล้างทันทีเหมือนเดิม (ฟอร์มเริ่มว่าง) — [2026-10-28-6] แต่ถ้ามีข้อมูลลูกค้า เก็บเป็นร่างให้ก่อน (ไม่ใช่บิลเก่าที่กำลังแก้ไข)
+        if(payload.state && !payload.editingRecordId) setTimeout(()=>{ autoDraftCurrentForm('stale', payload.state); }, 0);
+      }
     }catch(e){}
   })();
 
