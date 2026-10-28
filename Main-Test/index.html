@@ -1063,6 +1063,10 @@
   .draft-del:hover{color:var(--red)}
   /* [ใหม่ 2026-10-06] ร่างข้ามเครื่อง: ป้ายบอกว่าร่างนี้ยังอยู่แค่ในเครื่อง (ยังไม่ซิงก์) + บรรทัดสถานะการโหลดจากเซิร์ฟเวอร์ */
   .draft-local{color:var(--red);font-weight:600}
+  /* [2026-10-28-7 ตามที่ขอ] ติ๊ก "ลูกค้านำสินค้ากลับมาปรับแก้" → สินค้าใช้ของสาขา ล็อกเป็นค่านี้ + ข้อความบอกวิธีปลด */
+  .cust-stock-hint{font-size:12px;line-height:1.45;color:var(--goldink);text-align:right;margin:-4px 0 10px}
+  .cust-stock-hint.hidden{display:none}
+  select.branch-prod.cust-locked{opacity:1;color:var(--ink);cursor:not-allowed}
   /* [2026-10-28-6] ป้าย "บันทึกอัตโนมัติ" บนร่างที่ระบบบันทึกให้เอง (ก่อนเปิดร่างอื่น / โหลดบิลมาแก้ / ข้ามวัน) */
   .draft-auto{display:inline-block;margin-left:2px;padding:1px 8px;border-radius:999px;background:rgba(201,162,75,.18);color:var(--goldink);font-weight:600;font-size:11px;white-space:nowrap}
   .draft-sync-line{font-size:12.5px;color:var(--t2);padding:2px 4px 8px}
@@ -3103,6 +3107,7 @@
 
 <div class="hp-item"><div class="hp-name">สินค้าใช้ของสาขา <span class="hp-kind">Dropdown · ค่าเริ่มต้น OFFICE</span></div><div class="hp-desc">
 <p>บอกว่าสินค้าชิ้นนี้ใช้ของสาขาไหน ตัวเลือกคือ OFFICE · R3 · T21 · SQ1 · PM · SC · CM · FP · KR · SL · NW · CC · BP · RCD · KK · PK · MG · CTW · WG แต่ละชิ้นเลือกคนละสาขาได้ ค่านี้ขึ้นบนใบสรุปที่พิมพ์เป็นบรรทัด “ใช้สินค้าจาก” (แสดงเป็นตัวย่อสาขา เช่น OFFICE)</p>
+<p><b>สินค้าของลูกค้าที่นำกลับมาแก้:</b> ติ๊ก <span class="hp-field">ลูกค้านำสินค้ากลับมาปรับแก้</span> แล้วช่องนี้จะเปลี่ยนเป็น “ลูกค้านำสินค้ากลับมาปรับแก้” เองและ<b>ล็อก</b> (มีข้อความ 🔒 ใต้ช่อง) ช่องชื่อพนักงานที่ติดต่อจะไม่ขึ้น · บนใบสรุปพิมพ์แค่ <b>#</b> แทน “ใช้สินค้าจาก …” · ใน Salesforce ช่อง “สินค้าจาก” เป็น <b>สินค้าหน้าร้าน</b> · ใบ 4×6 (KK ใช้ช่างหน้าร้าน) ยังไม่ใช้กับสินค้าแบบนี้ (ติ๊ก “ใช้ช่างหน้าร้าน” จะไม่ขึ้น)</p>
 <div class="hp-note">ช่องนี้ไม่ใช่ “สาขาที่นัดรับ” สาขาที่นัดรับอยู่ในหน้าที่ 3</div></div></div>
 
 <div class="hp-item"><div class="hp-name">ชื่อพนักงานที่ติดต่อ <span class="hp-kind">พิมพ์แล้วเลือกชื่อ · ขึ้นเฉพาะบางกรณี · ไม่บังคับ</span></div><div class="hp-desc">
@@ -3114,11 +3119,11 @@
 </ul>
 </div></div>
 
-<div class="hp-item"><div class="hp-name">เย็บย้ำกระดุม · ลูกค้านำสินค้ากลับมาแก้/ ใช้งานก่อนปรับแก้ · งานทีม <span class="hp-kind">ช่องติ๊ก 3 ช่อง</span></div><div class="hp-desc">
+<div class="hp-item"><div class="hp-name">เย็บย้ำกระดุม · ลูกค้านำสินค้ากลับมาปรับแก้ · งานทีม <span class="hp-kind">ช่องติ๊ก 3 ช่อง</span></div><div class="hp-desc">
 <p>ทั้ง 3 ช่องเป็นทางลัด ติ๊กแล้วระบบเติมคำนั้นต่อท้ายช่องหมายเหตุให้ เอาติ๊กออกก็ลบคำนั้นออกให้</p>
 <div class="hp-tablewrap"><table class="hp-table"><thead><tr><th>ช่องติ๊ก</th><th>ขึ้นกับประเภทสินค้า</th><th>คำที่เติมในหมายเหตุ</th></tr></thead><tbody>
 <tr><td>เย็บย้ำกระดุม</td><td>เสื้อสูท กางเกง เสื้อเชิ้ต และเสื้อกั๊ก (ไม่มีใน Accessory)</td><td>เย็บย้ำกระดุม</td></tr>
-<tr><td>ลูกค้านำสินค้ากลับมาแก้/ ใช้งานก่อนปรับแก้</td><td>ทุกประเภท</td><td>ลูกค้านำสินค้ากลับมาแก้/ ใช้งานก่อนปรับแก้</td></tr>
+<tr><td>ลูกค้านำสินค้ากลับมาปรับแก้</td><td>ทุกประเภท</td><td>ลูกค้านำสินค้ากลับมาปรับแก้ — และ<b>ล็อก “สินค้าใช้ของสาขา” เป็น “ลูกค้านำสินค้ากลับมาปรับแก้”</b> (เอาติ๊กออก = กลับเป็น OFFICE) · ร่าง/บิลเก่าที่มีคำเดิม “ลูกค้านำสินค้ากลับมาแก้/ ใช้งานก่อนปรับแก้” หรือ “ลูกค้าใช้งานก่อนปรับแก้” ยังนับเป็นติ๊ก</td></tr>
 <tr><td>งานทีม</td><td>ทุกประเภท</td><td>งานทีม</td></tr>
 </tbody></table></div>
 <ul class="hp-list">
@@ -4446,7 +4451,7 @@
       <div class="info-panel hidden" data-info-panel="repeat">
         <h3 class="hp-title">สินค้าแก้ครั้งที่ 2, 3, 4, 5</h3>
 <p class="hp-lead">ใช้เมื่อ <b>ลูกค้านำสินค้าสำเร็จรูปที่เคยแก้ไปแล้ว กลับมาให้แก้อีกครั้ง</b> (เช่น รับกางเกงไปแล้ว ยาวขายังไม่พอดี) ระบบจะบันทึกเป็น “ครั้งที่ 2” ถึง “ครั้งที่ 5” ของสินค้าชิ้นเดิม (P# เดิม) ออกเลขที่บิลใหม่ให้ วาดใบสรุปให้ และส่งข้อมูลเข้า Salesforce ต่อให้ โดยไม่ต้องลงบิลใหม่ทั้งบิล หน้านี้อธิบายทุกขั้นตอน ตั้งแต่หาสินค้า กรอกฟอร์ม หลังบันทึก การพิมพ์ การแก้ไข จนถึงข้อความผิดพลาดที่อาจเจอ</p>
-<details class="hp-toc" id="hp-toc-repeat"><summary>สารบัญหน้านี้ — กดหัวข้อเพื่อข้ามไปอ่าน (20 หัวข้อ)</summary><ul class="hp-toc-list"><li><a class="hp-jump" href="#hp-repeat-1">นำกลับมาแก้คืออะไร ใช้เมื่อไหร่</a></li><li><a class="hp-jump" href="#hp-repeat-2">ต่างจากติ๊ก “ลูกค้านำสินค้ากลับมาแก้/ ใช้งานก่อนปรับแก้” อย่างไร</a></li><li><a class="hp-jump" href="#hp-repeat-3">ก่อนเริ่ม: สินค้าต้องพร้อมอะไรบ้าง</a></li><li><a class="hp-jump" href="#hp-repeat-4">เปิดหน้าจอนำกลับมาแก้</a></li><li><a class="hp-jump" href="#hp-repeat-5">ป้ายบนการ์ด แปลว่าอะไร</a></li><li><a class="hp-jump" href="#hp-repeat-6">หาสินค้า: P#, สแกน QR, เบอร์โทร, ชื่อลูกค้า</a></li><li><a class="hp-jump" href="#hp-repeat-7">หาด้วยเลขที่บิล หรือ O#</a></li><li><a class="hp-jump" href="#hp-repeat-8">หัวฟอร์ม และ “ครั้งที่” คืออะไร</a></li><li><a class="hp-jump" href="#hp-repeat-9">ส่วนที่ 01 รายละเอียด (จุดที่แก้ หมายเหตุ เย็บย้ำกระดุม รูป)</a></li><li><a class="hp-jump" href="#hp-repeat-10">ส่วนที่ 02 นัดรับ (สาขา จัดส่ง วันที่ งานด่วน ผู้ตรวจ)</a></li><li><a class="hp-jump" href="#hp-repeat-11">เลขที่บิลใหม่</a></li><li><a class="hp-jump" href="#hp-repeat-12">ปุ่มบันทึกข้อมูล และข้อความ “ยังขาด”</a></li><li><a class="hp-jump" href="#hp-repeat-13">หลังกดบันทึก: หน้าสรุปและใบสรุป</a></li><li><a class="hp-jump" href="#hp-repeat-14">ข้อมูลไปอยู่ที่ไหนใน Lark</a></li><li><a class="hp-jump" href="#hp-repeat-15">ส่งเข้า Salesforce เมื่อไหร่ ใครเป็นคนส่ง</a></li><li><a class="hp-jump" href="#hp-repeat-16">การพิมพ์ใบนำกลับมาแก้</a></li><li><a class="hp-jump" href="#hp-repeat-17">แก้ไขงานนำกลับมาแก้ที่บันทึกแล้ว</a></li><li><a class="hp-jump" href="#hp-repeat-18">งานเก่าก่อนมีระบบอัตโนมัติ และ SKU จากระบบเก่า</a></li><li><a class="hp-jump" href="#hp-repeat-19">ข้อความผิดพลาดที่อาจเจอ และวิธีแก้</a></li><li><a class="hp-jump" href="#hp-repeat-20">สิ่งที่ทำไม่ได้ ข้อจำกัด และติดต่อใคร</a></li></ul></details>
+<details class="hp-toc" id="hp-toc-repeat"><summary>สารบัญหน้านี้ — กดหัวข้อเพื่อข้ามไปอ่าน (20 หัวข้อ)</summary><ul class="hp-toc-list"><li><a class="hp-jump" href="#hp-repeat-1">นำกลับมาแก้คืออะไร ใช้เมื่อไหร่</a></li><li><a class="hp-jump" href="#hp-repeat-2">ต่างจากติ๊ก “ลูกค้านำสินค้ากลับมาปรับแก้” อย่างไร</a></li><li><a class="hp-jump" href="#hp-repeat-3">ก่อนเริ่ม: สินค้าต้องพร้อมอะไรบ้าง</a></li><li><a class="hp-jump" href="#hp-repeat-4">เปิดหน้าจอนำกลับมาแก้</a></li><li><a class="hp-jump" href="#hp-repeat-5">ป้ายบนการ์ด แปลว่าอะไร</a></li><li><a class="hp-jump" href="#hp-repeat-6">หาสินค้า: P#, สแกน QR, เบอร์โทร, ชื่อลูกค้า</a></li><li><a class="hp-jump" href="#hp-repeat-7">หาด้วยเลขที่บิล หรือ O#</a></li><li><a class="hp-jump" href="#hp-repeat-8">หัวฟอร์ม และ “ครั้งที่” คืออะไร</a></li><li><a class="hp-jump" href="#hp-repeat-9">ส่วนที่ 01 รายละเอียด (จุดที่แก้ หมายเหตุ เย็บย้ำกระดุม รูป)</a></li><li><a class="hp-jump" href="#hp-repeat-10">ส่วนที่ 02 นัดรับ (สาขา จัดส่ง วันที่ งานด่วน ผู้ตรวจ)</a></li><li><a class="hp-jump" href="#hp-repeat-11">เลขที่บิลใหม่</a></li><li><a class="hp-jump" href="#hp-repeat-12">ปุ่มบันทึกข้อมูล และข้อความ “ยังขาด”</a></li><li><a class="hp-jump" href="#hp-repeat-13">หลังกดบันทึก: หน้าสรุปและใบสรุป</a></li><li><a class="hp-jump" href="#hp-repeat-14">ข้อมูลไปอยู่ที่ไหนใน Lark</a></li><li><a class="hp-jump" href="#hp-repeat-15">ส่งเข้า Salesforce เมื่อไหร่ ใครเป็นคนส่ง</a></li><li><a class="hp-jump" href="#hp-repeat-16">การพิมพ์ใบนำกลับมาแก้</a></li><li><a class="hp-jump" href="#hp-repeat-17">แก้ไขงานนำกลับมาแก้ที่บันทึกแล้ว</a></li><li><a class="hp-jump" href="#hp-repeat-18">งานเก่าก่อนมีระบบอัตโนมัติ และ SKU จากระบบเก่า</a></li><li><a class="hp-jump" href="#hp-repeat-19">ข้อความผิดพลาดที่อาจเจอ และวิธีแก้</a></li><li><a class="hp-jump" href="#hp-repeat-20">สิ่งที่ทำไม่ได้ ข้อจำกัด และติดต่อใคร</a></li></ul></details>
 
 <h4 class="hp-h" id="hp-repeat-1">นำกลับมาแก้คืออะไร ใช้เมื่อไหร่</h4>
 <ul class="hp-list">
@@ -4456,10 +4461,10 @@
 <li><b>ทำจากที่ไหน:</b> ปุ่ม <span class="hp-btn">รายการย้อนหลัง</span> ที่แถบบน แล้วอยู่ใน​<span class="nb">แท็บ</span> <span class="hp-field">รายการที่นัดรับ</span> (ไม่มีปุ่มแยก)</li>
 </ul>
 
-<h4 class="hp-h" id="hp-repeat-2">ต่างจากติ๊ก “ลูกค้านำสินค้ากลับมาแก้/ ใช้งานก่อนปรับแก้” อย่างไร</h4>
-<div class="hp-tablewrap"><table class="hp-table"><thead><tr><th></th><th>ติ๊ก “ลูกค้านำสินค้ากลับมาแก้/ ใช้งานก่อนปรับแก้”</th><th>หน้าจอนำกลับมาแก้ (หน้านี้)</th></tr></thead><tbody>
+<h4 class="hp-h" id="hp-repeat-2">ต่างจากติ๊ก “ลูกค้านำสินค้ากลับมาปรับแก้” อย่างไร</h4>
+<div class="hp-tablewrap"><table class="hp-table"><thead><tr><th></th><th>ติ๊ก “ลูกค้านำสินค้ากลับมาปรับแก้”</th><th>หน้าจอนำกลับมาแก้ (หน้านี้)</th></tr></thead><tbody>
 <tr><td>อยู่ที่ไหน</td><td>ฟอร์มลงบิลใหม่ หน้าที่ 2 ใต้สินค้าแต่ละชิ้น</td><td>รายการย้อนหลัง → แท็บ รายการที่นัดรับ</td></tr>
-<tr><td>ทำอะไร</td><td>แค่เติมคำนี้ลงใน “หมายเหตุ” ของสินค้าชิ้นนั้น ในบิลใหม่ที่กำลังลง</td><td>บันทึกการแก้ครั้งที่ 2–5 ของสินค้าชิ้นเดิม (P# เดิม)</td></tr>
+<tr><td>ทำอะไร</td><td>เติมคำนี้ลงใน “หมายเหตุ” + ล็อก “สินค้าใช้ของสาขา” เป็นของลูกค้า (ใบสรุปพิมพ์ #) ในบิลใหม่ที่กำลังลง</td><td>บันทึกการแก้ครั้งที่ 2–5 ของสินค้าชิ้นเดิม (P# เดิม)</td></tr>
 <tr><td>ใช้เมื่อ</td><td>ลงบิลใหม่ (P# ใหม่) ของสินค้าที่ลูกค้าเคยใส่/ใช้งานมาแล้ว หรือไม่ได้ลงผ่านระบบนี้</td><td>สินค้ามี P# อยู่แล้ว และสถานะใน Salesforce พร้อม (ดูหัวข้อถัดไป)</td></tr>
 <tr><td>นับครั้งที่แก้</td><td>ไม่นับ (เป็นบิลใหม่ ครั้งที่ 1)</td><td>นับต่อจากของเดิม ครั้งที่ 2 ถึง 5</td></tr>
 </tbody></table></div>
@@ -4917,7 +4922,7 @@
 <tr><td>ใบสั่งแก้ปรับทรงสำเร็จรูป + ประเภทสินค้า</td><td>หัวเรื่อง และชื่อประเภทตัวใหญ่ เช่น “กางเกง”</td></tr>
 <tr><td>!! งานด่วน !!</td><td>กรอบข้อความ ขึ้นเฉพาะงานด่วน (ไม่แสดงชื่อผู้อนุมัติบนใบ)</td></tr>
 <tr><td>ลูกค้า · เบอร์ · พนักงานขาย</td><td>ชื่อ นามสกุล (ชื่อเล่น) / เบอร์โทร / พนักงานขาย</td></tr>
-<tr><td>ใช้สินค้าจาก … · จองกับ …</td><td>“ใช้สินค้าจาก” เช่น OFFICE ขึ้นเมื่อมีข้อมูลสาขาของสินค้า. “จองกับ” (พนักงานที่ติดต่อ) ขึ้นเฉพาะใบที่พิมพ์ตอนบันทึกและกรอกไว้</td></tr>
+<tr><td>ใช้สินค้าจาก … · จองกับ … (หรือ #)</td><td>“ใช้สินค้าจาก” เช่น OFFICE ขึ้นเมื่อมีข้อมูลสาขาของสินค้า. “จองกับ” (พนักงานที่ติดต่อ) ขึ้นเฉพาะใบที่พิมพ์ตอนบันทึกและกรอกไว้ · <b>สินค้าที่ลูกค้านำกลับมาปรับแก้</b> (ติ๊กไว้) พิมพ์แค่ <b>#</b> ไม่มีชื่อสาขาและไม่มี “จองกับ”</td></tr>
 <tr><td>SKU …</td><td>รหัสสินค้า ต่อด้วยขีดและไซซ์ เช่น “SKU UF543-BK-P-32”</td></tr>
 <tr><td>แถวค่าวัดตัว</td><td>เฉพาะ <b>เสื้อสูท</b> และ <b>กางเกง</b> ที่เลือกแก้ไขขนาด: ชื่อจุดวัด (+ ทิศทาง “ขยายออก” / “เก็บเข้า” สำหรับ อก เอว สะโพก) และค่า เช่น “ยาวขา 33 นิ้ว”. ถ้าเลือก “ไม่แก้ไขขนาดสินค้า” ไม่มีแถวพวกนี้</td></tr>
 <tr><td>หมายเหตุ</td><td>ขึ้นเมื่อมีหมายเหตุ (ท่อนที่ซ้ำกับแถวค่าวัดตัวด้านบนจะถูกตัดออก)</td></tr>
@@ -5450,14 +5455,15 @@
         <div class="sku-type-warning hidden"></div>
         <!-- ไซซ์/สาขาที่ใช้ของ ย้ายมาอยู่กลุ่มเดียวกับรหัสสินค้า (เดิมอยู่หลังประเภทสินค้า) เน้นรหัส+ไซซ์ให้เด่นเพราะเป็นข้อมูลที่หน้างานต้องใช้หาสินค้าจริง -->
         <div class="frow size-row"><span class="k">Size</span><input class="fig emph size-input" placeholder="—"></div>
-        <div class="frow"><span class="k">สินค้าใช้ของสาขา</span><select class="frowsel branch-prod"><option>OFFICE</option><option>R3</option><option>T21</option><option>SQ1</option><option>PM</option><option>SC</option><option>CM</option><option>FP</option><option>KR</option><option>SL</option><option>NW</option><option>CC</option><option>BP</option><option>RCD</option><option>KK</option><option>PK</option><option>MG</option><option>CTW</option><option>WG</option></select></div>
+        <div class="frow"><span class="k">สินค้าใช้ของสาขา</span><select class="frowsel branch-prod"><option>OFFICE</option><option>R3</option><option>T21</option><option>SQ1</option><option>PM</option><option>SC</option><option>CM</option><option>FP</option><option>KR</option><option>SL</option><option>NW</option><option>CC</option><option>BP</option><option>RCD</option><option>KK</option><option>PK</option><option>MG</option><option>CTW</option><option>WG</option><option hidden>ลูกค้านำสินค้ากลับมาปรับแก้</option></select></div>
+        <div class="cust-stock-hint hidden">🔒 ล็อกตามติ๊ก “ลูกค้านำสินค้ากลับมาปรับแก้” — เอาติ๊กออกถ้าจะเลือกสาขาอื่น</div>   <!-- [2026-10-28-7] -->
         <div class="frow codewrap contact-row hidden"><span class="k">ชื่อพนักงานที่ติดต่อ</span><input class="contact-input" placeholder="พิมพ์แล้วเลือกชื่อ" autocomplete="off"><div class="suggest contact-suggest"></div></div>
         <!-- [ใหม่ตามที่ขอ] ติ๊ก "เย็บย้ำกระดุม" เหนือหมายเหตุ — โชว์เฉพาะเสื้อสูท/กางเกง/เสื้อเชิ้ต/เสื้อกั๊ก [2026-10-26-2] (คุมด้วย JS ใน renderMeasureSection) ติ๊กแล้วเติมคำนี้ลงหมายเหตุอัตโนมัติ ซึ่งไปรวมกับหมายเหตุที่ส่ง Salesforce (Field20__c) อยู่แล้วตามปกติ -->
         <div class="frow stitch-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="stitch-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">เย็บย้ำกระดุม</span></label></div>
         <!-- [2026-10-22-3 ตามที่ขอ] ติ๊ก "เปลี่ยนรหัสกระดุม" — โชว์เฉพาะเสื้อสูท/กางเกง/เสื้อกั๊ก (คุมใน renderMeasureSection) · ติ๊กแล้วมีช่องพิมพ์รหัสกระดุม · เติม "เปลี่ยนรหัสกระดุม (รหัส)" ลงหมายเหตุ (ไป Salesforce + ใบสรุป) ดู wireButtonCodeCheckbox -->
         <div class="frow btncode-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="btncode-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">เปลี่ยนรหัสกระดุม</span></label><input class="btncode-input hidden" type="text" placeholder="รหัสกระดุม" autocomplete="off" maxlength="40" aria-label="รหัสกระดุม"></div>
         <!-- [ใหม่ 2026-09-23 ตามที่ขอ] ติ๊ก "ลูกค้าใช้งานก่อนปรับแก้" เหนือหมายเหตุ — กลไกเดียวกับ "เย็บย้ำกระดุม" ทุกอย่าง (ติ๊กแล้วเติมคำนี้ลงหมายเหตุอัตโนมัติ) ต่างกันแค่ไม่จำกัดประเภทสินค้า (ใช้ได้ทุกประเภท ไม่ใช่แค่เสื้อสูท/กางเกง) ดู wireUsedCheckbox -->
-        <div class="frow used-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="used-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">ลูกค้านำสินค้ากลับมาแก้/ ใช้งานก่อนปรับแก้</span></label></div>
+        <div class="frow used-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="used-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">ลูกค้านำสินค้ากลับมาปรับแก้</span></label></div>
         <!-- [ใหม่ 2026-10-06 ตามที่ขอ] ติ๊ก "งานทีม" เหนือหมายเหตุ — กลไกเดียวกับ "เย็บย้ำกระดุม" (ติ๊กแล้วเติมคำนี้ลงหมายเหตุอัตโนมัติ เอาติ๊กออกแล้วลบคำนี้) ต่างแค่โชว์ทุกประเภทสินค้า (พิมพ์ชื่อทีมต่อท้ายในหมายเหตุได้เอง เช่น "งานทีม K.Wind") -->
         <div class="frow team-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="team-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">งานทีม</span></label></div>
         <!-- [แก้ 2026-10-19] ติ๊ก "ใช้ช่างหน้าร้าน" เหนือหมายเหตุ — โชว์เฉพาะ สินค้าใช้ของสาขา = KK และประเภทของก้อนนี้ = กางเกง (คุมด้วย JS: updateShopTailorRow) · กลไกเดียวกับ "งานทีม" (ติ๊กแล้วเติมคำนี้ลงหมายเหตุ เอาติ๊กออกแล้วลบคำ) -->
@@ -5654,7 +5660,7 @@
     if(WFEAT.v) return Promise.resolve(WFEAT.v);
     if(WFEAT.p) return WFEAT.p;
     WFEAT.p=fetch(WORKER+'/version').then(r=>r.json()).then(j=>{
-      WFEAT.v={raReprint:!!(j&&j.raReprint===true), printStation:!!(j&&j.printStation===true), findByCustomer:!!(j&&j.findByCustomer===true), findByBill:!!(j&&j.findByBill===true), raPhotoLark:!!(j&&j.raPhotoLark===true), raEdit:!!(j&&j.raEdit===true), draftsMulti:!!(j&&j.draftsMulti===true), ra2Auto:!!(j&&j.ra2Auto&&j.ra2Auto.on===true), build:String((j&&j.build)||'')};
+      WFEAT.v={raReprint:!!(j&&j.raReprint===true), printStation:!!(j&&j.printStation===true), findByCustomer:!!(j&&j.findByCustomer===true), findByBill:!!(j&&j.findByBill===true), raPhotoLark:!!(j&&j.raPhotoLark===true), raEdit:!!(j&&j.raEdit===true), custStock:!!(j&&j.custStock===true), draftsMulti:!!(j&&j.draftsMulti===true), ra2Auto:!!(j&&j.ra2Auto&&j.ra2Auto.on===true), build:String((j&&j.build)||'')};
       return WFEAT.v;
     },()=>({raReprint:false,printStation:false,findByCustomer:false,findByBill:false,raPhotoLark:false,ra2Auto:false,build:''})).finally(()=>{ WFEAT.p=null; });
     return WFEAT.p;
@@ -5665,7 +5671,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-28-6';
+  const APP_VERSION = '2026-10-28-7';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -9856,7 +9862,7 @@
     });
   }
   // [ใหม่ 2026-09-23 ตามที่ขอ] ติ๊ก "ลูกค้าใช้งานก่อนปรับแก้" เติม/ลบคำนี้ในหมายเหตุอัตโนมัติ — โครงเดียวกับ wireStitchCheckbox เป๊ะ ต่างแค่คำที่เติมกับ class ที่ผูก ใช้ได้ทุกประเภทสินค้า (ไม่มีเงื่อนไขซ่อน/ล้างตามประเภทแบบเย็บย้ำกระดุม)
-  const USED_WORD='ลูกค้านำสินค้ากลับมาแก้/ ใช้งานก่อนปรับแก้', USED_RE=/ลูกค้านำสินค้ากลับมาแก้\/ ใช้งานก่อนปรับแก้|ลูกค้าใช้งานก่อนปรับแก้/g;   // [2026-10-26-2 ตามที่ขอ] ชื่อใหม่ (คำเดิมยังอ่านเป็นติ๊กได้)
+  const USED_WORD='ลูกค้านำสินค้ากลับมาปรับแก้', USED_RE=/ลูกค้านำสินค้ากลับมาแก้\/ ใช้งานก่อนปรับแก้|ลูกค้านำสินค้ากลับมาปรับแก้|ลูกค้าใช้งานก่อนปรับแก้/g;   // [2026-10-28-7 ตามที่ขอ] ตัดเหลือ "ลูกค้านำสินค้ากลับมาปรับแก้" · ข้อความเดิม 2 แบบยังอ่านเป็นติ๊ก (ร่าง/บิลเก่า)   // [2026-10-26-2 ตามที่ขอ] ชื่อใหม่ (คำเดิมยังอ่านเป็นติ๊กได้)
   function wireUsedCheckbox(block){
     const cb=block.querySelector('.used-check');
     if(!cb || cb.dataset.wired) return;
@@ -9869,7 +9875,30 @@
       if(cb.checked) v=(v?v+' ':'')+USED_WORD;
       noteInput.value=v;
       resizeNoteInput(noteInput);
+      syncCustStock(block);   // [2026-10-28-7] ติ๊ก → สินค้าใช้ของสาขา = ของลูกค้า (ล็อก) · เอาติ๊กออก → OFFICE
     });
+  }
+  // ── [2026-10-28-7 ตามที่ขอ] "สินค้าใช้ของสาขา" = "ลูกค้านำสินค้ากลับมาปรับแก้" — ผูกกับติ๊กเดียวกันเสมอ (ติ๊ก ⇔ ค่านี้)
+  //   Salesforce: Worker sh13 ส่ง "สินค้าจาก" = สินค้าหน้าร้าน (หลังบ้าน RTW ยืนยัน) · Worker เก่า (ไม่มี custStock) → ส่งเป็นสาขาที่ซื้อแทน = ผลใน Salesforce เท่ากัน
+  //   ใบสรุปพิมพ์ "#" แทน "ใช้สินค้าจาก …" และไม่พิมพ์ "จองกับ" (isCustStockItem — รวมพิมพ์ซ้ำจาก Salesforce ที่เห็นเป็น หน้าร้าน + หมายเหตุมีคำนี้)
+  const CUST_STOCK='ลูกค้านำสินค้ากลับมาปรับแก้';
+  // ใบ 4×6 (KK ใช้ช่างหน้าร้าน) ของสินค้าที่ลูกค้านำกลับมา — เจ้าของยังไม่ตอบ · false = ไม่ทำใบ 4×6 และซ่อนติ๊ก "ใช้ช่างหน้าร้าน" · เปลี่ยนเป็น true บรรทัดเดียว = ใช้กติกา KK เดิมโดยดูสาขาที่ซื้อแทนสต็อก
+  const CUST_STOCK_KK_4X6=false;
+  function isCustStockItem(item, order){
+    const b=stockBranchCode(item&&item.branch);
+    if(b===CUST_STOCK) return true;
+    const buy=stockBranchCode(order&&order.branch);
+    return (b==='หน้าร้าน' || (!!buy && b===buy)) && String((item&&item.note)||'').indexOf(CUST_STOCK)>=0;
+  }
+  function syncCustStock(block){
+    if(!block || isRa2Scope(block)) return;
+    const sel=block.querySelector('.branch-prod'), cb=block.querySelector('.used-check'); if(!sel || !cb) return;
+    const before=sel.value;
+    if(cb.checked){ sel.value=CUST_STOCK; sel.disabled=true; }
+    else { if(sel.value===CUST_STOCK) sel.value='OFFICE'; sel.disabled=false; }
+    sel.classList.toggle('cust-locked', cb.checked);
+    const hint=block.querySelector('.cust-stock-hint'); if(hint) hint.classList.toggle('hidden', !cb.checked);
+    if(sel.value!==before) sel.dispatchEvent(new Event('change',{bubbles:true}));   // ช่องผู้ติดต่อ / ติ๊กช่างหน้าร้าน / autosave
   }
   // [ใหม่ 2026-10-06 ตามที่ขอ] ติ๊ก "งานทีม" เติม/ลบคำนี้ในหมายเหตุอัตโนมัติ — โครงเดียวกับ wireStitchCheckbox/wireUsedCheckbox ทุกอย่าง
   function wireTeamCheckbox(block){
@@ -9891,6 +9920,7 @@
   // ค่าสาขาจากฟอร์ม ("KK") กับจาก Salesforce ("สาขา KK (…)") แปลงเป็นรหัสเดียวกันด้วย stockBranchCode
   function stockBranchCode(v){ return String(v||'').replace(/\s*[(（][^)）]*[)）]/g,'').replace(/^สาขา\s*/,'').trim().toUpperCase(); }
   function shopTailorEligible(typeValue, stockBranch){
+    if(stockBranchCode(stockBranch)===CUST_STOCK) return CUST_STOCK_KK_4X6 && stockBranchCode(document.getElementById('branchTop')?.value)==='KK' && /^กางเกง/.test(String(typeValue||''));   // [2026-10-28-7] ของลูกค้า: ดูสาขาที่ซื้อ (ปิดอยู่)
     return stockBranchCode(stockBranch)==='KK' && /^กางเกง/.test(String(typeValue||''));
   }
   function updateShopTailorRow(block, typeValue){
@@ -9966,7 +9996,7 @@
   function syncNoteCheckboxes(block){
     const words=(block.querySelector('.note-input')?.value||'').split(/\s+/).filter(Boolean);
     const st=block.querySelector('.stitch-check'); if(st) st.checked=words.includes('เย็บย้ำกระดุม');
-    const us=block.querySelector('.used-check'); if(us){ USED_RE.lastIndex=0; us.checked=USED_RE.test(block.querySelector('.note-input')?.value||''); USED_RE.lastIndex=0; }   // [2026-10-26-2] วลีใหม่หรือคำเดิม
+    const us=block.querySelector('.used-check'); if(us){ USED_RE.lastIndex=0; us.checked=USED_RE.test(block.querySelector('.note-input')?.value||''); USED_RE.lastIndex=0; syncCustStock(block); }   // [2026-10-26-2] วลีใหม่หรือคำเดิม
     const tm=block.querySelector('.team-check'); if(tm) tm.checked=words.includes('งานทีม');
     const sh=block.querySelector('.shop-check'); if(sh) sh.checked=words.includes(SHOP_TAILOR_WORD);
     if(!isRa2Scope(block)) block.querySelectorAll('.along-check').forEach(cb=>{ cb.checked=words.includes(ALONG_WORD); });
@@ -10406,7 +10436,7 @@
     function updateContactVisibility(){
       const topBranch=document.getElementById('branchTop')?.value||'';
       const v=branchSel?branchSel.value:'';
-      const show = v!==topBranch && v!=='OFFICE';
+      const show = v!==topBranch && v!=='OFFICE' && v!==CUST_STOCK;   // [2026-10-28-7] ของลูกค้า = ไม่ต้องติดต่อสาขาไหน
       if(contactRow) contactRow.classList.toggle('hidden', !show);
       // [2026-10-21-6] ช่องถูกซ่อน (OFFICE / สาขาเดียวกับด้านบน) = ล้างชื่อทิ้ง — เดิมชื่อค้างในช่องที่มองไม่เห็นแล้วยังถูกส่ง/พิมพ์ "จองกับ" (WG26102002)
       if(!show){ const ci=block.querySelector('.contact-input'); if(ci) ci.value=''; }
@@ -10506,6 +10536,7 @@
     const noteInp=block.querySelector('.note-input'); if(noteInp){ noteInp.value=''; resizeNoteInput(noteInp); }
     // ล้างหมายเหตุแล้วต้องเอาติ๊กออกด้วย (เย็บย้ำกระดุม/ลูกค้าใช้งานก่อนปรับแก้) ไม่งั้นก้อนใหม่ที่โคลนมาจากก้อนที่ติ๊กไว้จะโชว์ติ๊กค้างทั้งที่หมายเหตุว่าง
     block.querySelectorAll('.stitch-check,.used-check,.team-check,.shop-check,.btncode-check').forEach(cb=>{ cb.checked=false; });
+    { const bp=block.querySelector('.branch-prod'); if(bp){ bp.disabled=false; bp.classList.remove('cust-locked'); } const h=block.querySelector('.cust-stock-hint'); if(h) h.classList.add('hidden'); }   // [2026-10-28-7]
     const bcInp=block.querySelector('.btncode-input'); if(bcInp){ bcInp.value=''; bcInp.classList.add('hidden'); }
     const contactInp=block.querySelector('.contact-input'); if(contactInp) contactInp.value='';
     const sugEl=block.querySelector('.sku-suggest'); if(sugEl){ sugEl.classList.remove('show'); sugEl.innerHTML=''; }
@@ -10996,7 +11027,8 @@
       const type=block.querySelector('.type-select')?.value||'';
       const sku=block.querySelector('.sku-input')?.value?.trim()||'';
       const size=block.querySelector('.size-input')?.value?.trim()||'';
-      const branchProd=block.querySelector('.branch-prod')?.value||'';
+      let branchProd=block.querySelector('.branch-prod')?.value||'';
+      if(branchProd===CUST_STOCK && !wfeat('custStock')) branchProd=(document.getElementById('branchTop')?.value||'').trim()||branchProd;   // [2026-10-28-7] Worker เก่า: ส่งเป็นสาขาที่ซื้อ → Salesforce "สินค้าหน้าร้าน" เท่ากัน (ไม่ให้ตกไป สาขาอื่นๆ ที่ Salesforce ไม่รับ)
       const contact=block.querySelector('.contact-input')?.value?.trim()||'';
       const note=block.querySelector('.note-input')?.value?.trim()||'';
       data['รายการ'+n+'_ประเภท']=type;
@@ -11009,7 +11041,7 @@
       // [แก้ตามที่ขอ] "พนักงานติดต่อ" แยกรายชิ้นด้วยเหมือนสาขา (เดิมมีแต่ order-level ตัวเดียวต่อประเภท "พนักงานติดต่อสูท" ฯลฯ — ค่าสุดท้ายที่กรอกทับของชิ้นก่อนหน้าเสมอ งงว่าเป็นของชิ้นไหน) Worker เอาไปรวมในช่อง เสื้อสูท/กางเกง/เสื้อเชิ้ต/เสื้อกั๊ก N ด้วย
       // [2026-10-21-6] ส่งชื่อติดต่อเฉพาะตอนเบิกจากสาขาอื่น (สาขาสินค้า ≠ OFFICE และ ≠ สาขาด้านบน) — กันชื่อค้างซ้ำอีกชั้น
       const _topBr=document.getElementById('branchTop')?.value||'';
-      data['รายการ'+n+'_ติดต่อ']=(branchProd && branchProd!=='OFFICE' && branchProd!==_topBr)?contact:'';
+      data['รายการ'+n+'_ติดต่อ']=(branchProd && branchProd!=='OFFICE' && branchProd!==CUST_STOCK && branchProd!==_topBr)?contact:'';
       // รูปที่แนบไว้ (base64 data URI) — ต่อกันด้วยช่องว่าง ฝั่ง Worker จะแยกด้วย .split(/\s+/) ตอนแนบเข้า Salesforce
       if(block._attachedImages && block._attachedImages.length) data['รายการ'+n+'_รูป']=block._attachedImages.join(' ');
 
@@ -11313,11 +11345,13 @@
     // [แก้ตามที่ขอ] "ใช้สินค้าจาก" ย้ายจาก branchCenter (กลางใบ ใต้ SKU) มาไว้ในกลุ่มลูกค้า ชิดซ้ายตัวเล็ก + ค่าอ่านง่ายขึ้น
     const stockSrc=receiptStockSrcLabel(item.branch, order.branch);
     // [แก้ตามที่ขอ] ขยายตัวอักษรบรรทัดนี้ให้ใหญ่กว่ากลุ่ม ลูกค้า/เบอร์/พนักงานขาย ข้างเคียง (bigger:true → F(24) แทน F(19) เดิม)
-    if(stockSrc) lines.push({kind:'kv', label:'ใช้สินค้าจาก', value:stockSrc, small:true, bigger:true});
+    const _custStock=isCustStockItem(item, order);   // [2026-10-28-7 ตามที่ขอ] ของลูกค้า → พิมพ์แค่ "#" (ไม่มีชื่อสาขา ไม่มีจองกับ)
+    if(_custStock) lines.push({kind:'kv', label:'', value:'#', small:true, bigger:true, stockLine:true});
+    else if(stockSrc) lines.push({kind:'kv', label:'ใช้สินค้าจาก', value:stockSrc, small:true, bigger:true, stockLine:true});
     // [แก้ตามที่ขอ] "พนักงานที่ติดต่อ" → "จองกับ" (index.html ส่ง item.contact มาเฉพาะตอนเบิกจากสาขาอื่น)
     // [2026-10-21-6] "จองกับ" เฉพาะสินค้าที่เบิกจากสาขาอื่น — ใช้ของ OFFICE / สาขาตัวเอง / หน้าร้าน = ไม่พิมพ์ (บิลเก่าที่มีชื่อค้าง พิมพ์ซ้ำก็ไม่ขึ้น)
     const _stockU=String(stockSrc||'').toUpperCase(), _orderBr=String(order.branch||'').trim().toUpperCase();
-    if(item.contact && _stockU && _stockU!=='OFFICE' && _stockU!=='หน้าร้าน' && _stockU!==_orderBr) lines.push({kind:'kv', label:'จองกับ', value:item.contact, small:true});
+    if(!_custStock && item.contact && _stockU && _stockU!=='OFFICE' && _stockU!=='หน้าร้าน' && _stockU!==_orderBr) lines.push({kind:'kv', label:'จองกับ', value:item.contact, small:true});
     lines.push({kind:'dash'});
     // รวม size ต่อท้ายรหัสสินค้าเป็นก้อนเดียวกันเลย เช่น "UF068-BK-P-32"
     // [แก้บั๊ก] Accessory ไม่มีไซซ์จริง พนักงานบางคนพิมพ์ "-" ใส่ช่อง Size ไว้เฉยๆ (ไม่รู้จะใส่อะไร) โค้ดเดิมเห็นว่ามีค่า (ไม่ว่าง) เลยต่อท้ายให้กลายเป็น "รหัส--" (ขีดคู่) — กรองค่าที่เป็นแค่ขีด/ว่างออกก่อน
@@ -11437,7 +11471,7 @@
       if(l.kind==='right'&&/ \(ชิ้นที่ 1\)$/.test(l.text)) return Object.assign({},l,{text:l.text.replace(/ \(ชิ้นที่ 1\)$/,'')});
       if(l.kind==='kv'&&l.label==='พนักงานขาย') return Object.assign({},l,{label:'พนักงานตรวจสอบ',value:o.inspector||'-'});
       return l; }).filter(l=>!(l.kind==='center'&&(!l.text||l.text==='-')))   // ไม่มีสถานะชำระเงิน → ตัดบรรทัดว่าง
-      .filter(l=>!(l.kind==='kv'&&l.label==='ใช้สินค้าจาก'));   // [2026-10-26-2 ตามที่ขอ] ใบนำกลับมาแก้ไม่มี "ใช้สินค้าจาก …" (กันสับสน)
+      .filter(l=>!(l.kind==='kv'&&(l.label==='ใช้สินค้าจาก'||l.stockLine)));   // [2026-10-26-2 ตามที่ขอ] ใบนำกลับมาแก้ไม่มี "ใช้สินค้าจาก …" (กันสับสน)
     if(fx.warn){ const i=out.findIndex(l=>l.kind==='skuCenter'); if(i>=0) out.splice(i+1,0,{kind:'centerBigBoxed', text:'⚠ SKU จากระบบเก่า'},{kind:'center', text:'ตรวจสอบก่อนแก้'}); }
     return out;
   }
@@ -11737,7 +11771,8 @@
   // ============================================================
   function shouldUseReceipt4x6(order, item){
     if(!order || !item) return false;
-    if(stockBranchCode(item.branch)!=='KK') return false;                          // สินค้าใช้ของสาขา = KK (ฟอร์มส่ง "KK" · Salesforce ส่ง "สาขา KK (…)") — ไม่ดูสาขาที่ซื้อ/สาขานัดรับ
+    if(isCustStockItem(item, order)){ if(!CUST_STOCK_KK_4X6 || stockBranchCode(order.branch)!=='KK') return false; }   // [2026-10-28-7] ของลูกค้า: ปิดอยู่ (สวิตช์ CUST_STOCK_KK_4X6)
+    else if(stockBranchCode(item.branch)!=='KK') return false;                          // สินค้าใช้ของสาขา = KK (ฟอร์มส่ง "KK" · Salesforce ส่ง "สาขา KK (…)") — ไม่ดูสาขาที่ซื้อ/สาขานัดรับ
     if(!/^กางเกง/.test(String(item.type||'').trim())) return false;                // ประเภทสินค้า = กางเกง
     return String(item.note||'').indexOf(SHOP_TAILOR_WORD)>=0;                     // หมายเหตุมี "ใช้ช่างหน้าร้าน" (ติ๊กเอง/พิมพ์เอง/มาจากบิลเดิมก็นับ)
   }
