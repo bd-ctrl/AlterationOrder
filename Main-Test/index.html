@@ -3018,7 +3018,7 @@
 <ul class="hp-list">
 <li>แตะแล้วเลือกรูปจากเครื่อง เลือกหลายรูปพร้อมกันได้ ระบบย่อรูปให้เล็กเองระหว่างนั้นขึ้นคำว่า “กำลังบีบอัดรูป…”</li>
 <li>แนบแล้วป้ายจะเปลี่ยนเป็น “แนบรูปแล้ว (1 รูป) · เพิ่มรูป” (ตัวเลขเปลี่ยนตามจำนวนรูป) แตะป้ายอีกครั้งเพื่อแนบรูปเพิ่ม · ใต้หัวสินค้ามีรูปย่อให้ดู แตะรูปย่อเพื่อดูเต็มจอ กด × บนรูปเพื่อลบรูปนั้น</li>
-<li>แนบได้สูงสุด <b>8 รูปต่อบิล</b> (รวมทุกชิ้น) · บิลที่มีสินค้า <b>4 ชิ้นขึ้นไป</b> ได้สูงสุด <b>6 รูป</b> (ข้อจำกัดตอนส่งเข้า Salesforce) ถ้าเกินจะขึ้นข้อความ “แนบรูปไม่สำเร็จ … แนบได้สูงสุด … รูปต่อบิล” ให้กด × ลบรูปเดิมออกก่อน หรือแนบน้อยลง · แนบไว้ 7–8 รูปแล้วค่อยเพิ่มสินค้าชิ้นที่ 4 ตอนกดบันทึกระบบจะให้ลบรูปให้เหลือ 6 ก่อน</li>
+<li>แนบได้สูงสุดต่อบิล (รวมทุกชิ้น) ตามจำนวนสินค้าในบิล: <b>1 ชิ้น = 10 รูป</b> · <b>2–3 ชิ้น = 8 รูป</b> · <b>4 ชิ้นขึ้นไป = 6 รูป</b> (ข้อจำกัดตอนส่งเข้า Salesforce) ถ้าเกินจะขึ้นข้อความ “แนบรูปไม่สำเร็จ … แนบได้สูงสุด … รูปต่อบิล (บิลที่มีสินค้า … ชิ้น)” ให้กด × ลบรูปเดิมออกก่อน หรือแนบน้อยลง · แนบรูปไว้แล้วค่อยเพิ่มสินค้า จนรูปเกินเพดานใหม่ ตอนกดบันทึกระบบจะบอกให้ลบรูปออกก่อน</li>
 <li>ไฟล์ที่เบราว์เซอร์เปิดไม่ได้ (เช่น รูปแบบ HEIC บางเครื่อง) จะขึ้นข้อความ “เปิดไฟล์รูปไม่สำเร็จ” ให้ลองถ่ายหรือเลือกรูปใหม่</li>
 <li>รูปที่แนบไม่ถูกเก็บในร่างที่กด <span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path><path d="M17 21v-8H7v8"></path><path d="M7 3v5h8"></path></svg>บันทึกร่าง</span> ถ้าเปิดร่างกลับมาต้องแนบรูปใหม่</li>
 </ul></div></div>
@@ -4545,7 +4545,7 @@
 <li>ใต้แต่ละจุดมีตัวแดง <b>แก้ไขครั้งที่ 1: … นิ้ว</b> = ค่าที่ลงไว้ตอนบิลแรก ไว้เทียบ</li>
 <li><b>หมายเหตุ</b>: ยาวรวมได้ 255 ตัว (ตัวนับมุมขวานับรวมจุดวัด งานด่วน ที่อยู่จัดส่ง และเลขบิลใหม่ที่ระบบเติมให้แล้ว) เครื่องหมาย | จะถูกเปลี่ยนเป็น / และขึ้นบรรทัดใหม่จะกลายเป็นเว้นวรรค</li>
 <li><b>เย็บย้ำกระดุม</b>: มีเฉพาะ เสื้อสูท กางเกง เสื้อเชิ้ต เสื้อกั๊ก ติ๊กแล้วระบบเติมคำนี้ในหมายเหตุ เอาติ๊กออกคำก็หายไป</li>
-<li><b>รูปภาพ (ถ้ามี · สูงสุด 10 รูป)</b>: กด <span class="hp-btn">เพิ่มรูป</span> ถ่ายหรือเลือกรูป ระบบย่อรูปให้เอง รูปจะถูกส่งตอนกดบันทึก ไปที่คอลัมน์ “รูปสินค้านำกลับมาแก้” ใน Lark และไฟล์ของสินค้าใน Salesforce (รูปไม่ถูกพิมพ์ลงใบสรุป)</li>
+<li><b>รูปภาพ (ถ้ามี · สูงสุด 15 รูป)</b>: กด <span class="hp-btn">เพิ่มรูป</span> ถ่ายหรือเลือกรูป ระบบย่อรูปให้เอง รูปจะถูกส่งตอนกดบันทึก ไปที่คอลัมน์ “รูปสินค้านำกลับมาแก้” ใน Lark และไฟล์ของสินค้าใน Salesforce (รูปไม่ถูกพิมพ์ลงใบสรุป)</li>
 </ol>
 <div class="hp-note">สินค้าบางประเภทไม่มีจุดวัด ระบบจะขึ้น “สินค้าประเภทนี้ไม่มีจุดวัด — เขียนรายละเอียดในหมายเหตุ” และหมายเหตุจะกลายเป็นช่องบังคับ</div>
 <div class="hp-warn">ถ้าขึ้น “ข้อความที่จะบันทึกยาว … ตัว … เกิน 255” ต้องลดหมายเหตุลงตามจำนวนที่บอกก่อน ถึงจะกดบันทึกได้</div>
@@ -4695,7 +4695,7 @@
 <li>แก้งานที่ส่งเข้า Salesforce แล้วไม่ได้ · ยกเลิกหรือลบงานนำกลับมาแก้ในแอปไม่ได้ (แจ้งหลังบ้าน)</li>
 <li>ค้นด้วยเลขที่บิลหรือ O# ในช่องค้นหานี้ไม่ได้ (ใช้​<span class="nb">แท็บ</span>ประวัติ หรือหน้าต่างพิมพ์)</li>
 <li>ค้นด้วยชื่อ/เบอร์ ย้อนหลังได้ 2 ปี และแสดงสูงสุด 40 บิล</li>
-<li>รูปที่แนบ (สูงสุด 10 รูป) ไม่ถูกพิมพ์ และเพิ่มรูปในโหมดแก้ไขไม่ได้</li>
+<li>รูปที่แนบ (สูงสุด 15 รูป) ไม่ถูกพิมพ์ และเพิ่มรูปในโหมดแก้ไขไม่ได้</li>
 <li><b>ติดต่อใคร:</b> เรื่องสถานะสินค้า การลงชื่อ/ส่งเข้า Salesforce ช่องค้างใน Salesforce = <b>ทีมหลังบ้าน</b> · ข้อความที่บอกให้ “แจ้งผู้ดูแลระบบ” หรือหน้าเว็บทำงานผิดปกติ = <b>ผู้ดูแลระบบ</b> (แจ้งเลข P# เลขที่บิล และถ่ายรูปหน้าจอข้อความไปด้วย)</li>
 </ul>
         <div class="hp-fab"><a class="hp-jump" href="#hp-toc-repeat" title="กลับไปที่สารบัญ" aria-label="กลับไปที่สารบัญ">สารบัญ</a></div>
@@ -5665,7 +5665,7 @@
     if(WFEAT.v) return Promise.resolve(WFEAT.v);
     if(WFEAT.p) return WFEAT.p;
     WFEAT.p=fetch(WORKER+'/version').then(r=>r.json()).then(j=>{
-      WFEAT.v={raReprint:!!(j&&j.raReprint===true), printStation:!!(j&&j.printStation===true), findByCustomer:!!(j&&j.findByCustomer===true), findByBill:!!(j&&j.findByBill===true), raPhotoLark:!!(j&&j.raPhotoLark===true), raEdit:!!(j&&j.raEdit===true), custStock:!!(j&&j.custStock===true), draftsMulti:!!(j&&j.draftsMulti===true), ra2Auto:!!(j&&j.ra2Auto&&j.ra2Auto.on===true), build:String((j&&j.build)||'')};
+      WFEAT.v={raReprint:!!(j&&j.raReprint===true), printStation:!!(j&&j.printStation===true), findByCustomer:!!(j&&j.findByCustomer===true), findByBill:!!(j&&j.findByBill===true), raPhotoLark:!!(j&&j.raPhotoLark===true), raEdit:!!(j&&j.raEdit===true), custStock:!!(j&&j.custStock===true), raPhotoMax:Math.max(0,Math.floor(+(j&&j.raPhotoMax)||0)), draftsMulti:!!(j&&j.draftsMulti===true), ra2Auto:!!(j&&j.ra2Auto&&j.ra2Auto.on===true), build:String((j&&j.build)||'')};
       return WFEAT.v;
     },()=>({raReprint:false,printStation:false,findByCustomer:false,findByBill:false,raPhotoLark:false,ra2Auto:false,build:''})).finally(()=>{ WFEAT.p=null; });
     return WFEAT.p;
@@ -5676,7 +5676,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-29-1';
+  const APP_VERSION = '2026-10-29-2';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -7997,13 +7997,16 @@
     const timeTxt=()=>{ const f=S.form; return f&&/^\d{1,2}:\d{2}$/.test(String(f.time||''))?', เวลานัดรับ '+f.time:''; };
     // [2026-10-22-2 ตามที่ขอ "ต้องมีเพิ่มรูปภาพด้วย และให้มี preview รูป"] รูปเก็บในเครื่องจนกดบันทึก → หลังบันทึกสำเร็จแนบเข้า Salesforce Product ชื่อ "นำกลับมาแก้_P#<n>_ครั้งที่<r>_รูป<i>.jpg"
     // (ไม่ใส่ในคอลัมน์ใบสรุปของ Lark — คอลัมน์นั้นโปรแกรมปริ้นใช้พิมพ์ · ชื่อไฟล์ไม่ขึ้นต้น "ใบสรุป_" จึงไม่ถูก /attach-product-file ลบทิ้ง)
-    const PH_MAX=10;   // [2026-10-28-9 ตามที่ขอ] 6 → 10 = เพดานของ Worker (index 1–10) · รูปละ 1 คำขอแยกกัน ไม่ติดงบ subrequest
+    // [2026-10-29-2 ตามที่ขอ] 15 รูป — เฉพาะ Worker ที่รับลำดับรูป 1–15 (sh14b-ph15 ขึ้นไป: /version raPhotoMax ≥ 15 หรือ build มี "ph15") · Worker เก่ารับ 1–10 → คง 10
+    //   (ตัวเลขนี้ถามตอนเปิดฟอร์ม/แนบรูป — ยังไม่รู้รุ่น Worker = 10 ไว้ก่อน ไม่มีทางส่งลำดับเกินที่ Worker รับ)
+    const PH_MAX_OLD=10, PH_MAX_NEW=15;
+    const phMax=()=>{ const v=WFEAT.v; if(v&&v.raPhotoMax>0) return Math.min(PH_MAX_NEW, v.raPhotoMax); return (v&&/ph15/.test(String(v.build||'')))?PH_MAX_NEW:PH_MAX_OLD; };
     //   // [2026-10-27-2 ตามที่ขอ "6 รูปไม่ได้หรอ"] 5 → 6 (เท่าฟอร์มบิลปกติ) · Worker รับลำดับรูป 1–10 อยู่แล้ว
     function phInner(f){
       const ph=(f&&f.photos)||[];
       return ph.map((p,i)=>'<div class="ra2-th"><img src="'+p.url+'" alt="รูปที่ '+(i+1)+'" data-ra2-pv="'+i+'"><button type="button" class="x" data-ra2-phdel="'+i+'" aria-label="ลบรูปที่ '+(i+1)+'">×</button></div>').join('')
         + (f&&f.phBusy?'<div class="ra2-th busy"><span class="ra2-spin"></span></div>':'')
-        + (ph.length+((f&&f.phBusy)||0)<PH_MAX?'<label class="ra2-th add" aria-label="เพิ่มรูป"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg><span>เพิ่มรูป</span><input type="file" accept="image/*" multiple hidden data-ra2-phin></label>':'')
+        + (ph.length+((f&&f.phBusy)||0)<phMax()?'<label class="ra2-th add" aria-label="เพิ่มรูป"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="15" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M9 5l1.5-2h3L15 5"/></svg><span>เพิ่มรูป</span><input type="file" accept="image/*" multiple hidden data-ra2-phin></label>':'')
         + (f&&f.phMsg?'<div class="ra2-phmsg">'+esc(f.phMsg)+'</div>':'');
     }
     function paintPh(){ const w=view.querySelector('[data-ra2-ph]'); if(w&&S.form) w.innerHTML=phInner(S.form); }
@@ -8026,8 +8029,8 @@
     async function addPhotos(files){
       const f=S.form; if(!f) return;
       const list=[...(files||[])].filter(x=>x&&/^image\//.test(x.type||'image/'));
-      const room=PH_MAX-f.photos.length; f.phMsg='';
-      if(list.length>room) f.phMsg='แนบได้สูงสุด '+PH_MAX+' รูป';
+      const room=phMax()-f.photos.length; f.phMsg='';
+      if(list.length>room) f.phMsg='แนบได้สูงสุด '+phMax()+' รูป';
       for(const file of list.slice(0,Math.max(0,room))){
         f.phBusy++; paintPh();
         try{ const url=await phCompress(file); if(S.form===f) f.photos.push({url,b64:url.split(',')[1]}); }
@@ -8220,7 +8223,7 @@
                    :'<div class="ra2-off">สินค้าประเภทนี้ไม่มีจุดวัด — เขียนรายละเอียดในหมายเหตุ</div>')
             + '<div class="ra2-frow note"><span class="k">หมายเหตุ'+(hasM?'':' <span class="req">*</span>')+'</span><div class="ra2-nwrap"><textarea class="note-input" data-ra2-note rows="2" maxlength="'+LIMIT+'" placeholder="เพิ่มหมายเหตุ" aria-label="หมายเหตุ"></textarea><span class="ra2-cnt" data-ra2-cnt></span></div></div>'
             + '<div class="ra2-frow tick" data-ra2-stitchrow'+(raStitchOk(f.type)?'':' hidden')+'><label class="stitchlbl rchk"><input type="checkbox" data-ra2-stitch><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">เย็บย้ำกระดุม</span></label></div>'
-            + (ed?'':'<div class="ra2-frow ph"><span class="k">รูปภาพ <span class="opt">(ถ้ามี · สูงสุด '+PH_MAX+' รูป)</span></span><div class="ra2-ph" data-ra2-ph>'+phInner(f)+'</div></div>')
+            + (ed?'':'<div class="ra2-frow ph"><span class="k">รูปภาพ <span class="opt">(ถ้ามี · สูงสุด '+phMax()+' รูป)</span></span><div class="ra2-ph" data-ra2-ph>'+phInner(f)+'</div></div>')
             + '<div class="ra2-hint" data-ra2-over role="alert" hidden></div>'
             + '<div class="ra2-hint mut">'+(ed?'เลขบิลใหม่คงเดิม ('+esc(ed.billNoNew||'-')+') · ความยาวนับรวมเลขบิลใหม่แล้ว ('+LIMIT+' ตัว)':'ระบบจะเติม “บิลใหม่ …” ไว้ต้นรายละเอียดให้ (นับรวมในเลข '+LIMIT+' ตัวแล้ว) · เลขบิลใหม่ออกในนามสาขา '+esc(workBranch()||'—'))+'</div>'
           + '</div>'
@@ -10432,7 +10435,7 @@
           try{
             const url=await compressImageFile(file, 28000);
             if(billPhotoCount() >= photoBillMax()){
-              failed.push(file.name+': แนบได้สูงสุด '+photoBillMax()+' รูปต่อบิล'+(photoBillMax()<PHOTO_BILL_MAX_FEW?' (บิลที่มีสินค้า '+(PHOTO_BILL_FEW_ITEMS+1)+' ชิ้นขึ้นไป)':'')+' — กด × ที่รูปเดิมเพื่อลบก่อน หรือแนบรูปน้อยลง');
+              failed.push(file.name+': แนบได้สูงสุด '+photoBillMax()+' รูปต่อบิล'+photoBillMaxNote()+' — กด × ที่รูปเดิมเพื่อลบก่อน หรือแนบรูปน้อยลง');
             }else{
               block._attachedImages.push(url);
             }
@@ -10526,8 +10529,10 @@
   // [2026-10-28-9 ตามที่ขอ "ปรับเป็น 8 รูปก่อน"] งบ subrequest ตอนยืนยันเข้า Salesforce (Free = 50/ครั้ง · ทำในคำขอเดียว ไม่แบ่งรอบ)
   //   นับจากโค้ด sh12b/sh13: ก่อนสร้าง ~4 · หาบิลพี่น้อง ≤4 · ลูกค้า+Order ~4 · ต่อชิ้น 1 (+ค้นกลุ่มสินค้าครั้งแรกของประเภท ≤1) · ถามเลข P# ในคำขอ ~8 · เขียนกลับ ~2 · รูปละ 2
   //   สินค้า ≤3 ชิ้น + 8 รูป ≈ 28+16 = 44 (เท่าเพดานเผื่อ 44) · 4 ชิ้นขึ้นไปคง 6 รูป (8 ชิ้น + 6 รูป ≈ 47 = เท่ากับที่ใช้อยู่เดิม)
-  const PHOTO_BILL_MAX_FEW=8, PHOTO_BILL_MAX_MANY=6, PHOTO_BILL_FEW_ITEMS=3;
-  function photoBillMax(){ return document.querySelectorAll('#productsWrap .product-block').length<=PHOTO_BILL_FEW_ITEMS ? PHOTO_BILL_MAX_FEW : PHOTO_BILL_MAX_MANY; }
+  //   [2026-10-29-2 ตามที่ขอ] สินค้า 1 ชิ้น + 10 รูป ≈ 24+20 = 44 (เท่าเพดานเผื่อ) → 1 ชิ้น 10 รูป · 2–3 ชิ้น 8 รูป · 4 ชิ้นขึ้นไป 6 รูป
+  const productBlockCount=()=>document.querySelectorAll('#productsWrap .product-block').length;
+  function photoBillMax(){ const n=productBlockCount(); return n<=1 ? 10 : (n<=3 ? 8 : 6); }
+  const photoBillMaxNote=()=>' (บิลที่มีสินค้า '+productBlockCount()+' ชิ้น)';
   function billPhotoCount(){ return [...document.querySelectorAll('#productsWrap .product-block')].reduce((s,b)=>s+((b._attachedImages||[]).length),0); }
   function renderAttachThumbs(block){
     const imgs=block._attachedImages||[];
@@ -11132,7 +11137,7 @@
     if(!data['สาขา']) missing.push({page:1,label:'สาขา (แถบด้านบน)'});
     if(!data['พนักงานขาย']) missing.push({page:1,label:'พนักงานขาย (แถบด้านบน)'});
     if(!data['เบอร์โทรศัพท์']) missing.push({page:1,label:'เบอร์โทรศัพท์'});
-    { const nPh=billPhotoCount(), mx=photoBillMax(); if(nPh>mx) missing.push({page:2,label:'รูปแนบ '+nPh+' รูป เกินสูงสุด '+mx+' รูปต่อบิล (บิลที่มีสินค้า '+(PHOTO_BILL_FEW_ITEMS+1)+' ชิ้นขึ้นไป) — กด × ลบรูปออก '+(nPh-mx)+' รูป'}); }   // [2026-10-28-9]
+    { const nPh=billPhotoCount(), mx=photoBillMax(); if(nPh>mx) missing.push({page:2,label:'รูปแนบ '+nPh+' รูป เกินสูงสุด '+mx+' รูปต่อบิล'+photoBillMaxNote()+' — กด × ลบรูปออก '+(nPh-mx)+' รูป'}); }   // [2026-10-28-9]
     if(!data['ชื่อ']) missing.push({page:1,label:'ชื่อ'});
     if(!data['นามสกุล']) missing.push({page:1,label:'นามสกุล'});
     // ต้องเลือกสินค้าอย่างน้อย 1 รายการจากหน้าสินค้า (ส่วนที่ 2) และแต่ละรายการที่มีต้องกรอกรหัสสินค้า/Size ให้ครบ
