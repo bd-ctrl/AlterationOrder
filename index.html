@@ -4596,7 +4596,7 @@
 <figure class="hp-fig"><img data-src="help_img/repeat-09.jpg" width="1127" height="1480" alt="หน้าบันทึกนำกลับมาแก้ ครั้งที่ 2 แล้ว ตารางสิ่งที่แก้ในครั้งนี้ ข้อมูลเก่าเทียบข้อมูลใหม่ และรูปใบสรุปสินค้านำกลับมาแก้"><figcaption>หน้าสรุปหลังบันทึก — ตาราง “สิ่งที่แก้ในครั้งนี้” เทียบค่าครั้งที่ 1 กับค่าใหม่ · ใบสรุป “สินค้านำกลับมาแก้” · “อัปโหลดรูปใบสรุปแล้ว” · ปุ่มบันทึกรูป / เสร็จสิ้น (ภาพจากโหมดทดสอบ ชื่อ/เบอร์เป็นข้อมูลตัวอย่าง)</figcaption></figure>
 <ul class="hp-list">
 <li>หัวเขียว <b>บันทึกนำกลับมาแก้ ครั้งที่ N แล้ว</b></li>
-<li><b>ใบสรุปสินค้านำกลับมาแก้</b> ต่างจากใบปกติ: บรรทัดบน = เลขบิลใหม่ · ครั้งที่ N / วันที่นำกลับมาแก้ / O# · P# · หัวเรื่อง “สินค้านำกลับมาแก้” · “พนักงานตรวจสอบ” แทนพนักงานขาย · ไม่มีบรรทัด “ใช้สินค้าจาก”</li>
+<li><b>ใบสรุปสินค้านำกลับมาแก้</b> ต่างจากใบปกติ: บรรทัดบน = เลขบิลใหม่ · ครั้งที่ N / วันที่นำกลับมาแก้ / O# · P# · หัวเรื่อง “สินค้านำกลับมาแก้” · “พนักงานตรวจสอบ” แทนพนักงานขาย · ไม่มีบรรทัด “ใช้สินค้าจาก” · ท้ายใบมี <b>QR</b> (ลิงก์หน้าสินค้าใน Salesforce) เหมือนใบปกติ</li>
 <li>ระบบส่งรูปใบสรุปเข้า Lark เอง (ขึ้น “อัปโหลดรูปใบสรุปแล้ว (… KB)”) ชื่อไฟล์ <b>นำกลับมาแก้_P#เลข_ครั้งที่N.png</b> และแนบเข้าไฟล์ของสินค้าใน Salesforce ด้วย ถ้าขึ้น “อัปโหลดรูปไม่สำเร็จ” ให้กด <span class="hp-btn">ลองใหม่</span> ก่อนออก</li>
 <li>ถ้าแนบรูปภาพไว้ จะขึ้น “แนบรูปภาพเข้า … ได้ k/n รูป” ถ้าไม่ครบกด ลองใหม่</li>
 <li><span class="hp-btn">บันทึกรูป</span> = เก็บรูปใบสรุปลงเครื่อง (ชื่อไฟล์ ใบสรุป_นำกลับมาแก้_เลข P#_ครั้งที่N.png) · <span class="hp-btn">เสร็จสิ้น</span> = กลับไปรายการ ป้ายของชิ้นนั้นจะเปลี่ยนเป็น “รอหลังบ้านส่ง”</li>
@@ -5665,7 +5665,7 @@
     if(WFEAT.v) return Promise.resolve(WFEAT.v);
     if(WFEAT.p) return WFEAT.p;
     WFEAT.p=fetch(WORKER+'/version').then(r=>r.json()).then(j=>{
-      WFEAT.v={raReprint:!!(j&&j.raReprint===true), printStation:!!(j&&j.printStation===true), findByCustomer:!!(j&&j.findByCustomer===true), findByBill:!!(j&&j.findByBill===true), raPhotoLark:!!(j&&j.raPhotoLark===true), raEdit:!!(j&&j.raEdit===true), custStock:!!(j&&j.custStock===true), raPhotoMax:Math.max(0,Math.floor(+(j&&j.raPhotoMax)||0)), draftsMulti:!!(j&&j.draftsMulti===true), ra2Auto:!!(j&&j.ra2Auto&&j.ra2Auto.on===true), build:String((j&&j.build)||'')};
+      WFEAT.v={raReprint:!!(j&&j.raReprint===true), printStation:!!(j&&j.printStation===true), findByCustomer:!!(j&&j.findByCustomer===true), findByBill:!!(j&&j.findByBill===true), raPhotoLark:!!(j&&j.raPhotoLark===true), raEdit:!!(j&&j.raEdit===true), custStock:!!(j&&j.custStock===true), raPhotoMax:Math.max(0,Math.floor(+(j&&j.raPhotoMax)||0)), receiptClaim:!!(j&&j.receiptClaim), draftsMulti:!!(j&&j.draftsMulti===true), ra2Auto:!!(j&&j.ra2Auto&&j.ra2Auto.on===true), build:String((j&&j.build)||'')};
       return WFEAT.v;
     },()=>({raReprint:false,printStation:false,findByCustomer:false,findByBill:false,raPhotoLark:false,ra2Auto:false,build:''})).finally(()=>{ WFEAT.p=null; });
     return WFEAT.p;
@@ -5676,7 +5676,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-29-2';
+  const APP_VERSION = '2026-10-30-1';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -5956,7 +5956,7 @@
     const order={billNo:e.billNoNew||'-', sentDate:praBillDate(e.billNoNew)||toISO(new Date()), custName:name, phone:e.phone||pr.custPhone||'', nickname:e.nickname||'', staff:e.inspector, payStatus:'', urgent:d.urgent,
       pickupLabel:d.deliv?d.deliv.method:(String(e.pickupBranch||'').split(' – ')[0]||e.branch||''), deliveryPlace:d.deliv?d.deliv.place:'', pickupDate:e.pickupDate, pickupTime:d.time||'', branch:e.branch||''};
     const item={type:pr.type||'สินค้า', sku:pr.sku||'', size:pr.size||'', measureRows:d.rows, orderCode:e.orderCode||pr.orderCode||'', productCode:'P# '+e.digits,
-      branch:lt.stockBranch||e.branch||'', note:d.note, itemIndex:1, itemTotal:1};
+      branch:lt.stockBranch||e.branch||'', note:d.note, itemIndex:1, itemTotal:1, qrUrl:sfProductUrl(pr.recordUrl, lt.recordUrl, pr.id)};   // [2026-10-30-1] QR
     try{ await Promise.all([loadSkuList(false),loadSkuNames(false)]); }catch(x){}   // [2026-10-27-7] รายการ SKU ต้องมาก่อน (ตรวจ SKU งานเก่า)
     return await renderReceiptCanvasBase64(repeatReceiptLines(order,item,{bill:e.billNoNew||'-',round:e.round,inspector:e.inspector}));
   }
@@ -8614,7 +8614,7 @@
         const order={billNo:bill, sentDate, custName:f.custName||'-', phone:f.phone, nickname:f.nick, staff:f.inspector, payStatus:'', urgent:!!f.urgent,
           pickupLabel:f.branch, deliveryPlace:isDel(f.branch)?String(f.addr||'').trim():'', pickupDate:f.date, pickupTime:f.time||'', branch:(o&&o.branch)||''};
         const item={type:f.type||'สินค้า', sku:f.sku, size:f.size, measureRows:d.rows.map(r=>({label:r.rl,value:r.rv})), orderCode:f.orderCode, productCode:f.code,
-          branch:lt.stockBranch||(o&&o.branch)||'', note:d.note, itemIndex:1, itemTotal:1};
+          branch:lt.stockBranch||(o&&o.branch)||'', note:d.note, itemIndex:1, itemTotal:1, qrUrl:sfProductUrl(f.p&&f.p.recordUrl, lt.recordUrl, f.p&&f.p.id)};   // [2026-10-30-1] QR
         try{ await Promise.all([loadSkuList(false),loadSkuNames(false)]); }catch(x){}   // [2026-10-27-7] รายการ SKU ต้องมาก่อน (ตรวจ SKU งานเก่า)
         const lines=repeatReceiptLines(order,item,{bill,round:f.n,inspector:f.inspector});   // [2026-10-23-3] ย้ายไปใช้ร่วมกับหน้าต่างพิมพ์
         d.img=await Promise.race([renderReceiptCanvasBase64(lines), new Promise((_,no)=>setTimeout(()=>no(new Error('วาดรูปนานเกินไป')),25000))]);
@@ -11486,6 +11486,8 @@
     if(has(zz?s+'-'+zz:s) || has(s)) return {sku:s, warn:false, fixed:false};   // รหัสเดิมมีอยู่จริงในรายการ (เช่น Accessory) = ใช้ได้
     return {sku:s, warn:true, fixed:false};
   }
+  // [2026-10-30-1 ตามที่ขอ] QR บนใบนำกลับมาแก้ = ลิงก์หน้า Suitcube Product ใน Salesforce (แบบเดียวกับใบปกติ) — ใช้ recordUrl จาก Worker ก่อน · ไม่มี = สร้างจาก Salesforce Id
+  function sfProductUrl(){ for(const v of arguments){ const t=String(v||'').trim(); if(/^https:\/\//.test(t)) return t; if(/^[a-zA-Z0-9]{15}(?:[a-zA-Z0-9]{3})?$/.test(t)) return 'https://d6f000002yqrnuao.lightning.force.com/lightning/r/Suitcube_Product__c/'+t+'/view'; } return ''; }
   function repeatReceiptLines(order, item, o){
     const fx=raSkuFix(item&&item.sku, item&&item.type, item&&item.size);
     if(item && fx.sku!==item.sku) item=Object.assign({}, item, {sku:fx.sku});
@@ -12206,6 +12208,12 @@
     if(qs.get('auto')!=='1') return;
     var DRY=qs.get('dry')==='1';
     var HOURS=Math.min(168, Math.max(1, Number(qs.get('hours'))||48));
+    // [2026-10-29-3 ตามที่ขอ "รันบน GitHub Actions"] &once=1 = ทำรอบเดียว: วนตรวจทุก 3 วิ จนไม่มีบิลที่ถึงเวลาทำ หรือครบ maxsec (20–300 วิ ค่าเริ่ม 100)
+    //   แล้วตั้ง window.__autoOnce = {done:true, stats, logs} + ชื่อแท็บ AUTO-ONCE-DONE ให้สคริปต์ปิดเบราว์เซอร์ · ไม่จำอะไรข้ามรอบ (Worker sh15 จำให้: จองบิล + นับครั้งที่แนบ)
+    //   holder = ชื่อผู้ทำงาน (?holder=gha-<run> จาก Actions · ไม่ส่ง = สุ่ม) — Worker sh15 จองบิลที่ส่งให้ผู้ถามคนนี้ 4 นาที ผู้อื่นไม่ได้บิลนั้นซ้ำ
+    var ONCE=qs.get('once')==='1';
+    var ONCE_MAX_MS=Math.min(300, Math.max(20, Number(qs.get('maxsec'))||100))*1000, T0=Date.now(), lastDueN=0, onceErrN=0, onceDone=false;
+    var HOLDER=(function(){ var h=String(qs.get('holder')||'').trim(); return /^[A-Za-z0-9_.:-]{3,64}$/.test(h) ? h : ((ONCE?'once-':'web-')+Math.random().toString(36).slice(2,10)); })();
     var STORE='suitcubeAutoDone-v1';
     var state={ done:{}, verify:{} };
     try{ var raw=JSON.parse(localStorage.getItem(STORE)||'{}'); if(raw && raw.done) state.done=raw.done; if(raw && raw.verify) state.verify=raw.verify; }catch(e){ /* ไม่มี localStorage — ใช้ข้อมูลจาก Salesforce (alreadyDone) แทน */ }
@@ -12269,6 +12277,7 @@
       setSt('work','กำลังทำใบสรุปบิล '+it.billNo+' …');
       var r=await autoUpgradeReceipts({ recordId:it.recordId, billNo:it.billNo, skipSf:skipSf, dryRun:DRY });
       var a=autoAfter(r, tr, Date.now());
+      if(!DRY){ try{ var fe=(await workerFeat())||{}; if(fe.receiptClaim){ var att=!!(r && (r.ok || (r.done && (((r.done.lark||[]).length) || ((r.done.sf||[]).length))))); await autoPostJson('/receipt-done', { recordId:it.recordId, holder:HOLDER, attached:att }, 2); } }catch(e){ log('⚠ แจ้งผลจองบิล '+it.billNo+' ไม่สำเร็จ: '+((e&&e.message)||e)); } }   // [2026-10-29-3]
       if(a.kind==='done'){
         if(DRY) tr.nextAt=Infinity; else { state.done[it.recordId]=Date.now(); state.verify[it.recordId]={ at:Date.now(), n: vAct==='retry' ? state.verify[it.recordId].n+1 : 0, bill:it.billNo }; save(); if(vAct==='first') stats.done++; }
         log('✔ '+it.billNo+' ('+it.orderCode+') '+(DRY?'[ซ้อม] วาดได้ ':'ทำแล้ว ')+((r.codes||[]).length)+' ชิ้น: '+(r.codes||[]).join(', ')+(r.warnings&&r.warnings.length?'  ⚠ '+r.warnings.join(' | '):''));
@@ -12287,7 +12296,9 @@
         if(!DRY) autoVerifyPrune(state.verify, Date.now());
         var dueIds=DRY ? [] : autoVerifyDue(state.verify, Date.now());
         var skipIds=Object.keys(state.done).filter(function(id){ return dueIds.indexOf(id)<0; }).slice(-400);
-        var res=await autoPostJson('/receipt-pending', { sinceHours:HOURS, skipRecordIds:skipIds }, 1);
+        var res=await autoPostJson('/receipt-pending', { sinceHours:HOURS, skipRecordIds:skipIds, holder:HOLDER }, 1);
+        if(res.claim && res.claim.capped && res.claim.capped.length) log('⚠ '+res.claim.capped.length+' บิลแนบใบสรุปครบ 4 ครั้งแล้วยังไม่ถึง Drive — Worker หยุดส่งให้ทำ ต้องดูมือ');
+        onceErrN=0;
         lastCheck=Date.now();
         (res.alreadyDone||[]).forEach(function(id){
           if(!state.done[id]) state.done[id]=Date.now();
@@ -12295,7 +12306,7 @@
         });
         if((res.alreadyDone||[]).length) save();
         var items=res.items||[];
-        var due=autoDue(items, tries, Date.now(), AUTO_MAX_PER_CYCLE);
+        var due=autoDue(items, tries, Date.now(), AUTO_MAX_PER_CYCLE); lastDueN=due.length;
         var okN=0;
         for(var i=0;i<due.length;i++){ if(await doOne(due[i])) okN++; }
         stats.waiting=items.length-okN;
@@ -12306,9 +12317,19 @@
         if(/HTTP 404|Not found/i.test(msg)){ setSt('err','Worker ยังไม่ใช่รุ่น R18.3 (ไม่มี /receipt-pending) — ต้อง deploy Worker ก่อน · ลองใหม่ทุก 1 นาที'); nextDelay=60*1000; }
         else setSt('err','ติดต่อ Worker ไม่ได้ — ลองใหม่ในรอบหน้า');
         log('✘ ตรวจบิลใหม่ไม่สำเร็จ: '+msg);
-      }finally{ busy=false; schedule(); }
+      }finally{
+        busy=false;
+        if(ONCE){ if(st.kind==='err') onceErrN++; if(lastDueN===0 || onceErrN>=3 || Date.now()-T0>ONCE_MAX_MS) { finishOnce(); return; } nextDelay=3000; lastDueN=0; }
+        schedule();
+      }
     }
     function schedule(){ setTimeout(cycle, nextDelay); }
+    function finishOnce(){
+      if(onceDone) return; onceDone=true;
+      log('จบรอบเดียว (once) — ใช้เวลา '+Math.round((Date.now()-T0)/1000)+' วินาที');
+      window.__autoOnce={ done:true, version:APP_VERSION, holder:HOLDER, stats:{ done:stats.done, waiting:stats.waiting, errors:stats.errors }, status:st, elapsedMs:Date.now()-T0, logs:logs.slice().reverse() };
+      setSt(st.kind==='err'?'err':'ok', 'จบรอบเดียวแล้ว'); document.title='AUTO-ONCE-DONE';
+    }
     // กันเครื่องหลับตอนแท็บแสดงอยู่ (ถ้าเบราว์เซอร์รองรับ) — และขอใหม่ทุกครั้งที่กลับมาแสดง
     var wl=null;
     async function keepAwake(){ try{ if(navigator.wakeLock && document.visibilityState==='visible' && !wl){ wl=await navigator.wakeLock.request('screen'); wl.addEventListener('release', function(){ wl=null; }); } }catch(e){ wl=null; } }
