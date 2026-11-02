@@ -12,6 +12,7 @@
   var PROXY = window.CUSTOMER_LOOKUP_PROXY || 'https://suitcube-customer-lookup.ba-bd5.workers.dev';
   var AUTH_KEY = 'suitcube_auth_v1';
   var ORDERS_FIRST = 3;
+  var OPEN_DELAY_MS = 2000;   // กดปุ่ม "ลูกค้า" แล้วรอก่อนเปิดป๊อปอัป
   var MEAS = [['chest','อก'],['waist','เอว'],['shoulder','ไหล่'],['upper_arm','ต้นแขน'],['arm_length','ยาวแขน'],
     ['lower_hip','สะโพก'],['shirt_length_original','ยาวเสื้อ'],['front_length','ยาวหน้า'],['back_length','ยาวหลัง'],
     ['crotch','เป้า'],['thigh','ต้นขา'],['leg_opening','ปลายขา'],['leg_length','ยาวขา']];
@@ -441,7 +442,13 @@
     var b = el('button', 'hist'); b.id = 'clBtn'; b.type = 'button'; b.title = 'ดูข้อมูลลูกค้า';
     b.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>';
     b.appendChild(document.createTextNode('ลูกค้า'));
-    b.addEventListener('click', open);
+    var opening = false;
+    b.addEventListener('click', function(){
+      if (opening) return;   // กดซ้ำระหว่างรอไม่นับ
+      opening = true;
+      b.style.cursor = 'progress';
+      setTimeout(function(){ opening = false; b.style.cursor = ''; open(); }, OPEN_DELAY_MS);
+    });
     hist.parentNode.insertBefore(b, hist);
     return true;
   }
