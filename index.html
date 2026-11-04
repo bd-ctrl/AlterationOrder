@@ -5524,7 +5524,7 @@
         <div class="scancap">สามารถสแกนบาร์โค้ดสินค้าในช่องนี้ได้ — จากนั้นรหัสสินค้าและ Size จะขึ้นอัตโนมัติ</div>
         <div class="sku-type-warning hidden"></div>
         <!-- ไซซ์/สาขาที่ใช้ของ ย้ายมาอยู่กลุ่มเดียวกับรหัสสินค้า (เดิมอยู่หลังประเภทสินค้า) เน้นรหัส+ไซซ์ให้เด่นเพราะเป็นข้อมูลที่หน้างานต้องใช้หาสินค้าจริง -->
-        <div class="frow size-row"><span class="k">Size</span><input class="fig emph size-input" placeholder="—"></div>
+        <div class="frow size-row"><span class="k">Size</span><input class="fig emph size-input" maxlength="3" autocomplete="off" placeholder="—"></div>
         <div class="frow"><span class="k">สินค้าใช้ของสาขา</span><select class="frowsel branch-prod"><option>OFFICE</option><option>R3</option><option>T21</option><option>SQ1</option><option>PM</option><option>SC</option><option>CM</option><option>FP</option><option>KR</option><option>SL</option><option>NW</option><option>CC</option><option>BP</option><option>RCD</option><option>KK</option><option>PK</option><option>MG</option><option>CTW</option><option>WG</option><option hidden>ลูกค้านำสินค้ากลับมาปรับแก้</option></select></div>
         <div class="cust-stock-hint hidden">🔒 ล็อกตามติ๊ก “ลูกค้านำสินค้ากลับมาปรับแก้” — เอาติ๊กออกถ้าจะเลือกสาขาอื่น</div>   <!-- [2026-10-28-7] -->
         <div class="frow codewrap contact-row hidden"><span class="k">ชื่อพนักงานที่ติดต่อ</span><input class="contact-input" placeholder="พิมพ์แล้วเลือกชื่อ" autocomplete="off"><div class="suggest contact-suggest"></div></div>
@@ -5741,7 +5741,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-04-1';
+  const APP_VERSION = '2026-11-04-3';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -10343,6 +10343,27 @@
     el._thRaw=rawHasThai?raw:null; el._thShown=rawHasThai?out:null;
   }
   function resetThaiKeysState(el){ el._thRaw=el._thShown=null; }
+  // [2026-11-04 ตามที่ขอ] กติกา Size ตามชนิด (ตรงกับที่ Salesforce รับ): เสื้อสูท = เลขไม่เกิน 2 หลัก · กางเกง = เลขไม่เกิน 3 หลัก · ชนิดอื่น = ไม่เกิน 3 ตัว
+  // ห้ามภาษาไทยทุกชนิด — ลืมเปลี่ยนแป้นแล้วกดเลข = แปลงเป็นเลข · อักษรไทยอื่นตัดทิ้ง
+  function sizeRule(type){ type=String(type||''); if(type.includes('เสื้อสูท')) return {max:2,digits:true}; if(type.includes('กางเกง')) return {max:3,digits:true}; return {max:3,digits:false}; }
+  function cleanSizeTyped(v,type){
+    const rule=sizeRule(type);
+    return Array.from(String(v||'')).map(ch=>{
+      const td='๐๑๒๓๔๕๖๗๘๙'.indexOf(ch);
+      if(td>=0) return String(td);
+      if(/[\u0E00-\u0E7F]/.test(ch)){ const en=thaiKeysToEn(ch); return /^\d$/.test(en)?en:''; }
+      return (rule.digits?/\d/:/[A-Za-z0-9.\-\/]/).test(ch)?ch:'';
+    }).join('').slice(0,rule.max);
+  }
+  function sizeValueOk(v,type){ const rule=sizeRule(type); v=String(v||'').trim(); return v.length<=rule.max && !/[\u0E00-\u0E7F]/.test(v) && (!rule.digits||/^\d+$/.test(v)); }
+  function sizeRuleText(type){ const rule=sizeRule(type); return rule.digits?('ใส่ได้เฉพาะตัวเลขไม่เกิน '+rule.max+' หลัก'):('ใส่ได้ไม่เกิน '+rule.max+' ตัว และห้ามภาษาไทย'); }
+  function applySizeRule(el){
+    const type=el.closest('.product-block')?.querySelector('.type-select')?.value||'';
+    const clean=cleanSizeTyped(el.value,type);
+    if(clean!==el.value) el.value=clean;
+  }
+  document.addEventListener('input',e=>{ const el=e.target; if(el&&el.classList&&el.classList.contains('size-input')) applySizeRule(el); });
+  document.addEventListener('change',e=>{ const el=e.target; if(!el||!el.classList||!el.classList.contains('type-select')) return; const sz=el.closest('.product-block')?.querySelector('.size-input'); if(sz&&sz.value) applySizeRule(sz); });
   const ACC_TYPE_NAME='Accessory อื่นๆ', SF_SKU_MAX=15;
   let _skuSetSrc=null, _skuSet=null;
   function skuInMaster(c){
@@ -11275,6 +11296,7 @@
       // [แก้ตามที่ขอ] รหัส Accessory ขึ้นต้น NT/BT/CL ไม่มีไซซ์จริงเลย (แถว Size ถูกซ่อนไปแล้วในหน้าสินค้า) เลยไม่ต้องบังคับกรอก — Accessory รหัสอื่น (เช่น รองเท้า) ยังต้องกรอกไซซ์เหมือนเดิม
       const sizeNotNeeded = !!code && skuHasNoSize(code);
       if(!sizeNotNeeded && !data['รายการ'+n+'_ไซส์']) missing.push({page:2,label:'สินค้ารายการที่ '+n+' — Size'});
+      else if(!sizeNotNeeded && !sizeValueOk(data['รายการ'+n+'_ไซส์'],type)) missing.push({page:2,label:'สินค้ารายการที่ '+n+' — Size '+sizeRuleText(type)});
       // [ใหม่] เช็ค 2 ทาง — "ประเภทสินค้า" ที่เลือกไว้ ต้องตรงกับประเภทที่อ่านได้จากตัวรหัส SKU เอง กันเคสเลือกประเภทผิด/แก้ทับหลังสแกนแล้วข้อมูลสองช่องขัดกัน (เช่น รหัสลงท้าย -P- แต่ประเภทดันเลือกเป็น "เสื้อสูท")
       if(parsed && parsed.type && parsed.type!==type){
         missing.push({page:2,label:'สินค้ารายการที่ '+n+' — ประเภทสินค้า ("'+type+'") ไม่ตรงกับรหัส SKU "'+code+'" (รหัสนี้ควรเป็น "'+parsed.type+'")'});
