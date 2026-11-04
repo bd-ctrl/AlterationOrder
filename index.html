@@ -48,19 +48,74 @@
   #printPauseBanner button:active{transform:scale(.97)}
   #printPauseBanner button:disabled{opacity:.6;cursor:default}
   @media (max-width:520px){#printPauseBanner{flex-wrap:wrap}}
-  .pc-strip{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:10px 0 2px;padding:10px 12px;border:1px solid var(--rule);border-radius:12px;background:#fff;font-size:13.5px}
+  .pc-strip{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:6px 0 2px;padding:6px 10px;border:1px solid var(--rule);border-radius:10px;background:#fff;font-size:12.5px}
   .pc-strip[hidden]{display:none}
-  .pc-strip .pc-dot{width:10px;height:10px;border-radius:50%;background:var(--green);flex:0 0 auto}
-  .pc-strip .pc-txt{flex:1 1 180px;line-height:1.4;min-width:0}
-  .pc-strip .pc-sub{display:block;font-size:12px;color:var(--t2);margin-top:2px;overflow-wrap:anywhere}
+  .pc-strip .pc-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex:0 0 auto}
+  .pc-strip .pc-txt{flex:1 1 180px;line-height:1.35;min-width:0}
+  .pc-strip .pc-sub{display:block;font-size:11px;color:var(--t2);margin-top:1px;overflow-wrap:anywhere}
   .pc-strip.paused{border-color:#b5342a;background:#fdecea}
   .pc-strip.paused .pc-dot{background:#b5342a}
   .pc-strip.paused .pc-txt{color:#7d1f18;font-weight:600}
-  .pc-strip button{flex:0 0 auto;border-radius:999px;font-family:inherit;font-size:13px;font-weight:600;padding:7px 14px;cursor:pointer;white-space:nowrap}
+  .pc-strip button{flex:0 0 auto;border-radius:999px;font-family:inherit;font-size:12px;font-weight:600;padding:4px 11px;cursor:pointer;white-space:nowrap}
   .pc-strip button[hidden]{display:none}
   .pc-strip button:disabled{opacity:.55;cursor:default}
   .pc-stop{border:1.5px solid #b5342a;background:#fff;color:#b5342a}
   .pc-resume{border:none;background:var(--gold);color:var(--ink)}
+  .pc-kick{display:flex;align-items:center;justify-content:center;flex:0 0 auto;width:28px;height:28px;padding:0;border:none;border-radius:50%;background:var(--ink);color:#fff;cursor:pointer}
+  .pc-kick[hidden]{display:none}
+  .pc-kick:disabled{opacity:.55;cursor:default}
+  .pc-kick svg{width:15px;height:15px;display:block}
+  #printRangePop .pr-gap{display:flex;align-items:center;gap:6px;min-width:0}
+  #printRangePop .pr-gap input{flex:1 1 0;width:112px;min-width:0;text-align:right}
+  #printRangePop .pr-gap span{flex:0 0 auto;font-size:12.5px;color:var(--t2)}
+  .pc-strip .pc-dot.run{animation:pcPulse 1.4s ease-in-out infinite}
+  @keyframes pcPulse{50%{opacity:.35}}
+  @media (prefers-reduced-motion:reduce){.pc-strip .pc-dot.run{animation:none}}
+  .pc-strip .pc-txt b{font-family:'Barlow',sans-serif;font-weight:700;font-size:13.5px}
+  .pc-strip.bad{border-color:#b5342a;background:#fdecea}
+  .pc-strip.bad .pc-dot{background:#b5342a}
+  .pc-strip.bad .pc-txt,.pc-strip.bad .pc-sub{color:#7d1f18}
+  .pc-strip.bad .pc-txt{font-weight:600}
+  .pc-strip.bad .pc-sub{font-weight:400}
+  .pc-strip.warn{border-color:#d9772e;background:#fdf3e8}
+  .pc-strip.warn .pc-dot{background:#d9772e}
+  .pc-strip.warn .pc-txt,.pc-strip.warn .pc-sub{color:#8a4a17}
+  .pc-strip.warn .pc-txt{font-weight:600}
+  .pc-strip.warn .pc-sub{font-weight:400}
+  .pc-b{margin:6px 0 2px;padding:10px 12px;border:1px solid var(--rule);border-radius:12px;background:#fff}
+  .pc-b[hidden]{display:none}
+  .pc-b.bad{border-color:#b5342a}
+  .pc-b-top{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:var(--t2)}
+  .pc-b.bad .pc-b-top{color:#b5342a;font-weight:600}
+  .pc-b-st{display:flex;align-items:center;gap:6px;min-width:0}
+  .pc-b-dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto;background:var(--green)}
+  .pc-b.bad .pc-b-dot{background:#b5342a}
+  .pc-b-dot.run{animation:pcPulse 1.4s ease-in-out infinite}
+  @media (prefers-reduced-motion:reduce){.pc-b-dot.run{animation:none}}
+  .pc-b-main{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px}
+  .pc-b-bill{font-family:'Barlow',sans-serif;font-weight:700;font-size:22px;line-height:1.15;min-width:0;overflow-wrap:anywhere}
+  .pc-b-act{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+  .pc-b-act .pc-stop{flex:0 0 auto;border-radius:999px;font-family:inherit;font-size:12px;font-weight:600;padding:4px 11px;cursor:pointer;white-space:nowrap}
+  .pc-b-act .pc-stop[hidden]{display:none}
+  .pc-b-act .pc-stop:disabled{opacity:.55;cursor:default}
+  .pc-b-sub{font-size:11.5px;color:var(--t2);margin-top:2px;overflow-wrap:anywhere}
+  .pc-b-sub:empty{display:none}
+  .pc-b-next{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:8px;padding-top:8px;border-top:1px solid var(--rule2);font-size:11.5px;color:var(--t2)}
+  .pc-b-next[hidden]{display:none}
+  .pc-chip{font-family:'Barlow',sans-serif;font-weight:600;font-size:12px;color:var(--ink);background:#f4f0e6;border:none;border-radius:999px;padding:2px 8px}
+  button.pc-chip{cursor:pointer;color:var(--goldink)}
+  .pc-q-list[hidden]{display:none}
+  .pc-q-list{max-height:112px;overflow-y:auto;margin-top:6px;border-top:1px solid var(--rule2)}
+  .pc-q-r{display:grid;grid-template-columns:20px 1fr auto auto;gap:6px;align-items:center;padding:3px 10px;border-bottom:1px solid var(--rule2);font-size:12px}
+  .pc-q-r:last-child{border-bottom:none}
+  .pc-q-n{color:var(--t3);font-family:'Barlow',sans-serif;font-weight:600}
+  .pc-q-b{font-family:'Barlow',sans-serif;font-weight:700;font-size:12.5px;min-width:0;overflow-wrap:anywhere}
+  .pc-q-p{color:var(--t2);font-size:11px}
+  .pc-q-t{color:var(--t2);font-family:'Barlow',sans-serif;font-weight:500;font-size:11.5px}
+  .pc-q-r.now{background:#f1f5ee}
+  .pc-q-r.now .pc-q-n,.pc-q-r.now .pc-q-p{color:var(--green);font-weight:600}
+  .pc-q-r.stuck{background:#fdecea}
+  .pc-q-r.stuck .pc-q-n,.pc-q-r.stuck .pc-q-p{color:#b5342a;font-weight:600}
   .pc-note{margin-top:6px;color:#b5342a;font-weight:600}
   /* [2026-10-16] กล่องยืนยัน (หยุดพิมพ์/เริ่มพิมพ์ต่อ ถามจากในหน้าต่างพิมพ์) ต้องอยู่เหนือหน้าต่างพิมพ์ — เดิม z-index เท่ากัน (90) แล้วตัวที่อยู่ท้าย DOM ชนะ กล่องยืนยันเลยจมอยู่ข้างหลังกดไม่ได้ */
   #confirmPop{z-index:95}
@@ -650,7 +705,7 @@
   /* [ใหม่ตามที่ขอ] บรรทัดคำอธิบายเล็กๆ ใต้หัวข้อป็อปอัป "พิมพ์ใบสั่งแก้ปรับทรงสำเร็จรูป" */
   .printrange-desc{font-size:12.5px;color:var(--t2);margin-top:-8px;margin-bottom:16px}
   /* [ใหม่ตามที่ขอ] บอกจำนวนงานทั้งหมดที่ตรงกับเงื่อนไขค้นหาปัจจุบัน (default = เมื่อวาน) อัปเดตสดทุกครั้งที่เปลี่ยนเงื่อนไข */
-  .printrange-count{display:inline-flex;align-items:center;gap:6px;font-family:'Barlow',sans-serif;font-weight:600;font-size:13px;color:var(--goldink);background:rgba(201,162,75,.1);border-radius:999px;padding:5px 14px;margin:-8px 0 16px}
+  .printrange-count{display:inline-block;font-family:'Barlow',sans-serif;font-weight:600;font-size:13px;color:var(--goldink);background:rgba(201,162,75,.1);border-radius:999px;padding:5px 14px;margin:-8px 0 16px}
   .printrange-count.loading{color:var(--t3);font-weight:400;font-style:italic}
   /* [ใหม่ตามที่ขอ+mockup confirmed] เจอ 0 งาน = ตัวหนังสือแดงเฉยๆ ไม่มีป้าย (ไม่ต้องเด่น) / เจอ >0 งาน = ป้ายทองใหญ่ขึ้น หนาขึ้น (เด่นขึ้น เตือนว่ามีงานรอปริ้น) */
   .printrange-count.zero{color:var(--red);background:none;padding:0;border-radius:0}
@@ -672,6 +727,8 @@
   .printrange-result-list .r .ids{font-size:11.5px;color:var(--t2)}
   .printrange-result-empty{padding:16px;text-align:center;font-size:13px;color:var(--t3)}
   /* [2026-10-23-3 ตามที่ขอ "ปริ้นใบนำกลับมาแก้จากหน้าต่างพิมพ์ใบสั่งแก้"] รายการใบนำกลับมาแก้ที่ตรงกับเลขที่ค้น — ใช้หน้าตาเดียวกับรายการสรุปของหน้าต่างนี้ */
+  /* [2026-11-02 ตามที่ขอ "ปรินต์สินค้านำกลับมาแก้ได้ทีละหลายบิล"] ช่องกรอกหลายเลข + รายการติ๊กเลือกจากช่วงวันที่ */
+  #printRangePop textarea.printrange-multi{flex:1;min-width:0;min-height:44px;resize:vertical;border:none;outline:none;background:transparent;font-family:inherit;font-size:14px;line-height:1.5;color:var(--ink);text-align:right}
   .printrange-ra{margin:-4px 0 14px}
   .printrange-ra[hidden]{display:none}
   .printrange-ra .pra-h{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px}
@@ -1449,7 +1506,7 @@
   html.ro-mode #roBanner b{color:#f3d58b;font-weight:600}
   html.ro-mode .foot .draft, html.ro-mode .foot .trash, html.ro-mode #submitBtn,
   html.ro-mode .hist-edit-btn, html.ro-mode .hist-cancel-btn, html.ro-mode .hist-note-btn, html.ro-mode .hist-redraw-btn,
-  html.ro-mode #printRangeBtn, html.ro-mode #pcStopBtn, html.ro-mode #pcResumeBtn, html.ro-mode #printPauseBannerBtn,
+  html.ro-mode #printRangeBtn, html.ro-mode #pcStopBtn, html.ro-mode #pcResumeBtn, html.ro-mode #pcKickBtn, html.ro-mode #printPauseBannerBtn,
   html.ro-mode .ra2-save{display:none !important}
   .ro-toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);z-index:100001;max-width:min(92vw,520px);background:#b5573b;color:#fff;font-family:'Prompt',sans-serif;font-size:14px;line-height:1.5;padding:10px 16px;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.18);text-align:center}
   #authBar .ab-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex:0 0 auto}
@@ -5318,9 +5375,17 @@
         <button type="button" class="pc-stop" id="pcStopBtn" hidden>หยุดพิมพ์</button>
         <button type="button" class="pc-resume" id="pcResumeBtn" hidden>เริ่มพิมพ์ต่อ</button>
       </div>
+      <div class="pc-b" id="pcBig" hidden>
+        <div class="pc-b-top"><span class="pc-b-st"><span class="pc-b-dot" id="pcBigDot" aria-hidden="true"></span><span id="pcBigLabel"></span></span><span id="pcBigRight"></span></div>
+        <div class="pc-b-main"><span class="pc-b-bill" id="pcBigBill"></span><span class="pc-b-act" id="pcBigAct"><button type="button" class="pc-kick" id="pcKickBtn" title="พิมพ์ต่อ" aria-label="พิมพ์ต่อ" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/></svg></button></span></div>
+        <div class="pc-b-sub" id="pcBigSub"></div>
+        <div class="pc-b-next" id="pcBigNext" hidden></div>
+        <div class="pc-q-list" id="pcQueueList" hidden></div>
+      </div>
       <div class="printrange-body" id="printRangeForm">
         <div class="frow"><span class="k">สาขา</span><select class="hdrsel" id="printRangeBranch"><option value="">ทุกสาขา</option><option>R3</option><option>T21</option><option>SQ1</option><option>PM</option><option>SC</option><option>CM</option><option>FP</option><option>KR</option><option>SL</option><option>NW</option><option>CC</option><option>BP</option><option>RCD</option><option>KK</option><option>PK</option><option>MG</option><option>CTW</option><option>WG</option></select></div>
-        <div class="frow"><span class="k">เลขที่บิล</span><input id="printRangeBillNo" placeholder="เว้นว่าง = ค้นด้วยช่วงวันที่แทน"></div>
+        <div class="frow"><span class="k">เลขที่บิล / P#</span><textarea id="printRangeBillNo" class="printrange-multi" rows="2" placeholder="ใส่ได้หลายเลข ขึ้นบรรทัดใหม่ทีละเลข&#10;เว้นว่าง = ค้นด้วยช่วงวันที่แทน"></textarea></div>
+        <div class="frow"><span class="k">ช่วงบิล <span class="printrange-hint">(ตั้งแต่ใบไหน ถึงใบไหน)</span></span><span class="pr-gap"><input id="printGapFrom" placeholder="ตั้งแต่บิล" autocomplete="off" aria-label="ตั้งแต่บิล"><span>ถึง</span><input id="printGapTo" placeholder="ถึงบิล" autocomplete="off" aria-label="ถึงบิล"></span></div>
         <div class="frow"><span class="k">Suitcube Order <span class="printrange-hint">(ใส่แค่ตัวเลข เช่น 184476)</span></span><input id="printRangeOrderId" placeholder="เว้นว่างได้"></div>
         <div class="frow"><span class="k">Suitcube Product <span class="printrange-hint">(ใส่แค่ตัวเลข เช่น 388870)</span></span><input id="printRangeProductId" placeholder="เว้นว่างได้"></div>
         <!-- [แก้ตามที่ขอ] เปลี่ยนจากปฏิทิน native <input type=date> ให้เป็นปฏิทินกำหนดเองแบบเดียวกับ "วันที่นัดรับสินค้า"/ตัวกรองวันที่ในประวัติ (makeFilterCal) — โครงสร้างเดียวกันเป๊ะ ใช้ class hist-datewrap/hist-date-display/hist-today ร่วมกันเพื่อหน้าตาตรงกัน -->
@@ -5676,7 +5741,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-10-30-1';
+  const APP_VERSION = '2026-11-04-1';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -5803,7 +5868,7 @@
   const printFromDate=document.getElementById('printFromDate'), printToDate=document.getElementById('printToDate');
   // [ใหม่ตามที่ขอ] เพิ่มช่องเลือกสาขา + ค้นหาจากเลขที่บิล/Suitcube Order/Suitcube Product ได้ (เดิมมีแค่ช่วงวันที่ ส่งสาขาว่างเปล่าตายตัวเสมอ ทั้งที่ฝั่ง Worker รองรับกรองสาขาอยู่แล้ว)
   const printRangeBranch=document.getElementById('printRangeBranch'), printRangeBillNo=document.getElementById('printRangeBillNo');
-  const printRangeOrderId=document.getElementById('printRangeOrderId'), printRangeProductId=document.getElementById('printRangeProductId');
+  const printRangeOrderId=document.getElementById('printRangeOrderId'), printRangeProductId=document.getElementById('printRangeProductId'), printGapFrom=document.getElementById('printGapFrom'), printGapTo=document.getElementById('printGapTo');
   const printRangeSubmitBtn=document.getElementById('printRangeSubmitBtn');
   const printRangeForm=document.getElementById('printRangeForm'), printRangeResult=document.getElementById('printRangeResult');
   const printRangeResultSummary=document.getElementById('printRangeResultSummary'), printRangeResultList=document.getElementById('printRangeResultList');
@@ -5826,21 +5891,24 @@
   }
   function updatePrintRangeCount(){
     if(!printRangeCount) return;
+    updatePrintRangeRa();
     _prCount=null;
     const branch=printRangeBranch?.value||'';
     const billNo=(printRangeBillNo?.value||'').trim();
     const orderId=(printRangeOrderId?.value||'').trim();
     const productId=(printRangeProductId?.value||'').trim();
     const from=printFromDate?.value||'', to=printToDate?.value||'';
-    if(!billNo && !orderId && !productId && (!from || !to)){ printRangeCount.textContent=''; printRangeCount.className='printrange-count'; return; }
+    const [gapA,gapB]=prGapTerms();
+    if(!!gapA!==!!gapB){ _printCountSeq++; printRangeCount.textContent='ใส่ให้ครบทั้ง "ตั้งแต่บิล" และ "ถึงบิล"'; printRangeCount.className='printrange-count loading'; return; }
+    if(!gapA && !billNo && !orderId && !productId && (!from || !to)){ printRangeCount.textContent=''; printRangeCount.className='printrange-count'; return; }
     const seq=++_printCountSeq;
     printRangeCount.innerHTML=scLd({size:14,words:false,inline:true})+'กำลังนับจำนวนงาน…'; printRangeCount.className='printrange-count loading';
-    fetch(WORKER+'/queue-reprint', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ branch, billNo, orderId, productId, from, to }) })
-      .then(r=>r.json()).then(json=>{
+    prFindJson(branch, billNo, orderId, productId, from, to)
+      .then(json=>{
         if(seq!==_printCountSeq) return; // เปลี่ยนเงื่อนไขใหม่แซงไปแล้ว ผลรอบนี้ตกไป
-        if(!json || !json.success){ printRangeCount.textContent='นับจำนวนงานไม่สำเร็จ'; printRangeCount.className='printrange-count loading'; return; }
+        if(!json || !json.success){ printRangeCount.textContent=(json&&json.gapError)||'นับจำนวนงานไม่สำเร็จ'; printRangeCount.className='printrange-count loading'; return; }
         const y=new Date(); y.setDate(y.getDate()-1);
-        _prCount={ total:(json.list||[]).length, yesterday: !billNo && !orderId && !productId && from===toISO(y) && to===toISO(y) };
+        _prCount={ total:(json.list||[]).length, yesterday: !gapA && !billNo && !orderId && !productId && from===toISO(y) && to===toISO(y) };
         renderPrintRangeCountText();
       }).catch(()=>{ if(seq===_printCountSeq){ printRangeCount.textContent='นับจำนวนงานไม่สำเร็จ'; printRangeCount.className='printrange-count loading'; } });
   }
@@ -5853,12 +5921,57 @@
   const printRangeRa=document.getElementById('printRangeRa');
   let _praSeq=0, _praT=null, _praList=[];
   const praTerms=()=>[printRangeBillNo, printRangeOrderId, printRangeProductId].map(el=>String((el&&el.value)||'').trim());
+  // [2026-11-02 ตามที่ขอ] กรอกได้หลายเลขในช่องเดียว (คั่นด้วยขึ้นบรรทัด/เว้นวรรค/จุลภาค) · เลข 5-7 หลักหรือ P# = เลขสินค้า · O# = เลขออเดอร์ · นอกนั้น = เลขบิล
+  const praSplit=s=>String(s||'').replace(/[Pp]#\s*/g,'P#').replace(/[Oo]#\s*/g,'O#').split(/[\s,;]+/).filter(Boolean);
+  function prSearches(b,o,p){
+    const bt=praSplit(b), ot=praSplit(o), pt=praSplit(p);
+    const fromBill=t=>/^P#\d+$/i.test(t)||/^\d{5,7}$/.test(t)?{b:'',o:'',p:t.replace(/\D/g,'')}:(/^O#\d+$/i.test(t)?{b:'',o:t.replace(/\D/g,''),p:''}:{b:t,o:'',p:''});
+    if(bt.length<=1&&ot.length<=1&&pt.length<=1){   // ค่าละ 1 ช่อง = ค้นรวมเงื่อนไขแบบเดิม
+      if(!bt.length&&!ot.length&&!pt.length) return [];
+      const one=bt.length?fromBill(bt[0]):{b:'',o:'',p:''};
+      return [{b:one.b, o:ot[0]?ot[0].replace(/^O#/i,''):one.o, p:pt[0]?pt[0].replace(/^P#/i,''):one.p}];
+    }
+    const out=[...bt.map(fromBill), ...ot.map(t=>({b:'',o:t.replace(/^O#/i,''),p:''})), ...pt.map(t=>({b:'',o:'',p:t.replace(/^P#/i,'')}))], seen=new Set();
+    return out.filter(x=>{ const k=x.b+'|'+x.o+'|'+x.p; if(seen.has(k)) return false; seen.add(k); return true; }).slice(0,40);
+  }
+  // [2026-11-03-2 ตามที่ขอ] ช่วงบิล: พิมพ์ตั้งแต่ใบไหนถึงใบไหน เรียงตามลำดับแถวที่สร้าง (ข้ามสาขาได้ · เลือกสาขาไว้ = เอาเฉพาะสาขานั้นในช่วง)
+  const prGapTerms=()=>[printGapFrom,printGapTo].map(el=>String((el&&el.value)||'').trim().toUpperCase());
+  const prCreatedKey=o=>Number(o&&o.createdMs)||Date.parse(((o&&o.dates&&o.dates.created)||'')+'T'+((o&&o.dates&&o.dates.createdTime)||'00:00')+':00+07:00')||0;
+  async function prFindGap(branch,a,b,post){
+    const one=async bill=>{ const j=await post({branch:'',billNo:bill,orderId:'',productId:'',from:'',to:''}); return j&&j.success ? (j.list||[]).find(o=>String(o.orderNo||'').trim().toUpperCase()===bill)||null : null; };
+    const [oa,ob]=await Promise.all([one(a),one(b)]);
+    const miss=[!oa?a:'',!ob?b:''].filter(Boolean);
+    if(miss.length) return {success:false,gapError:'ไม่พบบิล '+miss.join(', '),error:'ไม่พบบิล '+miss.join(', ')};
+    const days=[oa.dates&&oa.dates.created,ob.dates&&ob.dates.created].filter(Boolean).sort();
+    const j=await post({branch:'',billNo:'',orderId:'',productId:'',from:days[0],to:days[days.length-1]});
+    if(!j||!j.success) return j;
+    const sorted=(j.list||[]).slice().sort((x,y)=>prCreatedKey(x)-prCreatedKey(y));
+    let i=sorted.findIndex(o=>o.id===oa.id), k=sorted.findIndex(o=>o.id===ob.id);
+    if(i<0||k<0) return {success:false,gapError:'หาลำดับบิลไม่พบ',error:'หาลำดับบิลไม่พบ'};
+    if(i>k){ const t=i; i=k; k=t; }
+    const list=sorted.slice(i,k+1).filter(o=>!branch||o.branch===branch);
+    return {success:true,list};
+  }
+  async function prFindJson(branch,billNo,orderId,productId,from,to){
+    const post=body=>fetch(WORKER+'/queue-reprint',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json());
+    const [gapA,gapB]=prGapTerms();
+    if(gapA&&gapB) return prFindGap(branch,gapA,gapB,post);
+    const searches=prSearches(billNo,orderId,productId);
+    if(!searches.length) return await post({branch,billNo:'',orderId:'',productId:'',from,to});
+    const byId=new Map();
+    for(const s of searches){
+      const j=await post({branch,billNo:s.b,orderId:s.o,productId:s.p,from,to});
+      if(!j||!j.success) return j;
+      (j.list||[]).forEach(o=>{ if(!byId.has(o.id)) byId.set(o.id,o); });
+    }
+    return {success:true,list:[...byId.values()]};
+  }
   const praFileOf=e=>e.file||('นำกลับมาแก้_P#'+e.digits+'_ครั้งที่'+e.round+'.png');
   function updatePrintRangeRa(){
     if(!printRangeRa) return;
     clearTimeout(_praT); _praSeq++;
     const [b,o,p]=praTerms();
-    if(!b&&!o&&!p){ printRangeRa.hidden=true; printRangeRa.innerHTML=''; _praList=[]; renderPrintRangeCountText(); return; }
+    if(!b&&!o&&!p){ _praList=[]; printRangeRa.hidden=true; printRangeRa.innerHTML=''; return; }
     _praT=setTimeout(()=>loadPrintRangeRa(b,o,p),400);
   }
   async function praJson(url,opt){ const r=await fetch(url,opt); let j=null; try{ j=await r.json(); }catch(e){} if(!r.ok||!j||j.success===false) throw new Error((j&&(j.error||j.code))||('HTTP '+r.status)); return j; }
@@ -5890,7 +6003,11 @@
     return out;
   }
   // [2026-10-26-1 ตามที่ขอ] ไม่โชว์การ์ด "ใบนำกลับมาแก้" + ปุ่มแยกแล้ว — หาไว้เงียบๆ เพื่อนับรวมใน "พบทั้งหมด" และพิมพ์พร้อมกันตอนกด "สั่งพิมพ์"
-  async function praFindFor(b,o,p){ const f=await workerFeat(); return f.raReprint?await praFindNew(b,o,p):await praFindLive(b,o,p); }
+  async function praFindFor(b,o,p){
+    const f=await workerFeat(), byKey=new Map();
+    for(const s of prSearches(b,o,p)){ (f.raReprint?await praFindNew(s.b,s.o,s.p):await praFindLive(s.b,s.o,s.p)).forEach(e=>{ const k=e.recordId+'|'+e.digits+'|'+e.round; if(!byKey.has(k)) byKey.set(k,e); }); }
+    return [...byKey.values()];
+  }
   async function loadPrintRangeRa(b,o,p){
     const seq=++_praSeq;
     printRangeRa.hidden=true; printRangeRa.innerHTML='';
@@ -5998,6 +6115,8 @@
     if(el) el.addEventListener('input', updatePrintRangeCount);
     if(el && el.tagName==='SELECT') el.addEventListener('change', updatePrintRangeCount);
   });
+  let _prGapT=null;
+  [printGapFrom,printGapTo].forEach(el=>{ if(el) el.addEventListener('input',()=>{ clearTimeout(_prGapT); _prGapT=setTimeout(updatePrintRangeCount,500); }); });
   function resetPrintRangePop(){
     if(printRangeForm) printRangeForm.classList.remove('hidden');
     if(printRangeResult) printRangeResult.classList.add('hidden');
@@ -6026,6 +6145,8 @@
       if(printToDate) printToDate.value=yStr;
       if(printRangeBranch) printRangeBranch.value='';
       if(printRangeBillNo) printRangeBillNo.value='';
+      if(printGapFrom) printGapFrom.value='';
+      if(printGapTo) printGapTo.value='';
       if(printRangeOrderId) printRangeOrderId.value='';
       if(printRangeProductId) printRangeProductId.value='';
       updateTodayHint(printFromDate, printFromToday);
@@ -6048,21 +6169,19 @@
       const orderId=(printRangeOrderId?.value||'').trim();
       const productId=(printRangeProductId?.value||'').trim();
       const from=printFromDate?.value||'', to=printToDate?.value||'';
+      const [gapA,gapB]=prGapTerms();
+      if(!!gapA!==!!gapB){ alert('ใส่ให้ครบทั้ง "ตั้งแต่บิล" และ "ถึงบิล"'); return; }
       const hasSearchTerm = !!(billNo || orderId || productId);
       // ถ้ากรอกช่องค้นหาช่องใดช่องหนึ่งมา (เลขที่บิล/Suitcube Order/Suitcube Product) ค้นด้วยช่องนั้นได้เลย ไม่ต้องเลือกช่วงวันที่ก็ได้ — ถ้าไม่กรอกเลย ยังต้องเลือกช่วงวันที่เหมือนเดิม
-      if(!hasSearchTerm && (!from || !to)){ alert('กรุณากรอกเลขที่บิล/Suitcube Order/Suitcube Product อย่างใดอย่างหนึ่ง หรือเลือกช่วงวันที่'); return; }
+      if(!gapA && !hasSearchTerm && (!from || !to)){ alert('กรุณากรอกเลขที่บิล/Suitcube Order/Suitcube Product อย่างใดอย่างหนึ่ง หรือเลือกช่วงวันที่'); return; }
       printRangeSubmitBtn.disabled=true; scBusy(printRangeSubmitBtn,'กำลังค้นหา…');
       try{
-        const res=await fetch(WORKER+'/queue-reprint', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ branch, billNo, orderId, productId, from, to }),
-        });
-        const json=await res.json();
+        const json=await prFindJson(branch, billNo, orderId, productId, from, to);
         if(!json || !json.success) throw new Error(json&&json.error||'ค้นหาไม่สำเร็จ');
         const list=json.list||[];
         // [2026-10-26-1 ตามที่ขอ] ใบนำกลับมาแก้ที่ตรงกับคำค้น (เลขบิลใหม่/เลขบิลเดิม/P#/O#) พิมพ์รวมในรอบเดียวกันนี้ — ค้นช่วงวันที่อย่างเดียวไม่รวม
         let raList=[];
-        if(hasSearchTerm){ try{ raList=await praFindFor(billNo,orderId,productId); }catch(e){ raList=[]; } }
+        if(hasSearchTerm&&!gapA){ try{ raList=await praFindFor(billNo,orderId,productId); }catch(e){ raList=[]; } }
         // ดึงข้อมูลล่าสุดจาก Salesforce + วาดใบสรุปใหม่ + แนบเข้า Lark + ตั้งคิวปริ้น ทีละบิล (กันพิมพ์รูปเก่าที่ยังไม่อัปเดต)
         const results=[];
         // [แก้บั๊ก+ตามที่ขอ] เดิมเก็บแค่ lines (ไปวาดเป็น HTML ทีหลัง) — เปลี่ยนเก็บ imageBase64 ที่วาดเสร็จแล้วจากขั้นตอน regenerateReceiptsFromLatest ตรงๆ เลย (ไม่ต้องวาดซ้ำ) ให้พิมพ์ออกมาเหมือนโหมด "ดึงเป็นรูป" เป๊ะๆ ไม่จางกว่ากัน
@@ -6105,6 +6224,7 @@
         if(billNo) searchLabels.push('เลขที่บิล "'+billNo+'"');
         if(orderId) searchLabels.push('Suitcube Order "'+orderId+'"');
         if(productId) searchLabels.push('Suitcube Product "'+productId+'"');
+        if(gapA) searchLabels.length=0, searchLabels.push('ช่วงบิล '+gapA+' ถึง '+gapB);
         const scopeLabel=searchLabels.length ? searchLabels.join(', ') : (from+' ถึง '+to);
         if(printRangeResultSummary) printRangeResultSummary.innerHTML='อัปเดตข้อมูลล่าสุด + เข้าคิวพิมพ์แล้ว <b>'+okCount+' / '+results.length+'</b> รายการ ('+branchLabel+', '+scopeLabel+')'+((window.suitcubePrintControl&&window.suitcubePrintControl.isPaused())?'<div class="pc-note">⛔ ตอนนี้หยุดพิมพ์อยู่ — บิลเข้าคิวแล้วแต่ยังไม่ออกเครื่องพิมพ์ จนกว่าจะกดเริ่มพิมพ์ต่อ</div>':'');
         if(printRangeResultList){
@@ -12728,7 +12848,7 @@
     if(sm==='auto') return;   // หน้า ?auto=1 เปิดทิ้งไว้เครื่องเดียว ไม่มีคนดู
     var el=function(id){ return document.getElementById(id); };
     var banner=el('printPauseBanner'), bannerText=el('printPauseBannerText'), bannerBtn=el('printPauseBannerBtn');
-    var strip=el('pcStrip'), stateEl=el('pcState'), subEl=el('pcSub'), stopBtn=el('pcStopBtn'), resumeBtn=el('pcResumeBtn');
+    var strip=el('pcStrip'), stateEl=el('pcState'), subEl=el('pcSub'), stopBtn=el('pcStopBtn'), resumeBtn=el('pcResumeBtn'), kickBtn=el('pcKickBtn'), bigEl=el('pcBig'), bigDot=el('pcBigDot'), bigLabel=el('pcBigLabel'), bigRight=el('pcBigRight'), bigBill=el('pcBigBill'), bigAct=el('pcBigAct'), bigSub=el('pcBigSub'), bigNext=el('pcBigNext'), queueList=el('pcQueueList'), listOpen=false;
     if(!banner||!strip||!stopBtn||!resumeBtn) return;
     var st=null, failMsg='', busy=false, inflight=false, lastFetch=0, watchCmd=0, watchUntil=0, failStreak=0;
     var pad=function(n){ return n<10 ? '0'+n : ''+n; };
@@ -12764,6 +12884,77 @@
       if(waited<30000) return 'รอโปรแกรมพิมพ์รับทราบ…';
       return '⚠ โปรแกรมพิมพ์ยังไม่รับทราบ (อาจปิดอยู่) — ถ้ากระดาษยังออก ให้ล้างคิวที่เครื่องพิมพ์เอง: กด Win+R พิมพ์ control printers';
     }
+    // [2026-11-03-2 ตามที่ขอ] สถานะเครื่องพิมพ์ + คิว + ปุ่มพิมพ์ต่อ (ต้องใช้ Worker sh17 + print-agent รุ่น 5 · รุ่นเก่า = ไม่มี st.printer แถบเหมือนเดิม)
+    var PS_SILENT_MS=180000;
+    function agoText(ms){ var s=Math.max(0,Math.floor(ms/1000)); if(s<60) return s+' วินาทีที่แล้ว'; return Math.floor(s/60)+' นาทีที่แล้ว'; }
+    function kickLine(){
+      var a=st && st.kickAck, n=st ? (st.kick||0) : 0;
+      if(n && (!a || a.kick<n)){ var w=(st.now||Date.now())-(st.kickAt||0); return w<90000 ? 'สั่งพิมพ์ต่อแล้ว รอเครื่องพิมพ์ตอบ…' : 'โปรแกรมพิมพ์ยังไม่ตอบคำสั่งพิมพ์ต่อ'; }
+      if(!a || (st.now||Date.now())-a.at>300000) return '';
+      return (a.ok?'':'⚠ ')+a.note;
+    }
+    function bigOff(){ bigEl.hidden=true; kickBtn.hidden=true; if(stopBtn.parentNode!==strip) strip.insertBefore(stopBtn,resumeBtn); }
+    function billOf(name){ return String(name||'').replace(/\s*\(\d+\/\d+\)$/,''); }
+    function renderQueue(pr,stuck,rows){
+      queueList.textContent='';
+      rows.forEach(function(r,i){
+        var m=/^(.*?)\s*\((\d+)\/(\d+)\)$/.exec(r.name), head=i===0&&r.sent;
+        var row=document.createElement('div'); row.className='pc-q-r'+(head?(stuck?' stuck':' now'):'');
+        var cell=function(c,t){ var e=document.createElement('span'); e.className=c; e.textContent=t; row.appendChild(e); };
+        cell('pc-q-n', head?(stuck?'!':'▶'):String(i+1));
+        cell('pc-q-b', m?m[1]:r.name);
+        cell('pc-q-p', head?(stuck?'ค้างอยู่':'กำลังพิมพ์'):(m?'แผ่น '+m[2]+'/'+m[3]:(r.sent?'':'รอส่ง')));
+        if(head) cell('pc-q-t', hhmm(pr.since));   // เวลาเฉพาะใบแรก = เริ่มเป็นใบแรกในคิวเมื่อไร (ใบอื่นไม่แสดงตามที่ขอ)
+        queueList.appendChild(row);
+      });
+      queueList.hidden=!listOpen;
+    }
+    // ใบถัดไป: 2 บิลแรกเป็นป้าย ที่เหลือรวมเป็น +N (กดเพื่อดูคิวทั้งหมด)
+    function renderNext(rows){
+      bigNext.textContent='';
+      var names=[]; rows.slice(1).forEach(function(r){ var b=billOf(r.name); if(b!==billOf(rows[0].name)&&names.indexOf(b)<0) names.push(b); });
+      if(!names.length && rows.length<2){ bigNext.hidden=true; listOpen=false; return; }
+      bigNext.hidden=false;
+      bigNext.appendChild(document.createTextNode('ถัดไป '));
+      names.slice(0,2).forEach(function(b){ var c=document.createElement('span'); c.className='pc-chip'; c.textContent=b; bigNext.appendChild(c); });
+      var btn=document.createElement('button'); btn.type='button'; btn.className='pc-chip';
+      var more=names.length-2; btn.textContent=listOpen?'ซ่อนคิว':(more>0?'+'+more:'ดูคิว');
+      btn.setAttribute('aria-expanded',listOpen?'true':'false');
+      btn.setAttribute('aria-label',listOpen?'ซ่อนคิว':'ดูคิวทั้งหมด '+rows.length+' ใบ');
+      btn.addEventListener('click',function(){ listOpen=!listOpen; render(); });
+      bigNext.appendChild(btn);
+    }
+    // คืน true = วาดตามสถานะเครื่องพิมพ์แล้ว
+    function renderPrinter(){
+      var pr=st && st.printer;
+      if(!pr){ bigOff(); return false; }
+      var now=st.now||Date.now(), age=now-pr.at, jobs=pr.jobs||[], wait=pr.wait||[], kl=kickLine();
+      var rows=jobs.map(function(j){ return { name:j.n, sent:true }; }).concat(wait.map(function(b){ return { name:b, sent:false }; }));
+      var left=Math.max(pr.total||0,jobs.length)+wait.length;
+      if(age>PS_SILENT_MS){
+        bigOff(); strip.className='pc-strip warn';
+        stateEl.textContent='ไม่ได้รับสถานะจากเครื่องพิมพ์';
+        subEl.textContent='อัปเดตล่าสุด '+agoText(age)+' · เช็กว่าคอมเครื่องพิมพ์เปิดอยู่';
+        return true;
+      }
+      if(!rows.length){
+        bigOff(); listOpen=false; strip.className='pc-strip';
+        stateEl.textContent='การพิมพ์: ปกติ';
+        subEl.textContent='ไม่มีงานค้าง'+(pr.last?' · ใบล่าสุด '+pr.last:'')+' · อัปเดต '+agoText(age);
+        return true;
+      }
+      var stuck=!!pr.stuck && !!jobs.length;
+      strip.hidden=true; bigEl.hidden=false; bigEl.className='pc-b'+(stuck?' bad':'');
+      if(stopBtn.parentNode!==bigAct) bigAct.appendChild(stopBtn);
+      bigDot.className='pc-b-dot'+(stuck?'':' run');
+      bigLabel.textContent=stuck?('ค้างอยู่'+(pr.bad?' · '+pr.bad:'')):(jobs.length?'กำลังพิมพ์':'กำลังส่งงานเข้าเครื่องพิมพ์');
+      bigRight.textContent=stuck?hhmm(pr.since):('อัปเดต '+agoText(age));
+      bigBill.textContent=billOf(rows[0].name);
+      kickBtn.hidden=!stuck;
+      bigSub.textContent=[stuck?'ไม่ขยับ '+Math.max(0,Math.floor((now-pr.since)/60000))+' นาที':'', left>1?'เหลือ '+(left-1)+' ใบ':'', kl].filter(Boolean).join(' · ');
+      renderNext(rows); renderQueue(pr,stuck,rows);
+      return true;
+    }
     function render(){
       var paused=!!(st && st.state==='pause');
       if(paused){
@@ -12774,19 +12965,18 @@
       if(!st){
         if(failMsg) stateEl.textContent='ตรวจสถานะการพิมพ์ไม่ได้ในตอนนี้'; else scBusy(stateEl,'กำลังตรวจสอบสถานะการพิมพ์…',{size:14});
         subEl.textContent = failMsg ? 'ปุ่มหยุดพิมพ์ใช้ไม่ได้ชั่วคราว — ถ้าต้องหยุดด่วนให้ล้างคิวที่เครื่องพิมพ์เอง ('+failMsg+')' : '';
-        stopBtn.hidden=true; resumeBtn.hidden=true; return;
+        bigOff(); stopBtn.hidden=true; resumeBtn.hidden=true; return;
       }
       if(paused){
         stateEl.textContent='⛔ หยุดพิมพ์อยู่';
         var ack=ackLine();
         subEl.textContent=(st.by ? 'สั่งโดย '+st.by : '')+(st.at ? ' เวลา '+hhmm(st.at) : '')+(ack ? ' · '+ack : '');
-        stopBtn.hidden=true; resumeBtn.hidden=false;
+        bigOff(); stopBtn.hidden=true; resumeBtn.hidden=false;
       } else {
-        stateEl.textContent='การพิมพ์: ปกติ';
-        subEl.textContent='';
+        if(!renderPrinter()){ stateEl.textContent='การพิมพ์: ปกติ'; subEl.textContent=''; }
         stopBtn.hidden=false; resumeBtn.hidden=true;
       }
-      stopBtn.disabled=resumeBtn.disabled=bannerBtn.disabled=busy;
+      stopBtn.disabled=resumeBtn.disabled=bannerBtn.disabled=kickBtn.disabled=busy;
     }
     function refresh(){
       if(busy || inflight) return Promise.resolve();
@@ -12809,6 +12999,7 @@
       return api('POST',{ action:action, by:who() }).then(function(j){
         st=j; failMsg=''; busy=false; render();
         if(action==='pause'){ watchCmd=j.cmd; watchUntil=Date.now()+45000; setTimeout(tickWatch, 1500); }
+        if(action==='kick') setTimeout(refresh, 3000);
       }).catch(function(e){
         busy=false; render();
         alert(okMsg+'ไม่สำเร็จ: '+((e && e.message) || 'เชื่อมต่อไม่สำเร็จ — ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่อีกครั้ง'));
@@ -12825,6 +13016,11 @@
       if(busy) return;
       confirmDialog('เริ่มพิมพ์ต่อใช่ไหม? บิลที่ค้างอยู่ในคิวจะเริ่มพิมพ์ออกเครื่องพิมพ์ทันที', 'เริ่มพิมพ์ต่อ').then(function(ok){ if(ok) send('resume','เริ่มพิมพ์ต่อ'); });
     }
+    function doKick(){
+      if(busy) return;
+      confirmDialog('ใส่กระดาษและเปิดเครื่องพิมพ์แล้วใช่ไหม? ใบที่ค้างจะพิมพ์ใหม่ตั้งแต่ต้นแผ่น แล้วใบที่เหลือจะออกต่อ', 'พิมพ์ต่อ').then(function(ok){ if(ok) send('kick','พิมพ์ต่อ'); });
+    }
+    kickBtn.addEventListener('click', doKick);
     stopBtn.addEventListener('click', doStop);
     resumeBtn.addEventListener('click', doResume);
     bannerBtn.addEventListener('click', doResume);
@@ -12832,6 +13028,7 @@
     setTimeout(refresh, 2500);
     setInterval(function(){ if(document.visibilityState==='visible' && !(failStreak>=3 && Date.now()-lastFetch<300000)) refresh(); }, 60000);   // ล้มติดกัน 3 ครั้ง (เช่น Worker ยังไม่ได้อัปเดต) = ห่างเป็นทุก 5 นาที
     document.addEventListener('visibilitychange', function(){ if(document.visibilityState==='visible' && Date.now()-lastFetch>20000) refresh(); });
+    setInterval(function(){ var pop=el('printRangePop'); if(pop && pop.classList.contains('show') && document.visibilityState==='visible' && failStreak<3) refresh(); }, 10000);   // เปิดหน้าต่างพิมพ์อยู่ = อัปเดตทุก 10 วินาที
     window.suitcubePrintControl={ isPaused:function(){ return !!(st && st.state==='pause'); }, refresh:refresh };
   })();
 </script>
