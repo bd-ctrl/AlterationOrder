@@ -139,6 +139,8 @@
       var tail=t.slice(h.end, idx+1<hits.length?hits[idx+1].pos:t.length), d=defs[h.i];
       var n=pickNumber(tail);
       if(n==null){ miss.push(d.label+' (ไม่ได้ยินตัวเลข)'); return; }
+      // [11-10 ตามที่ขอ] สัดส่วนที่เก็บเข้า/ขยายออก ใส่ได้สูงสุด 3 (ทั้งเข้าและออก) — เกิน = ไม่ใส่ ให้พูดใหม่
+      if(d.dir && n>3){ miss.push(d.label+' '+fmt(n)+' เกิน 3 นิ้ว ไม่ใส่ให้ — พูดใหม่'); return; }
       var dir='';
       if(IN_RE.test(tail)) dir='in'; else if(OUT_RE.test(tail)) dir='out';
       // "เก็บเข้า" ที่อยู่ก่อนชื่อ เช่น "เก็บเข้าเอว 1"
