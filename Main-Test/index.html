@@ -1,6 +1,35 @@
 <!DOCTYPE html>
 <html lang="th">
-<head>
+<head><script>
+/* [Main-Test โหมดทดสอบ] ไม่ต้องเข้าสู่ระบบ Lark · ทุกคำขอไป Worker ถูกตอบแทนในเครื่อง: อ่าน = ว่าง · บันทึก = ไม่ทำ
+   บัตรผ่านในเครื่องเป็นของปลอม ใช้แค่ให้หน้าเปิดได้ — Worker จริงไม่รับบัตรนี้ (ตรวจลายเซ็น) และไม่มีคำขอไปถึง Worker เลย */
+(function(){
+  /* ที่เก็บในเบราว์เซอร์แยกจากแอปหลัก: โดเมนเดียวกัน (bd-ctrl.github.io) ใช้ localStorage ร่วมกัน — ทุกชื่อของหน้านี้เติม 'maintest:' ข้างหน้า
+     กันบัตรผ่านปลอม/ร่าง/ค่าต่างๆ ของหน้าทดสอบไปทับของแอปหลักในเครื่องเดียวกัน */
+  try{ var P='maintest:', sp=Storage.prototype, g=sp.getItem, st=sp.setItem, rm=sp.removeItem, isL=function(o){ try{ return o===window.localStorage; }catch(e){ return false; } };
+    sp.getItem=function(k){ return g.call(this, isL(this)?P+k:k); }; sp.setItem=function(k,v){ return st.call(this, isL(this)?P+k:k, v); }; sp.removeItem=function(k){ return rm.call(this, isL(this)?P+k:k); };
+  }catch(e){}
+})();
+(function(){
+  try{ localStorage.setItem('suitcube_auth_v1', JSON.stringify({token:'main-test-demo',expiresAt:Date.now()+30*864e5,user:{name:'หน้าทดสอบ',branch:null,role:'user',mapped:false}})); }catch(e){}
+  var realFetch=window.fetch;
+  var J=function(x){ return Promise.resolve(new Response(JSON.stringify(x),{status:200,headers:{'Content-Type':'application/json'}})); };
+  window.fetch=function(u,init){
+    var url=String(u&&u.url||u);
+    if(url.indexOf('workers.dev')<0 && url.indexOf('/auth/')<0) return realFetch.apply(this,arguments);   // ไฟล์อื่น (รูป/ฟอนต์) โหลดปกติ
+    if(url.indexOf('/auth/me')>=0) return J({success:true,user:{name:'หน้าทดสอบ',branch:null,role:'user',mapped:false}});
+    if(init&&init.method&&init.method!=='GET') return J({success:false,code:'main_test',error:'หน้าทดสอบ — ไม่บันทึกข้อมูลจริง'});
+    return J({success:true,list:[],orders:[],entries:[],items:[],skus:[],names:{},drafts:[],data:{}});
+  };
+  document.addEventListener('DOMContentLoaded',function(){
+    var b=document.createElement('div');
+    b.textContent='หน้าทดสอบ · ไม่ต้องล็อกอิน · ไม่ดึงและไม่บันทึกข้อมูลจริง · ลองปุ่ม "พูด" ได้ที่หน้าสินค้า';
+    b.style.cssText='position:fixed;left:50%;top:6px;transform:translateX(-50%);z-index:2147483000;background:#232220;color:#fff;font:500 12.5px Prompt,sans-serif;padding:5px 12px;border-radius:999px;max-width:calc(100vw - 16px);text-align:center;pointer-events:none;opacity:.92';
+    document.body.appendChild(b);
+  });
+})();
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SUITCUBE Alteration Order</title>
@@ -5824,7 +5853,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-10-1-voice-1';
+  const APP_VERSION = '2026-11-10-1-voice-2';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
