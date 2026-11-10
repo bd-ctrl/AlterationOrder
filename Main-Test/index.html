@@ -115,6 +115,17 @@
   .voice-out .vh b{color:var(--ink);font-weight:500}
   .voice-out .vok{color:var(--goldink);margin-top:3px}
   .voice-out .vwarn{color:#b42318;margin-top:3px}
+  .voice-out .vchips{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+  .voice-out .vcap{font-size:12px;color:var(--t2);margin-right:2px}
+  .voice-out .vchip{display:inline-flex;align-items:center;gap:2px;height:32px;padding:0 2px 0 12px;border-radius:999px;background:var(--goldbg,#f4ecd9);border:1px solid #e5d5ad;font-size:13.5px;color:var(--ink)}
+  .voice-out .vchip button{width:28px;height:28px;border:none;border-radius:50%;background:transparent;color:var(--t2);font-size:18px;line-height:1;cursor:pointer;padding:0}
+  .voice-out .vchip button:hover{background:#fff;color:#b42318}
+  .voice-out .vpend{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px;color:#b42318}
+  .voice-out .vpend button{height:34px;padding:0 14px;border-radius:999px;border:1.5px solid var(--gold);background:#fff;color:var(--goldink);font:500 13.5px 'Prompt',sans-serif;cursor:pointer}
+  .voice-out .vfoot{display:flex;align-items:center;gap:10px;margin-top:8px;padding-top:6px;border-top:1px dashed var(--rule2);font-size:12px;color:var(--t3)}
+  .voice-out .vh2{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .voice-out .vclr{height:30px;padding:0 12px;border-radius:999px;border:1.5px solid var(--rule);background:#fff;font:500 12.5px 'Prompt',sans-serif;color:var(--ink);cursor:pointer;white-space:nowrap}
+  .voice-out .vx{width:30px;height:30px;border:none;border-radius:50%;background:transparent;color:var(--t2);font-size:18px;cursor:pointer;padding:0}
   .foot .inner > .app-ver.wn2{cursor:pointer;border:none;background:none;padding:6px 2px;font:inherit;font-size:10.5px;color:var(--t3);font-family:'Barlow',sans-serif;letter-spacing:.3px}
   .foot .inner > .app-ver.wn2.on{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px 0 8px;border-radius:999px;background:var(--goldbg,#f4ecd9);border:1px solid #e5d5ad;white-space:nowrap}
   .foot .inner > .app-ver.wn2 .wn2-k{display:none;align-items:center;gap:6px;font:600 12.5px 'Prompt',sans-serif;color:var(--goldink);letter-spacing:0}
@@ -5853,7 +5864,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-10-1-voice-2';
+  const APP_VERSION = '2026-11-10-1-voice-3';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -13276,18 +13287,18 @@
       all.forEach(o=>{ let from=0,k; while((k=t.indexOf(o.w,from))>=0){ let free=true; for(let j=k;j<k+o.w.length;j++) if(taken[j]){ free=false; break; }
         if(free){ for(let j=k;j<k+o.w.length;j++) taken[j]=true; hits.push({pos:k,end:k+o.w.length,i:o.i}); } from=k+o.w.length; } });
       hits.sort((a,b)=>a.pos-b.pos);
-      const out=[], warn=[];
+      const out=[], warn=[], pending=[], over=[];
       hits.forEach((h,idx)=>{
         const d=defs[h.i], tail=t.slice(h.end, idx+1<hits.length?hits[idx+1].pos:t.length), n=vNum(tail);
         if(n==null){ warn.push(d.label+' ไม่ได้ยินตัวเลข'); return; }
         let dir=/↓/.test(tail)?'in':(/↑/.test(tail)?'out':'');
         if(!dir){ const before=t.slice(idx>0?hits[idx-1].end:0,h.pos); if(vNum(before)==null){ if(/↓/.test(before)) dir='in'; else if(/↑/.test(before)) dir='out'; } }
-        if(d.dir && n>3){ warn.push(d.label+' '+vFmt(n)+' เกิน 3 นิ้ว ไม่ใส่ให้'); return; }
-        if(d.dir && !dir){ warn.push(d.label+' '+vFmt(n)+' ไม่ได้บอกเก็บเข้า/ขยายออก ไม่ใส่ให้'); return; }
+        if(d.dir && n>3){ over.push({d,n}); return; }
+        if(d.dir && !dir){ pending.push({d,n}); return; }
         out.push({d,n,dir});
       });
-      if(!hits.length) warn.push('ไม่เจอชื่อสัดส่วนในประโยค');
-      return {out,warn};
+      if(!hits.length) warn.push('ไม่เจอชื่อสัดส่วนในประโยค ลองพูดชื่อสัดส่วนก่อนตัวเลข เช่น "ต่ำศอก 18"');
+      return {out,warn,pending,over};
     }
     window.__voiceParseApp=vParse;   // สำหรับทดสอบ
     const kNorm=s=>String(s||'').replace(/\s+/g,'');
@@ -13295,51 +13306,106 @@
       const want=kNorm(label);
       return [...block.querySelectorAll('.measure-list .mitem:not(.group-toggle-row)')].find(m=>{ const k=kNorm(m.querySelector('.k')?.textContent); return k===want || (want==='ต้นแขน' && k.indexOf('ต้นแขน')===0); });
     }
-    function vApply(block,text){
-      const type=block.querySelector('.type-select')?.value||'', box=block.querySelector('.voice-out');
-      const r=vParse(text,type), done=[];
-      if(r.out.length){
-        setToggleOnIndex(block,'.toptoggle',0);
-        const ml=block.querySelector('.measure-list'); if(ml) ml.classList.remove('hidden');
+    // [voice-3 ตามที่ขอ] กล่องผล = สิ่งที่ "ทำต่อได้": ป้ายค่าที่ใส่แล้ว (× ลบรายสัดส่วน) · ไม่ได้บอกทิศ = ปุ่มเลือก เก็บเข้า/ขยายออก
+    //   · เกิน 3 = บอกให้พูดใหม่/กด +/− · ล้างที่พูดทั้งหมด · ประโยคที่ได้ยินย่อเป็นบรรทัดเล็กด้านล่าง
+    const vState=block=>block._vs||(block._vs={applied:{},pending:[],over:[],warn:[],text:''});
+    function vMeasureOn(block){
+      setToggleOnIndex(block,'.toptoggle',0);
+      const ml=block.querySelector('.measure-list'); if(ml) ml.classList.remove('hidden');
+    }
+    function vTouched(block){ const ml=block.querySelector('.measure-list'); if(ml) ml.dispatchEvent(new Event('input',{bubbles:true})); }   // ให้บันทึกร่างอัตโนมัติรู้ (ไม่ส่งเข้าช่องตัวเลขตรงๆ — ช่องจะรีเซ็ตทิศ)
+    function vSetOne(block,d,n,dir){
+      const m=findMitem(block,d.label), st=vState(block); if(!m){ st.warn.push(d.label+' ไม่มีในฟอร์มนี้'); return false; }
+      vMeasureOn(block);
+      setToggleOnIndex(m,'.toggle',0); m.classList.add('editing');
+      if(d.takeIn && dir==='in'){ setTakeInValue(m,n); st.applied[d.label]={d,n,dir,takeIn:true}; return true; }
+      const el=m.querySelector('.numonly:not(.takein-input)'); if(!el) return false;
+      setMitemValue(el, d.dir ? (dir==='in'?-n:n) : n);
+      st.applied[d.label]={d,n,dir};
+      return true;
+    }
+    function vClearOne(block,label){
+      const st=vState(block), a=st.applied[label]; if(!a) return;
+      const m=findMitem(block,label);
+      if(m){
+        if(a.takeIn) setTakeInValue(m,0);
+        else { const el=m.querySelector('.numonly:not(.takein-input)'); if(el) setMitemValue(el,0); setToggleOnIndex(m,'.toggle',1); m.classList.remove('editing'); }
       }
-      r.out.forEach(o=>{
-        const m=findMitem(block,o.d.label); if(!m){ r.warn.push(o.d.label+' ไม่มีในฟอร์มนี้'); return; }
-        setToggleOnIndex(m,'.toggle',0); m.classList.add('editing');
-        if(o.d.takeIn && o.dir==='in'){ setTakeInValue(m,o.n); done.push(o.d.label+' เก็บเข้า '+vFmt(o.n)); }
-        else {
-          const el=m.querySelector('.numonly:not(.takein-input)'); if(!el) return;
-          setMitemValue(el, o.d.dir ? (o.dir==='in'?-o.n:o.n) : o.n);
-          done.push(o.d.label+' '+vFmt(o.n)+(o.d.dir?(o.dir==='in'?' เก็บเข้า':' ขยายออก'):''));
-          if(!o.d.dir && o.dir) r.warn.push(o.d.label+': ใส่ '+vFmt(o.n)+' ลงช่องแล้ว แต่ได้ยินคำว่า'+(o.dir==='in'?'ลด/สั้นลง':'เพิ่ม/ยาวขึ้น')+' — ตรวจอีกทีว่าเป็นความยาวจริง');
-        }
+      delete st.applied[label];
+    }
+    function vEl(tag,cls,text){ const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+    function vRender(block){
+      const box=block.querySelector('.voice-out'); if(!box) return;
+      const st=vState(block), labels=Object.keys(st.applied);
+      box.innerHTML='';
+      if(!labels.length && !st.pending.length && !st.over.length && !st.warn.length && !st.text){ box.hidden=true; return; }
+      box.hidden=false;
+      if(labels.length){
+        const row=vEl('div','vchips'); row.appendChild(vEl('span','vcap','ใส่แล้ว'));
+        labels.forEach(l=>{ const a=st.applied[l]; const c=vEl('span','vchip', l+' '+(a.takeIn?'เก็บเข้า ':'')+vFmt(a.n)+(a.d.dir?(a.dir==='in'?' เก็บเข้า':' ขยายออก'):''));
+          const x=vEl('button','', '×'); x.type='button'; x.dataset.rm=l; x.setAttribute('aria-label','ลบ '+l); c.appendChild(x); row.appendChild(c); });
+        box.appendChild(row);
+      }
+      st.pending.forEach((p,i)=>{
+        const row=vEl('div','vpend'); row.appendChild(vEl('span','', p.d.label+' '+vFmt(p.n)+' นิ้ว — เก็บเข้าหรือขยายออก?'));
+        [['in','เก็บเข้า'],['out','ขยายออก']].forEach(([dir,t])=>{ const b=vEl('button','',t); b.type='button'; b.dataset.pick=String(i); b.dataset.dir=dir; row.appendChild(b); });
+        box.appendChild(row);
       });
-      if(r.out.length){ const ml2=block.querySelector('.measure-list'); if(ml2) ml2.dispatchEvent(new Event('input',{bubbles:true})); }   // ให้บันทึกร่างอัตโนมัติรู้ (ไม่ส่งเข้าช่องตัวเลขตรงๆ — ช่องจะรีเซ็ตทิศ)
-      if(box){
-        box.hidden=false; box.innerHTML='';
-        const h=document.createElement('div'); h.className='vh'; h.appendChild(document.createTextNode('ได้ยิน: ')); const b=document.createElement('b'); b.textContent=text; h.appendChild(b); box.appendChild(h);
-        if(done.length){ const ok=document.createElement('div'); ok.className='vok'; ok.textContent='ใส่แล้ว: '+done.join(' · '); box.appendChild(ok); }
-        if(r.warn.length){ const w=document.createElement('div'); w.className='vwarn'; w.textContent='⚠ '+r.warn.join(' · '); box.appendChild(w); }
+      st.over.forEach(o=>box.appendChild(vEl('div','vwarn', o.d.label+' '+vFmt(o.n)+' เกิน 3 นิ้ว ไม่ได้ใส่ — พูดใหม่ หรือกด + / − ที่ช่อง'+o.d.label+'เอง')));
+      st.warn.forEach(w=>box.appendChild(vEl('div','vwarn', w)));
+      const foot=vEl('div','vfoot');
+      foot.appendChild(vEl('span','vh2', st.text?('ได้ยินล่าสุด: '+st.text):''));
+      if(labels.length){ const c=vEl('button','vclr','ล้างที่พูดทั้งหมด'); c.type='button'; c.dataset.clr='1'; foot.appendChild(c); }
+      const x=vEl('button','vx','×'); x.type='button'; x.dataset.close='1'; x.setAttribute('aria-label','ปิดกล่องนี้'); foot.appendChild(x);
+      box.appendChild(foot);
+    }
+    function vBox(block){
+      let box=block.querySelector('.voice-out');
+      if(!box){ box=document.createElement('div'); box.className='voice-out'; box.hidden=true; const sl=block.querySelector('.measure-section .seclabel'); if(sl&&sl.parentNode) sl.parentNode.insertBefore(box, sl.nextSibling); }
+      if(!box._vw){
+        box._vw=true;
+        box.addEventListener('click',e=>{
+          const t=e.target.closest('button'); if(!t) return;
+          const st=vState(block);
+          if(t.dataset.rm){ vClearOne(block,t.dataset.rm); vTouched(block); }
+          else if(t.dataset.pick!=null){ const p=st.pending[+t.dataset.pick]; if(p){ st.pending.splice(+t.dataset.pick,1); vSetOne(block,p.d,p.n,t.dataset.dir); vTouched(block); } }
+          else if(t.dataset.clr){ Object.keys(st.applied).forEach(l=>vClearOne(block,l)); st.pending=[]; st.over=[]; st.warn=[]; vTouched(block); }
+          else if(t.dataset.close){ st.pending=[]; st.over=[]; st.warn=[]; st.text=''; if(!Object.keys(st.applied).length){ box.hidden=true; return; } }
+          vRender(block);
+        });
       }
+      return box;
+    }
+    function vApply(block,text){
+      const type=block.querySelector('.type-select')?.value||'', st=vState(block), r=vParse(text,type);
+      vBox(block);
+      st.text=text; st.pending=r.pending; st.over=r.over; st.warn=r.warn.slice();
+      r.out.forEach(o=>{
+        if(!vSetOne(block,o.d,o.n,o.dir)) return;
+        if(!o.d.dir && o.dir) st.warn.push(o.d.label+': ได้ยินคำว่า'+(o.dir==='in'?'ลด/สั้นลง':'เพิ่ม/ยาวขึ้น')+' แต่ช่องนี้คือความยาว — ใส่ '+vFmt(o.n)+' แล้ว ตรวจอีกที');
+      });
+      if(r.out.length) vTouched(block);
+      vRender(block);
     }
     let cur=null;
     function vStart(block,btn){
       if(cur){ cur.rec.stop(); return; }
       const rec=new SRc(); rec.lang='th-TH'; rec.interimResults=true; rec.continuous=true;
       let fin='', interim='';
-      let box=block.querySelector('.voice-out');
-      if(!box){ box=document.createElement('div'); box.className='voice-out'; const sl=block.querySelector('.measure-section .seclabel'); if(sl&&sl.parentNode) sl.parentNode.insertBefore(box, sl.nextSibling); }
+      const box=vBox(block); let errShown=false;
       const show=t=>{ box.hidden=false; box.innerHTML=''; const h=document.createElement('div'); h.className='vh'; h.textContent=t; box.appendChild(h); };
       cur={rec,btn};
       rec.onstart=()=>{ btn.classList.add('rec'); btn.querySelector('.vt').textContent='หยุด'; show('กำลังฟัง… พูดได้เลย เช่น "ต่ำศอก 18 นิ้ว" · จบแล้วกด "หยุด"'); };
       rec.onresult=e=>{ interim=''; for(let i=e.resultIndex;i<e.results.length;i++){ const x=e.results[i]; if(x.isFinal) fin+=x[0].transcript+' '; else interim+=x[0].transcript; } show('ได้ยิน: '+(fin+interim)); };
-      rec.onerror=e=>{ const m={'not-allowed':'ไม่ได้อนุญาตไมโครโฟน — กดอนุญาตแล้วลองใหม่','no-speech':'ไม่ได้ยินเสียง ลองพูดใหม่','network':'ต้องต่ออินเทอร์เน็ต','service-not-allowed':'ต้องเปิด Siri/Dictation ใน iPad ก่อน'}; show('⚠ '+(m[e.error]||('ฟังไม่สำเร็จ: '+e.error))); box.firstChild.className='vwarn'; };
-      rec.onend=()=>{ btn.classList.remove('rec'); btn.querySelector('.vt').textContent='พูด'; cur=null; const t=(fin+interim).trim(); if(t) vApply(block,t); };
+      rec.onerror=e=>{ const m={'not-allowed':'ไม่ได้อนุญาตไมโครโฟน — กดอนุญาตแล้วลองใหม่','no-speech':'ไม่ได้ยินเสียง ลองพูดใหม่','network':'ต้องต่ออินเทอร์เน็ต','service-not-allowed':'ต้องเปิด Siri/Dictation ใน iPad ก่อน'}; errShown=true; const st=vState(block); st.warn=['⚠ '+(m[e.error]||('ฟังไม่สำเร็จ: '+e.error))]; };
+      rec.onend=()=>{ btn.classList.remove('rec'); btn.querySelector('.vt').textContent='พูด'; cur=null; const t=(fin+interim).trim(); if(t) vApply(block,t); else { if(!errShown) vState(block).warn=['ไม่ได้ยินเสียง ลองกด "พูด" แล้วพูดใหม่']; vRender(block); } };
       try{ rec.start(); }catch(err){ cur=null; show('⚠ เริ่มฟังไม่ได้: '+err.message); }
     }
     function vSync(block){
       const btn=block.querySelector('.voice-btn'); if(!btn) return;
       const type=block.querySelector('.type-select')?.value||'';
       btn.hidden=!SRc || !VDEFS[type] || ((typeof isRa2Scope==='function') && isRa2Scope(block));
+      const vb=block.querySelector('.voice-out'); if(vb && !vb._vw) vb.remove();   // ก้อนที่โคลนมาพร้อมกล่องผลของก้อนแรก — ทิ้ง
       if(btn.hidden){ const box=block.querySelector('.voice-out'); if(box) box.hidden=true; }
     }
     const wrap=document.getElementById('productsWrap');
