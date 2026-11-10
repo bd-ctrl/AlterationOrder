@@ -36,6 +36,9 @@
   .row.hit .num{border-color:var(--gold);background:var(--goldbg);color:var(--ink)}
   .row .dir{font-size:13px;color:var(--t2);min-width:62px;text-align:right}
   .row.hit .dir{color:var(--goldink);font-weight:500}
+  .row .rm{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--rule);background:#fff;color:var(--t2);font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+  .row .rm:hover{border-color:var(--red);color:var(--red)}
+  .row .rm-sp{width:34px;display:inline-block}
   .row.flash{animation:fl 1.2s}
   @keyframes fl{0%{background:#fff3c4}100%{background:transparent}}
   .miss{font-size:13px;color:var(--red);margin-top:6px}
@@ -161,7 +164,7 @@
       var v=vals[type+i], row=document.createElement('div'); row.className='row'+(v?' hit':'')+(v&&flash&&flash.indexOf(i)>=0?' flash':'');
       var dirTxt='';
       if(v){ if(d.takeIn&&v.takeIn) dirTxt='เก็บเข้า'; else if(d.dir) dirTxt=v.dir==='in'?'เก็บเข้า':(v.dir==='out'?'ขยายออก':'ไม่ระบุทิศ'); else dirTxt=v.dir==='in'?'(ลดลง)':(v.dir==='out'?'(เพิ่มขึ้น)':''); }
-      row.innerHTML='<span>'+d.label+'</span><span class="v"><span class="dir">'+dirTxt+'</span><span class="num">'+(v?fmt(v.n):'–')+'</span></span>';
+      row.innerHTML='<span>'+d.label+'</span><span class="v"><span class="dir">'+dirTxt+'</span><span class="num">'+(v?fmt(v.n):'–')+'</span>'+(v?'<button type="button" class="rm" data-i="'+i+'" aria-label="ลบค่า '+d.label+'">×</button>':'<span class="rm-sp"></span>')+'</span>';
       elItems.appendChild(row);
     });
     document.getElementById('capItems').textContent='สัดส่วน'+(type==='suit'?'เสื้อสูท':'กางเกง');
@@ -178,6 +181,7 @@
   }
   document.getElementById('tabs').addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b) return; type=b.dataset.t; [].forEach.call(this.children,function(x){ x.classList.toggle('on',x===b); }); render(); });
   document.getElementById('clr').addEventListener('click',function(){ vals={}; render(); elMiss.hidden=true; });
+  elItems.addEventListener('click',function(e){ var b=e.target.closest('.rm'); if(!b) return; delete vals[type+b.dataset.i]; render(); });   // [11-10 ตามที่ขอ] ลบค่ารายช่อง
   document.getElementById('typedGo').addEventListener('click',function(){ var v=document.getElementById('typed').value.trim(); if(v){ elHeard.textContent=v; apply(v); } });
   document.getElementById('typed').addEventListener('keydown',function(e){ if(e.key==='Enter') document.getElementById('typedGo').click(); });
   render();
