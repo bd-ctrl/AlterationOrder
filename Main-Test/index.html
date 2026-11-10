@@ -5864,7 +5864,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-10-1-voice-3';
+  const APP_VERSION = '2026-11-10-1-voice-3-qr-1';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -6436,6 +6436,43 @@
     if(cb && code) cb(code);
   }
   let _scanCanvas=null, _scanCtx=null, _scanMode=null;
+  // [2026-11-10 Main-Test qr-1 ตามที่ขอ "ป้ายผ้าไนลอนสแกนไม่ติด"] ZXing (zxing-wasm 3.1.3 · MIT · ไฟล์อยู่ที่ zxing/ ข้างหน้านี้ ไม่โหลดจากเว็บอื่น)
+  //   = ตัวอ่านสำรอง: ตัวเดิม (BarcodeDetector / jsQR) อ่านทุกเฟรมเหมือนเดิม · อ่านไม่ออก → ส่งภาพเดียวกันให้ ZXing ทุก ~0.35 วิ (tryHarder)
+  //   โหลดตอนเปิดกล้องครั้งแรก · โหลดไม่ได้ = ใช้ตัวเดิมอย่างเดียว ไม่ขึ้น error · ทดสอบกับรูปป้ายผ้าไนลอนในตาราง Lark: อ่านได้ 2 ใน 4 ที่ jsQR อ่านไม่ออก
+  const ZX={st:'',p:null,busy:false,last:0,sess:0};
+  const ZX_FORMATS=['QRCode','Code128','Code39','EAN13','EAN8','UPCA','ITF','DataMatrix'];
+  function zxLoad(){
+    if(ZX.p) return ZX.p;
+    ZX.p=new Promise((res,rej)=>{
+      const sc=document.createElement('script'); sc.src='zxing/zxing-reader.js'; sc.async=true;
+      sc.onload=()=>{ try{
+        const base=new URL('zxing/',location.href).href;
+        window.ZXingWASM.prepareZXingModule({overrides:{locateFile:(p,pre)=>p.endsWith('.wasm')?base+p:pre+p},fireImmediately:true})
+          .then(()=>{ ZX.st='ok'; res(true); }).catch(e=>{ ZX.st='fail'; rej(e); });
+      }catch(e){ ZX.st='fail'; rej(e); } };
+      sc.onerror=()=>{ ZX.st='fail'; rej(new Error('zxing load')); };
+      document.head.appendChild(sc);
+    });
+    ZX.p.catch(()=>{});
+    return ZX.p;
+  }
+  function zxReadImage(img){
+    return window.ZXingWASM.readBarcodes(img,{formats:ZX_FORMATS,tryHarder:true,maxNumberOfSymbols:1})
+      .then(r=>{ const hit=(r||[]).find(x=>x&&x.isValid&&x.text); return hit?hit.text:null; }).catch(()=>null);
+  }
+  // คืน Promise<ข้อความ|null> ถ้าถึงรอบให้ ZXing อ่าน · คืน null ถ้ายังไม่พร้อม/กำลังอ่าน/ยังไม่ถึงเวลา
+  function zxTry(){
+    if(ZX.st!=='ok'||ZX.busy) return null;
+    const now=performance.now(); if(now-ZX.last<350) return null;
+    ZX.last=now; ZX.busy=true;
+    const img=_scanCtx.getImageData(0,0,_scanCanvas.width,_scanCanvas.height);
+    return zxReadImage(img).finally(()=>{ ZX.busy=false; });
+  }
+  function zxAfter(pr,mode){
+    const sess=ZX.sess;
+    pr.then(t=>{ if(sess!==ZX.sess||_scanMode!==mode) return; if(t){ finishScan(t); return; } _scanRAF=requestAnimationFrame(scanLoop); });
+  }
+  window.suitcubeZx={load:zxLoad,read:img=>zxLoad().then(()=>zxReadImage(img)),state:()=>ZX.st};   // ใช้ทดสอบเท่านั้น (อ่านอย่างเดียว)
   function scanLoop(){
     if(!scanVideo.videoWidth){ _scanRAF=requestAnimationFrame(scanLoop); return; }
     if(!_scanCanvas){ _scanCanvas=document.createElement('canvas'); _scanCtx=_scanCanvas.getContext('2d', {willReadFrequently:true}); }
@@ -6444,6 +6481,8 @@
     if(_scanMode==='detector'){
       _scanDetector.detect(_scanCanvas).then(codes=>{
         if(codes && codes.length){ finishScan(codes[0].rawValue); return; }
+        if(_scanMode!=='detector') return;
+        const zp=zxTry(); if(zp){ zxAfter(zp,'detector'); return; }
         _scanRAF=requestAnimationFrame(scanLoop);
       }).catch(()=>{ _scanRAF=requestAnimationFrame(scanLoop); });
       return;
@@ -6452,11 +6491,13 @@
       const img=_scanCtx.getImageData(0,0,_scanCanvas.width,_scanCanvas.height);
       const result=window.jsQR(img.data, img.width, img.height, {inversionAttempts:'dontInvert'});
       if(result && result.data){ finishScan(result.data); return; }
+      const zp=zxTry(); if(zp){ zxAfter(zp,'jsqr'); return; }
       _scanRAF=requestAnimationFrame(scanLoop);
       return;
     }
   }
   async function openScanner(onResult){
+    ZX.sess++; zxLoad();
     _scanOnResult=onResult;
     _scanMode=null;
     scanManualInput.value='';
