@@ -99,6 +99,26 @@
   .follow-hint[hidden]{display:none}
   /* [2026-11-09 ตามที่ขอ] ช่องค้นหาเลขบิลของ "ปรับแก้ตามเลขบิล" (แบบ mockup follow-bill-search) */
   .follow-pick{margin:2px 0 8px}
+  /* [2026-11-17 ตามที่ขอ แบบ ข] หัวข้อพับได้ "ตัวเลือกเพิ่มเติม" + ตัวเลือก งานเสียส่งคืนสต็อก */
+  .opt-fold{border-bottom:1px solid #e8e2d4}
+  .opt-fold[hidden]{display:none}
+  .opt-fold .of-h{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:52px;padding:0;border:none;background:none;font:inherit;font-size:15px;color:inherit;cursor:pointer;text-align:left}
+  .opt-fold .of-r{display:inline-flex;align-items:center;gap:8px;color:#8a8474}
+  .opt-fold .of-n{background:#C9A24B;color:#fff;border-radius:999px;padding:1px 9px;font:600 12.5px 'Barlow',sans-serif}
+  .opt-fold .of-n.zero{background:#e6e0d1;color:#8a8474}
+  .opt-fold .of-arr{display:inline-block;transition:transform .2s;font-size:16px}
+  .opt-fold.open .of-arr{transform:rotate(180deg)}
+  .opt-fold .of-tags{display:flex;flex-wrap:wrap;gap:6px;margin:-6px 0 10px;cursor:pointer}
+  .opt-fold .of-tags:empty,.opt-fold.open .of-tags{display:none}
+  .opt-fold .of-tag{font-size:12.5px;background:#f4ecd9;color:#a37f30;border-radius:999px;padding:2px 10px}
+  .opt-fold .of-tag.bad{background:#fbecea;color:#b5342a;font-weight:500}
+  .opt-fold .of-b{display:none;padding:0 0 6px}
+  .opt-fold.open .of-b{display:block}
+  .frow.defect-row{padding-top:11px;padding-bottom:11px}
+  .frow.defect-row .rchk input:checked + .ind{background:#b5342a;border-color:#b5342a}
+  .frow.defect-row .rchk input:checked ~ .k{color:#b5342a;font-weight:500}
+  .defect-warn{margin:-4px 0 8px 34px;padding:6px 10px;border-radius:8px;background:#fbecea;color:#b5342a;font-size:12.5px}
+  .defect-warn[hidden]{display:none}
   .follow-pick[hidden]{display:none}
   .fp-search{display:flex;align-items:center;gap:8px;height:42px;background:#fff;border:1.5px solid var(--gold,#C9A24B);border-radius:10px;padding:0 10px}
   .fp-search svg{width:16px;height:16px;flex:0 0 auto;color:#8a8474}
@@ -5588,6 +5608,11 @@
         <div class="frow"><span class="k">สินค้าใช้ของสาขา</span><select class="frowsel branch-prod"><option>OFFICE</option><option>R3</option><option>T21</option><option>SQ1</option><option>PM</option><option>SC</option><option>CM</option><option>FP</option><option>KR</option><option>SL</option><option>NW</option><option>CC</option><option>BP</option><option>RCD</option><option>KK</option><option>PK</option><option>MG</option><option>CTW</option><option>WG</option><option hidden>ลูกค้านำสินค้ากลับมาปรับแก้</option></select></div>
         <div class="cust-stock-hint hidden">🔒 ล็อกตามติ๊ก “ลูกค้านำสินค้ากลับมาปรับแก้” — เอาติ๊กออกถ้าจะเลือกสาขาอื่น</div>   <!-- [2026-10-28-7] -->
         <div class="frow codewrap contact-row hidden"><span class="k contact-k">ชื่อพนักงานที่ติดต่อ</span><input class="contact-input" placeholder="พิมพ์แล้วเลือกชื่อ" autocomplete="off"><div class="suggest contact-suggest"></div></div>
+        <!-- [2026-11-17 ตามที่ขอ แบบ ข] ตัวเลือกทั้งหมดอยู่ในหัวข้อพับได้ · ปิด = เห็นจำนวน + ป้ายของที่ติ๊ก · ตัวเลือกทำงานเหมือนเดิมทุกอย่าง -->
+        <div class="opt-fold">
+        <button type="button" class="of-h" aria-expanded="false"><span>ตัวเลือกเพิ่มเติม</span><span class="of-r"><b class="of-n zero">0</b><span class="of-arr" aria-hidden="true">⌄</span></span></button>
+        <div class="of-tags"></div>
+        <div class="of-b">
         <!-- [ใหม่ตามที่ขอ] ติ๊ก "เย็บย้ำกระดุม" เหนือหมายเหตุ — โชว์เฉพาะเสื้อสูท/กางเกง/เสื้อเชิ้ต/เสื้อกั๊ก [2026-10-26-2] (คุมด้วย JS ใน renderMeasureSection) ติ๊กแล้วเติมคำนี้ลงหมายเหตุอัตโนมัติ ซึ่งไปรวมกับหมายเหตุที่ส่ง Salesforce (Field20__c) อยู่แล้วตามปกติ -->
         <div class="frow stitch-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="stitch-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">เย็บย้ำกระดุม</span></label></div>
         <!-- [2026-10-22-3 ตามที่ขอ] ติ๊ก "เปลี่ยนรหัสกระดุม" — โชว์เฉพาะเสื้อสูท/กางเกง/เสื้อกั๊ก (คุมใน renderMeasureSection) · ติ๊กแล้วมีช่องพิมพ์รหัสกระดุม · เติม "เปลี่ยนรหัสกระดุม (รหัส)" ลงหมายเหตุ (ไป Salesforce + ใบสรุป) ดู wireButtonCodeCheckbox -->
@@ -5599,8 +5624,13 @@
         <div class="frow follow-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="follow-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">ปรับแก้ตามเลขบิล</span></label></div>
         <div class="follow-hint follow-source-hint" hidden></div>
         <div class="follow-pick" hidden><div class="fp-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="text" class="fp-input" placeholder="ค้นหาเลขบิล" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="ค้นหาเลขบิลที่จะปรับแก้ตาม"></div><div class="fp-list"></div><div class="fp-ok" hidden></div></div>
+        <!-- [2026-11-17 ตามที่ขอ] ติ๊ก "งานเสียส่งคืนสต็อก" — เติม/ลบคำนี้ในหมายเหตุ (เหมือนงานทีม) · ติ๊กแล้วเป็นสีแดง + ข้อความเตือน -->
+        <div class="frow defect-row" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="defect-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">งานเสียคืนสต็อก</span></label></div>
+        <div class="defect-warn" hidden>หมายเหตุจะมีคำ !!งานเสียคืนสต็อก!! — สินค้านี้เป็นงานเสีย คืนสต็อก</div>
         <!-- [แก้ 2026-10-19] ติ๊ก "ใช้ช่างหน้าร้าน" เหนือหมายเหตุ — โชว์เฉพาะ สินค้าใช้ของสาขา = KK และประเภทของก้อนนี้ = กางเกง (คุมด้วย JS: updateShopTailorRow) · กลไกเดียวกับ "งานทีม" (ติ๊กแล้วเติมคำนี้ลงหมายเหตุ เอาติ๊กออกแล้วลบคำ) -->
         <div class="frow shop-row hidden" style="border:none"><label class="stitchlbl rchk"><input type="checkbox" class="shop-check"><span class="ind"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.4 8.6l3.1 3.1 6.1-7.2"/></svg></span><span class="k">ใช้ช่างหน้าร้าน</span></label></div>
+        </div>
+        </div>
         <div class="frow" style="border:none;align-items:flex-start"><span class="k note-label">หมายเหตุเสื้อสูท</span><textarea class="note-input" placeholder="เพิ่มหมายเหตุ" rows="2"></textarea></div>
         <!-- คำแนะนำเพิ่มเติมใต้ช่องหมายเหตุ — โชว์เฉพาะประเภทสินค้าที่เกี่ยวข้อง (คุมด้วย JS ตาม type-select) -->
         <div class="note-hint" data-hint-for="เสื้อกั๊ก (สำเร็จรูป)" style="display:none">ถ้าต้องการเย็บ/ย้ำกระดุม ระบุในช่องหมายเหตุด้านบน</div>
@@ -5811,7 +5841,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-11-3';
+  const APP_VERSION = '2026-11-17-1';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -10355,8 +10385,48 @@
     scheduleFollowSync();
   }
   (function(){ const w=document.getElementById('productsWrap'); if(w) ['input','change','click'].forEach(ev=>w.addEventListener(ev,scheduleFollowSync)); })();
+  // [2026-11-17 ตามที่ขอ] งานเสียส่งคืนสต็อก — ติ๊ก = เติมคำในหมายเหตุ (เหมือนงานทีม) + ข้อความเตือนสีแดง
+  const DEFECT_WORD='!!งานเสียคืนสต็อก!!';   // [2026-11-17 ตามที่ขอ] ใส่ !! ให้เด่นในหมายเหตุ (Lark/Salesforce/ใบสรุป)
+  function syncDefectWarn(block){ const w=block.querySelector('.defect-warn'), c=block.querySelector('.defect-check'); if(w) w.hidden=!(c&&c.checked); }
+  function wireDefectCheckbox(block){
+    const cb=block.querySelector('.defect-check');
+    if(!cb || cb.dataset.wired) return;
+    cb.dataset.wired='1';
+    cb.addEventListener('change', ()=>{
+      const noteInput=block.querySelector('.note-input');
+      if(noteInput){
+        let words=noteInput.value.split(/\s+/).filter(Boolean).filter(w=>w!==DEFECT_WORD);
+        if(cb.checked) words.push(DEFECT_WORD);
+        noteInput.value=words.join(' ');
+        resizeNoteInput(noteInput);
+      }
+      syncDefectWarn(block); optFoldSync(block);
+    });
+  }
+  // [2026-11-17 ตามที่ขอ แบบ ข] หัวข้อพับ "ตัวเลือกเพิ่มเติม": นับตัวที่ติ๊ก (เฉพาะแถวที่โชว์อยู่) + ป้ายชื่อ · ไม่มีแถวโชว์เลย = ซ่อนทั้งหัวข้อ
+  function optFoldSync(block){
+    const fold=block && block.querySelector('.opt-fold'); if(!fold) return;
+    const rows=[...fold.querySelectorAll('.of-b > .frow')].filter(r=>!r.classList.contains('hidden'));
+    fold.hidden=!rows.length;
+    const on=rows.map(r=>r.querySelector('input[type=checkbox]')).filter(c=>c&&c.checked);
+    const n=fold.querySelector('.of-n'); if(n){ n.textContent=String(on.length); n.classList.toggle('zero',!on.length); }
+    const tags=fold.querySelector('.of-tags');
+    if(tags){ tags.innerHTML=''; on.forEach(c=>{ const t=document.createElement('span'); t.className='of-tag'+(c.classList.contains('defect-check')?' bad':''); t.textContent=(c.closest('label')?.querySelector('.k')?.textContent||'').trim(); tags.appendChild(t); }); }
+    syncDefectWarn(block);
+  }
+  function wireOptFold(block){
+    const fold=block.querySelector('.opt-fold'); if(!fold || fold.dataset.wired) return;
+    fold.dataset.wired='1';
+    const setOpen=o=>{ fold.classList.toggle('open',o); const h=fold.querySelector('.of-h'); if(h) h.setAttribute('aria-expanded',o?'true':'false'); };
+    fold.querySelector('.of-h')?.addEventListener('click',()=>setOpen(!fold.classList.contains('open')));
+    fold.querySelector('.of-tags')?.addEventListener('click',()=>setOpen(true));
+    fold.addEventListener('change',()=>optFoldSync(block));
+    optFoldSync(block);
+  }
+  (function(){ const w=document.getElementById('productsWrap'); if(!w) return; const all=()=>w.querySelectorAll('.product-block').forEach(optFoldSync); w.addEventListener('change',()=>setTimeout(all,0)); setInterval(all,1500); setTimeout(all,0); })();
   function wireTeamCheckbox(block){
     wireFollowCheckbox(block); wireQtyInput(block);   // [2026-11-05]
+    wireDefectCheckbox(block); wireOptFold(block);   // [2026-11-17]
     const cb=block.querySelector('.team-check');
     if(!cb || cb.dataset.wired) return;
     cb.dataset.wired='1';
@@ -10453,6 +10523,8 @@
     const st=block.querySelector('.stitch-check'); if(st) st.checked=words.includes('เย็บย้ำกระดุม');
     const us=block.querySelector('.used-check'); if(us){ USED_RE.lastIndex=0; us.checked=USED_RE.test(block.querySelector('.note-input')?.value||''); USED_RE.lastIndex=0; syncCustStock(block); }   // [2026-10-26-2] วลีใหม่หรือคำเดิม
     const tm=block.querySelector('.team-check'); if(tm) tm.checked=words.includes('งานทีม');
+    const df=block.querySelector('.defect-check'); if(df) df.checked=words.includes(DEFECT_WORD);   // [2026-11-17]
+    setTimeout(()=>optFoldSync(block),0);
     const fl=block.querySelector('.follow-check'); if(fl){ fl.checked=words.includes(FOLLOW_WORD); followPanelSync(block); scheduleFollowSync(); }
     const sh=block.querySelector('.shop-check'); if(sh) sh.checked=words.includes(SHOP_TAILOR_WORD);
     if(!isRa2Scope(block)) block.querySelectorAll('.along-check').forEach(cb=>{ cb.checked=words.includes(ALONG_WORD); });
@@ -11026,7 +11098,8 @@
     const noteInp=block.querySelector('.note-input'); if(noteInp){ noteInp.value=''; resizeNoteInput(noteInp); }
     { const q=block.querySelector('.qty-input'); if(q) q.value='1'; const qh=block.querySelector('.qty-hint'); if(qh) qh.hidden=true; block.classList.remove('follow-target'); block.querySelectorAll('.follow-hint').forEach(h=>{ h.hidden=true; h.textContent=''; }); const fp=block.querySelector('.follow-pick'); if(fp){ fp.hidden=true; const fi=fp.querySelector('.fp-input'); if(fi) fi.value=''; const fl=fp.querySelector('.fp-list'); if(fl) fl.innerHTML=''; const fo=fp.querySelector('.fp-ok'); if(fo){ fo.hidden=true; fo.textContent=''; } } }
     // ล้างหมายเหตุแล้วต้องเอาติ๊กออกด้วย (เย็บย้ำกระดุม/ลูกค้าใช้งานก่อนปรับแก้) ไม่งั้นก้อนใหม่ที่โคลนมาจากก้อนที่ติ๊กไว้จะโชว์ติ๊กค้างทั้งที่หมายเหตุว่าง
-    block.querySelectorAll('.stitch-check,.used-check,.team-check,.shop-check,.btncode-check,.follow-check').forEach(cb=>{ cb.checked=false; });
+    block.querySelectorAll('.stitch-check,.used-check,.team-check,.shop-check,.btncode-check,.follow-check,.defect-check').forEach(cb=>{ cb.checked=false; });
+    { const of=block.querySelector('.opt-fold'); if(of) of.classList.remove('open'); const dw=block.querySelector('.defect-warn'); if(dw) dw.hidden=true; setTimeout(()=>optFoldSync(block),0); }   // [2026-11-17]
     { const bp=block.querySelector('.branch-prod'); if(bp){ bp.disabled=false; bp.classList.remove('cust-locked'); } const h=block.querySelector('.cust-stock-hint'); if(h) h.classList.add('hidden'); }   // [2026-10-28-7]
     const bcInp=block.querySelector('.btncode-input'); if(bcInp){ bcInp.value=''; bcInp.classList.add('hidden'); }
     const contactInp=block.querySelector('.contact-input'); if(contactInp) contactInp.value='';
@@ -11044,7 +11117,7 @@
     if(block._attachedImages && block._attachedImages.length) return true;
     if(toggleOnIndex(block,'.toptoggle')===0) return true;
     if([...block.querySelectorAll('.measure-list input.numonly')].some(i=>i.value.trim()!=='')) return true;
-    if([...block.querySelectorAll('.stitch-check,.used-check,.team-check,.shop-check,.follow-check')].some(cb=>cb.checked)) return true;
+    if([...block.querySelectorAll('.stitch-check,.used-check,.team-check,.shop-check,.follow-check,.defect-check')].some(cb=>cb.checked)) return true;
     return false;
   }
   function addEmptyProductBlock(){
@@ -11053,7 +11126,7 @@
     // firstProductBlock มีปุ่ม "เพิ่มสินค้า" อยู่ใน colL ด้วย — cloneNode เลยติดสำเนาปุ่มมาด้วยเสมอ ต้องทิ้งสำเนานี้ทิ้ง (ตัวจริงจะถูกย้ายมาแทนที่ด้วย placeAddProductBtn ด้านล่าง)
     const dupBtn=clone.querySelector('#addProductBtn'); if(dupBtn) dupBtn.remove();
     // [แก้บั๊ก 2026-09-24] cloneNode คัดลอก data-wired="1" ของช่องติ๊ก (เย็บย้ำกระดุม/ลูกค้าใช้งานก่อนปรับแก้) ไปด้วย แต่ไม่คัดลอกตัวฟัง event — ก้อนที่ 2 เป็นต้นไปเลยกดติ๊กแล้วไม่มีอะไรเกิดขึ้นเลย (guard dataset.wired คิดว่าเชื่อมแล้ว) ต้องล้างธงนี้ในสำเนา ให้ wireMeasureItems เชื่อมใหม่
-    clone.querySelectorAll('.stitch-check,.used-check,.team-check,.shop-check,.btncode-check,.follow-check,.qty-input').forEach(cb=>{ delete cb.dataset.wired; });
+    clone.querySelectorAll('.stitch-check,.used-check,.team-check,.shop-check,.btncode-check,.follow-check,.qty-input,.defect-check,.opt-fold').forEach(cb=>{ delete cb.dataset.wired; });
     resetProductBlockToEmpty(clone);
     wrap.appendChild(clone);
     wireProduct(clone);
