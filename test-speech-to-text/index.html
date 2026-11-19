@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>POC แกะเสียงภาษาไทย</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#232220;--t2:#6b6658;--t3:#8f897a;--gold:#C9A24B;--goldink:#8a6a24;--goldbg:#f4ecd9;--paper:#fffdf6;--bg:#efeadd;--rule:#ddd6c4;--rule2:#ece6d6;--red:#b5342a;--redbg:#fbecea;--green:#3d6b30;--greenbg:#e9f2e3}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.6 Prompt,sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:24px;font-weight:600;margin:0}
+.lead{margin:2px 0 14px;color:var(--t2);font-size:14px}
+.tabs{display:flex;gap:4px;background:#e4decd;border-radius:999px;padding:4px;margin-bottom:14px}
+.tabs button{flex:1;min-height:42px;border:0;border-radius:999px;background:transparent;font:500 14px Prompt,sans-serif;color:var(--t2);cursor:pointer;padding:0 8px}
+.tabs button.on{background:#fff;color:var(--ink)}
+.card{background:var(--paper);border:1px solid var(--rule2);border-radius:14px;padding:16px;margin-bottom:12px}
+.card h2{font-size:16px;font-weight:600;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;font:600 13px Barlow,sans-serif;flex:0 0 auto}
+.hint{font-size:13px;color:var(--t2);margin:4px 0 8px}
+.warn{font-size:13px;color:var(--red);background:var(--redbg);border-radius:10px;padding:8px 11px;margin:8px 0}
+label.f{display:block;font-size:13px;font-weight:500;margin:8px 0 3px}
+input[type=password],input[type=text],select,textarea{width:100%;border:1px solid var(--rule);border-radius:10px;background:#fff;padding:9px 11px;font:400 15px Prompt,sans-serif;color:var(--ink)}
+textarea{resize:vertical;min-height:64px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:0 12px}
+.script{font-size:21px;font-weight:500;line-height:1.5;background:var(--goldbg);border-radius:12px;padding:14px;margin:8px 0}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px}
+.btn{min-height:44px;border:1px solid var(--rule);border-radius:999px;background:#fff;color:var(--ink);padding:0 18px;font:500 14px Prompt,sans-serif;cursor:pointer}
+.btn.pri{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.rec{background:var(--red);border-color:var(--red);color:#fff}
+.btn:disabled{opacity:.45;cursor:default}
+.ck{display:flex;align-items:center;gap:8px;font-size:14px;margin-top:8px;cursor:pointer}
+.ck input{width:20px;height:20px;accent-color:var(--goldink)}
+.st{font-size:13px;color:var(--t2)}
+audio{width:100%;max-width:420px;height:40px}
+.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(255px,100%),1fr));gap:10px}
+.tool{border:1px solid var(--rule);border-radius:12px;background:#fff;padding:12px;display:flex;flex-direction:column;gap:7px;min-width:0}
+.tool h3{font-size:15px;font-weight:600;margin:0}
+.tool .out{font-size:14px;min-height:44px;overflow-wrap:anywhere}
+.tool .err{font-size:13px;color:var(--red);overflow-wrap:anywhere}
+.met{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;border-top:1px solid var(--rule2);padding-top:7px}
+.met div{font-size:11.5px;color:var(--t2)}
+.met b{display:block;font:600 17px Barlow,sans-serif;color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{font-size:12px;border-radius:999px;padding:1px 8px;background:var(--greenbg);color:var(--green)}
+.chip.no{background:var(--redbg);color:var(--red)}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--rule2);border-radius:12px;background:#fff}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:13.5px}
+th,td{padding:9px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--rule2)}
+thead th{background:var(--goldbg);font-weight:600}
+tbody th{font-weight:500;background:#fbf8ee;width:128px}
+tr:last-child th,tr:last-child td{border-bottom:0}
+td ul{margin:0;padding-left:16px}
+.best{color:var(--green);font-weight:600}
+a{color:var(--goldink)}
+.src{font-size:12.5px;color:var(--t2);margin-top:10px}
+[hidden]{display:none!important}
+.back{display:inline-block;font-size:14px;color:var(--goldink);text-decoration:none;margin-bottom:8px;min-height:32px}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:8px}
+.sum div{background:#fff;border:1px solid var(--rule2);border-radius:10px;padding:8px 10px;font-size:12.5px;color:var(--t2)}
+.sum b{display:block;font:600 16px Prompt,sans-serif;color:var(--ink)}
+.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:10px}
+.menu a{display:flex;flex-direction:column;gap:3px;background:var(--paper);border:1px solid var(--rule);border-radius:14px;padding:14px;text-decoration:none;color:var(--ink)}
+.menu a:hover{border-color:var(--gold)}
+.menu .p{font:500 12.5px Prompt,sans-serif;color:var(--goldink)}
+.menu b{font-size:17px;font-weight:600}
+.menu span{font-size:13px;color:var(--t2)}
+.menu .r{margin-top:6px;padding-top:6px;border-top:1px solid var(--rule2);color:var(--ink)}
+.narrow{max-width:640px}
+.keyok{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;background:var(--greenbg);color:var(--green);border-radius:10px;padding:10px 12px;font-size:14px}
+.krow{display:flex;gap:8px}.krow input{flex:1;min-width:0}
+.lnk{border:0;background:none;padding:4px 2px;font:500 14px Prompt,sans-serif;color:var(--goldink);cursor:pointer;text-decoration:underline}
+.read{text-align:center}
+.rn{font-size:13px;color:var(--t2)}
+.rq{font-size:26px;font-weight:500;line-height:1.45;margin:8px 0 6px}
+.rnav{display:flex;justify-content:space-between}
+.center{text-align:center}
+.mic{width:96px;height:96px;border-radius:50%;border:0;background:var(--red);color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:box-shadow .2s}
+.mic svg{width:42px;height:42px;fill:currentColor}
+.mic.on{box-shadow:0 0 0 10px rgba(181,52,42,.18);animation:pulse 1.2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 16px rgba(181,52,42,.08)}}
+.st.big{font-size:15px;color:var(--ink);margin-top:10px}
+#altLine{margin-top:4px}
+#typeBox{margin-top:10px;text-align:left}
+#player{margin:10px auto 0;display:block}
+.out{font-size:18px;font-weight:500;margin:4px 0 8px;overflow-wrap:anywhere}
+.err{font-size:14px;color:var(--red);margin-bottom:8px;overflow-wrap:anywhere}
+.met{margin:10px 0 12px}
+.btn.wide{width:100%}
+details.more summary{cursor:pointer;font-weight:500;font-size:15px;min-height:28px}
+details.more[open] summary{margin-bottom:6px}
+.narrow{max-width:640px}
+.keyok{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;background:var(--greenbg);color:var(--green);border-radius:10px;padding:10px 12px;font-size:14px}
+.krow{display:flex;gap:8px}.krow input{flex:1;min-width:0}
+.lnk{border:0;background:none;padding:4px 2px;font:500 14px Prompt,sans-serif;color:var(--goldink);cursor:pointer;text-decoration:underline}
+.read{text-align:center}
+.rn{font-size:13px;color:var(--t2)}
+.rq{font-size:26px;font-weight:500;line-height:1.45;margin:8px 0 6px}
+.rnav{display:flex;justify-content:space-between}
+.center{text-align:center}
+.mic{width:96px;height:96px;border-radius:50%;border:0;background:var(--red);color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:box-shadow .2s}
+.mic svg{width:42px;height:42px;fill:currentColor}
+.mic.on{box-shadow:0 0 0 10px rgba(181,52,42,.18);animation:pulse 1.2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 16px rgba(181,52,42,.08)}}
+.st.big{font-size:15px;color:var(--ink);margin-top:10px}
+#altLine{margin-top:4px}
+#typeBox{margin-top:10px;text-align:left}
+#player{margin:10px auto 0;display:block}
+.out{font-size:18px;font-weight:500;margin:4px 0 8px;overflow-wrap:anywhere}
+.err{font-size:14px;color:var(--red);margin-bottom:8px;overflow-wrap:anywhere}
+.met{margin:10px 0 12px}
+.btn.wide{width:100%}
+details.more summary{cursor:pointer;font-weight:500;font-size:15px;min-height:28px}
+.ttabs{display:flex;gap:4px;background:#e4decd;border-radius:999px;padding:4px;margin-bottom:12px}
+.ttabs button{flex:1;min-height:44px;border:0;border-radius:999px;background:transparent;font:500 15px Prompt,sans-serif;color:var(--t2);cursor:pointer}
+.ttabs button.on{background:#fff;color:var(--ink)}
+.rows{border:1px solid var(--rule2);border-radius:10px;overflow:hidden;margin:6px 0 4px;background:#fff}
+.mr{display:flex;justify-content:space-between;gap:8px;padding:8px 11px;border-bottom:1px solid var(--rule2);font-size:14px}
+.mr:last-child{border-bottom:0}
+.mr .v{color:var(--t3);text-align:right}
+.mr.ok{background:var(--greenbg)}.mr.ok .v{color:var(--green);font-weight:500}
+.mr.bad{background:var(--redbg)}.mr.bad .v{color:var(--red);font-weight:500}
+.notebox{border:1px solid var(--rule2);border-radius:10px;background:#fff;padding:9px 11px;font-size:15px;margin:6px 0}
+.notebox .k{font-size:12px;color:var(--t2)}
+details.more[open] summary{margin-bottom:6px}
+.narrow{max-width:640px}
+.keyok{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;background:var(--greenbg);color:var(--green);border-radius:10px;padding:10px 12px;font-size:14px}
+.krow{display:flex;gap:8px}.krow input{flex:1;min-width:0}
+.lnk{border:0;background:none;padding:4px 2px;font:500 14px Prompt,sans-serif;color:var(--goldink);cursor:pointer;text-decoration:underline}
+.read{text-align:center}
+.rn{font-size:13px;color:var(--t2)}
+.rq{font-size:26px;font-weight:500;line-height:1.45;margin:8px 0 6px}
+.rnav{display:flex;justify-content:space-between}
+.center{text-align:center}
+.mic{width:96px;height:96px;border-radius:50%;border:0;background:var(--red);color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:box-shadow .2s}
+.mic svg{width:42px;height:42px;fill:currentColor}
+.mic.on{box-shadow:0 0 0 10px rgba(181,52,42,.18);animation:pulse 1.2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 16px rgba(181,52,42,.08)}}
+.st.big{font-size:15px;color:var(--ink);margin-top:10px}
+#altLine{margin-top:4px}
+#typeBox{margin-top:10px;text-align:left}
+#player{margin:10px auto 0;display:block}
+.out{font-size:18px;font-weight:500;margin:4px 0 8px;overflow-wrap:anywhere}
+.err{font-size:14px;color:var(--red);margin-bottom:8px;overflow-wrap:anywhere}
+.met{margin:10px 0 12px}
+.btn.wide{width:100%}
+details.more summary{cursor:pointer;font-weight:500;font-size:15px;min-height:28px}
+.ttabs{display:flex;gap:4px;background:#e4decd;border-radius:999px;padding:4px;margin-bottom:12px}
+.ttabs button{flex:1;min-height:44px;border:0;border-radius:999px;background:transparent;font:500 15px Prompt,sans-serif;color:var(--t2);cursor:pointer}
+.ttabs button.on{background:#fff;color:var(--ink)}
+.rows{border:1px solid var(--rule2);border-radius:10px;overflow:hidden;margin:6px 0 4px;background:#fff}
+.mr{display:flex;justify-content:space-between;gap:8px;padding:8px 11px;border-bottom:1px solid var(--rule2);font-size:14px}
+.mr:last-child{border-bottom:0}
+.mr .v{color:var(--t3);text-align:right}
+.mr.ok{background:var(--greenbg)}.mr.ok .v{color:var(--green);font-weight:500}
+.mr.bad{background:var(--redbg)}.mr.bad .v{color:var(--red);font-weight:500}
+.notebox{border:1px solid var(--rule2);border-radius:10px;background:#fff;padding:9px 11px;font-size:15px;margin:6px 0}
+.notebox .k{font-size:12px;color:var(--t2)}
+details.more[open] summary{margin-bottom:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>POC แกะเสียงภาษาไทย</h1>
+  <p class="lead">เลือกเครื่องมือ แล้วพูดประโยคเดียวกันในแต่ละหน้า (เสื้อสูท · กางเกง · เชิ้ต) กลับมาดูผลเทียบที่หน้านี้ · ใส่ PIN ครั้งเดียวต่อเครื่อง</p>
+  <div class="menu">
+      <a href="elevenlabs/index.html"><span class="p">หน้า 1</span><b>ElevenLabs Scribe v3</b><span>ฟรีประมาณ 30 นาทีต่อเดือน</span><span class="r" id="m-el">ยังไม่ทดสอบ</span></a>
+      <a href="ios/index.html"><span class="p">หน้า 2</span><b>iOS (Apple)</b><span>ฟรี ไม่ต้องใช้ PIN · ใช้ Safari บน iPhone/iPad</span><span class="r" id="m-ios">ยังไม่ทดสอบ</span></a>
+      <a href="gemini/index.html"><span class="p">หน้า 3</span><b>Gemini 3.5 Transcribe</b><span>แบบฟรีทดสอบได้</span><span class="r" id="m-ge">ยังไม่ทดสอบ</span></a>
+      <a href="typhoon/index.html"><span class="p">หน้า 4</span><b>Typhoon ASR Realtime</b><span>ฟรี · โมเดลภาษาไทย</span><span class="r" id="m-ty">ยังไม่ทดสอบ</span></a>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <h2>เทียบเครื่องมือ (ข้อมูล ณ 19 พ.ย. 2569)</h2>
+    <p class="hint">ราคาบาทคิดที่ 1 ดอลลาร์ = 33.97 บาท · ตัวเลขความแม่นวัดคนละวิธี เทียบตรง ๆ ไม่ได้ · ผลจริงดูแถวสุดท้าย (ผลในเครื่องนี้)</p>
+      <div class="tw"><table>
+        <thead><tr><th></th><th>ElevenLabs Scribe v3</th><th>iOS (Apple)</th><th>Gemini 3.5 Transcribe</th><th>Typhoon ASR Realtime</th></tr></thead>
+        <tbody>
+          <tr><th>ราคาตอนทดสอบ</th><td>ฟรีประมาณ 30 นาทีต่อเดือน</td><td>ฟรี</td><td>ฟรี (แบบทดสอบ)</td><td>ฟรี (100 ครั้งต่อนาที)</td></tr>
+          <tr><th>ราคาใช้งานจริง ต่อชั่วโมงเสียง</th><td>$0.20 (6.79 บาท)<br>คำเฉพาะ +$0.05 (1.70 บาท)</td><td>ฟรี</td><td>ประมาณ $0.30 (10.19 บาท)</td><td>ฟรี (ยังไม่มีราคาเสียเงิน)</td></tr>
+          <tr><th>ข้อมูลความแม่นภาษาไทย</th><td>Scribe v2 ระดับ "Good" (คำผิด 10–20%) วัดโดย ElevenLabs</td><td>Apple ไม่เปิดเผย</td><td>รุ่นนี้ไม่มี · รุ่นพี่ Gemini 3 Pro ตัวอักษรผิด 6.9–12.5% (ทีม Typhoon วัด)</td><td>ตัวอักษรผิด 6.8–10% (ทีม Typhoon วัดเอง)</td></tr>
+          <tr><th>ใส่คำเฉพาะ (เอว ต่ำเข่า SKU)</th><td>ได้</td><td>ไม่ได้</td><td>ได้ แต่มีรายงานว่าบางครั้งไม่มีผล</td><td>ไม่ได้</td></tr>
+          <tr><th>ข้อจำกัด</th><td>ไฟล์ไม่เกิน 5GB หรือ 15 ชั่วโมง</td><td>ใช้ได้เฉพาะ Safari บน iPhone/iPad ใช้ในแอป Lark ไม่ได้ และรับไฟล์ไม่ได้</td><td>Google ติดป้ายภาษาไทยว่า Experimental</td><td>รับ WAV/MP3/FLAC/OGG/OPUS (หน้านี้แปลงให้) · เงื่อนไขฟรีอาจเปลี่ยน</td></tr>
+          <tr><th>ข้อดี</th><td>ใส่คำเฉพาะได้ รับไฟล์ยาว ราคาถูก</td><td>ฟรี ไม่ต้องมี Key เห็นข้อความทันที</td><td>ต่อง่ายด้วย API Key ทดสอบฟรี</td><td>โมเดลภาษาไทยโดยเฉพาะ ฟรี</td></tr>
+          <tr><th>ข้อเสีย</th><td>มีค่าใช้จ่ายเมื่อใช้จริง</td><td>คุมคุณภาพไม่ได้</td><td>ภาษาไทยยังเป็นรุ่นทดลอง</td><td>ใส่คำเฉพาะไม่ได้ · เก็บข้อมูลการใช้งาน</td></tr>
+          <tr><th>ผลจริงจากการทดสอบ</th><td id="live-el">ยังไม่ทดสอบ</td><td id="live-ios">ยังไม่ทดสอบ</td><td id="live-ge">ยังไม่ทดสอบ</td><td id="live-ty">ยังไม่ทดสอบ</td></tr>
+        </tbody>
+      </table></div>
+      <p class="src">แหล่งข้อมูล: <a href="https://elevenlabs.io/pricing/api" target="_blank" rel="noopener">ราคา ElevenLabs</a> · <a href="https://elevenlabs.io/docs/overview/capabilities/speech-to-text" target="_blank" rel="noopener">เอกสาร ElevenLabs</a> · <a href="https://aistudio.google.com/docs/pricing" target="_blank" rel="noopener">ราคา Gemini</a> · <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-5-transcribe" target="_blank" rel="noopener">เอกสาร Gemini</a> · <a href="https://arxiv.org/html/2601.13044v1" target="_blank" rel="noopener">งานวิจัย Typhoon ASR</a> · <a href="https://docs.opentyphoon.ai/en/asr/" target="_blank" rel="noopener">เอกสาร Typhoon</a></p>
+  </div>
+</div>
+<script>
+(function(){
+  var runs=[]; try{ runs=JSON.parse(localStorage.getItem('sttPocRunsV1')||'[]')||[]; }catch(e){}
+  var pct=function(x){return x==null?'—':Math.round(x*100)+'%';};
+  ['el','ios','ge','ty'].forEach(function(id){ var all=runs.filter(function(r){return r.tool===id;}), ok=all.filter(function(r){return !r.err;}); if(!all.length) return;
+    var ac=ok.map(function(r){return r.acc;}).filter(function(x){return x!=null;}), acc=ac.length?ac.reduce(function(a,b){return a+b;},0)/ac.length:null, kA=ok.reduce(function(n,r){return n+r.keyAll;},0), kO=ok.reduce(function(n,r){return n+r.keyOk;},0);
+    var ms=ok.map(function(r){return r.ms;}).filter(function(x){return x!=null;}).sort(function(a,b){return a-b;}), md=ms.length?ms[ms.length>>1]:null;
+    var t='ถูกต้อง '+pct(acc)+' · ช่อง/คำสำคัญ '+(kA?pct(kO/kA):'—')+' · '+(md==null?'—':(md/1000).toFixed(1)+' วิ')+' ('+all.length+' ครั้ง)';
+    ['m-'+id,'live-'+id].forEach(function(x){ var el=document.getElementById(x); if(el) el.textContent=t; }); });
+})();
+</script>
+</body>
+</html>
