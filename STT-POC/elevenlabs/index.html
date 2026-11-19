@@ -68,61 +68,88 @@ a{color:var(--goldink)}
 .menu b{font-size:17px;font-weight:600}
 .menu span{font-size:13px;color:var(--t2)}
 .menu .r{margin-top:6px;padding-top:6px;border-top:1px solid var(--rule2);color:var(--ink)}
+.narrow{max-width:640px}
+.keyok{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;background:var(--greenbg);color:var(--green);border-radius:10px;padding:10px 12px;font-size:14px}
+.krow{display:flex;gap:8px}.krow input{flex:1;min-width:0}
+.lnk{border:0;background:none;padding:4px 2px;font:500 14px Prompt,sans-serif;color:var(--goldink);cursor:pointer;text-decoration:underline}
+.read{text-align:center}
+.rn{font-size:13px;color:var(--t2)}
+.rq{font-size:26px;font-weight:500;line-height:1.45;margin:8px 0 6px}
+.rnav{display:flex;justify-content:space-between}
+.center{text-align:center}
+.mic{width:96px;height:96px;border-radius:50%;border:0;background:var(--red);color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:box-shadow .2s}
+.mic svg{width:42px;height:42px;fill:currentColor}
+.mic.on{box-shadow:0 0 0 10px rgba(181,52,42,.18);animation:pulse 1.2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 16px rgba(181,52,42,.08)}}
+.st.big{font-size:15px;color:var(--ink);margin-top:10px}
+#altLine{margin-top:4px}
+#typeBox{margin-top:10px;text-align:left}
+#player{margin:10px auto 0;display:block}
+.out{font-size:18px;font-weight:500;margin:4px 0 8px;overflow-wrap:anywhere}
+.err{font-size:14px;color:var(--red);margin-bottom:8px;overflow-wrap:anywhere}
+.met{margin:10px 0 12px}
+.btn.wide{width:100%}
+details.more summary{cursor:pointer;font-weight:500;font-size:15px;min-height:28px}
+details.more[open] summary{margin-bottom:6px}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap narrow">
   <a class="back" href="../index.html">← กลับหน้าเมนู</a>
   <h1>ElevenLabs Scribe v3</h1>
-  <p class="lead">ราคา $0.20 (6.79 บาท) ต่อชั่วโมงเสียง · คำเฉพาะ +$0.05 (1.70 บาท)</p>
+  <p class="lead">$0.20 (6.79 บาท) ต่อชั่วโมงเสียง · บัญชีฟรีทดสอบได้ประมาณ 30 นาทีต่อเดือน</p>
 
   <div class="card" id="keyCard">
-    <h2><span class="n">1</span>ใส่ API Key</h2>
-    <p class="hint">สร้าง Key ได้ที่ <a href="https://elevenlabs.io/app/developers/api-keys" target="_blank" rel="noopener">ElevenLabs API Keys</a> · รหัสหายเมื่อรีเฟรช ไม่ถูกบันทึกในเครื่อง</p>
-    <label class="f" for="apiKey">API Key</label>
-    <input id="apiKey" type="password" autocomplete="off" spellcheck="false">
-    <label class="ck"><input type="checkbox" id="useTerms" checked>ใส่คำเฉพาะให้ระบบช่วยจำ</label>
-    <textarea id="terms" rows="2" aria-label="คำเฉพาะ คั่นด้วยจุลภาค"></textarea>
+    <div id="keySaved" class="keyok" hidden><span>✓ บันทึก API Key ไว้ในเครื่องนี้แล้ว</span><span><button type="button" class="lnk" id="keyChange">เปลี่ยน</button> · <button type="button" class="lnk" id="keyDel">ลบ</button></span></div>
+    <div id="keyForm">
+      <label class="f" for="apiKey">วาง API Key (ทำครั้งเดียวต่อเครื่อง)</label>
+      <div class="krow"><input id="apiKey" type="password" autocomplete="off" spellcheck="false"><button type="button" class="btn pri" id="keySave">บันทึก</button></div>
+      <p class="hint">ขอ Key ได้ที่ <a href="https://elevenlabs.io/app/developers/api-keys" target="_blank" rel="noopener">ElevenLabs API Keys</a> · เปิดสิทธิ์ Speech to Text อย่างเดียว · ปิด "Improve the models for everyone" ในบัญชีได้</p>
+    </div>
   </div>
 
-  <div class="card">
-    <h2><span class="n" id="stepA">2</span>เลือกประโยค</h2>
-    <label class="f" for="scriptSel">ประโยคทดสอบ</label>
-    <select id="scriptSel"></select>
-    <div class="script" id="scriptShow"></div>
-    <label class="f" for="refText">ข้อความที่ถูกต้อง (แก้ได้ถ้าพูดเอง)</label>
+  <div class="card read">
+    <div class="rn" id="readNo"></div>
+    <div class="rq" id="readText"></div>
+    <div class="rnav"><button type="button" class="lnk" id="prevBtn">‹ ก่อนหน้า</button><button type="button" class="lnk" id="nextLink">ถัดไป ›</button></div>
+  </div>
+
+  <div class="card center">
+    <button type="button" class="mic" id="micBtn" aria-label="แตะเพื่อเริ่มพูด"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-2.08A7 7 0 0 0 19 12z"/></svg></button>
+    <div class="st big" id="micSt">แตะเพื่อเริ่มพูด แตะอีกครั้งเมื่อพูดจบ</div>
+    <div class="st" id="altLine"></div>
+    <div id="typeBox" hidden>
+      <textarea id="typeText" rows="2" aria-label="ข้อความจากไมค์บนแป้นพิมพ์"></textarea>
+      <div class="row" style="justify-content:center"><button type="button" class="btn" id="typeScore">ให้คะแนนข้อความนี้</button></div>
+    </div>
+    <input type="file" id="fileIn" accept="audio/*,video/mp4,.m4a,.mp3,.wav,.webm,.ogg" hidden>
+    <audio id="player" controls hidden></audio>
+  </div>
+
+  <div class="card" id="resCard" hidden>
+    <div class="st">ระบบแกะได้ว่า</div>
+    <div class="out" id="resText"></div>
+    <div class="err" id="resErr" hidden></div>
+    <div class="chips" id="resChips"></div>
+    <div class="met" id="resMet"></div>
+    <button type="button" class="btn pri wide" id="nextBtn">ประโยคถัดไป ›</button>
+    <a class="lnk" href="#sumCard" style="display:block;text-align:center;margin-top:8px">ดูผลรวมทั้งหมด</a>
+  </div>
+
+  <details class="card more">
+    <summary>ตั้งค่าเพิ่มเติม</summary>
+    <div id="termBox">
+      <label class="ck"><input type="checkbox" id="useTerms" checked>บอกคำเฉพาะให้ระบบล่วงหน้า</label>
+      <p class="hint">รายการคำที่ใช้บ่อย เช่น เอว สะโพก รหัสสินค้า ระบบจะแกะคำเหล่านี้ถูกมากขึ้น ไม่ต้องแก้ก็ได้</p>
+      <textarea id="terms" rows="2" aria-label="คำเฉพาะ คั่นด้วยจุลภาค"></textarea>
+    </div>
+    <label class="f" for="refText">ข้อความที่ถูกต้อง (ใช้ให้คะแนน · แก้ได้ถ้าพูดเอง)</label>
     <textarea id="refText" rows="2"></textarea>
     <label class="f" for="keyText">คำสำคัญที่ต้องถูก (บรรทัดละคำ · คำที่ถือว่าถูกเหมือนกันคั่นด้วย |)</label>
     <textarea id="keyText" rows="3"></textarea>
-  </div>
+  </details>
 
-  <div class="card" id="cloudCard">
-    <h2><span class="n">3</span>อัดเสียงแล้วแกะเสียง</h2>
-    <div class="row" style="margin-top:0">
-      <button type="button" class="btn pri" id="recBtn">อัดเสียง</button>
-      <label class="btn" style="display:inline-flex;align-items:center">เลือกไฟล์เสียง<input type="file" id="fileIn" accept="audio/*,video/mp4,.m4a,.mp3,.wav,.webm,.ogg" hidden></label>
-      <span class="st" id="recSt">ยังไม่มีเสียง</span>
-    </div>
-    <audio id="player" controls hidden></audio>
-    <div class="row"><button type="button" class="btn pri" id="runBtn" disabled>แกะเสียง</button><span class="st" id="runSt"></span></div>
-  </div>
-
-  <div class="card" id="iosCard">
-    <h2><span class="n">2</span>ฟังเสียงด้วย iOS</h2>
-    <p class="hint">เปิดหน้านี้ใน Safari บน iPhone/iPad ผ่านลิงก์ https เท่านั้น ใช้ในแอป Lark ไม่ได้ และต้องเปิด Siri/Dictation ไว้</p>
-    <div class="row"><button type="button" class="btn pri" id="iosBtn">เริ่มฟังเสียง</button><span class="st" id="iosSt"></span></div>
-    <label class="f" for="iosText">หรือแตะช่องนี้ แล้วกดไมค์บนแป้นพิมพ์เพื่อพูด</label>
-    <textarea id="iosText" rows="2"></textarea>
-    <div class="row"><button type="button" class="btn" id="iosScore">ให้คะแนนข้อความนี้</button></div>
-  </div>
-
-  <div class="card">
-    <h2>ผลครั้งล่าสุด</h2>
-    <div class="tool" id="result"></div>
-    <div class="row"><button type="button" class="btn" id="nextBtn">ไปประโยคถัดไป</button></div>
-  </div>
-
-  <div class="card">
+  <div class="card" id="sumCard">
     <h2>สรุปผลของเครื่องมือนี้</h2>
     <div class="sum" id="sum"></div>
     <div class="tw" style="margin-top:10px"><table><thead><tr><th>เวลา</th><th>ประโยค</th><th>ถูกต้อง</th><th>คำสำคัญ</th><th>เวลาแกะ</th><th>ข้อความที่ได้</th></tr></thead><tbody id="runBody"></tbody></table></div>
@@ -133,7 +160,7 @@ a{color:var(--goldink)}
 <script>
 (function(){
 'use strict';
-var ID='el', NAME='ElevenLabs Scribe v3', PER_HOUR=0.2, TERM_HOUR=0.05, CLOUD=ID!=='ios', USD_THB=33.97, STORE='sttPocRunsV1';
+var ID='el', NAME='ElevenLabs Scribe v3', PER_HOUR=0.2, TERM_HOUR=0.05, CLOUD=ID!=='ios', TERMS_OK=(ID==='el'||ID==='ge'), USD_THB=33.97, STORE='sttPocRunsV1', KEYSTORE='sttPocKey_'+ID;
 var $=function(id){return document.getElementById(id);};
 var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
 var SCRIPTS=[
@@ -146,11 +173,13 @@ var SCRIPTS=[
   {t:'เย็บย้ำกระดุม นัดรับวันศุกร์ที่ 21 พฤศจิกายน งานด่วน',k:['เย็บย้ำกระดุม','วันศุกร์ที่21','พฤศจิกายน','งานด่วน']},
   {t:'ลูกค้าบอกว่าไหล่แน่นนิดหน่อย ขอขยายอก 1 นิ้ว แล้วเอาเอวเข้าอีกครึ่งนิ้ว',k:['ไหล่','ขยายอก1นิ้ว','เอว','0.5นิ้ว']}
 ];
-var S={blob:null,name:'',dur:0};
-function allRuns(){ try{ return JSON.parse(localStorage.getItem(STORE)||'[]')||[]; }catch(e){ return S.mem||(S.mem=[]); } }
-function putRuns(a){ S.mem=a; try{ localStorage.setItem(STORE,JSON.stringify(a.slice(-400))); }catch(e){} }
+var S={idx:0,blob:null,name:'',dur:0,busy:false,mem:null};
+function ls(k,v){ try{ if(v===undefined) return localStorage.getItem(k); if(v===null) localStorage.removeItem(k); else localStorage.setItem(k,v); }catch(e){} return null; }
+function allRuns(){ try{ var x=JSON.parse(ls(STORE)||'[]'); if(Array.isArray(x)) return x; }catch(e){} return S.mem||(S.mem=[]); }
+function putRuns(a){ S.mem=a; ls(STORE,JSON.stringify(a.slice(-400))); }
 function myRuns(){ return allRuns().filter(function(r){return r.tool===ID;}); }
 
+// ── ให้คะแนน ──
 var DIG={'หนึ่ง':1,'เอ็ด':1,'สอง':2,'ยี่':2,'สาม':3,'สี่':4,'ห้า':5,'หก':6,'เจ็ด':7,'แปด':8,'เก้า':9};
 function norm(s){
   s=String(s||'').normalize('NFC').toLowerCase().replace(/[๐-๙]/g,function(c){return String(c.charCodeAt(0)-0x0E50);}).replace(/\s+/g,'');
@@ -165,33 +194,44 @@ function accuracy(ref,hyp){ var r=norm(ref),h=norm(hyp); if(!r) return null; ret
 function keyLines(){ return $('keyText').value.split('\n').map(function(x){return x.trim();}).filter(Boolean); }
 function keyHits(keys,hyp){ var h=norm(hyp); return keys.map(function(k){ return {k:k.split('|')[0],ok:k.split('|').some(function(a){return h.indexOf(norm(a))>=0;})}; }); }
 
-function terms(){ if(!$('useTerms').checked) return []; return $('terms').value.split(/[,\n]/).map(function(x){return x.trim();}).filter(Boolean).slice(0,100); }
+// ── เรียกเครื่องมือ ──
+function terms(){ if(!TERMS_OK||!$('useTerms').checked) return []; return $('terms').value.split(/[,\n]/).map(function(x){return x.trim();}).filter(Boolean).slice(0,100); }
 function fetchT(url,opt){ var ac=new AbortController(),t=setTimeout(function(){ac.abort();},120000); opt.signal=ac.signal;
   return fetch(url,opt).then(function(r){ return r.text().then(function(x){ clearTimeout(t); var j=null; try{ j=JSON.parse(x); }catch(e){}
-    if(!r.ok){ var m=j&&(j.error&&(j.error.message||j.error)||j.detail&&(j.detail.message||j.detail)||j.message); throw new Error('HTTP '+r.status+(m?' · '+(typeof m==='string'?m:JSON.stringify(m)):'')); }
-    return j; }); },function(e){ clearTimeout(t); throw new Error(e&&e.name==='AbortError'?'รอเกิน 2 นาที':'เชื่อมต่อไม่ได้'); }); }
+    if(!r.ok){ var m=j&&(j.error&&(j.error.message||j.error)||j.detail&&(j.detail.message||j.detail)||j.message); if(r.status===401||r.status===403) m='API Key ไม่ถูกต้องหรือไม่มีสิทธิ์'+(m?' ('+(typeof m==='string'?m:JSON.stringify(m))+')':''); if(r.status===429) m='ใช้ถี่เกินไป รอสักครู่แล้วลองใหม่'; throw new Error('HTTP '+r.status+(m?' · '+(typeof m==='string'?m:JSON.stringify(m)):'')); }
+    return j; }); },function(e){ clearTimeout(t); throw new Error(e&&e.name==='AbortError'?'รอเกิน 2 นาที':'เชื่อมต่อไม่ได้ (เช็กอินเทอร์เน็ต)'); }); }
 function b64(blob){ return new Promise(function(ok,no){ var r=new FileReader(); r.onload=function(){ok(String(r.result).split(',')[1]||'');}; r.onerror=function(){no(new Error('อ่านไฟล์เสียงไม่ได้'));}; r.readAsDataURL(blob); }); }
 function geMime(t){ t=String(t||'').split(';')[0].toLowerCase(); if(t==='audio/mp4'||t==='audio/x-m4a'||t==='video/mp4') return 'audio/m4a'; return t||'audio/m4a'; }
 function geText(j){ var out=[]; ((j&&j.steps)||[]).forEach(function(s){ ((s&&s.content)||[]).forEach(function(c){ if(c&&typeof c.text==='string') out.push(c.text); }); }); return out.join(' ').trim()||String(j&&j.output_text||''); }
+// แปลงเสียงเป็น WAV 16kHz mono (Typhoon ไม่รับ m4a/webm)
+function toWav(blob){ return blob.arrayBuffer().then(function(buf){ var AC=window.AudioContext||window.webkitAudioContext; if(!AC) throw new Error('เครื่องนี้แปลงไฟล์เสียงไม่ได้');
+  var ac=new AC(); return new Promise(function(ok,no){ var p=ac.decodeAudioData(buf,ok,function(){no(new Error('อ่านไฟล์เสียงนี้ไม่ได้'));}); if(p&&p.then) p.then(ok,function(){no(new Error('อ่านไฟล์เสียงนี้ไม่ได้'));}); }).then(function(a){ try{ac.close();}catch(e){}
+    var rate=16000, len=Math.max(1,Math.ceil(a.duration*rate)), OC=window.OfflineAudioContext||window.webkitOfflineAudioContext, oc=new OC(1,len,rate), src=oc.createBufferSource(); src.buffer=a; src.connect(oc.destination); src.start(0);
+    return new Promise(function(ok){ oc.oncomplete=function(e){ok(e.renderedBuffer);}; var r=oc.startRendering(); if(r&&r.then) r.then(ok); }); }).then(function(out){
+    var d=out.getChannelData(0), n=d.length, v=new DataView(new ArrayBuffer(44+n*2)), w=function(o,s){for(var i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));};
+    w(0,'RIFF'); v.setUint32(4,36+n*2,true); w(8,'WAVEfmt '); v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true); v.setUint32(24,16000,true); v.setUint32(28,32000,true); v.setUint16(32,2,true); v.setUint16(34,16,true); w(36,'data'); v.setUint32(40,n*2,true);
+    for(var i=0;i<n;i++){ var s=Math.max(-1,Math.min(1,d[i])); v.setInt16(44+i*2,s<0?s*0x8000:s*0x7FFF,true); }
+    return new Blob([v],{type:'audio/wav'}); }); }); }
 var CALL={
   el:function(key,blob,name,tm){ var f=new FormData(); f.append('file',blob,name); f.append('model_id','scribe_v3'); f.append('language_code','tha'); f.append('tag_audio_events','false'); f.append('timestamps_granularity','none'); tm.forEach(function(x){f.append('keyterms',x);});
     return fetchT('https://api.elevenlabs.io/v1/speech-to-text',{method:'POST',headers:{'xi-api-key':key},body:f}).then(function(j){return String(j&&j.text||'');}); },
-  oa:function(key,blob,name,tm){ if(blob.size>25*1048576) return Promise.reject(new Error('ไฟล์เกิน 25MB')); var f=new FormData(); f.append('file',blob,name); f.append('model','gpt-transcribe'); f.append('languages[]','th'); tm.forEach(function(x){f.append('keywords[]',x);});
-    return fetchT('https://api.openai.com/v1/audio/transcriptions',{method:'POST',headers:{Authorization:'Bearer '+key},body:f}).then(function(j){return String(j&&j.text||'');}); },
   ge:function(key,blob,name,tm){ return b64(blob).then(function(d){ var tc={language_codes:['th-TH'],mode:{type:'verbatim'}}; if(tm.length) tc.custom_vocabulary=tm;
-    return fetchT('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'x-goog-api-key':key,'Content-Type':'application/json','Api-Revision':'2026-05-20'},body:JSON.stringify({model:'models/gemini-3.5-transcribe',input:[{type:'audio',data:d,mime_type:geMime(blob.type)}],generation_config:{transcription_config:tc}})}).then(geText); }); }
+    return fetchT('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'x-goog-api-key':key,'Content-Type':'application/json','Api-Revision':'2026-05-20'},body:JSON.stringify({model:'models/gemini-3.5-transcribe',input:[{type:'audio',data:d,mime_type:geMime(blob.type)}],generation_config:{transcription_config:tc}})}).then(geText); }); },
+  ty:function(key,blob){ return toWav(blob).then(function(wav){ var f=new FormData(); f.append('file',wav,'clip.wav'); f.append('model','typhoon-asr-realtime');
+    return fetchT('https://api.opentyphoon.ai/v1/audio/transcriptions',{method:'POST',headers:{Authorization:'Bearer '+key},body:f}).then(function(j){return String(j&&j.text||'');}); }); }
 };
 
+// ── ผลและสรุป ──
 function pct(x){ return x==null?'—':Math.round(x*100)+'%'; }
 function secT(ms){ return ms==null?'—':(ms/1000).toFixed(1)+' วิ'; }
 function money(u){ return '$'+u.toFixed(u<0.01?4:3)+' ('+(u*USD_THB).toFixed(2)+' บาท)'; }
 function record(text,ms,err,withTerms){ var ref=$('refText').value.trim(), hits=err?[]:keyHits(keyLines(),text);
   var run={at:new Date().toISOString(),tool:ID,ref:ref,text:text||'',acc:err?null:accuracy(ref,text),keyOk:hits.filter(function(h){return h.ok;}).length,keyAll:hits.length,ms:ms,sec:S.dur||0,terms:!!withTerms,err:err||''};
   var a=allRuns(); a.push(run); putRuns(a); renderSum(); showResult(run,hits); }
-function showResult(r,hits){ var h='<h3>'+esc(NAME)+'</h3>';
-  if(r.err) h+='<div class="err">'+esc(r.err)+'</div>';
-  else h+='<div class="out">'+(esc(r.text)||'<span class="st">ไม่มีข้อความ</span>')+'</div><div class="chips">'+hits.map(function(x){return '<span class="chip'+(x.ok?'':' no')+'">'+(x.ok?'✓ ':'✗ ')+esc(x.k)+'</span>';}).join('')+'</div><div class="met"><div><b>'+pct(r.acc)+'</b>ถูกต้อง</div><div><b>'+r.keyOk+'/'+r.keyAll+'</b>คำสำคัญ</div><div><b>'+secT(r.ms)+'</b>เวลาแกะ</div></div>';
-  $('result').innerHTML=h; }
+function showResult(r,hits){ $('resCard').hidden=false; $('resErr').hidden=!r.err; $('resErr').textContent=r.err||''; $('resText').textContent=r.err?'—':(r.text||'(ไม่มีข้อความ)');
+  $('resChips').innerHTML=hits.map(function(x){return '<span class="chip'+(x.ok?'':' no')+'">'+(x.ok?'✓ ':'✗ ')+esc(x.k)+'</span>';}).join('');
+  $('resMet').innerHTML=r.err?'':'<div><b>'+pct(r.acc)+'</b>ถูกต้อง</div><div><b>'+r.keyOk+'/'+r.keyAll+'</b>คำสำคัญ</div><div><b>'+secT(r.ms)+'</b>เวลาแกะ</div>';
+  $('resCard').scrollIntoView({behavior:'smooth',block:'nearest'}); }
 function median(a){ if(!a.length) return null; a=a.slice().sort(function(x,y){return x-y;}); var m=a.length>>1; return a.length%2?a[m]:(a[m-1]+a[m])/2; }
 function mean(a){ return a.length?a.reduce(function(x,y){return x+y;},0)/a.length:null; }
 function renderSum(){ var all=myRuns(), ok=all.filter(function(r){return !r.err;}), kA=ok.reduce(function(n,r){return n+r.keyAll;},0), kO=ok.reduce(function(n,r){return n+r.keyOk;},0);
@@ -200,49 +240,65 @@ function renderSum(){ var all=myRuns(), ok=all.filter(function(r){return !r.err;
   $('sum').innerHTML=it.map(function(x){return '<div><span>'+esc(x[0])+'</span><b>'+esc(x[1])+'</b></div>';}).join('');
   $('runBody').innerHTML=all.slice().reverse().slice(0,60).map(function(r){ return '<tr><td>'+esc(new Date(r.at).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}))+'</td><td>'+esc(r.ref)+'</td><td>'+pct(r.acc)+'</td><td>'+r.keyOk+'/'+r.keyAll+'</td><td>'+secT(r.ms)+'</td><td>'+esc(r.err||r.text)+'</td></tr>'; }).join('')||'<tr><td colspan="6" class="st">ยังไม่มีผลทดสอบ</td></tr>'; }
 
-$('scriptSel').innerHTML=SCRIPTS.map(function(s,i){return '<option value="'+i+'">'+(i+1)+'. '+esc(s.t)+'</option>';}).join('');
-function pick(){ var s=SCRIPTS[+$('scriptSel').value]; $('scriptShow').textContent=s.t; $('refText').value=s.t; $('keyText').value=s.k.join('\n'); }
-$('scriptSel').addEventListener('change',pick); pick();
-$('refText').addEventListener('input',function(){ $('scriptShow').textContent=this.value; });
-$('result').innerHTML='<h3>'+esc(NAME)+'</h3><div class="st">รอทดสอบ</div>';
-$('nextBtn').addEventListener('click',function(){ var s=$('scriptSel'); s.value=String((+s.value+1)%SCRIPTS.length); pick(); if(CLOUD){ S.blob=null; $('player').hidden=true; $('runBtn').disabled=true; $('recSt').textContent='ยังไม่มีเสียง'; $('runSt').textContent=''; } else { $('iosText').value=''; $('iosSt').textContent=''; } $('result').innerHTML='<h3>'+esc(NAME)+'</h3><div class="st">รอทดสอบ</div>'; window.scrollTo({top:$('scriptSel').getBoundingClientRect().top+scrollY-80,behavior:'smooth'}); });
+// ── ประโยค ──
+function show(){ var s=SCRIPTS[S.idx]; $('readNo').textContent='อ่านประโยคนี้ · '+(S.idx+1)+' จาก '+SCRIPTS.length; $('readText').textContent=s.t; $('refText').value=s.t; $('keyText').value=s.k.join('\n'); }
+function go(d){ if(S.busy) return; S.idx=(S.idx+d+SCRIPTS.length)%SCRIPTS.length; show(); S.blob=null; $('player').hidden=true; $('resCard').hidden=true; if(!CLOUD){ $('typeText').value=''; } setSt('แตะเพื่อเริ่มพูด แตะอีกครั้งเมื่อพูดจบ'); window.scrollTo({top:0,behavior:'smooth'}); }
+$('prevBtn').addEventListener('click',function(){go(-1);}); $('nextLink').addEventListener('click',function(){go(1);}); $('nextBtn').addEventListener('click',function(){go(1);});
+$('refText').addEventListener('input',function(){ $('readText').textContent=this.value; });
+function setSt(t,bad){ var e=$('micSt'); e.textContent=t; e.style.color=bad?'var(--red)':''; }
+function micOn(on){ $('micBtn').classList.toggle('on',!!on); $('micBtn').setAttribute('aria-label',on?'แตะเพื่อหยุด':'แตะเพื่อเริ่มพูด'); }
+
+// ── API Key ──
+function keyVal(){ return ls(KEYSTORE)||''; }
+function keyUi(){ var has=!!keyVal(); $('keySaved').hidden=!has; $('keyForm').hidden=has; }
+$('keySave').addEventListener('click',function(){ var v=$('apiKey').value.trim(); if(!v){ $('apiKey').focus(); return; } ls(KEYSTORE,v); $('apiKey').value=''; keyUi(); if(S.blob) run(); });
+$('keyChange').addEventListener('click',function(){ $('keySaved').hidden=true; $('keyForm').hidden=false; $('apiKey').focus(); });
+$('keyDel').addEventListener('click',function(){ if(!confirm('ลบ API Key ออกจากเครื่องนี้?')) return; ls(KEYSTORE,null); keyUi(); });
+
+function run(){ var key=keyVal(), tm=terms(); if(!S.blob||S.busy) return; if(!key){ setSt('บันทึก API Key ด้านบนก่อน แล้วระบบจะแกะเสียงให้',true); $('apiKey').focus(); return; }
+  S.busy=true; setSt('กำลังแกะเสียง…'); var st=performance.now();
+  CALL[ID](key,S.blob,S.name,tm).then(function(text){ record(text,performance.now()-st,'',tm.length>0); setSt('เสร็จแล้ว · แตะไมค์เพื่อพูดใหม่ หรือไปประโยคถัดไป'); },function(e){ record('',null,e.message||'แกะเสียงไม่สำเร็จ',tm.length>0); setSt('แกะเสียงไม่สำเร็จ',true); }).then(function(){ S.busy=false; }); }
 
 if(CLOUD){
-  $('iosCard').hidden=true; $('terms').value='เอว, สะโพก, ต้นแขน, ยาวแขน, ต่ำเข่า, ปลายขา, ความยาวขา, เก็บเข้า, ขยายออก, ตัดสั้น, เย็บย้ำกระดุม, UF669-3-P';
-  var setAudio=function(blob,name,dur){ S.blob=blob; S.name=name; S.dur=dur||0; var p=$('player'); if(p.src) URL.revokeObjectURL(p.src); p.src=URL.createObjectURL(blob); p.hidden=false; $('runBtn').disabled=false; $('recSt').textContent='พร้อมแกะเสียง'+(dur?' · '+dur.toFixed(1)+' วินาที':''); };
-  var noMic=function(){ var e=$('recSt'); e.textContent='หน้าต่างนี้ใช้ไมโครโฟนไม่ได้ — เปิดไฟล์นี้ด้วย Chrome หรือ Edge (คลิกขวาที่ไฟล์ → Open with) หรือกดเลือกไฟล์เสียงแทน'; e.style.color='var(--red)'; };
-  if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder)) noMic();
+  $('terms').value='เอว, สะโพก, ต้นแขน, ยาวแขน, ต่ำเข่า, ปลายขา, ความยาวขา, เก็บเข้า, ขยายออก, ตัดสั้น, เย็บย้ำกระดุม, UF669-3-P';
+  if(!TERMS_OK) $('termBox').hidden=true;
+  $('altLine').innerHTML='หรือ <button type="button" class="lnk" id="pickFile">เลือกไฟล์เสียง</button>';
+  $('pickFile').addEventListener('click',function(){ $('fileIn').click(); });
+  var setAudio=function(blob,name,dur){ S.blob=blob; S.name=name; S.dur=dur||0; var p=$('player'); if(p.src) URL.revokeObjectURL(p.src); p.src=URL.createObjectURL(blob); p.hidden=false; run(); };
   var mr=null,chunks=[],t0=0,stream=null;
   var recMime=function(){ var L=['audio/mp4','audio/webm;codecs=opus','audio/webm']; if(!window.MediaRecorder||!MediaRecorder.isTypeSupported) return ''; for(var i=0;i<L.length;i++) if(MediaRecorder.isTypeSupported(L[i])) return L[i]; return ''; };
-  $('recBtn').addEventListener('click',function(){ var b=this; if(mr&&mr.state==='recording'){ mr.stop(); return; }
-    if(!navigator.mediaDevices||!window.MediaRecorder){ noMic(); return; }
+  var canMic=!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder);
+  if(!canMic) setSt('หน้าต่างนี้ใช้ไมโครโฟนไม่ได้ — เปิดลิงก์นี้ใน Safari หรือ Chrome หรือกดเลือกไฟล์เสียงแทน',true);
+  $('micBtn').addEventListener('click',function(){ if(S.busy) return; if(mr&&mr.state==='recording'){ mr.stop(); return; }
+    if(!canMic){ setSt('หน้าต่างนี้ใช้ไมโครโฟนไม่ได้ — เปิดลิงก์นี้ใน Safari หรือ Chrome หรือกดเลือกไฟล์เสียงแทน',true); return; }
     navigator.mediaDevices.getUserMedia({audio:true}).then(function(st){ stream=st; var m=recMime(); mr=m?new MediaRecorder(st,{mimeType:m}):new MediaRecorder(st); chunks=[];
       mr.ondataavailable=function(e){ if(e.data&&e.data.size) chunks.push(e.data); };
-      mr.onstop=function(){ stream.getTracks().forEach(function(x){x.stop();}); b.textContent='อัดเสียง'; b.classList.remove('rec'); b.classList.add('pri'); var type=(mr.mimeType||m||'audio/webm'); setAudio(new Blob(chunks,{type:type}),/mp4/.test(type)?'clip.m4a':'clip.webm',(performance.now()-t0)/1000); };
-      mr.start(); t0=performance.now(); b.textContent='หยุดอัด'; b.classList.remove('pri'); b.classList.add('rec'); $('recSt').textContent='กำลังอัด… อ่านประโยคด้านบน';
-    },function(){ $('recSt').textContent='ไม่ได้รับอนุญาตให้ใช้ไมโครโฟน'; }); });
-  $('fileIn').addEventListener('change',function(){ var f=this.files&&this.files[0]; if(!f) return; var a=new Audio(), u=URL.createObjectURL(f), done=false, fin=function(d){ if(done) return; done=true; URL.revokeObjectURL(u); setAudio(f,f.name,isFinite(d)?d:0); }; a.preload='metadata'; a.onloadedmetadata=function(){fin(a.duration);}; a.onerror=function(){fin(0);}; a.src=u; setTimeout(function(){fin(0);},3000); });
-  $('runBtn').addEventListener('click',function(){ var key=$('apiKey').value.trim(), btn=this, tm=terms(); if(!S.blob) return; if(!key){ $('runSt').textContent='ใส่ API Key ก่อน'; return; }
-    btn.disabled=true; $('runSt').textContent='กำลังแกะเสียง…'; var st=performance.now();
-    CALL[ID](key,S.blob,S.name,tm).then(function(text){ record(text,performance.now()-st,'',tm.length>0); $('runSt').textContent='เสร็จแล้ว'; },function(e){ record('',null,e.message||'แกะเสียงไม่สำเร็จ',tm.length>0); $('runSt').textContent='ไม่สำเร็จ'; }).then(function(){ btn.disabled=false; }); });
+      mr.onstop=function(){ stream.getTracks().forEach(function(x){x.stop();}); micOn(false); var type=(mr.mimeType||m||'audio/webm'); setAudio(new Blob(chunks,{type:type}),/mp4/.test(type)?'clip.m4a':'clip.webm',(performance.now()-t0)/1000); };
+      mr.start(); t0=performance.now(); micOn(true); setSt('กำลังฟัง… อ่านประโยคด้านบน แล้วแตะอีกครั้ง');
+    },function(){ setSt('ไม่ได้รับอนุญาตให้ใช้ไมโครโฟน — กดอนุญาตแล้วลองใหม่',true); }); });
+  $('fileIn').addEventListener('change',function(){ var f=this.files&&this.files[0]; this.value=''; if(!f) return; var a=new Audio(), u=URL.createObjectURL(f), done=false, fin=function(d){ if(done) return; done=true; URL.revokeObjectURL(u); setAudio(f,f.name,isFinite(d)?d:0); }; a.preload='metadata'; a.onloadedmetadata=function(){fin(a.duration);}; a.onerror=function(){fin(0);}; a.src=u; setTimeout(function(){fin(0);},3000); });
 } else {
-  $('keyCard').hidden=true; $('cloudCard').hidden=true; $('stepA').textContent='1'; document.querySelector('#iosCard .n').textContent='2';
-  var SR=window.SpeechRecognition||window.webkitSpeechRecognition, rec=null, iosOn=false, iosFinal='', iosStop=0, iosStart=0;
-  $('iosBtn').addEventListener('click',function(){ var b=this; if(!SR){ $('iosSt').textContent='เบราว์เซอร์นี้ไม่รองรับ ใช้ไมค์บนแป้นพิมพ์แทน'; return; }
-    if(iosOn){ iosStop=performance.now(); rec.stop(); $('iosSt').textContent='กำลังสรุปข้อความ…'; return; }
-    rec=new SR(); rec.lang='th-TH'; rec.continuous=true; rec.interimResults=true; iosFinal='';
-    rec.onstart=function(){ iosOn=true; iosStart=performance.now(); iosStop=0; b.textContent='หยุดฟัง'; b.classList.remove('pri'); b.classList.add('rec'); $('iosSt').textContent='กำลังฟัง… อ่านประโยคด้านบน'; };
-    rec.onresult=function(e){ var it=''; for(var i=e.resultIndex;i<e.results.length;i++){ if(e.results[i].isFinal) iosFinal+=e.results[i][0].transcript+' '; else it+=e.results[i][0].transcript; } $('iosText').value=(iosFinal+it).trim(); };
-    rec.onerror=function(e){ $('iosSt').textContent=e.error==='not-allowed'?'ไม่ได้รับอนุญาต เปิดสิทธิ์ไมโครโฟนและ Siri/Dictation':'ฟังเสียงไม่สำเร็จ ('+e.error+')'; };
-    rec.onend=function(){ var was=iosOn; iosOn=false; b.textContent='เริ่มฟังเสียง'; b.classList.remove('rec'); b.classList.add('pri'); if(!was) return; var t=$('iosText').value.trim(); if(!iosStop) iosStop=performance.now(); S.dur=(iosStop-iosStart)/1000; record(t,performance.now()-iosStop,t?'':'ไม่ได้ยินเสียง',false); if(t) $('iosSt').textContent='เสร็จแล้ว'; };
-    try{ rec.start(); }catch(err){ $('iosSt').textContent='เริ่มฟังไม่ได้'; } });
-  $('iosScore').addEventListener('click',function(){ var t=$('iosText').value.trim(); if(!t){ $('iosSt').textContent='ยังไม่มีข้อความ'; return; } S.dur=0; record(t,null,'',false); $('iosSt').textContent='ให้คะแนนแล้ว'; });
+  $('keyCard').hidden=true; $('termBox').hidden=true;
+  $('altLine').innerHTML='หรือ <button type="button" class="lnk" id="useKb">พูดผ่านไมค์บนแป้นพิมพ์</button>';
+  $('useKb').addEventListener('click',function(){ $('typeBox').hidden=false; $('typeText').focus(); });
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition, rec=null, on=false, fin='', stopAt=0, startAt=0;
+  if(!SR) setSt('เบราว์เซอร์นี้ฟังเสียงเองไม่ได้ — ใช้ Safari บน iPhone/iPad หรือกด "พูดผ่านไมค์บนแป้นพิมพ์"',true);
+  $('micBtn').addEventListener('click',function(){ if(!SR){ $('typeBox').hidden=false; return; }
+    if(on){ stopAt=performance.now(); rec.stop(); setSt('กำลังสรุปข้อความ…'); return; }
+    rec=new SR(); rec.lang='th-TH'; rec.continuous=true; rec.interimResults=true; fin='';
+    rec.onstart=function(){ on=true; startAt=performance.now(); stopAt=0; micOn(true); setSt('กำลังฟัง… อ่านประโยคด้านบน แล้วแตะอีกครั้ง'); };
+    rec.onresult=function(e){ var it=''; for(var i=e.resultIndex;i<e.results.length;i++){ if(e.results[i].isFinal) fin+=e.results[i][0].transcript+' '; else it+=e.results[i][0].transcript; } $('typeText').value=(fin+it).trim(); };
+    rec.onerror=function(e){ setSt(e.error==='not-allowed'?'ไม่ได้รับอนุญาต — เปิดสิทธิ์ไมโครโฟนและ Siri/Dictation':'ฟังเสียงไม่สำเร็จ ('+e.error+')',true); };
+    rec.onend=function(){ var was=on; on=false; micOn(false); if(!was) return; var t=$('typeText').value.trim(); if(!stopAt) stopAt=performance.now(); S.dur=(stopAt-startAt)/1000; record(t,performance.now()-stopAt,t?'':'ไม่ได้ยินเสียง',false); setSt(t?'เสร็จแล้ว · ไปประโยคถัดไปได้':'ไม่ได้ยินเสียง ลองใหม่',!t); };
+    try{ rec.start(); }catch(err){ setSt('เริ่มฟังไม่ได้',true); } });
+  $('typeScore').addEventListener('click',function(){ var t=$('typeText').value.trim(); if(!t){ $('typeText').focus(); return; } S.dur=0; record(t,null,'',false); });
 }
 $('clearBtn').addEventListener('click',function(){ if(!confirm('ล้างผลของ '+NAME+'?')) return; putRuns(allRuns().filter(function(r){return r.tool!==ID;})); renderSum(); });
 $('csvBtn').addEventListener('click',function(){ var q=function(v){return '"'+String(v==null?'':v).replace(/"/g,'""')+'"';}, rows=[['เวลา','เครื่องมือ','ข้อความที่ถูกต้อง','ข้อความที่ได้','ความถูกต้อง','คำสำคัญถูก','คำสำคัญทั้งหมด','เวลาแกะ(วินาที)','ความยาวเสียง(วินาที)','ใส่คำเฉพาะ','ข้อผิดพลาด'].map(q).join(',')];
   myRuns().forEach(function(r){ rows.push([r.at,NAME,r.ref,r.text,r.acc==null?'':r.acc.toFixed(3),r.keyOk,r.keyAll,r.ms==null?'':(r.ms/1000).toFixed(2),r.sec?r.sec.toFixed(1):'',r.terms?'ใช่':'ไม่',r.err].map(q).join(',')); });
   var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['﻿'+rows.join('\r\n')],{type:'text/csv;charset=utf-8'})); a.download='stt-poc-'+ID+'.csv'; document.body.appendChild(a); a.click(); a.remove(); });
-renderSum();
+show(); keyUi(); renderSum();
+window.__poc={norm:norm,accuracy:accuracy,toWav:toWav};
 })();
 </script>
 </body>
