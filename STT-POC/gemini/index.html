@@ -125,6 +125,40 @@ details.more summary{cursor:pointer;font-weight:500;font-size:15px;min-height:28
 .notebox{border:1px solid var(--rule2);border-radius:10px;background:#fff;padding:9px 11px;font-size:15px;margin:6px 0}
 .notebox .k{font-size:12px;color:var(--t2)}
 details.more[open] summary{margin-bottom:6px}
+.narrow{max-width:640px}
+.keyok{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;background:var(--greenbg);color:var(--green);border-radius:10px;padding:10px 12px;font-size:14px}
+.krow{display:flex;gap:8px}.krow input{flex:1;min-width:0}
+.lnk{border:0;background:none;padding:4px 2px;font:500 14px Prompt,sans-serif;color:var(--goldink);cursor:pointer;text-decoration:underline}
+.read{text-align:center}
+.rn{font-size:13px;color:var(--t2)}
+.rq{font-size:26px;font-weight:500;line-height:1.45;margin:8px 0 6px}
+.rnav{display:flex;justify-content:space-between}
+.center{text-align:center}
+.mic{width:96px;height:96px;border-radius:50%;border:0;background:var(--red);color:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:box-shadow .2s}
+.mic svg{width:42px;height:42px;fill:currentColor}
+.mic.on{box-shadow:0 0 0 10px rgba(181,52,42,.18);animation:pulse 1.2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 16px rgba(181,52,42,.08)}}
+.st.big{font-size:15px;color:var(--ink);margin-top:10px}
+#altLine{margin-top:4px}
+#typeBox{margin-top:10px;text-align:left}
+#player{margin:10px auto 0;display:block}
+.out{font-size:18px;font-weight:500;margin:4px 0 8px;overflow-wrap:anywhere}
+.err{font-size:14px;color:var(--red);margin-bottom:8px;overflow-wrap:anywhere}
+.met{margin:10px 0 12px}
+.btn.wide{width:100%}
+details.more summary{cursor:pointer;font-weight:500;font-size:15px;min-height:28px}
+.ttabs{display:flex;gap:4px;background:#e4decd;border-radius:999px;padding:4px;margin-bottom:12px}
+.ttabs button{flex:1;min-height:44px;border:0;border-radius:999px;background:transparent;font:500 15px Prompt,sans-serif;color:var(--t2);cursor:pointer}
+.ttabs button.on{background:#fff;color:var(--ink)}
+.rows{border:1px solid var(--rule2);border-radius:10px;overflow:hidden;margin:6px 0 4px;background:#fff}
+.mr{display:flex;justify-content:space-between;gap:8px;padding:8px 11px;border-bottom:1px solid var(--rule2);font-size:14px}
+.mr:last-child{border-bottom:0}
+.mr .v{color:var(--t3);text-align:right}
+.mr.ok{background:var(--greenbg)}.mr.ok .v{color:var(--green);font-weight:500}
+.mr.bad{background:var(--redbg)}.mr.bad .v{color:var(--red);font-weight:500}
+.notebox{border:1px solid var(--rule2);border-radius:10px;background:#fff;padding:9px 11px;font-size:15px;margin:6px 0}
+.notebox .k{font-size:12px;color:var(--t2)}
+details.more[open] summary{margin-bottom:6px}
 </style>
 </head>
 <body>
@@ -134,11 +168,11 @@ details.more[open] summary{margin-bottom:6px}
   <p class="lead">แบบฟรีทดสอบได้ · แบบเสียเงินประมาณ $0.30 (10.19 บาท) ต่อชั่วโมงเสียง</p>
 
   <div class="card" id="keyCard">
-    <div id="keySaved" class="keyok" hidden><span>✓ บันทึก API Key ไว้ในเครื่องนี้แล้ว</span><span><button type="button" class="lnk" id="keyChange">เปลี่ยน</button> · <button type="button" class="lnk" id="keyDel">ลบ</button></span></div>
+    <div id="keySaved" class="keyok" hidden><span id="keyOkText">✓ บันทึก API Key ไว้ในระบบแล้ว ใช้ได้ทุกเครื่อง</span><span><button type="button" class="lnk" id="keyDel">ออกจากระบบ</button></span></div>
     <div id="keyForm">
-      <label class="f" for="apiKey">วาง API Key (ทำครั้งเดียวต่อเครื่อง)</label>
-      <div class="krow"><input id="apiKey" type="password" autocomplete="off" spellcheck="false"><button type="button" class="btn pri" id="keySave">บันทึก</button></div>
-      <p class="hint">ขอ Key ได้ที่ <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a> · แบบฟรี Google อาจนำเสียงไปปรับปรุงระบบ ใช้แค่ประโยคตัวอย่าง</p>
+      <label class="f" for="apiKey">ใส่ PIN (ครั้งเดียวต่อเครื่อง ใช้ได้ทุกหน้า)</label>
+      <div class="krow"><input id="apiKey" type="password" inputmode="numeric" autocomplete="off" spellcheck="false"><button type="button" class="btn pri" id="keySave">เข้าใช้</button></div>
+      <p class="hint" id="pinHint">PIN คือค่า STT_PIN ที่ตั้งไว้ใน Cloudflare · API Key ของทุกเจ้าเก็บอยู่ที่ Cloudflare ไม่อยู่ในเครื่องนี้</p>
     </div>
   </div>
 
@@ -198,7 +232,7 @@ details.more[open] summary{margin-bottom:6px}
 <script>
 (function(){
 'use strict';
-var ID='ge', NAME='Gemini 3.5 Transcribe', PER_HOUR=0, TERM_HOUR=0, CLOUD=ID!=='ios', TERMS_OK=(ID==='el'||ID==='ge'), USD_THB=33.97, STORE='sttPocRunsV1', KEYSTORE='sttPocKey_'+ID;
+var ID='ge', NAME='Gemini 3.5 Transcribe', PER_HOUR=0, TERM_HOUR=0, CLOUD=ID!=='ios', TERMS_OK=(ID==='el'||ID==='ge'), USD_THB=33.97, STORE='sttPocRunsV1', KEYSTORE='sttPocPin', PROXY='https://stt-poc.ba-bd5.workers.dev';
 var $=function(id){return document.getElementById(id);};
 var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
 var SETS={
@@ -327,7 +361,7 @@ function measureScore(type,ref,hyp){ var exp=parse(ref,type).out, got=parse(hyp,
 function terms(){ if(!TERMS_OK||!$('useTerms').checked) return []; return $('terms').value.split(/[,\n]/).map(function(x){return x.trim();}).filter(Boolean).slice(0,100); }
 function fetchT(url,opt){ var ac=new AbortController(),t=setTimeout(function(){ac.abort();},120000); opt.signal=ac.signal;
   return fetch(url,opt).then(function(r){ return r.text().then(function(x){ clearTimeout(t); var j=null; try{ j=JSON.parse(x); }catch(e){}
-    if(!r.ok){ var m=j&&(j.error&&(j.error.message||j.error)||j.detail&&(j.detail.message||j.detail)||j.message); if(r.status===401||r.status===403) m='API Key ไม่ถูกต้องหรือไม่มีสิทธิ์'+(m?' ('+(typeof m==='string'?m:JSON.stringify(m))+')':''); if(r.status===429) m='ใช้ถี่เกินไป รอสักครู่แล้วลองใหม่'; throw new Error('HTTP '+r.status+(m?' · '+(typeof m==='string'?m:JSON.stringify(m)):'')); }
+    if(!r.ok){ var m=j&&(j.error&&(j.error.message||j.error)||j.detail&&(j.detail.message||j.detail)||j.message); if(r.status===401){ ls(KEYSTORE,null); setTimeout(keyUi,0); m='PIN ไม่ถูกต้อง — ใส่ PIN ใหม่ด้านบน'; } if(r.status===429) m='ใช้ถี่เกินไป รอสักครู่แล้วลองใหม่'; throw new Error('HTTP '+r.status+(m?' · '+(typeof m==='string'?m:JSON.stringify(m)):'')); }
     return j; }); },function(e){ clearTimeout(t); throw new Error(e&&e.name==='AbortError'?'รอเกิน 2 นาที':'เชื่อมต่อไม่ได้ (เช็กอินเทอร์เน็ต)'); }); }
 function b64(blob){ return new Promise(function(ok,no){ var r=new FileReader(); r.onload=function(){ok(String(r.result).split(',')[1]||'');}; r.onerror=function(){no(new Error('อ่านไฟล์เสียงไม่ได้'));}; r.readAsDataURL(blob); }); }
 function geMime(t){ t=String(t||'').split(';')[0].toLowerCase(); if(t==='audio/mp4'||t==='audio/x-m4a'||t==='video/mp4') return 'audio/m4a'; return t||'audio/m4a'; }
@@ -342,12 +376,12 @@ function toWav(blob){ return blob.arrayBuffer().then(function(buf){ var AC=windo
     for(var i=0;i<n;i++){ var s=Math.max(-1,Math.min(1,d[i])); v.setInt16(44+i*2,s<0?s*0x8000:s*0x7FFF,true); }
     return new Blob([v],{type:'audio/wav'}); }); }); }
 var CALL={
-  el:function(key,blob,name,tm){ var f=new FormData(); f.append('file',blob,name); f.append('model_id','scribe_v3'); f.append('language_code','tha'); f.append('tag_audio_events','false'); f.append('timestamps_granularity','none'); tm.forEach(function(x){f.append('keyterms',x);});
-    return fetchT('https://api.elevenlabs.io/v1/speech-to-text',{method:'POST',headers:{'xi-api-key':key},body:f}).then(function(j){return String(j&&j.text||'');}); },
-  ge:function(key,blob,name,tm){ return b64(blob).then(function(d){ var tc={language_codes:['th-TH'],mode:{type:'verbatim'}}; if(tm.length) tc.custom_vocabulary=tm;
-    return fetchT('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'x-goog-api-key':key,'Content-Type':'application/json','Api-Revision':'2026-05-20'},body:JSON.stringify({model:'models/gemini-3.5-transcribe',input:[{type:'audio',data:d,mime_type:geMime(blob.type)}],generation_config:{transcription_config:tc}})}).then(geText); }); },
-  ty:function(key,blob){ return toWav(blob).then(function(wav){ var f=new FormData(); f.append('file',wav,'clip.wav'); f.append('model','typhoon-asr-realtime');
-    return fetchT('https://api.opentyphoon.ai/v1/audio/transcriptions',{method:'POST',headers:{Authorization:'Bearer '+key},body:f}).then(function(j){return String(j&&j.text||'');}); }); }
+  el:function(pin,blob,name,tm){ var f=new FormData(); f.append('file',blob,name); f.append('model_id','scribe_v3'); f.append('language_code','tha'); f.append('tag_audio_events','false'); f.append('timestamps_granularity','none'); tm.forEach(function(x){f.append('keyterms',x);});
+    return fetchT(PROXY+'/stt/el',{method:'POST',headers:{'x-stt-pin':pin},body:f}).then(function(j){return String(j&&j.text||'');}); },
+  ge:function(pin,blob,name,tm){ return b64(blob).then(function(d){ var tc={language_codes:['th-TH'],mode:{type:'verbatim'}}; if(tm.length) tc.custom_vocabulary=tm;
+    return fetchT(PROXY+'/stt/ge',{method:'POST',headers:{'x-stt-pin':pin,'Content-Type':'application/json'},body:JSON.stringify({model:'models/gemini-3.5-transcribe',input:[{type:'audio',data:d,mime_type:geMime(blob.type)}],generation_config:{transcription_config:tc}})}).then(geText); }); },
+  ty:function(pin,blob){ return toWav(blob).then(function(wav){ var f=new FormData(); f.append('file',wav,'clip.wav'); f.append('model','typhoon-asr-realtime');
+    return fetchT(PROXY+'/stt/ty',{method:'POST',headers:{'x-stt-pin':pin},body:f}).then(function(j){return String(j&&j.text||'');}); }); }
 };
 
 // ── ผลและสรุป ──
@@ -380,14 +414,18 @@ $('refText').addEventListener('input',function(){ $('readText').textContent=this
 function setSt(t,bad){ var e=$('micSt'); e.textContent=t; e.style.color=bad?'var(--red)':''; }
 function micOn(on){ $('micBtn').classList.toggle('on',!!on); $('micBtn').setAttribute('aria-label',on?'แตะเพื่อหยุด':'แตะเพื่อเริ่มพูด'); }
 
-// ── API Key ──
+// ── PIN (Key อยู่ใน Cloudflare) ──
 function keyVal(){ return ls(KEYSTORE)||''; }
 function keyUi(){ var has=!!keyVal(); $('keySaved').hidden=!has; $('keyForm').hidden=has; }
-$('keySave').addEventListener('click',function(){ var v=$('apiKey').value.trim(); if(!v){ $('apiKey').focus(); return; } ls(KEYSTORE,v); $('apiKey').value=''; keyUi(); if(S.blob) run(); });
-$('keyChange').addEventListener('click',function(){ $('keySaved').hidden=true; $('keyForm').hidden=false; $('apiKey').focus(); });
-$('keyDel').addEventListener('click',function(){ if(!confirm('ลบ API Key ออกจากเครื่องนี้?')) return; ls(KEYSTORE,null); keyUi(); });
+function checkPin(pin){ return fetch(PROXY+'/status',{headers:{'x-stt-pin':pin}}).then(function(r){ return r.json().catch(function(){return {};}).then(function(j){ if(r.status===401) throw new Error('PIN ไม่ถูกต้อง'); if(!r.ok) throw new Error((j.error&&j.error.message)||('ระบบตอบ '+r.status)); return j; }); },function(){ throw new Error('ติดต่อระบบไม่ได้ (เช็กอินเทอร์เน็ต)'); }); }
+function toolWarn(j){ if(CLOUD&&j&&j.tools&&j.tools[ID]===false){ $('keyOkText').textContent='✓ เข้าระบบแล้ว · แต่ยังไม่ได้ใส่ Key ของ '+NAME+' ใน Cloudflare'; $('keySaved').style.background='var(--redbg)'; $('keySaved').style.color='var(--red)'; } }
+$('keySave').addEventListener('click',function(){ var v=$('apiKey').value.trim(), b=this; if(!v){ $('apiKey').focus(); return; } b.disabled=true; $('pinHint').textContent='กำลังตรวจ PIN…';
+  checkPin(v).then(function(j){ ls(KEYSTORE,v); $('apiKey').value=''; keyUi(); toolWarn(j); if(S.blob) run(); },function(e){ $('pinHint').textContent=e.message; $('pinHint').style.color='var(--red)'; }).then(function(){ b.disabled=false; }); });
+$('apiKey').addEventListener('keydown',function(e){ if(e.key==='Enter') $('keySave').click(); });
+$('keyDel').addEventListener('click',function(){ if(!confirm('ออกจากระบบในเครื่องนี้? (ต้องใส่ PIN ใหม่)')) return; ls(KEYSTORE,null); keyUi(); });
+if(keyVal()&&CLOUD) checkPin(keyVal()).then(toolWarn,function(e){ if(/PIN/.test(e.message)){ ls(KEYSTORE,null); keyUi(); } });
 
-function run(){ var key=keyVal(), tm=terms(); if(!S.blob||S.busy) return; if(!key){ setSt('บันทึก API Key ด้านบนก่อน แล้วระบบจะแกะเสียงให้',true); $('apiKey').focus(); return; }
+function run(){ var key=keyVal(), tm=terms(); if(!S.blob||S.busy) return; if(!key){ setSt('ใส่ PIN ด้านบนก่อน แล้วระบบจะแกะเสียงให้',true); $('apiKey').focus(); return; }
   S.busy=true; setSt('กำลังแกะเสียง…'); var st=performance.now();
   CALL[ID](key,S.blob,S.name,tm).then(function(text){ record(text,performance.now()-st,'',tm.length>0); setSt('เสร็จแล้ว · แตะไมค์เพื่อพูดใหม่ หรือไปประโยคถัดไป'); },function(e){ record('',null,e.message||'แกะเสียงไม่สำเร็จ',tm.length>0); setSt('แกะเสียงไม่สำเร็จ',true); }).then(function(){ S.busy=false; }); }
 
