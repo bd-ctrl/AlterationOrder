@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>POC iOS (Apple)</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#232220;--t2:#6b6658;--t3:#8f897a;--gold:#C9A24B;--goldink:#8a6a24;--goldbg:#f4ecd9;--paper:#fffdf6;--bg:#efeadd;--rule:#ddd6c4;--rule2:#ece6d6;--red:#b5342a;--redbg:#fbecea;--green:#3d6b30;--greenbg:#e9f2e3}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.6 Prompt,sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:24px;font-weight:600;margin:0}
+.lead{margin:2px 0 14px;color:var(--t2);font-size:14px}
+.tabs{display:flex;gap:4px;background:#e4decd;border-radius:999px;padding:4px;margin-bottom:14px}
+.tabs button{flex:1;min-height:42px;border:0;border-radius:999px;background:transparent;font:500 14px Prompt,sans-serif;color:var(--t2);cursor:pointer;padding:0 8px}
+.tabs button.on{background:#fff;color:var(--ink)}
+.card{background:var(--paper);border:1px solid var(--rule2);border-radius:14px;padding:16px;margin-bottom:12px}
+.card h2{font-size:16px;font-weight:600;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;font:600 13px Barlow,sans-serif;flex:0 0 auto}
+.hint{font-size:13px;color:var(--t2);margin:4px 0 8px}
+.warn{font-size:13px;color:var(--red);background:var(--redbg);border-radius:10px;padding:8px 11px;margin:8px 0}
+label.f{display:block;font-size:13px;font-weight:500;margin:8px 0 3px}
+input[type=password],input[type=text],select,textarea{width:100%;border:1px solid var(--rule);border-radius:10px;background:#fff;padding:9px 11px;font:400 15px Prompt,sans-serif;color:var(--ink)}
+textarea{resize:vertical;min-height:64px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:0 12px}
+.script{font-size:21px;font-weight:500;line-height:1.5;background:var(--goldbg);border-radius:12px;padding:14px;margin:8px 0}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px}
+.btn{min-height:44px;border:1px solid var(--rule);border-radius:999px;background:#fff;color:var(--ink);padding:0 18px;font:500 14px Prompt,sans-serif;cursor:pointer}
+.btn.pri{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.rec{background:var(--red);border-color:var(--red);color:#fff}
+.btn:disabled{opacity:.45;cursor:default}
+.ck{display:flex;align-items:center;gap:8px;font-size:14px;margin-top:8px;cursor:pointer}
+.ck input{width:20px;height:20px;accent-color:var(--goldink)}
+.st{font-size:13px;color:var(--t2)}
+audio{width:100%;max-width:420px;height:40px}
+.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(255px,100%),1fr));gap:10px}
+.tool{border:1px solid var(--rule);border-radius:12px;background:#fff;padding:12px;display:flex;flex-direction:column;gap:7px;min-width:0}
+.tool h3{font-size:15px;font-weight:600;margin:0}
+.tool .out{font-size:14px;min-height:44px;overflow-wrap:anywhere}
+.tool .err{font-size:13px;color:var(--red);overflow-wrap:anywhere}
+.met{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;border-top:1px solid var(--rule2);padding-top:7px}
+.met div{font-size:11.5px;color:var(--t2)}
+.met b{display:block;font:600 17px Barlow,sans-serif;color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{font-size:12px;border-radius:999px;padding:1px 8px;background:var(--greenbg);color:var(--green)}
+.chip.no{background:var(--redbg);color:var(--red)}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--rule2);border-radius:12px;background:#fff}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:13.5px}
+th,td{padding:9px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--rule2)}
+thead th{background:var(--goldbg);font-weight:600}
+tbody th{font-weight:500;background:#fbf8ee;width:128px}
+tr:last-child th,tr:last-child td{border-bottom:0}
+td ul{margin:0;padding-left:16px}
+.best{color:var(--green);font-weight:600}
+a{color:var(--goldink)}
+.src{font-size:12.5px;color:var(--t2);margin-top:10px}
+[hidden]{display:none!important}
+.back{display:inline-block;font-size:14px;color:var(--goldink);text-decoration:none;margin-bottom:8px;min-height:32px}
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:8px}
+.sum div{background:#fff;border:1px solid var(--rule2);border-radius:10px;padding:8px 10px;font-size:12.5px;color:var(--t2)}
+.sum b{display:block;font:600 16px Prompt,sans-serif;color:var(--ink)}
+.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:10px}
+.menu a{display:flex;flex-direction:column;gap:3px;background:var(--paper);border:1px solid var(--rule);border-radius:14px;padding:14px;text-decoration:none;color:var(--ink)}
+.menu a:hover{border-color:var(--gold)}
+.menu .p{font:500 12.5px Prompt,sans-serif;color:var(--goldink)}
+.menu b{font-size:17px;font-weight:600}
+.menu span{font-size:13px;color:var(--t2)}
+.menu .r{margin-top:6px;padding-top:6px;border-top:1px solid var(--rule2);color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← กลับหน้าเมนู</a>
+  <h1>iOS (Apple)</h1>
+  <p class="lead">ฟรี · ไม่ต้องใช้ API Key · ใช้บน iPhone/iPad ใน Safari</p>
+
+  <div class="card" id="keyCard">
+    <h2><span class="n">1</span>ใส่ API Key</h2>
+    <p class="hint">สร้าง Key ได้ที่ <a href="#" target="_blank" rel="noopener">-</a> · รหัสหายเมื่อรีเฟรช ไม่ถูกบันทึกในเครื่อง</p>
+    <label class="f" for="apiKey">API Key</label>
+    <input id="apiKey" type="password" autocomplete="off" spellcheck="false">
+    <label class="ck"><input type="checkbox" id="useTerms" checked>ใส่คำเฉพาะให้ระบบช่วยจำ</label>
+    <textarea id="terms" rows="2" aria-label="คำเฉพาะ คั่นด้วยจุลภาค"></textarea>
+  </div>
+
+  <div class="card">
+    <h2><span class="n" id="stepA">2</span>เลือกประโยค</h2>
+    <label class="f" for="scriptSel">ประโยคทดสอบ</label>
+    <select id="scriptSel"></select>
+    <div class="script" id="scriptShow"></div>
+    <label class="f" for="refText">ข้อความที่ถูกต้อง (แก้ได้ถ้าพูดเอง)</label>
+    <textarea id="refText" rows="2"></textarea>
+    <label class="f" for="keyText">คำสำคัญที่ต้องถูก (บรรทัดละคำ · คำที่ถือว่าถูกเหมือนกันคั่นด้วย |)</label>
+    <textarea id="keyText" rows="3"></textarea>
+  </div>
+
+  <div class="card" id="cloudCard">
+    <h2><span class="n">3</span>อัดเสียงแล้วแกะเสียง</h2>
+    <div class="row" style="margin-top:0">
+      <button type="button" class="btn pri" id="recBtn">อัดเสียง</button>
+      <label class="btn" style="display:inline-flex;align-items:center">เลือกไฟล์เสียง<input type="file" id="fileIn" accept="audio/*,video/mp4,.m4a,.mp3,.wav,.webm,.ogg" hidden></label>
+      <span class="st" id="recSt">ยังไม่มีเสียง</span>
+    </div>
+    <audio id="player" controls hidden></audio>
+    <div class="row"><button type="button" class="btn pri" id="runBtn" disabled>แกะเสียง</button><span class="st" id="runSt"></span></div>
+  </div>
+
+  <div class="card" id="iosCard">
+    <h2><span class="n">2</span>ฟังเสียงด้วย iOS</h2>
+    <p class="hint">เปิดหน้านี้ใน Safari บน iPhone/iPad ผ่านลิงก์ https เท่านั้น ใช้ในแอป Lark ไม่ได้ และต้องเปิด Siri/Dictation ไว้</p>
+    <div class="row"><button type="button" class="btn pri" id="iosBtn">เริ่มฟังเสียง</button><span class="st" id="iosSt"></span></div>
+    <label class="f" for="iosText">หรือแตะช่องนี้ แล้วกดไมค์บนแป้นพิมพ์เพื่อพูด</label>
+    <textarea id="iosText" rows="2"></textarea>
+    <div class="row"><button type="button" class="btn" id="iosScore">ให้คะแนนข้อความนี้</button></div>
+  </div>
+
+  <div class="card">
+    <h2>ผลครั้งล่าสุด</h2>
+    <div class="tool" id="result"></div>
+    <div class="row"><button type="button" class="btn" id="nextBtn">ไปประโยคถัดไป</button></div>
+  </div>
+
+  <div class="card">
+    <h2>สรุปผลของเครื่องมือนี้</h2>
+    <div class="sum" id="sum"></div>
+    <div class="tw" style="margin-top:10px"><table><thead><tr><th>เวลา</th><th>ประโยค</th><th>ถูกต้อง</th><th>คำสำคัญ</th><th>เวลาแกะ</th><th>ข้อความที่ได้</th></tr></thead><tbody id="runBody"></tbody></table></div>
+    <div class="row"><button type="button" class="btn" id="csvBtn">ดาวน์โหลด CSV</button><button type="button" class="btn" id="clearBtn">ล้างผลของเครื่องมือนี้</button></div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var ID='ios', NAME='iOS (Apple)', PER_HOUR=0, TERM_HOUR=0, CLOUD=ID!=='ios', USD_THB=33.97, STORE='sttPocRunsV1';
+var $=function(id){return document.getElementById(id);};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
+var SCRIPTS=[
+  {t:'เอวเก็บเข้า 1 นิ้วครึ่ง',k:['เอว','เก็บเข้า','1.5นิ้ว']},
+  {t:'สะโพกขยายออก 1 นิ้ว ความยาวขาตัดสั้น 2 นิ้ว',k:['สะโพก','ขยายออก','1นิ้ว','ความยาวขา','ตัดสั้น','2นิ้ว']},
+  {t:'อกเก็บเข้า 1 นิ้ว เอวเก็บเข้า 1 นิ้ว สะโพกเก็บเข้า 1 นิ้ว',k:['อกเก็บเข้า1นิ้ว','เอวเก็บเข้า1นิ้ว','สะโพกเก็บเข้า1นิ้ว']},
+  {t:'ต้นแขนเก็บเข้าครึ่งนิ้ว ยาวแขนตัดสั้น 1 นิ้วครึ่ง',k:['ต้นแขน','เก็บเข้า','0.5นิ้ว','ยาวแขน','ตัดสั้น','1.5นิ้ว']},
+  {t:'ปลายขาเก็บเข้า 1 นิ้ว ต่ำเข่าเก็บเข้าครึ่งนิ้ว',k:['ปลายขา','1นิ้ว','ต่ำเข่า','0.5นิ้ว']},
+  {t:'รหัสสินค้า UF669-3-P ไซส์ 36',k:['UF669-3-P|ยูเอฟ669-3-P|ยูเอฟ669-3-พี','ไซส์36']},
+  {t:'เย็บย้ำกระดุม นัดรับวันศุกร์ที่ 21 พฤศจิกายน งานด่วน',k:['เย็บย้ำกระดุม','วันศุกร์ที่21','พฤศจิกายน','งานด่วน']},
+  {t:'ลูกค้าบอกว่าไหล่แน่นนิดหน่อย ขอขยายอก 1 นิ้ว แล้วเอาเอวเข้าอีกครึ่งนิ้ว',k:['ไหล่','ขยายอก1นิ้ว','เอว','0.5นิ้ว']}
+];
+var S={blob:null,name:'',dur:0};
+function allRuns(){ try{ return JSON.parse(localStorage.getItem(STORE)||'[]')||[]; }catch(e){ return S.mem||(S.mem=[]); } }
+function putRuns(a){ S.mem=a; try{ localStorage.setItem(STORE,JSON.stringify(a.slice(-400))); }catch(e){} }
+function myRuns(){ return allRuns().filter(function(r){return r.tool===ID;}); }
+
+var DIG={'หนึ่ง':1,'เอ็ด':1,'สอง':2,'ยี่':2,'สาม':3,'สี่':4,'ห้า':5,'หก':6,'เจ็ด':7,'แปด':8,'เก้า':9};
+function norm(s){
+  s=String(s||'').normalize('NFC').toLowerCase().replace(/[๐-๙]/g,function(c){return String(c.charCodeAt(0)-0x0E50);}).replace(/\s+/g,'');
+  s=s.replace(/(หนึ่ง|สอง|ยี่|สาม|สี่|ห้า|หก|เจ็ด|แปด|เก้า)?สิบ(หนึ่ง|เอ็ด|สอง|สาม|สี่|ห้า|หก|เจ็ด|แปด|เก้า)?/g,function(m,a,b){return String((a?DIG[a]:1)*10+(b?DIG[b]:0));});
+  s=s.replace(/หนึ่ง|สอง|สาม|สี่|ห้า|หก|เจ็ด|แปด|เก้า/g,function(m){return String(DIG[m]);});
+  s=s.replace(/(\d)จุด(\d)/g,'$1.$2').replace(/(\d+)นิ้วครึ่ง/g,'$1.5นิ้ว').replace(/ครึ่งนิ้ว/g,'0.5นิ้ว');
+  return s.replace(/[^\p{L}\p{M}\p{N}.]/gu,'').replace(/\.(?!\d)/g,'');
+}
+function lev(a,b){ a=Array.from(a); b=Array.from(b); var p=[],i,j; for(j=0;j<=b.length;j++)p[j]=j;
+  for(i=1;i<=a.length;i++){ var c=[i]; for(j=1;j<=b.length;j++) c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1)); p=c; } return p[b.length]; }
+function accuracy(ref,hyp){ var r=norm(ref),h=norm(hyp); if(!r) return null; return Math.max(0,1-lev(r,h)/Array.from(r).length); }
+function keyLines(){ return $('keyText').value.split('\n').map(function(x){return x.trim();}).filter(Boolean); }
+function keyHits(keys,hyp){ var h=norm(hyp); return keys.map(function(k){ return {k:k.split('|')[0],ok:k.split('|').some(function(a){return h.indexOf(norm(a))>=0;})}; }); }
+
+function terms(){ if(!$('useTerms').checked) return []; return $('terms').value.split(/[,\n]/).map(function(x){return x.trim();}).filter(Boolean).slice(0,100); }
+function fetchT(url,opt){ var ac=new AbortController(),t=setTimeout(function(){ac.abort();},120000); opt.signal=ac.signal;
+  return fetch(url,opt).then(function(r){ return r.text().then(function(x){ clearTimeout(t); var j=null; try{ j=JSON.parse(x); }catch(e){}
+    if(!r.ok){ var m=j&&(j.error&&(j.error.message||j.error)||j.detail&&(j.detail.message||j.detail)||j.message); throw new Error('HTTP '+r.status+(m?' · '+(typeof m==='string'?m:JSON.stringify(m)):'')); }
+    return j; }); },function(e){ clearTimeout(t); throw new Error(e&&e.name==='AbortError'?'รอเกิน 2 นาที':'เชื่อมต่อไม่ได้'); }); }
+function b64(blob){ return new Promise(function(ok,no){ var r=new FileReader(); r.onload=function(){ok(String(r.result).split(',')[1]||'');}; r.onerror=function(){no(new Error('อ่านไฟล์เสียงไม่ได้'));}; r.readAsDataURL(blob); }); }
+function geMime(t){ t=String(t||'').split(';')[0].toLowerCase(); if(t==='audio/mp4'||t==='audio/x-m4a'||t==='video/mp4') return 'audio/m4a'; return t||'audio/m4a'; }
+function geText(j){ var out=[]; ((j&&j.steps)||[]).forEach(function(s){ ((s&&s.content)||[]).forEach(function(c){ if(c&&typeof c.text==='string') out.push(c.text); }); }); return out.join(' ').trim()||String(j&&j.output_text||''); }
+var CALL={
+  el:function(key,blob,name,tm){ var f=new FormData(); f.append('file',blob,name); f.append('model_id','scribe_v3'); f.append('language_code','tha'); f.append('tag_audio_events','false'); f.append('timestamps_granularity','none'); tm.forEach(function(x){f.append('keyterms',x);});
+    return fetchT('https://api.elevenlabs.io/v1/speech-to-text',{method:'POST',headers:{'xi-api-key':key},body:f}).then(function(j){return String(j&&j.text||'');}); },
+  oa:function(key,blob,name,tm){ if(blob.size>25*1048576) return Promise.reject(new Error('ไฟล์เกิน 25MB')); var f=new FormData(); f.append('file',blob,name); f.append('model','gpt-transcribe'); f.append('languages[]','th'); tm.forEach(function(x){f.append('keywords[]',x);});
+    return fetchT('https://api.openai.com/v1/audio/transcriptions',{method:'POST',headers:{Authorization:'Bearer '+key},body:f}).then(function(j){return String(j&&j.text||'');}); },
+  ge:function(key,blob,name,tm){ return b64(blob).then(function(d){ var tc={language_codes:['th-TH'],mode:{type:'verbatim'}}; if(tm.length) tc.custom_vocabulary=tm;
+    return fetchT('https://generativelanguage.googleapis.com/v1beta/interactions',{method:'POST',headers:{'x-goog-api-key':key,'Content-Type':'application/json','Api-Revision':'2026-05-20'},body:JSON.stringify({model:'models/gemini-3.5-transcribe',input:[{type:'audio',data:d,mime_type:geMime(blob.type)}],generation_config:{transcription_config:tc}})}).then(geText); }); }
+};
+
+function pct(x){ return x==null?'—':Math.round(x*100)+'%'; }
+function secT(ms){ return ms==null?'—':(ms/1000).toFixed(1)+' วิ'; }
+function money(u){ return '$'+u.toFixed(u<0.01?4:3)+' ('+(u*USD_THB).toFixed(2)+' บาท)'; }
+function record(text,ms,err,withTerms){ var ref=$('refText').value.trim(), hits=err?[]:keyHits(keyLines(),text);
+  var run={at:new Date().toISOString(),tool:ID,ref:ref,text:text||'',acc:err?null:accuracy(ref,text),keyOk:hits.filter(function(h){return h.ok;}).length,keyAll:hits.length,ms:ms,sec:S.dur||0,terms:!!withTerms,err:err||''};
+  var a=allRuns(); a.push(run); putRuns(a); renderSum(); showResult(run,hits); }
+function showResult(r,hits){ var h='<h3>'+esc(NAME)+'</h3>';
+  if(r.err) h+='<div class="err">'+esc(r.err)+'</div>';
+  else h+='<div class="out">'+(esc(r.text)||'<span class="st">ไม่มีข้อความ</span>')+'</div><div class="chips">'+hits.map(function(x){return '<span class="chip'+(x.ok?'':' no')+'">'+(x.ok?'✓ ':'✗ ')+esc(x.k)+'</span>';}).join('')+'</div><div class="met"><div><b>'+pct(r.acc)+'</b>ถูกต้อง</div><div><b>'+r.keyOk+'/'+r.keyAll+'</b>คำสำคัญ</div><div><b>'+secT(r.ms)+'</b>เวลาแกะ</div></div>';
+  $('result').innerHTML=h; }
+function median(a){ if(!a.length) return null; a=a.slice().sort(function(x,y){return x-y;}); var m=a.length>>1; return a.length%2?a[m]:(a[m-1]+a[m])/2; }
+function mean(a){ return a.length?a.reduce(function(x,y){return x+y;},0)/a.length:null; }
+function renderSum(){ var all=myRuns(), ok=all.filter(function(r){return !r.err;}), kA=ok.reduce(function(n,r){return n+r.keyAll;},0), kO=ok.reduce(function(n,r){return n+r.keyOk;},0);
+  var cost=all.reduce(function(n,r){return n+(PER_HOUR+(r.terms?TERM_HOUR:0))*(r.err?0:(r.sec||0))/3600;},0);
+  var it=[['ทดสอบแล้ว',all.length+' ครั้ง'],['ถูกต้องเฉลี่ย',pct(mean(ok.map(function(r){return r.acc;}).filter(function(x){return x!=null;})))],['คำสำคัญถูก',kA?pct(kO/kA):'—'],['เวลาแกะ (ค่ากลาง)',secT(median(ok.map(function(r){return r.ms;}).filter(function(x){return x!=null;})))],['ค่าใช้จ่ายรวม',PER_HOUR?money(cost):'ฟรี'],['ล้มเหลว',(all.length-ok.length)+' ครั้ง']];
+  $('sum').innerHTML=it.map(function(x){return '<div><span>'+esc(x[0])+'</span><b>'+esc(x[1])+'</b></div>';}).join('');
+  $('runBody').innerHTML=all.slice().reverse().slice(0,60).map(function(r){ return '<tr><td>'+esc(new Date(r.at).toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}))+'</td><td>'+esc(r.ref)+'</td><td>'+pct(r.acc)+'</td><td>'+r.keyOk+'/'+r.keyAll+'</td><td>'+secT(r.ms)+'</td><td>'+esc(r.err||r.text)+'</td></tr>'; }).join('')||'<tr><td colspan="6" class="st">ยังไม่มีผลทดสอบ</td></tr>'; }
+
+$('scriptSel').innerHTML=SCRIPTS.map(function(s,i){return '<option value="'+i+'">'+(i+1)+'. '+esc(s.t)+'</option>';}).join('');
+function pick(){ var s=SCRIPTS[+$('scriptSel').value]; $('scriptShow').textContent=s.t; $('refText').value=s.t; $('keyText').value=s.k.join('\n'); }
+$('scriptSel').addEventListener('change',pick); pick();
+$('refText').addEventListener('input',function(){ $('scriptShow').textContent=this.value; });
+$('result').innerHTML='<h3>'+esc(NAME)+'</h3><div class="st">รอทดสอบ</div>';
+$('nextBtn').addEventListener('click',function(){ var s=$('scriptSel'); s.value=String((+s.value+1)%SCRIPTS.length); pick(); if(CLOUD){ S.blob=null; $('player').hidden=true; $('runBtn').disabled=true; $('recSt').textContent='ยังไม่มีเสียง'; $('runSt').textContent=''; } else { $('iosText').value=''; $('iosSt').textContent=''; } $('result').innerHTML='<h3>'+esc(NAME)+'</h3><div class="st">รอทดสอบ</div>'; window.scrollTo({top:$('scriptSel').getBoundingClientRect().top+scrollY-80,behavior:'smooth'}); });
+
+if(CLOUD){
+  $('iosCard').hidden=true; $('terms').value='เอว, สะโพก, ต้นแขน, ยาวแขน, ต่ำเข่า, ปลายขา, ความยาวขา, เก็บเข้า, ขยายออก, ตัดสั้น, เย็บย้ำกระดุม, UF669-3-P';
+  var setAudio=function(blob,name,dur){ S.blob=blob; S.name=name; S.dur=dur||0; var p=$('player'); if(p.src) URL.revokeObjectURL(p.src); p.src=URL.createObjectURL(blob); p.hidden=false; $('runBtn').disabled=false; $('recSt').textContent='พร้อมแกะเสียง'+(dur?' · '+dur.toFixed(1)+' วินาที':''); };
+  var mr=null,chunks=[],t0=0,stream=null;
+  var recMime=function(){ var L=['audio/mp4','audio/webm;codecs=opus','audio/webm']; if(!window.MediaRecorder||!MediaRecorder.isTypeSupported) return ''; for(var i=0;i<L.length;i++) if(MediaRecorder.isTypeSupported(L[i])) return L[i]; return ''; };
+  $('recBtn').addEventListener('click',function(){ var b=this; if(mr&&mr.state==='recording'){ mr.stop(); return; }
+    if(!navigator.mediaDevices||!window.MediaRecorder){ $('recSt').textContent='อุปกรณ์นี้อัดเสียงในหน้าเว็บไม่ได้ เลือกไฟล์เสียงแทน'; return; }
+    navigator.mediaDevices.getUserMedia({audio:true}).then(function(st){ stream=st; var m=recMime(); mr=m?new MediaRecorder(st,{mimeType:m}):new MediaRecorder(st); chunks=[];
+      mr.ondataavailable=function(e){ if(e.data&&e.data.size) chunks.push(e.data); };
+      mr.onstop=function(){ stream.getTracks().forEach(function(x){x.stop();}); b.textContent='อัดเสียง'; b.classList.remove('rec'); b.classList.add('pri'); var type=(mr.mimeType||m||'audio/webm'); setAudio(new Blob(chunks,{type:type}),/mp4/.test(type)?'clip.m4a':'clip.webm',(performance.now()-t0)/1000); };
+      mr.start(); t0=performance.now(); b.textContent='หยุดอัด'; b.classList.remove('pri'); b.classList.add('rec'); $('recSt').textContent='กำลังอัด… อ่านประโยคด้านบน';
+    },function(){ $('recSt').textContent='ไม่ได้รับอนุญาตให้ใช้ไมโครโฟน'; }); });
+  $('fileIn').addEventListener('change',function(){ var f=this.files&&this.files[0]; if(!f) return; var a=new Audio(), u=URL.createObjectURL(f), done=false, fin=function(d){ if(done) return; done=true; URL.revokeObjectURL(u); setAudio(f,f.name,isFinite(d)?d:0); }; a.preload='metadata'; a.onloadedmetadata=function(){fin(a.duration);}; a.onerror=function(){fin(0);}; a.src=u; setTimeout(function(){fin(0);},3000); });
+  $('runBtn').addEventListener('click',function(){ var key=$('apiKey').value.trim(), btn=this, tm=terms(); if(!S.blob) return; if(!key){ $('runSt').textContent='ใส่ API Key ก่อน'; return; }
+    btn.disabled=true; $('runSt').textContent='กำลังแกะเสียง…'; var st=performance.now();
+    CALL[ID](key,S.blob,S.name,tm).then(function(text){ record(text,performance.now()-st,'',tm.length>0); $('runSt').textContent='เสร็จแล้ว'; },function(e){ record('',null,e.message||'แกะเสียงไม่สำเร็จ',tm.length>0); $('runSt').textContent='ไม่สำเร็จ'; }).then(function(){ btn.disabled=false; }); });
+} else {
+  $('keyCard').hidden=true; $('cloudCard').hidden=true; $('stepA').textContent='1'; document.querySelector('#iosCard .n').textContent='2';
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition, rec=null, iosOn=false, iosFinal='', iosStop=0, iosStart=0;
+  $('iosBtn').addEventListener('click',function(){ var b=this; if(!SR){ $('iosSt').textContent='เบราว์เซอร์นี้ไม่รองรับ ใช้ไมค์บนแป้นพิมพ์แทน'; return; }
+    if(iosOn){ iosStop=performance.now(); rec.stop(); $('iosSt').textContent='กำลังสรุปข้อความ…'; return; }
+    rec=new SR(); rec.lang='th-TH'; rec.continuous=true; rec.interimResults=true; iosFinal='';
+    rec.onstart=function(){ iosOn=true; iosStart=performance.now(); iosStop=0; b.textContent='หยุดฟัง'; b.classList.remove('pri'); b.classList.add('rec'); $('iosSt').textContent='กำลังฟัง… อ่านประโยคด้านบน'; };
+    rec.onresult=function(e){ var it=''; for(var i=e.resultIndex;i<e.results.length;i++){ if(e.results[i].isFinal) iosFinal+=e.results[i][0].transcript+' '; else it+=e.results[i][0].transcript; } $('iosText').value=(iosFinal+it).trim(); };
+    rec.onerror=function(e){ $('iosSt').textContent=e.error==='not-allowed'?'ไม่ได้รับอนุญาต เปิดสิทธิ์ไมโครโฟนและ Siri/Dictation':'ฟังเสียงไม่สำเร็จ ('+e.error+')'; };
+    rec.onend=function(){ var was=iosOn; iosOn=false; b.textContent='เริ่มฟังเสียง'; b.classList.remove('rec'); b.classList.add('pri'); if(!was) return; var t=$('iosText').value.trim(); if(!iosStop) iosStop=performance.now(); S.dur=(iosStop-iosStart)/1000; record(t,performance.now()-iosStop,t?'':'ไม่ได้ยินเสียง',false); if(t) $('iosSt').textContent='เสร็จแล้ว'; };
+    try{ rec.start(); }catch(err){ $('iosSt').textContent='เริ่มฟังไม่ได้'; } });
+  $('iosScore').addEventListener('click',function(){ var t=$('iosText').value.trim(); if(!t){ $('iosSt').textContent='ยังไม่มีข้อความ'; return; } S.dur=0; record(t,null,'',false); $('iosSt').textContent='ให้คะแนนแล้ว'; });
+}
+$('clearBtn').addEventListener('click',function(){ if(!confirm('ล้างผลของ '+NAME+'?')) return; putRuns(allRuns().filter(function(r){return r.tool!==ID;})); renderSum(); });
+$('csvBtn').addEventListener('click',function(){ var q=function(v){return '"'+String(v==null?'':v).replace(/"/g,'""')+'"';}, rows=[['เวลา','เครื่องมือ','ข้อความที่ถูกต้อง','ข้อความที่ได้','ความถูกต้อง','คำสำคัญถูก','คำสำคัญทั้งหมด','เวลาแกะ(วินาที)','ความยาวเสียง(วินาที)','ใส่คำเฉพาะ','ข้อผิดพลาด'].map(q).join(',')];
+  myRuns().forEach(function(r){ rows.push([r.at,NAME,r.ref,r.text,r.acc==null?'':r.acc.toFixed(3),r.keyOk,r.keyAll,r.ms==null?'':(r.ms/1000).toFixed(2),r.sec?r.sec.toFixed(1):'',r.terms?'ใช่':'ไม่',r.err].map(q).join(',')); });
+  var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['﻿'+rows.join('\r\n')],{type:'text/csv;charset=utf-8'})); a.download='stt-poc-'+ID+'.csv'; document.body.appendChild(a); a.click(); a.remove(); });
+renderSum();
+})();
+</script>
+</body>
+</html>
