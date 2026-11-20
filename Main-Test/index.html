@@ -1690,6 +1690,21 @@
   #authAdv.aa-soon .aa-dot{background:var(--red)}
   @media (max-width:640px){ #authAdv{padding-left:12px;padding-right:12px} #authAdv .aa-btn{flex:1 1 100%} }
   @media print{ #authGate,#authBar,#authAdv{display:none !important} }
+  /* [Main-Test numpad-1 2026-11-20 ตามที่ขอ "ทุกช่องอยากให้ขึ้นแค่แป้นตัวเลข ถ้าเปิดใน iPad หรือโทรศัพท์"] แป้นตัวเลขของหน้าเอง (เครื่องจอสัมผัสเท่านั้น) */
+  .kp-sheet{position:fixed;left:0;right:0;bottom:0;z-index:2147482000;background:#f4efe3;border-top:1px solid var(--rule2,#ddd3bd);box-shadow:0 -8px 24px rgba(0,0,0,.12);padding:10px 12px calc(12px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .18s ease}
+  .kp-sheet.show{transform:none}
+  .kp-in{max-width:520px;margin:0 auto}
+  .kp-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 2px 8px}
+  .kp-lab{font:500 14px 'Prompt',sans-serif;color:var(--t2,#6b6457);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .kp-val{font:600 28px 'Barlow',sans-serif;color:var(--ink,#232220);min-width:90px;text-align:right}
+  .kp-val small{font:400 13px 'Prompt',sans-serif;color:var(--t2,#6b6457);margin-left:4px}
+  .kp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .kp-grid button{height:52px;border-radius:12px;border:1px solid var(--rule2,#ddd3bd);background:#fff;font:600 22px 'Barlow',sans-serif;color:var(--ink,#232220);touch-action:manipulation;-webkit-user-select:none;user-select:none}
+  .kp-grid button:active{background:#efe6cf}
+  .kp-grid .kp-fr{font:500 18px 'Barlow',sans-serif;color:var(--goldink,#8a6a1f);background:#fbf6ea}
+  .kp-grid .kp-fn{font:500 15px 'Prompt',sans-serif;color:var(--t2,#6b6457)}
+  .kp-grid .kp-ok{grid-column:1/-1;height:50px;background:var(--ink,#232220);color:#fff;border-color:var(--ink,#232220);font:500 17px 'Prompt',sans-serif}
+  input.numonly.kp-on{caret-color:transparent;outline:2px solid var(--gold,#c9a24a);outline-offset:1px}
 </style>
 <script>
 /* ===== [ใหม่ 2026-10-19 ตามที่ขอ] Suitcube Loader (ตัวสร้างลูกบาศก์รอโหลด · คู่กับ CSS .sc-loader) — ต้นฉบับ suitcube-loader.js ปรับ: เพิ่ม decor (ไม่ประกาศ role=status ซ้ำเมื่อมีข้อความ "กำลัง…" อยู่ข้างๆ) + inline (.sc-inl)
@@ -5913,7 +5928,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-18-1-voice-4-qr-1';
+  const APP_VERSION = '2026-11-18-1-voice-4-qr-1-numpad-1';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -13429,6 +13444,62 @@
   var _h=parseInt((location.hash||'').slice(1)); goTo(_h>=1&&_h<=3?_h:1);
 
   // ── [ใหม่ตามที่ขอ] เช็คว่ามีเวอร์ชันใหม่ deploy หรือยัง — ทุก 2 ชม. + ทุกครั้งที่สลับกลับมาที่แท็บ ──
+  // ── [Main-Test numpad-1 2026-11-20 ตามที่ขอ] แป้นตัวเลขของหน้าเอง ──
+  // iPad ไม่มีแป้นตัวเลขล้วนให้หน้าเว็บเรียก (inputmode=decimal บน iPad = คีย์บอร์ดเต็ม) → เครื่องจอสัมผัส: แตะช่องขนาด = ขึ้นแป้นของหน้าแทนคีย์บอร์ดเครื่อง
+  // ช่องที่มี + / − (อก เอว สะโพก โคนขา ปลายขา) และช่องเก็บเข้าของต้นแขน = แตะแล้ว +0.25 เหมือนเดิม (ตามที่เคยขอ) ไม่เปิดแป้น · คอมที่ใช้เมาส์ = พิมพ์จากคีย์บอร์ดเหมือนเดิม
+  (function(){
+    const coarse=()=>{ try{ const ua=navigator.userAgent||''; return /iPhone|iPad|iPod|Android/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints>1) || matchMedia('(pointer:coarse)').matches; }catch(e){ return false; } };   // iPad/มือถือ · คอม Windows จอสัมผัสที่มีเมาส์ = พิมพ์ได้ปกติ
+    if(!coarse()) return;
+    const isKp=el=>!!(el && el.tagName==='INPUT' && el.classList.contains('numonly') && !el.classList.contains('takein-input') && !el.closest('.field-wrap') && (!el.readOnly || el.dataset.kp==='1'));
+    function mark(el){ if(el.dataset.kp==='1') return; el.dataset.kp='1'; el.readOnly=true; el.setAttribute('inputmode','none'); }
+    const sweep=()=>document.querySelectorAll('input.numonly').forEach(el=>{ if(isKp(el)) mark(el); });
+    const sheet=document.createElement('div'); sheet.className='kp-sheet'; sheet.setAttribute('role','dialog'); sheet.setAttribute('aria-label','แป้นตัวเลข');
+    sheet.innerHTML='<div class="kp-in"><div class="kp-head"><span class="kp-lab"></span><span class="kp-val"></span></div><div class="kp-grid">'
+      +['7','8','9','⌫','4','5','6','¼','1','2','3','½','0','.','ล้าง','¾'].map(k=>'<button type="button" data-k="'+k+'" class="'+(/[¼½¾]/.test(k)?'kp-fr':(k==='ล้าง'||k==='⌫'?'kp-fn':''))+'">'+k+'</button>').join('')
+      +'<button type="button" class="kp-ok" data-k="ok">ตกลง</button></div></div>';
+    let inp=null, buf='', fresh=true, openedAt=0, padEl=null, padOld='';
+    const lab=sheet.querySelector('.kp-lab'), val=sheet.querySelector('.kp-val');
+    const show=()=>{ val.innerHTML=(buf||'0')+'<small>นิ้ว</small>'; };
+    function commit(){
+      if(!inp) return;
+      const v=buf===''||buf==='.'?'':String(parseFloat(buf));
+      if(inp.value!==v){ inp.value=v; inp.dispatchEvent(new Event('input',{bubbles:true})); inp.dispatchEvent(new Event('change',{bubbles:true})); }
+    }
+    function scroller(el){ let p=el.parentElement; while(p && p!==document.body){ const o=getComputedStyle(p).overflowY; if((o==='auto'||o==='scroll') && p.scrollHeight>p.clientHeight) return p; p=p.parentElement; } return document.scrollingElement; }
+    function unpad(){ if(padEl){ padEl.style.paddingBottom=padOld; padEl=null; } }
+    function close(save){ if(!inp) return; if(save) commit(); inp.classList.remove('kp-on'); const el=inp; inp=null; sheet.classList.remove('show'); unpad(); try{ el.blur(); }catch(e){} }
+    function open(el){
+      if(inp===el) return; if(inp) close(true);
+      if(!sheet.isConnected) document.body.appendChild(sheet);
+      mark(el); inp=el; buf=el.value||''; fresh=true; el.classList.add('kp-on');
+      const m=el.closest('.mitem'); lab.textContent=(m&&m.querySelector('.k')?.textContent||'').trim();
+      show(); sheet.classList.add('show'); openedAt=performance.now();
+      unpad(); padEl=scroller(el); padOld=padEl.style.paddingBottom; padEl.style.paddingBottom=(sheet.offsetHeight+24)+'px';   // ช่องแถวล่างสุดเลื่อนขึ้นพ้นแป้นได้
+      setTimeout(()=>{ if(inp!==el) return; const r=el.getBoundingClientRect(), top=window.innerHeight-sheet.offsetHeight-16; if(r.bottom<=top && r.top>=80) return; const dy=r.bottom-top+Math.min(120,top/3); (padEl||document.scrollingElement).scrollBy({top:dy,behavior:'smooth'}); },220);   // เลื่อนช่องขึ้นมาเหนือแป้น (หน้านี้เลื่อนในกล่อง ไม่ใช่ทั้งหน้า)
+    }
+    sheet.addEventListener('pointerdown',e=>e.preventDefault());   // ไม่ให้ช่องหลุดโฟกัส/หน้าเลื่อน
+    sheet.addEventListener('click',e=>{
+      const b=e.target.closest('button'); if(!b||!inp) return; if(performance.now()-openedAt<350) return;   // แตะช่องแล้วแป้นเด้งขึ้นใต้นิ้ว — ไม่นับเป็นการกดเลข
+      const k=b.dataset.k;
+      if(k==='ok'){ close(true); return; }
+      if(k==='ล้าง'){ buf=''; fresh=false; }
+      else if(k==='⌫'){ buf=fresh?'':buf.slice(0,-1); fresh=false; }
+      else if(k==='¼'||k==='½'||k==='¾'){ const w=Math.floor(parseFloat(buf)||0), f={'¼':.25,'½':.5,'¾':.75}[k]; buf=String(w+f); fresh=false; }   // เศษส่วน = จำนวนเต็มเดิม + เศษ (12 → 12.75)
+      else if(k==='.'){ if(fresh){ buf='0.'; fresh=false; } else if(buf.indexOf('.')<0) buf=(buf||'0')+'.'; }
+      else { if(fresh){ buf=''; fresh=false; } const d=buf.indexOf('.'); if(buf.replace('.','').length<5 && !(d>=0 && buf.length-d>2)) buf=(buf==='0'?'':buf)+k; }
+      show();
+    });
+    document.addEventListener('pointerdown',e=>{
+      const el=e.target; if(isKp(el)){ mark(el); return; }
+      if(inp && !sheet.contains(el)) close(true);
+    },true);
+    document.addEventListener('focusin',e=>{ if(isKp(e.target)) open(e.target); });
+    document.addEventListener('click',e=>{ if(isKp(e.target)) open(e.target); });
+    sweep(); const pw=document.getElementById('productsWrap'); if(pw) new MutationObserver(()=>setTimeout(sweep,0)).observe(pw,{childList:true,subtree:true});
+    setInterval(sweep,2000);
+    window.__kp={open,close,sweep};   // สำหรับทดสอบ
+  })();
+
   // ── [Main-Test 2026-11-10 ตามที่ขอ "เอา Speech to Text เข้า Main Test"] พูดใส่สัดส่วน ──
   // กด "พูด" ที่หัวรายละเอียดของสินค้าชิ้นนั้น → ระบบฟังเสียงของ Safari/Chrome (th-TH) → แยกชื่อสัดส่วน + ตัวเลข + ทิศ
   // → ใส่ "เฉพาะตัวเลข" ลงช่องของสัดส่วนที่พูด (เปิด "แก้ไข" ให้) · สัดส่วนเข้า/ออก: ต้องบอกทิศ และไม่เกิน 3 ไม่งั้นไม่ใส่ (เตือนแทน)
