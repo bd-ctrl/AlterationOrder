@@ -16,7 +16,8 @@
   var J=function(x){ return Promise.resolve(new Response(JSON.stringify(x),{status:200,headers:{'Content-Type':'application/json'}})); };
   window.fetch=function(u,init){
     var url=String(u&&u.url||u);
-    if(url.indexOf('workers.dev')<0 && url.indexOf('/auth/')<0) return realFetch.apply(this,arguments);   // ไฟล์อื่น (รูป/ฟอนต์) โหลดปกติ
+    if(url.indexOf('workers.dev')<0 && url.indexOf('/auth/')<0) return realFetch.apply(this,arguments);
+    if(url.indexOf('//stt-poc.')>=0) return realFetch.apply(this,arguments);   // [voice-4] แกะเสียงด้วย Gemini ผ่าน Worker stt-poc (ไม่ใช่ข้อมูลลูกค้า)   // ไฟล์อื่น (รูป/ฟอนต์) โหลดปกติ
     if(url.indexOf('/auth/me')>=0) return J({success:true,user:{name:'หน้าทดสอบ',branch:null,role:'user',mapped:false}});
     /* [Main-Test 2026-11-17] สินค้าตัวอย่าง P# 999999 (ไม่มีจริง) — รายการที่นัดรับ พิมพ์ 999999 → เปิดฟอร์มนำกลับมาแก้ · ลองติ๊กงานเสียคืนสต๊อก */
     if(url.indexOf('/product-status')>=0) return J({success:true,statuses:{'P# 999999':'ตรวจสอบสินค้าที่สาขา'}});
@@ -28,7 +29,7 @@
   };
   document.addEventListener('DOMContentLoaded',function(){
     var b=document.createElement('div');
-    b.textContent='หน้าทดสอบ · ไม่ต้องล็อกอิน · ไม่ดึงและไม่บันทึกข้อมูลจริง · ลองปุ่ม "พูด" ได้ที่หน้าสินค้า';
+    b.textContent='หน้าทดสอบ · ไม่ต้องล็อกอิน · ไม่ดึงและไม่บันทึกข้อมูลจริง · ลองปุ่ม "พูด" ได้ที่หน้าสินค้า (แกะเสียงด้วย Gemini 3.5 Transcribe)';
     b.style.cssText='position:fixed;left:50%;top:6px;transform:translateX(-50%);z-index:2147483000;background:#232220;color:#fff;font:500 12.5px Prompt,sans-serif;padding:5px 12px;border-radius:999px;max-width:calc(100vw - 16px);text-align:center;pointer-events:none;opacity:.92';
     document.body.appendChild(b);
   });
@@ -5912,7 +5913,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-18-1-voice-3-qr-1';
+  const APP_VERSION = '2026-11-18-1-voice-4-qr-1';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -13433,44 +13434,79 @@
   // → ใส่ "เฉพาะตัวเลข" ลงช่องของสัดส่วนที่พูด (เปิด "แก้ไข" ให้) · สัดส่วนเข้า/ออก: ต้องบอกทิศ และไม่เกิน 3 ไม่งั้นไม่ใส่ (เตือนแทน)
   // ตัวแยกเลขชุดเดียวกับหน้า Voice-Test (ทดสอบ 16/16)
   (function(){
-    const SRc=window.SpeechRecognition||window.webkitSpeechRecognition;
+    // [voice-4 2026-11-20 ตามที่ขอ "เอาโมเดล Gemini 3.5 ใส่ Main Test แค่ Gemini"] อัดเสียง (MediaRecorder) → Worker stt-poc /stt/ge → Gemini 3.5 Transcribe (verbatim · th-TH · คำเฉพาะ)
+    //   → ตัวแยกเลขแบบเซลล์: ขนาดจริง = เลข 2 หลัก + เศษส่วนสี่ ("12 3 4"=12.75) · ช่องปรับ = 1 หลัก + เศษ ("สามสี่"=0.75) · ไม่แน่ใจ = ไม่ใส่ เตือนแทน
+    const STT_PROXY='https://stt-poc.ba-bd5.workers.dev';
+    const canRec=!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder);
     const VDEFS={
       'เสื้อสูท (สำเร็จรูป)':[
         {label:'ความยาวแขน', dir:false, words:['ความยาวแขน','ยาวแขน','แขนเสื้อ','แขน']},
         {label:'ต้นแขน', dir:false, takeIn:true, words:['ขนาดต้นแขน','ต้นแขน']},
-        {label:'ความยาวเสื้อ (หน้า)', dir:false, words:['ความยาวเสื้อหน้า','ความยาวเสื้อด้านหน้า','ยาวเสื้อหน้า','ตัวหน้า','ความยาวหน้า']},
-        {label:'ความยาวเสื้อ (หลัง)', dir:false, words:['ความยาวเสื้อหลัง','ความยาวเสื้อด้านหลัง','ยาวเสื้อหลัง','ตัวหลัง','ความยาวหลัง']},
-        {label:'อก', dir:true, words:['รอบอก','อก']},
-        {label:'เอว', dir:true, words:['รอบเอว','เอว']},
-        {label:'สะโพก', dir:true, words:['รอบสะโพก','สะโพก']},
+        {label:'ความยาวเสื้อ (หน้า)', dir:false, words:['ความยาวเสื้อข้างหน้า','ยาวเสื้อข้างหน้า','ความยาวเสื้อหน้า','ความยาวเสื้อด้านหน้า','ยาวเสื้อหน้า','ตัวหน้า','ความยาวหน้า']},
+        {label:'ความยาวเสื้อ (หลัง)', dir:false, words:['ความยาวเสื้อข้างหลัง','ยาวเสื้อข้างหลัง','ความยาวเสื้อหลัง','ความยาวเสื้อด้านหลัง','ยาวเสื้อหลัง','ตัวหลัง','ความยาวหลัง']},
+        {label:'อก', dir:true, cap:3, words:['รอบอก','อก']},
+        {label:'เอว', dir:true, cap:3, words:['รอบเอว','เอว']},
+        {label:'สะโพก', dir:true, cap:3, words:['รอบสะโพก','สะโพก']},
         {label:'ต่ำศอก', dir:false, words:['ต่ำศอก','ตำศอก','ศอก']}
       ],
       'กางเกง (สำเร็จรูป)':[
-        {label:'เอว', dir:true, words:['รอบเอว','เอว']},
-        {label:'สะโพก', dir:true, words:['รอบสะโพก','สะโพก']},
-        {label:'โคนขา/ต้นขา', dir:true, words:['โคนขา','ต้นขา']},
+        {label:'เอว', dir:true, cap:2, words:['รอบเอว','เอว']},   // [voice-4 ตามที่ขอ] กางเกง เอว/สะโพก สูงสุด 2
+        {label:'สะโพก', dir:true, cap:2, words:['รอบสะโพก','สะโพก']},
+        {label:'โคนขา/ต้นขา', dir:true, cap:3, inOnly:true, along:true, words:['โคนขา','ต้นขา']},
         {label:'ต่ำเข่า', dir:false, words:['ต่ำเข่า','ตำเข่า','เข่า']},
-        {label:'ปลายขา', dir:true, words:['ปลายขา']},
+        {label:'ปลายขา', dir:true, cap:3, words:['ปลายขา']},
         {label:'ความยาวขา', dir:false, words:['ความยาวขา','ยาวขา','ความยาวกางเกง']}
       ]
     };
     const IN_WORDS=/เก็บเข้า|เอาเข้า|ลดลง|สั้นลง|ตัดสั้น|ลด|เข้า/g, OUT_WORDS=/ขยายออก|ปล่อยออก|ยาวขึ้น|ขยาย|ปล่อย|เพิ่ม|ออก/g;
     const DIG={'ศูนย์':0,'หนึ่ง':1,'เอ็ด':1,'สอง':2,'ยี่':2,'สาม':3,'สี่':4,'ห้า':5,'หก':6,'เจ็ด':7,'แปด':8,'เก้า':9};
-    const NUMWORD=/(?:ศูนย์|หนึ่ง|เอ็ด|สอง|ยี่|สาม|สี่|ห้า|หก|เจ็ด|แปด|เก้า|สิบ|ร้อย)+(?:จุด(?:ศูนย์|หนึ่ง|สอง|สาม|สี่|ห้า|หก|เจ็ด|แปด|เก้า)+)?/g;
-    function wordsToNum(w){
-      const parts=w.split('จุด'), re=/ศูนย์|หนึ่ง|เอ็ด|สอง|ยี่|สาม|สี่|ห้า|หก|เจ็ด|แปด|เก้า|สิบ|ร้อย/g; let total=0, cur=0, m;
-      while((m=re.exec(parts[0]))){ const t=m[0]; if(t==='ร้อย'){ total+=(cur||1)*100; cur=0; } else if(t==='สิบ'){ total+=(cur||1)*10; cur=0; } else cur=DIG[t]; }
-      let dec=''; if(parts[1]){ const r2=/ศูนย์|หนึ่ง|สอง|สาม|สี่|ห้า|หก|เจ็ด|แปด|เก้า/g; let d; while((d=r2.exec(parts[1]))) dec+=DIG[d[0]]; }
-      const n=total+cur; return dec?parseFloat(n+'.'+dec):n;
-    }
+    // คำที่เครื่องแกะเสียงได้ยินผิดบ่อย (ผลทดสอบ 19 พ.ย.)
+    const VFIX=[[/เก็บข้าว/g,'เก็บเข้า'],[/เอาข้าว/g,'เอาเข้า'],[/ต้นแผน/g,'ต้นแขน'],[/(^|[^โ])คนขา/g,'$1โคนขา'],[/ต่ำเขา/g,'ต่ำเข่า'],[/ป้ายขา/g,'ปลายขา']];
     function vNorm(t){
-      t=String(t||'').replace(/[๐-๙]/g,c=>String('๐๑๒๓๔๕๖๗๘๙'.indexOf(c))).replace(/(\d),(\d)/g,'$1.$2').replace(/\s+/g,'');
-      return t.replace(NUMWORD,w=>String(wordsToNum(w))).replace(OUT_WORDS,'↑').replace(IN_WORDS,'↓');
+      t=String(t||'').normalize('NFC').replace(/\u0E4D\u0E32/g,'\u0E33').replace(/[๐-๙]/g,c=>String('๐๑๒๓๔๕๖๗๘๙'.indexOf(c)));
+      t=t.replace(/\[[^\]]*\]|\([^)]*\)/g,' ').replace(/(\d),(\d)/g,'$1.$2');
+      VFIX.forEach(f=>{ t=t.replace(f[0],f[1]); });
+      t=t.replace(/(หนึ่ง|สอง|สาม|สี่|ห้า|หก|เจ็ด|แปด|เก้า|ยี่)?สิบ(เอ็ด|หนึ่ง|สอง|สาม|สี่|ห้า|หก|เจ็ด|แปด|เก้า)?/g,(m,a,b)=>' '+((a?DIG[a]:1)*10+(b?DIG[b]:0))+' ');
+      t=t.replace(/ศูนย์|หนึ่ง|สอง|สาม|สี่|ห้า|หก|เจ็ด|แปด|เก้า/g,m=>' '+DIG[m]+' ');
+      t=t.replace(/(\d)\s*จุด\s*(\d)/g,'$1.$2').replace(/(\d)\s*ส่วน\s*(\d)/g,'$1/$2').replace(/\s*\/\s*/g,'/');
+      t=t.split(/\s+/).reduce((a,p)=>a+((/\d$/.test(a)&&/^\d/.test(p))?' ':'')+p,'');   // เว้นวรรคเฉพาะระหว่างตัวเลข ("29 34" ≠ "2934")
+      return t.replace(OUT_WORDS,'↑').replace(IN_WORDS,'↓');
     }
-    function vNum(tail){
-      const m=/(\d+(?:\.\d+)?)\s*(หุน|นิ้วครึ่ง|นิ้ว)?/.exec(tail);
-      if(m){ let n=parseFloat(m[1]); if(m[2]==='หุน') n=n/8; else if(m[2]==='นิ้วครึ่ง') n+=0.5; else if(/^\d+(?:\.\d+)?นิ้ว?ครึ่ง/.test(tail.slice(m.index))) n+=0.5; return n; }
-      return /ครึ่ง/.test(tail) ? 0.5 : null;
+    const vToks=s=>(s.match(/\d+(?:\.\d+)?|\/|ครึ่ง|หุน/g)||[]), Q4=/^[123]$/;
+    function vFrac(nx){
+      if(!nx.length) return {f:0};
+      if(Q4.test(nx[0])&&nx[1]==='4') return {f:nx[0]/4};
+      if(Q4.test(nx[0])&&nx[1]==='/'&&nx[2]==='4') return {f:nx[0]/4};
+      if(/^[123]4$/.test(nx[0])) return {f:nx[0][0]/4};
+      if(nx[0]==='ครึ่ง') return {f:0.5};
+      return {f:0,odd:/^\d/.test(nx[0])};
+    }
+    function vSize(tk){
+      let i=0; while(i<tk.length&&!/^\d/.test(tk[i])) i++; if(i>=tk.length) return null;
+      const a=tk[i], nx=tk.slice(i+1), raw=tk.slice(i).join(' ');
+      if(/^\d{2}\.[123]4$/.test(a)) return {n:parseInt(a,10)+a.split('.')[1][0]/4};   // "23.24" = 23 2/4
+      if(/^\d{4}$/.test(a)) return /^\d\d[123]4$/.test(a)?{n:+a.slice(0,2)+a[2]/4}:{unsure:true,raw};
+      if(/^\d{3}$/.test(a)) return {unsure:true,raw};
+      let n=parseFloat(a); if(n<5) return {unsure:true,raw};
+      if(/^\d+$/.test(a)){ const f=vFrac(nx); if(f.odd) return {unsure:true,raw}; n+=f.f; }
+      else if(nx[0]==='ครึ่ง') n+=0.5;
+      return {n};
+    }
+    function vAdj(tk,cap){
+      let i=0; while(i<tk.length&&!/^\d/.test(tk[i])&&tk[i]!=='ครึ่ง') i++; if(i>=tk.length) return null;
+      const a=tk[i], nx=tk.slice(i+1), raw=tk.slice(i).join(' '); let n;
+      if(a==='ครึ่ง') n=0.5;
+      else if(/^[123]4$/.test(a)) n=a[0]/4;                     // "34" = 3/4
+      else if(/^\d[123]4$/.test(a)) n=+a[0]+a[1]/4;              // "134" = 1 3/4
+      else if(/^\d$/.test(a)){
+        if(Q4.test(a)&&nx[0]==='4') n=a/4;                         // "3 4" = 3/4
+        else if(Q4.test(a)&&nx[0]==='/'&&nx[1]==='4') n=a/4;
+        else if(nx[0]==='หุน') n=a/8;
+        else n=+a+vFrac(nx).f;
+      } else n=parseFloat(a);
+      if(!(n>0)) return {unsure:true,raw};
+      if(n>cap) return {over:true,n,raw};
+      return {n};
     }
     const vFmt=n=>String(Math.round(n*1000)/1000);
     function vParse(text,type){
@@ -13480,18 +13516,38 @@
       all.forEach(o=>{ let from=0,k; while((k=t.indexOf(o.w,from))>=0){ let free=true; for(let j=k;j<k+o.w.length;j++) if(taken[j]){ free=false; break; }
         if(free){ for(let j=k;j<k+o.w.length;j++) taken[j]=true; hits.push({pos:k,end:k+o.w.length,i:o.i}); } from=k+o.w.length; } });
       hits.sort((a,b)=>a.pos-b.pos);
-      const out=[], warn=[], pending=[], over=[];
+      // พูดซ้ำ/แก้คำ ("ต้นแขน 19 ต้นแขน 19 ครึ่ง" · "ความยาวขา 20 ไม่ใช่ 38") = ใช้ค่าหลังสุด
+      const res={}, wb={}, empty={};
+      const put=(k,v)=>{ res[k]=v; delete wb[k]; delete empty[k]; }, wr=(k,m)=>{ delete res[k]; wb[k]=m; delete empty[k]; };
       hits.forEach((h,idx)=>{
-        const d=defs[h.i], tail=t.slice(h.end, idx+1<hits.length?hits[idx+1].pos:t.length), n=vNum(tail);
-        if(n==null){ warn.push(d.label+' ไม่ได้ยินตัวเลข'); return; }
-        let dir=/↓/.test(tail)?'in':(/↑/.test(tail)?'out':'');
-        if(!dir){ const before=t.slice(idx>0?hits[idx-1].end:0,h.pos); if(vNum(before)==null){ if(/↓/.test(before)) dir='in'; else if(/↑/.test(before)) dir='out'; } }
-        if(d.dir && n>3){ over.push({d,n}); return; }
-        if(d.dir && !dir){ pending.push({d,n}); return; }
-        out.push({d,n,dir});
+        const d=defs[h.i], tail=t.slice(h.end, idx+1<hits.length?hits[idx+1].pos:t.length);
+        const m=/[↓↑]/.exec(tail), pre=m?tail.slice(0,m.index):tail, post=m?tail.slice(m.index+1):'';
+        let dir=m?(m[0]==='↓'?'in':'out'):'';
+        if(!dir){ const before=t.slice(idx>0?hits[idx-1].end:0,h.pos); if(/[↓↑]/.test(before)&&!vToks(before).length) dir=/↓/.test(before)?'in':'out'; }
+        if(!d.dir){   // ขนาดจริง
+          const sz=vSize(vToks(pre));
+          if(sz){ if(sz.unsure) wr(d.label,d.label+' ไม่แน่ใจ (ได้ยิน "'+sz.raw+'") — ไม่ได้ใส่ ตรวจแล้วกรอกเอง'); else put(d.label,{k:'out',d,n:sz.n,dir:''}); }
+          if(d.takeIn&&dir){
+            if(dir==='out') wr(d.label+' เก็บเข้า','ต้นแขนขยายออกไม่ได้ (เก็บเข้าได้อย่างเดียว) — ไม่ได้ใส่');
+            else { const q=vAdj(vToks(post),3); if(q){ if(q.n!=null&&!q.over&&!q.unsure) put(d.label+' เก็บเข้า',{k:'out',d,n:q.n,dir:'in'}); else wr(d.label+' เก็บเข้า','ต้นแขนเก็บเข้า ไม่แน่ใจ (ได้ยิน "'+q.raw+'") — ไม่ได้ใส่'); } }
+          } else if(dir&&!sz) wr(d.label,d.label+' ต้องพูดเป็นขนาดจริง เช่น "'+d.label+' 23" (ไม่ใช่เก็บเข้า/ขยายออก) — ไม่ได้ใส่');
+          if(!sz&&!dir&&!res[d.label]&&!wb[d.label]) empty[d.label]=d;
+        } else {      // เก็บเข้า / ขยายออก
+          const q=vAdj(vToks(pre+' '+post),d.cap||3);
+          if(!q){ if(!res[d.label]&&!wb[d.label]) empty[d.label]=d; return; }
+          if(d.inOnly&&dir==='out'){ wr(d.label,d.label+' ขยายออกไม่ได้ — ไม่ได้ใส่'); return; }
+          if(q.over){ put(d.label,{k:'over',d,n:q.n,cap:d.cap||3}); return; }
+          if(q.unsure){ wr(d.label,d.label+' ไม่แน่ใจ (ได้ยิน "'+q.raw+'") — ไม่ได้ใส่'); return; }
+          if(!dir){ put(d.label,{k:'pending',d,n:q.n}); return; }
+          put(d.label,{k:'out',d,n:q.n,dir,along:!!(d.along&&/ตลอดแนว/.test(tail))});
+        }
       });
-      if(!hits.length) warn.push('ไม่เจอชื่อสัดส่วนในประโยค ลองพูดชื่อสัดส่วนก่อนตัวเลข เช่น "ต่ำศอก 18"');
-      return {out,warn,pending,over};
+      const out=[], pending=[], over=[], warn=[];
+      Object.keys(res).forEach(k=>{ const v=res[k]; (v.k==='out'?out:v.k==='pending'?pending:over).push(v); });
+      Object.keys(wb).forEach(k=>warn.push(wb[k]));
+      Object.keys(empty).forEach(k=>warn.push(k+' ไม่ได้ยินตัวเลข'));
+      if(!hits.length) warn.push('ไม่เจอชื่อสัดส่วนในประโยค ลองพูดชื่อสัดส่วนก่อนตัวเลข เช่น "ต่ำศอก 12"');
+      return {out,warn,pending,over,text:t};
     }
     window.__voiceParseApp=vParse;   // สำหรับทดสอบ
     const kNorm=s=>String(s||'').replace(/\s+/g,'');
@@ -13507,24 +13563,29 @@
       const ml=block.querySelector('.measure-list'); if(ml) ml.classList.remove('hidden');
     }
     function vTouched(block){ const ml=block.querySelector('.measure-list'); if(ml) ml.dispatchEvent(new Event('input',{bubbles:true})); }   // ให้บันทึกร่างอัตโนมัติรู้ (ไม่ส่งเข้าช่องตัวเลขตรงๆ — ช่องจะรีเซ็ตทิศ)
-    function vSetOne(block,d,n,dir){
+    function vSetOne(block,d,n,dir,along){
       const m=findMitem(block,d.label), st=vState(block); if(!m){ st.warn.push(d.label+' ไม่มีในฟอร์มนี้'); return false; }
       vMeasureOn(block);
       setToggleOnIndex(m,'.toggle',0); m.classList.add('editing');
-      if(d.takeIn && dir==='in'){ setTakeInValue(m,n); st.applied[d.label]={d,n,dir,takeIn:true}; return true; }
+      if(d.takeIn && dir==='in'){ setTakeInValue(m,n); st.applied[d.label+' เก็บเข้า']={d,n,dir,takeIn:true}; return true; }
       const el=m.querySelector('.numonly:not(.takein-input)'); if(!el) return false;
       setMitemValue(el, d.dir ? (dir==='in'?-n:n) : n);
-      st.applied[d.label]={d,n,dir};
+      if(d.along){ const ac=m.querySelector('.along-check'); if(ac&&ac.checked!==!!along){ ac.checked=!!along; ac.dispatchEvent(new Event('change',{bubbles:true})); } }
+      st.applied[d.label]={d,n,dir,along:!!along};
       return true;
     }
-    function vClearOne(block,label){
-      const st=vState(block), a=st.applied[label]; if(!a) return;
-      const m=findMitem(block,label);
+    function vClearOne(block,key){
+      const st=vState(block), a=st.applied[key]; if(!a) return;
+      const m=findMitem(block,a.d.label);
       if(m){
         if(a.takeIn) setTakeInValue(m,0);
-        else { const el=m.querySelector('.numonly:not(.takein-input)'); if(el) setMitemValue(el,0); setToggleOnIndex(m,'.toggle',1); m.classList.remove('editing'); }
+        else {
+          const el=m.querySelector('.numonly:not(.takein-input)'); if(el) setMitemValue(el,0);
+          if(a.along){ const ac=m.querySelector('.along-check'); if(ac&&ac.checked){ ac.checked=false; ac.dispatchEvent(new Event('change',{bubbles:true})); } }
+          if(!st.applied[a.d.label+' เก็บเข้า']){ setToggleOnIndex(m,'.toggle',1); m.classList.remove('editing'); }
+        }
       }
-      delete st.applied[label];
+      delete st.applied[key];
     }
     function vEl(tag,cls,text){ const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
     function vRender(block){
@@ -13535,7 +13596,7 @@
       box.hidden=false;
       if(labels.length){
         const row=vEl('div','vchips'); row.appendChild(vEl('span','vcap','ใส่แล้ว'));
-        labels.forEach(l=>{ const a=st.applied[l]; const c=vEl('span','vchip', l+' '+(a.takeIn?'เก็บเข้า ':'')+vFmt(a.n)+(a.d.dir?(a.dir==='in'?' เก็บเข้า':' ขยายออก'):''));
+        labels.forEach(l=>{ const a=st.applied[l]; const c=vEl('span','vchip', a.d.label+' '+(a.takeIn?'เก็บเข้า ':'')+vFmt(a.n)+(a.d.dir?(a.dir==='in'?' เก็บเข้า':' ขยายออก'):'')+(a.along?' ตลอดแนว':''));
           const x=vEl('button','', '×'); x.type='button'; x.dataset.rm=l; x.setAttribute('aria-label','ลบ '+l); c.appendChild(x); row.appendChild(c); });
         box.appendChild(row);
       }
@@ -13544,7 +13605,7 @@
         [['in','เก็บเข้า'],['out','ขยายออก']].forEach(([dir,t])=>{ const b=vEl('button','',t); b.type='button'; b.dataset.pick=String(i); b.dataset.dir=dir; row.appendChild(b); });
         box.appendChild(row);
       });
-      st.over.forEach(o=>box.appendChild(vEl('div','vwarn', o.d.label+' '+vFmt(o.n)+' เกิน 3 นิ้ว ไม่ได้ใส่ — พูดใหม่ หรือกด + / − ที่ช่อง'+o.d.label+'เอง')));
+      st.over.forEach(o=>box.appendChild(vEl('div','vwarn', o.d.label+' '+vFmt(o.n)+' เกิน '+(o.cap||3)+' นิ้ว ไม่ได้ใส่ — พูดใหม่ หรือกด + / − ที่ช่อง'+o.d.label+'เอง')));
       st.warn.forEach(w=>box.appendChild(vEl('div','vwarn', w)));
       const foot=vEl('div','vfoot');
       foot.appendChild(vEl('span','vh2', st.text?('ได้ยินล่าสุด: '+st.text):''));
@@ -13573,31 +13634,56 @@
       const type=block.querySelector('.type-select')?.value||'', st=vState(block), r=vParse(text,type);
       vBox(block);
       st.text=text; st.pending=r.pending; st.over=r.over; st.warn=r.warn.slice();
-      r.out.forEach(o=>{
-        if(!vSetOne(block,o.d,o.n,o.dir)) return;
-        if(!o.d.dir && o.dir) st.warn.push(o.d.label+': ได้ยินคำว่า'+(o.dir==='in'?'ลด/สั้นลง':'เพิ่ม/ยาวขึ้น')+' แต่ช่องนี้คือความยาว — ใส่ '+vFmt(o.n)+' แล้ว ตรวจอีกที');
-      });
+      r.out.forEach(o=>{ vSetOne(block,o.d,o.n,o.dir,o.along); });
       if(r.out.length) vTouched(block);
       vRender(block);
     }
     let cur=null;
+    const V_TERMS=['ความยาวแขน','ต้นแขน','ต่ำศอก','ความยาวเสื้อหน้า','ความยาวเสื้อหลัง','อก','เอว','สะโพก','โคนขา','ต้นขา','ต่ำเข่า','ปลายขา','ความยาวขา','เก็บเข้า','ขยายออก','ตลอดแนว'];
+    function vB64(blob){ return new Promise((ok,no)=>{ const fr=new FileReader(); fr.onload=()=>ok(String(fr.result).split(',')[1]||''); fr.onerror=()=>no(new Error('อ่านไฟล์เสียงไม่ได้')); fr.readAsDataURL(blob); }); }
+    function vGeMime(t){ t=String(t||'').split(';')[0].toLowerCase(); return (!t||t==='audio/mp4'||t==='audio/x-m4a'||t==='video/mp4')?'audio/m4a':t; }
+    function vGeText(j){ const out=[]; ((j&&j.steps)||[]).forEach(s=>((s&&s.content)||[]).forEach(c=>{ if(c&&typeof c.text==='string') out.push(c.text); })); if(out.length) return out.join(' ').trim();
+      (function walk(o){ if(!o||typeof o!=='object') return; if(Array.isArray(o)){ o.forEach(walk); return; } if(typeof o.text==='string') out.push(o.text); for(const k in o) if(k!=='text') walk(o[k]); })(j&&(j.outputs||j.output)); return out.join(' ').trim(); }
+    async function vGemini(blob){
+      const body=JSON.stringify({model:'models/gemini-3.5-transcribe',input:[{type:'audio',data:await vB64(blob),mime_type:vGeMime(blob.type)}],generation_config:{transcription_config:{language_codes:['th-TH'],mode:{type:'verbatim'},custom_vocabulary:V_TERMS}}});
+      for(let a=0;a<3;a++){   // Google ตอบ "คนใช้เยอะ" (503/429) = ลองใหม่เอง สูงสุด 3 ครั้ง
+        const ac=new AbortController(), to=setTimeout(()=>ac.abort(),60000); let r, x;
+        try{ r=await fetch(STT_PROXY+'/stt/ge',{method:'POST',headers:{'Content-Type':'application/json'},body,signal:ac.signal}); x=await r.text(); }
+        catch(e){ clearTimeout(to); throw new Error(e&&e.name==='AbortError'?'รอเกิน 1 นาที':'เชื่อมต่อไม่ได้ (เช็กอินเทอร์เน็ต)'); }
+        clearTimeout(to); let j=null; try{ j=JSON.parse(x); }catch(e){}
+        if(r.ok) return vGeText(j);
+        if((r.status===503||r.status===429)&&a<2){ await new Promise(ok=>setTimeout(ok,1500*(a+1))); continue; }
+        const m=j&&j.error&&(j.error.message||j.error); throw new Error('HTTP '+r.status+(m?' · '+(typeof m==='string'?m:JSON.stringify(m)):''));
+      }
+    }
+    function vBtn(btn,mode){ btn.classList.toggle('rec',mode==='rec'); btn.disabled=mode==='busy'; btn.querySelector('.vt').textContent=mode==='rec'?'หยุด':(mode==='busy'?'กำลังแกะ…':'พูด'); }
     function vStart(block,btn){
-      if(cur){ cur.rec.stop(); return; }
-      const rec=new SRc(); rec.lang='th-TH'; rec.interimResults=true; rec.continuous=true;
-      let fin='', interim='';
-      const box=vBox(block); let errShown=false;
+      if(cur){ if(cur.block===block&&cur.mr&&cur.mr.state==='recording') cur.mr.stop(); return; }
+      const box=vBox(block);
       const show=t=>{ box.hidden=false; box.innerHTML=''; const h=document.createElement('div'); h.className='vh'; h.textContent=t; box.appendChild(h); };
-      cur={rec,btn};
-      rec.onstart=()=>{ btn.classList.add('rec'); btn.querySelector('.vt').textContent='หยุด'; show('กำลังฟัง… พูดได้เลย เช่น "ต่ำศอก 18 นิ้ว" · จบแล้วกด "หยุด"'); };
-      rec.onresult=e=>{ interim=''; for(let i=e.resultIndex;i<e.results.length;i++){ const x=e.results[i]; if(x.isFinal) fin+=x[0].transcript+' '; else interim+=x[0].transcript; } show('ได้ยิน: '+(fin+interim)); };
-      rec.onerror=e=>{ const m={'not-allowed':'ไม่ได้อนุญาตไมโครโฟน — กดอนุญาตแล้วลองใหม่','no-speech':'ไม่ได้ยินเสียง ลองพูดใหม่','network':'ต้องต่ออินเทอร์เน็ต','service-not-allowed':'ต้องเปิด Siri/Dictation ใน iPad ก่อน'}; errShown=true; const st=vState(block); st.warn=['⚠ '+(m[e.error]||('ฟังไม่สำเร็จ: '+e.error))]; };
-      rec.onend=()=>{ btn.classList.remove('rec'); btn.querySelector('.vt').textContent='พูด'; cur=null; const t=(fin+interim).trim(); if(t) vApply(block,t); else { if(!errShown) vState(block).warn=['ไม่ได้ยินเสียง ลองกด "พูด" แล้วพูดใหม่']; vRender(block); } };
-      try{ rec.start(); }catch(err){ cur=null; show('⚠ เริ่มฟังไม่ได้: '+err.message); }
+      const fail=t=>{ vState(block).warn=['⚠ '+t]; vRender(block); };
+      cur={block,btn,mr:null};
+      navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+        const L=['audio/mp4','audio/webm;codecs=opus','audio/webm']; let mime=''; if(MediaRecorder.isTypeSupported) for(const x of L) if(MediaRecorder.isTypeSupported(x)){ mime=x; break; }
+        const mr=mime?new MediaRecorder(stream,{mimeType:mime}):new MediaRecorder(stream), chunks=[]; let t0=0;
+        cur.mr=mr;
+        mr.ondataavailable=e=>{ if(e.data&&e.data.size) chunks.push(e.data); };
+        mr.onstop=()=>{
+          stream.getTracks().forEach(x=>x.stop());
+          const blob=new Blob(chunks,{type:mr.mimeType||mime||'audio/webm'}), sec=(performance.now()-t0)/1000;
+          if(sec<0.6||blob.size<1500){ cur=null; vBtn(btn,''); fail('ไม่ได้ยินเสียง ลองกด "พูด" แล้วพูดใหม่'); return; }
+          vBtn(btn,'busy'); show('กำลังแกะเสียงด้วย Gemini…');
+          vGemini(blob).then(text=>{ if(text) vApply(block,text); else fail('Gemini ไม่ได้ยินคำพูด ลองพูดใหม่'); },
+                             err=>fail('แกะเสียงไม่สำเร็จ: '+(err&&err.message||err)))
+            .then(()=>{ cur=null; vBtn(btn,''); });
+        };
+        mr.start(); t0=performance.now(); vBtn(btn,'rec'); show('กำลังฟัง… พูดได้เลย เช่น "ต่ำศอก 12 นิ้ว" · จบแล้วกด "หยุด"');
+      },()=>{ cur=null; vBtn(btn,''); fail('ไม่ได้อนุญาตไมโครโฟน — กดอนุญาตแล้วลองใหม่'); });
     }
     function vSync(block){
       const btn=block.querySelector('.voice-btn'); if(!btn) return;
       const type=block.querySelector('.type-select')?.value||'';
-      btn.hidden=!SRc || !VDEFS[type] || ((typeof isRa2Scope==='function') && isRa2Scope(block));
+      btn.hidden=!canRec || !VDEFS[type] || ((typeof isRa2Scope==='function') && isRa2Scope(block));
       const vb=block.querySelector('.voice-out'); if(vb && !vb._vw) vb.remove();   // ก้อนที่โคลนมาพร้อมกล่องผลของก้อนแรก — ทิ้ง
       if(btn.hidden){ const box=block.querySelector('.voice-out'); if(box) box.hidden=true; }
     }
