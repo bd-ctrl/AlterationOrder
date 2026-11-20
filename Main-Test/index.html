@@ -5928,7 +5928,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-18-1-voice-4-qr-1-numpad-1';
+  const APP_VERSION = '2026-11-18-1-voice-4-qr-1-numpad-2';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -13460,9 +13460,12 @@
     let inp=null, buf='', fresh=true, openedAt=0, padEl=null, padOld='';
     const lab=sheet.querySelector('.kp-lab'), val=sheet.querySelector('.kp-val');
     const show=()=>{ val.innerHTML=(buf||'0')+'<small>นิ้ว</small>'; };
+    // ทศนิยมที่พิมพ์ค้าง: .2 → .25 · .7 → .75 · .5/.50 → .5 · ไม่มีเศษ = จำนวนเต็ม
+    function kpClean(b){ if(b===''||b==='.') return ''; const p=b.split('.'), w=parseInt(p[0]||'0',10)||0, f=p[1]||''; const fr=f===''?0:(f[0]==='2'?.25:f[0]==='5'?.5:f[0]==='7'?.75:0); const n=w+fr; return n?String(n):''; }
+    let hintT=0; function hint(t){ const k=lab.textContent; lab.textContent=t; lab.style.color='#b42318'; clearTimeout(hintT); hintT=setTimeout(()=>{ lab.textContent=k; lab.style.color=''; },1400); }
     function commit(){
       if(!inp) return;
-      const v=buf===''||buf==='.'?'':String(parseFloat(buf));
+      const v=kpClean(buf);
       if(inp.value!==v){ inp.value=v; inp.dispatchEvent(new Event('input',{bubbles:true})); inp.dispatchEvent(new Event('change',{bubbles:true})); }
     }
     function scroller(el){ let p=el.parentElement; while(p && p!==document.body){ const o=getComputedStyle(p).overflowY; if((o==='auto'||o==='scroll') && p.scrollHeight>p.clientHeight) return p; p=p.parentElement; } return document.scrollingElement; }
@@ -13486,7 +13489,11 @@
       else if(k==='⌫'){ buf=fresh?'':buf.slice(0,-1); fresh=false; }
       else if(k==='¼'||k==='½'||k==='¾'){ const w=Math.floor(parseFloat(buf)||0), f={'¼':.25,'½':.5,'¾':.75}[k]; buf=String(w+f); fresh=false; }   // เศษส่วน = จำนวนเต็มเดิม + เศษ (12 → 12.75)
       else if(k==='.'){ if(fresh){ buf='0.'; fresh=false; } else if(buf.indexOf('.')<0) buf=(buf||'0')+'.'; }
-      else { if(fresh){ buf=''; fresh=false; } const d=buf.indexOf('.'); if(buf.replace('.','').length<5 && !(d>=0 && buf.length-d>2)) buf=(buf==='0'?'':buf)+k; }
+      else if(buf.indexOf('.')>=0 && !fresh){   // หลังจุด: ได้แค่ 25 · 5(0) · 75
+        const f=buf.split('.')[1], ok=f===''?/[257]/.test(k):(f.length===1&&((f==='2'&&k==='5')||(f==='5'&&k==='0')||(f==='7'&&k==='5')));
+        if(ok) buf+=k; else hint('ทศนิยมได้แค่ .25 .50 .75');
+      }
+      else { if(fresh){ buf=''; fresh=false; } const w=buf==='0'?'':buf; if(w.length>=2) hint('ใส่ได้ไม่เกิน 2 หลัก'); else buf=w+k; }   // จำนวนเต็มไม่เกิน 2 หลัก
       show();
     });
     document.addEventListener('pointerdown',e=>{
