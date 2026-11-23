@@ -1709,6 +1709,8 @@
   .note-count{font-size:12px;color:var(--t3,#8a8273);text-align:right;margin:-6px 0 8px;line-height:1.4}
   .note-count.low{color:#9a5b00}
   .note-count.over{color:#b42318;font-weight:500}
+  /* [2026-11-23 ตามที่ขอ] เตือนรหัสสินค้า/Size ยาวเกินที่ Salesforce รับ */
+  .flimit-warn{font-size:12px;color:#b42318;font-weight:500;text-align:right;margin:-4px 0 8px;line-height:1.4}
 </style>
 <script>
 /* ===== [ใหม่ 2026-10-19 ตามที่ขอ] Suitcube Loader (ตัวสร้างลูกบาศก์รอโหลด · คู่กับ CSS .sc-loader) — ต้นฉบับ suitcube-loader.js ปรับ: เพิ่ม decor (ไม่ประกาศ role=status ซ้ำเมื่อมีข้อความ "กำลัง…" อยู่ข้างๆ) + inline (.sc-inl)
@@ -5932,7 +5934,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-23-1-voice-4-qr-1-numpad-2';
+  const APP_VERSION = '2026-11-23-2-voice-4-qr-1-numpad-2';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -10301,6 +10303,38 @@
     setInterval(noteCountAll,1500);   // ร่าง/บิลเก่าที่โหลดเข้าฟอร์ม (ไม่มี event)
     setTimeout(noteCountAll,0);
   })();
+  // ── [2026-11-23 ตามที่ขอ "กันด้วย"] ช่องที่ Salesforce จำกัดความยาว (ยืนยันจากข้อผิดพลาดจริงในตาราง Lark) ──
+  //   รหัสสินค้า Field143__c ≤ 15 ตัว (RD26091001 "FW-ZD2202-H1-BK-46" · RD26091308 "SH200-Beige-WHT-54")
+  //   Size เสื้อสูท Size1__c ≤ 2 ตัว (SL26102004 "105") · ช่องอื่นยังไม่รู้เพดาน ไม่กัน
+  const SKU_MAX=15, SUIT_SIZE_MAX=2;
+  function fieldLimitProblems(block){
+    const out=[], type=block.querySelector('.type-select')?.value||'';
+    const sku=(block.querySelector('.sku-input')?.value||'').trim(), size=(block.querySelector('.size-input')?.value||'').trim();
+    if(sku.length>SKU_MAX) out.push({el:'.sku-input', msg:'รหัสสินค้ายาว '+sku.length+' ตัว — Salesforce รับได้ไม่เกิน '+SKU_MAX+' ตัว (ถ้ามีไซซ์ต่อท้าย ให้ย้ายไซซ์ไปช่อง Size)'});
+    if(type.includes('เสื้อสูท') && size.length>SUIT_SIZE_MAX && !/^BL-/i.test(sku)) out.push({el:'.size-input', msg:'Size เสื้อสูทใส่ได้ไม่เกิน '+SUIT_SIZE_MAX+' ตัว (เช่น 46) — ตอนนี้ "'+size+'"'});
+    return out;
+  }
+  function updateFieldLimitWarn(block){
+    const probs=fieldLimitProblems(block);
+    ['.sku-input','.size-input'].forEach(sel=>{
+      const inp=block.querySelector(sel); if(!inp) return;
+      const row=inp.closest('.frow')||inp.parentElement; if(!row) return;
+      let w=row.nextElementSibling; if(!(w && w.classList.contains('flimit-warn') && w.dataset.for===sel)) w=null;
+      const p=probs.find(x=>x.el===sel);
+      if(p){ if(!w){ w=document.createElement('div'); w.className='flimit-warn'; w.dataset.for=sel; row.insertAdjacentElement('afterend',w); } w.textContent='⚠ '+p.msg; }
+      else if(w) w.remove();
+    });
+  }
+  (function(){
+    const pw=document.getElementById('productsWrap'); if(!pw) return;
+    const all=()=>pw.querySelectorAll('.product-block').forEach(updateFieldLimitWarn);
+    let q=0; const later=()=>{ if(q) return; q=requestAnimationFrame(()=>{ q=0; all(); }); };
+    pw.addEventListener('input',later); pw.addEventListener('change',later);
+    new MutationObserver(later).observe(pw,{childList:true});
+    setInterval(all,1500); setTimeout(all,0);
+  })();
+  function findFieldLimitProblems(){ return [...document.querySelectorAll('#productsWrap .product-block')].map((b,i)=>({i,p:fieldLimitProblems(b)})).filter(x=>x.p.length); }
+
   function findNoteOverLimit(){ return [...document.querySelectorAll('#productsWrap .product-block')].map((b,i)=>({b,i,n:noteTotalLen(b)})).filter(x=>x.b.querySelector('.note-input') && x.n>NOTE_MAX); }
 
   function findPendingLegConfirms(){
@@ -13349,6 +13383,9 @@
     const legPending=findPendingLegConfirms();
     if(legPending.length){ showPendingLegConfirm(legPending); return; }
     // [2026-11-23 ตามที่ขอ] หมายเหตุเกิน 255 ตัว (รวมที่ระบบต่อท้าย) — Salesforce สร้างสินค้าไม่ได้ → ไม่ให้บันทึก
+    // [2026-11-23 ตามที่ขอ] รหัสสินค้า > 15 ตัว / Size เสื้อสูท > 2 ตัว — Salesforce สร้างสินค้าไม่ได้ → ไม่ให้บันทึก
+    const fldBad=findFieldLimitProblems();
+    if(fldBad.length){ document.querySelectorAll('#productsWrap .product-block').forEach(updateFieldLimitWarn); showResult(false,'ข้อมูลยาวเกินที่ Salesforce รับ:\n'+fldBad.map(x=>x.p.map(p=>'• สินค้าชิ้นที่ '+(x.i+1)+': '+p.msg).join('\n')).join('\n')); goTo(2); return; }
     const noteOver=findNoteOverLimit();
     if(noteOver.length){ noteCountAll(); showResult(false,'หมายเหตุยาวเกิน '+NOTE_MAX+' ตัวอักษร (Salesforce รับไม่ได้):\n'+noteOver.map(x=>'• สินค้าชิ้นที่ '+(x.i+1)+' ยาว '+x.n+' ตัว — ลดอีก '+(x.n-NOTE_MAX)+' ตัว').join('\n')); goTo(2); return; }
     const isEditing=!!_editingRecordId;
