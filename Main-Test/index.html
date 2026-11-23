@@ -1704,7 +1704,13 @@
   .kp-grid .kp-fr{font:500 18px 'Barlow',sans-serif;color:var(--goldink,#8a6a1f);background:#fbf6ea}
   .kp-grid .kp-fn{font:500 15px 'Prompt',sans-serif;color:var(--t2,#6b6457)}
   .kp-grid .kp-ok{grid-column:1/-1;height:50px;background:var(--ink,#232220);color:#fff;border-color:var(--ink,#232220);font:500 17px 'Prompt',sans-serif}
-  input.numonly.kp-on{caret-color:transparent;outline:2px solid var(--gold,#c9a24a);outline-offset:1px}
+  input.numonly.kp-on,input.size-input.kp-on{caret-color:transparent;outline:2px solid var(--gold,#c9a24a);outline-offset:1px}
+  /* [numpad-3 2026-11-23 ตามที่ขอ "Size เป็น numpad"] ปุ่มไซซ์ตัวอักษร (เสื้อสูท/เชิ้ต) */
+  .kp-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}
+  .kp-chips:empty{display:none}
+  .kp-chips button{height:40px;min-width:54px;padding:0 10px;border-radius:999px;border:1px solid var(--rule2,#ddd3bd);background:#fff;font:600 16px 'Barlow',sans-serif;color:var(--ink,#232220);touch-action:manipulation}
+  .kp-chips button.on{background:var(--ink,#232220);color:#fff;border-color:var(--ink,#232220)}
+  .kp-grid button.kp-hide{visibility:hidden}
   /* [2026-11-23 ตามที่ขอ] ตัวนับหมายเหตุสินค้า (สูงสุด 255 ตัว รวมที่ระบบต่อท้ายให้) */
   .note-count{font-size:12px;color:var(--t3,#8a8273);text-align:right;margin:-6px 0 8px;line-height:1.4}
   .note-count.low{color:#9a5b00}
@@ -5934,7 +5940,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-23-2-voice-4-qr-1-numpad-2';
+  const APP_VERSION = '2026-11-23-2-voice-4-qr-1-numpad-3';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -13544,22 +13550,31 @@
   (function(){
     const coarse=()=>{ try{ const ua=navigator.userAgent||''; return /iPhone|iPad|iPod|Android/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints>1) || matchMedia('(pointer:coarse)').matches; }catch(e){ return false; } };   // iPad/มือถือ · คอม Windows จอสัมผัสที่มีเมาส์ = พิมพ์ได้ปกติ
     if(!coarse()) return;
-    const isKp=el=>!!(el && el.tagName==='INPUT' && el.classList.contains('numonly') && !el.classList.contains('takein-input') && !el.closest('.field-wrap') && (!el.readOnly || el.dataset.kp==='1'));
+    const isSize=el=>!!(el && el.tagName==='INPUT' && el.classList.contains('size-input') && el.closest('.product-block'));   // [numpad-3] ช่อง Size ของสินค้า
+    const isKp=el=>isSize(el) || !!(el && el.tagName==='INPUT' && el.classList.contains('numonly') && !el.classList.contains('takein-input') && !el.closest('.field-wrap') && (!el.readOnly || el.dataset.kp==='1'));
     function mark(el){ if(el.dataset.kp==='1') return; el.dataset.kp='1'; el.readOnly=true; el.setAttribute('inputmode','none'); }
-    const sweep=()=>document.querySelectorAll('input.numonly').forEach(el=>{ if(isKp(el)) mark(el); });
+    const sweep=()=>document.querySelectorAll('input.numonly, #productsWrap input.size-input').forEach(el=>{ if(isKp(el)) mark(el); });
     const sheet=document.createElement('div'); sheet.className='kp-sheet'; sheet.setAttribute('role','dialog'); sheet.setAttribute('aria-label','แป้นตัวเลข');
-    sheet.innerHTML='<div class="kp-in"><div class="kp-head"><span class="kp-lab"></span><span class="kp-val"></span></div><div class="kp-grid">'
+    sheet.innerHTML='<div class="kp-in"><div class="kp-head"><span class="kp-lab"></span><span class="kp-val"></span></div><div class="kp-chips"></div><div class="kp-grid">'
       +['7','8','9','⌫','4','5','6','¼','1','2','3','½','0','.','ล้าง','¾'].map(k=>'<button type="button" data-k="'+k+'" class="'+(/[¼½¾]/.test(k)?'kp-fr':(k==='ล้าง'||k==='⌫'?'kp-fn':''))+'">'+k+'</button>').join('')
       +'<button type="button" class="kp-ok" data-k="ok">ตกลง</button></div></div>';
-    let inp=null, buf='', fresh=true, openedAt=0, padEl=null, padOld='';
-    const lab=sheet.querySelector('.kp-lab'), val=sheet.querySelector('.kp-val');
-    const show=()=>{ val.innerHTML=(buf||'0')+'<small>นิ้ว</small>'; };
+    let inp=null, buf='', fresh=true, openedAt=0, padEl=null, padOld='', mode='num', halfOk=false, sizeMax=3;
+    const lab=sheet.querySelector('.kp-lab'), val=sheet.querySelector('.kp-val'), chips=sheet.querySelector('.kp-chips');
+    const show=()=>{ val.innerHTML=mode==='size'?((buf||'—')+''):((buf||'0')+'<small>นิ้ว</small>'); chips.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.sz===buf)); };
+    // [numpad-3] Size ใช้กติกาเดิมของแอป (sizeRule): เสื้อสูท = ตัวเลข ≤2 หลัก · กางเกง = ตัวเลข ≤3 หลัก (ไม่มีจุด) · ประเภทอื่น ≤3 ตัว + ปุ่มไซซ์ตัวอักษร (ตามรายการไซซ์จริงของประเภทนั้น)
+    function sizeSetup(el){
+      const type=el.closest('.product-block')?.querySelector('.type-select')?.value||'';
+      const rule=(typeof sizeRule==='function')?sizeRule(type):{max:3,digits:false};
+      const list=(typeof VALID_SIZES!=='undefined' && VALID_SIZES[type])||[];
+      sizeMax=rule.max; halfOk=false;
+      chips.innerHTML=rule.digits?'':list.filter(x=>!/^\d/.test(x) && x.length<=rule.max).map(x=>'<button type="button" data-sz="'+x+'">'+x+'</button>').join('');
+    }
     // ทศนิยมที่พิมพ์ค้าง: .2 → .25 · .7 → .75 · .5/.50 → .5 · ไม่มีเศษ = จำนวนเต็ม
     function kpClean(b){ if(b===''||b==='.') return ''; const p=b.split('.'), w=parseInt(p[0]||'0',10)||0, f=p[1]||''; const fr=f===''?0:(f[0]==='2'?.25:f[0]==='5'?.5:f[0]==='7'?.75:0); const n=w+fr; return n?String(n):''; }
     let hintT=0; function hint(t){ const k=lab.textContent; lab.textContent=t; lab.style.color='#b42318'; clearTimeout(hintT); hintT=setTimeout(()=>{ lab.textContent=k; lab.style.color=''; },1400); }
     function commit(){
       if(!inp) return;
-      const v=kpClean(buf);
+      const v=mode==='size'?String(buf||'').replace(/\.$/,''):kpClean(buf);
       if(inp.value!==v){ inp.value=v; inp.dispatchEvent(new Event('input',{bubbles:true})); inp.dispatchEvent(new Event('change',{bubbles:true})); }
     }
     function scroller(el){ let p=el.parentElement; while(p && p!==document.body){ const o=getComputedStyle(p).overflowY; if((o==='auto'||o==='scroll') && p.scrollHeight>p.clientHeight) return p; p=p.parentElement; } return document.scrollingElement; }
@@ -13569,7 +13584,10 @@
       if(inp===el) return; if(inp) close(true);
       if(!sheet.isConnected) document.body.appendChild(sheet);
       mark(el); inp=el; buf=el.value||''; fresh=true; el.classList.add('kp-on');
-      const m=el.closest('.mitem'); lab.textContent=(m&&m.querySelector('.k')?.textContent||'').trim();
+      mode=isSize(el)?'size':'num';
+      if(mode==='size') sizeSetup(el); else chips.innerHTML='';
+      sheet.querySelectorAll('.kp-grid .kp-fr').forEach(b=>b.classList.toggle('kp-hide', mode==='size' && !(b.dataset.k==='½' && halfOk)));
+      const m=el.closest('.mitem'); lab.textContent=mode==='size'?'Size':(m&&m.querySelector('.k')?.textContent||'').trim();
       show(); sheet.classList.add('show'); openedAt=performance.now();
       unpad(); padEl=scroller(el); padOld=padEl.style.paddingBottom; padEl.style.paddingBottom=(sheet.offsetHeight+24)+'px';   // ช่องแถวล่างสุดเลื่อนขึ้นพ้นแป้นได้
       setTimeout(()=>{ if(inp!==el) return; const r=el.getBoundingClientRect(), top=window.innerHeight-sheet.offsetHeight-16; if(r.bottom<=top && r.top>=80) return; const dy=r.bottom-top+Math.min(120,top/3); (padEl||document.scrollingElement).scrollBy({top:dy,behavior:'smooth'}); },220);   // เลื่อนช่องขึ้นมาเหนือแป้น (หน้านี้เลื่อนในกล่อง ไม่ใช่ทั้งหน้า)
@@ -13577,8 +13595,14 @@
     sheet.addEventListener('pointerdown',e=>e.preventDefault());   // ไม่ให้ช่องหลุดโฟกัส/หน้าเลื่อน
     sheet.addEventListener('click',e=>{
       const b=e.target.closest('button'); if(!b||!inp) return; if(performance.now()-openedAt<350) return;   // แตะช่องแล้วแป้นเด้งขึ้นใต้นิ้ว — ไม่นับเป็นการกดเลข
+      if(b.dataset.sz){ buf=b.dataset.sz; fresh=false; show(); close(true); return; }   // [numpad-3] ไซซ์ตัวอักษร = เลือกแล้วปิดเลย
       const k=b.dataset.k;
       if(k==='ok'){ close(true); return; }
+      if(mode==='size' && /^[A-Za-z]/.test(buf) && /^[0-9.]$/.test(k)){ buf=''; }   // เคยเลือกไซซ์ตัวอักษรไว้ แล้วกดตัวเลข = เริ่มใหม่
+      if(mode==='size' && /^[0-9]$/.test(k)){ if(fresh){ buf=''; fresh=false; } if(buf.length>=sizeMax) hint('Size ใส่ได้ไม่เกิน '+sizeMax+' หลัก'); else buf+=k; show(); return; }
+      if(mode==='size' && k==='.'){ if(!halfOk){ hint('Size ประเภทนี้ไม่มีทศนิยม'); show(); return; } if(fresh||buf===''){ hint('ใส่ตัวเลขก่อน เช่น 29.5'); show(); return; } if(buf.indexOf('.')<0) buf+='.'; fresh=false; show(); return; }
+      if(mode==='size' && buf.indexOf('.')>=0 && /^[0-9]$/.test(k)){ if(buf.endsWith('.') && k==='5') buf+='5'; else hint('Size ทศนิยมได้แค่ .5'); show(); return; }
+      if(mode==='size' && k==='½'){ const w=Math.floor(parseFloat(buf)||0); if(!w){ hint('ใส่ตัวเลขก่อน'); show(); return; } buf=w+'.5'; fresh=false; show(); return; }
       if(k==='ล้าง'){ buf=''; fresh=false; }
       else if(k==='⌫'){ buf=fresh?'':buf.slice(0,-1); fresh=false; }
       else if(k==='¼'||k==='½'||k==='¾'){ const w=Math.floor(parseFloat(buf)||0), f={'¼':.25,'½':.5,'¾':.75}[k]; buf=String(w+f); fresh=false; }   // เศษส่วน = จำนวนเต็มเดิม + เศษ (12 → 12.75)
