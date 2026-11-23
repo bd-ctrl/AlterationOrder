@@ -5940,7 +5940,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-23-3-voice-4-qr-1-numpad-4';
+  const APP_VERSION = '2026-11-23-4-voice-4-qr-1-numpad-4';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -10282,7 +10282,23 @@
     else { const k=get('ต่ำเข่า').v; if(k) out.push('ต่ำเข่า: '+Math.abs(k)+' นิ้ว'); }
     return out.filter(Boolean);
   }
-  function noteTotalLen(block){ const note=(block.querySelector('.note-input')?.value||'').trim(); return [note,...noteExtrasOf(block)].filter(Boolean).join('\n').length; }
+  // [2026-11-23 รอบ 2] ข้อความที่ Worker (sh18) เติมลงหมายเหตุนอกจากค่าวัด — ต้องนับด้วย ไม่งั้นนับต่ำกว่าจริง
+  function noteOtherExtras(block){
+    const out=[], type=block.querySelector('.type-select')?.value||'';
+    const urgent=document.getElementById('urgentCheck')?.classList.contains('on');
+    if(urgent){ const ap=(document.getElementById('urgentApprover')?.value||'').trim(); out.push('!! งานด่วน !!'+(ap?' (อนุมัติ: '+ap+')':'')); }
+    const pay=document.querySelector('#payToggle button.on')?.textContent.trim()||'';
+    if(pay.includes('ค้างชำระ')){ const amt=(document.getElementById('debtAmount')?.value||'').trim(); out.push('สถานะการชำระเงิน: ค้างชำระ'+(amt?' '+amt+' บาท':'')); }
+    const br=(block.querySelector('.branch-prod')?.value||'').trim(), ct=(block.querySelector('.contact-input')?.value||'').trim(), top=(document.getElementById('branchTop')?.value||'').trim();
+    if(ct && br && (typeof CUST_STOCK==='undefined' || br!==CUST_STOCK) && (br==='OFFICE' || br!==top)) out.push(br.toUpperCase()==='OFFICE' ? 'จองกับ: '+ct : 'พนักงานขายที่ติดต่อ '+ct);
+    return out;
+  }
+  function noteTotalLen(block){
+    const note=(block.querySelector('.note-input')?.value||'').trim(), type=block.querySelector('.type-select')?.value||'';
+    const known=/เสื้อสูท|กางเกง|เสื้อเชิ้ต|เสื้อกั๊ก/.test(type), size=(block.querySelector('.size-input')?.value||'').trim();
+    const base=(!known && size) ? (note?note+' | size '+size:'size '+size) : note;   // Accessory: Worker ต่อ " | size X" ท้ายหมายเหตุ
+    return [base,...noteExtrasOf(block),...noteOtherExtras(block)].filter(Boolean).join('\n').length;
+  }
   function updateNoteCounter(block){
     const ta=block.querySelector('.note-input'); if(!ta) return;
     let c=block.querySelector('.note-count');
@@ -10345,7 +10361,15 @@
   //   Contact: FirstName 40 · LastName 80 · Nickname1__c 20 · Email 80 · MobilePhone/Phone 40 (Lark รับยาวกว่านี้ → ใช้เพดาน Salesforce ทั้ง 3 ที่)
   //   ที่อยู่จัดส่ง (Order.Messenger__c) 32,768 — ไม่ต้องกัน · Size เชิ้ต/กั๊ก 20 แต่หน้าเว็บจำกัด 3 อยู่แล้ว · หมายเหตุ 255 · SKU 15 · Size สูท 2 (กันแยกไว้แล้ว)
   const CUST_LIMITS=[ {id:'custName',max:40,label:'ชื่อ'}, {id:'custLastName',max:80,label:'นามสกุล'}, {id:'custNick',max:20,label:'ชื่อเล่น'}, {id:'custEmail',max:80,label:'อีเมล'}, {id:'custPhone',max:40,label:'เบอร์โทรศัพท์'} ];
-  function custLimitProblems(){ return CUST_LIMITS.map(c=>{ const el=document.getElementById(c.id), v=(el&&el.value||'').trim(); return v.length>c.max?{c,el,len:v.length}:null; }).filter(Boolean); }
+  // [2026-11-23 รอบ 2] อีเมลรูปแบบผิด → Salesforce ไม่รับ (Worker ตัดอีเมลทิ้งเงียบๆ = ลูกค้าไม่มีอีเมลใน Salesforce) → กันบันทึก · เบอร์ไม่ใช่ 9–10 หลัก → เตือนอย่างเดียว (เบอร์ต่างประเทศได้)
+  const EMAIL_RE=/^[^\s@]{1,64}@[^\s@]{1,255}\.[^\s@]{2,63}$/;
+  function custLimitProblems(){
+    const out=CUST_LIMITS.map(c=>{ const el=document.getElementById(c.id), v=(el&&el.value||'').trim(); return v.length>c.max?{c,el,len:v.length,msg:c.label+'ยาว '+v.length+' ตัว — Salesforce รับได้ไม่เกิน '+c.max+' ตัว (เกิน '+(v.length-c.max)+')'}:null; }).filter(Boolean);
+    const em=document.getElementById('custEmail'), ev=(em&&em.value||'').trim();
+    if(ev && ev.length<=80 && !EMAIL_RE.test(ev)) out.push({c:CUST_LIMITS.find(c=>c.id==='custEmail'),el:em,len:ev.length,msg:'อีเมลรูปแบบไม่ถูกต้อง (เช่น name@gmail.com) — Salesforce ไม่รับ เว้นว่างได้ถ้าไม่มี'});
+    return out;
+  }
+  function phoneSoftWarn(){ const v=(document.getElementById('custPhone')?.value||'').replace(/[\s-]/g,''); return v && !/^\+?\d{9,15}$/.test(v) ? 'เบอร์ควรเป็นตัวเลข 9–10 หลัก (ตรวจอีกครั้ง)' : (v && /^\d+$/.test(v) && (v.length<9||v.length>10) ? 'เบอร์ '+v.length+' หลัก — เบอร์ไทยปกติ 9–10 หลัก (ตรวจอีกครั้ง)' : ''); }
   function updateCustLimitWarn(){
     const bad=custLimitProblems();
     CUST_LIMITS.forEach(c=>{
@@ -10353,7 +10377,8 @@
       const row=el.closest('.frow')||el.parentElement; if(!row) return;
       let w=row.nextElementSibling; if(!(w && w.classList.contains('flimit-warn') && w.dataset.for===c.id)) w=null;
       const p=bad.find(x=>x.c.id===c.id);
-      if(p){ if(!w){ w=document.createElement('div'); w.className='flimit-warn'; w.dataset.for=c.id; row.insertAdjacentElement('afterend',w); } w.textContent='⚠ '+c.label+'ยาว '+p.len+' ตัว — Salesforce รับได้ไม่เกิน '+c.max+' ตัว (เกิน '+(p.len-c.max)+')'; }
+      const soft=(c.id==='custPhone' && !p) ? phoneSoftWarn() : '';
+      if(p||soft){ if(!w){ w=document.createElement('div'); w.className='flimit-warn'; w.dataset.for=c.id; row.insertAdjacentElement('afterend',w); } w.textContent='⚠ '+(p?p.msg:soft); w.style.color=p?'':'#9a5b00'; }
       else if(w) w.remove();
     });
   }
@@ -13413,7 +13438,7 @@
     // [2026-11-23 ตามที่ขอ] หมายเหตุเกิน 255 ตัว (รวมที่ระบบต่อท้าย) — Salesforce สร้างสินค้าไม่ได้ → ไม่ให้บันทึก
     // [2026-11-23 ตามที่ขอ] รหัสสินค้า > 15 ตัว / Size เสื้อสูท > 2 ตัว — Salesforce สร้างสินค้าไม่ได้ → ไม่ให้บันทึก
     const custBad=custLimitProblems();   // [2026-11-23] ช่องลูกค้ายาวเกินที่ Salesforce รับ → ไม่ให้บันทึก
-    if(custBad.length){ updateCustLimitWarn(); showResult(false,'ข้อมูลลูกค้ายาวเกินที่ Salesforce รับ:\n'+custBad.map(x=>'• '+x.c.label+' ยาว '+x.len+' ตัว — ได้ไม่เกิน '+x.c.max+' ตัว').join('\n')); goTo(1); return; }
+    if(custBad.length){ updateCustLimitWarn(); showResult(false,'ข้อมูลลูกค้าที่ Salesforce ไม่รับ:\n'+custBad.map(x=>'• '+x.msg).join('\n')); goTo(1); return; }
     const fldBad=findFieldLimitProblems();
     if(fldBad.length){ document.querySelectorAll('#productsWrap .product-block').forEach(updateFieldLimitWarn); showResult(false,'ข้อมูลยาวเกินที่ Salesforce รับ:\n'+fldBad.map(x=>x.p.map(p=>'• สินค้าชิ้นที่ '+(x.i+1)+': '+p.msg).join('\n')).join('\n')); goTo(2); return; }
     const noteOver=findNoteOverLimit();
