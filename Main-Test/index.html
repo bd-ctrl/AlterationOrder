@@ -5940,7 +5940,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-23-5-voice-4-qr-1-numpad-4';
+  const APP_VERSION = '2026-11-23-6-voice-4-qr-1-numpad-4';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -10305,7 +10305,7 @@
     if(!c){ const row=ta.closest('.frow'); if(!row) return; c=document.createElement('div'); c.className='note-count'; c.setAttribute('aria-live','polite'); row.insertAdjacentElement('afterend',c); }
     const used=noteTotalLen(block), extra=used-(ta.value||'').trim().length, left=NOTE_MAX-used;
     c.textContent = left>=0 ? 'เหลือ '+left+' ตัว (สูงสุด '+NOTE_MAX+(extra>0?' · รวมที่ระบบต่อท้ายให้ '+extra+' ตัว':'')+')'
-                            : 'เกิน '+(-left)+' ตัว — ลดหมายเหตุให้เหลือไม่เกิน '+NOTE_MAX+' ตัว (Salesforce รับไม่ได้)';
+                            : 'เหลือ 0 ตัว (สูงสุด '+NOTE_MAX+')';   // [2026-11-23 ตามที่ขอ "ไม่ต้องบอก ถ้าเกินคือพิมพ์ไม่ได้เลย"] ไม่ขึ้นข้อความเกิน · พิมพ์/วางเกินถูกตัดอยู่แล้ว
     c.classList.toggle('over',left<0); c.classList.toggle('low',left>=0 && left<=20);
   }
   function noteCountAll(){ document.querySelectorAll('#productsWrap .product-block').forEach(updateNoteCounter); }
