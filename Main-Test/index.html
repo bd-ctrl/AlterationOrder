@@ -1705,6 +1705,10 @@
   .kp-grid .kp-fn{font:500 15px 'Prompt',sans-serif;color:var(--t2,#6b6457)}
   .kp-grid .kp-ok{grid-column:1/-1;height:50px;background:var(--ink,#232220);color:#fff;border-color:var(--ink,#232220);font:500 17px 'Prompt',sans-serif}
   input.numonly.kp-on{caret-color:transparent;outline:2px solid var(--gold,#c9a24a);outline-offset:1px}
+  /* [2026-11-23 ตามที่ขอ] ตัวนับหมายเหตุสินค้า (สูงสุด 255 ตัว รวมที่ระบบต่อท้ายให้) */
+  .note-count{font-size:12px;color:var(--t3,#8a8273);text-align:right;margin:-6px 0 8px;line-height:1.4}
+  .note-count.low{color:#9a5b00}
+  .note-count.over{color:#b42318;font-weight:500}
 </style>
 <script>
 /* ===== [ใหม่ 2026-10-19 ตามที่ขอ] Suitcube Loader (ตัวสร้างลูกบาศก์รอโหลด · คู่กับ CSS .sc-loader) — ต้นฉบับ suitcube-loader.js ปรับ: เพิ่ม decor (ไม่ประกาศ role=status ซ้ำเมื่อมีข้อความ "กำลัง…" อยู่ข้างๆ) + inline (.sc-inl)
@@ -5928,7 +5932,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-18-1-voice-4-qr-1-numpad-2';
+  const APP_VERSION = '2026-11-23-1-voice-4-qr-1-numpad-2';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -10249,6 +10253,56 @@
   }
   function focusLegInput(m){ const inp=legInputOf(m); if(!inp) return; inp.scrollIntoView({block:'center',behavior:'smooth'}); setTimeout(()=>{ try{ inp.focus(); inp.select(); }catch(e){} },250); }
   // ช่องความยาวขาที่ยังต้องตอบก่อนบันทึก (ทุกก้อนสินค้าในฟอร์ม)
+  // ── [2026-11-23 ตามที่ขอ "ให้ max แค่ 255 ตัว มีตัวอักษรขึ้นด้วยว่าเหลือกี่ตัว"] หมายเหตุสินค้า → Salesforce Field20__c รับได้ไม่เกิน 255 ตัว ──
+  //   เกินแล้ว Worker สร้างสินค้าไม่ได้ (STRING_TOO_LONG → "ข้อผิดพลาดการสร้างสินค้า") · Worker ต่อท้ายหมายเหตุเองด้วย (ตรรกะเดียวกับ Worker sh18):
+  //   สูท = "อก/เอว/สะโพก: เก็บเข้า|ขยายออก X นิ้ว" · "ต้นแขน: เก็บเข้า X นิ้ว" · "ต่ำศอก: X นิ้ว"   กางเกง = "เอว/สะโพก: …" · "ต่ำเข่า: X นิ้ว" (คั่นด้วยขึ้นบรรทัด)
+  //   → นับรวมทั้งหมด · พิมพ์/วางเกิน = ตัดส่วนเกินที่เพิ่งพิมพ์ · เกินจากที่อื่น (ติ๊ก/ใส่ค่าวัด/ร่างเก่า) = ตัวนับแดง + กดบันทึกไม่ได้จนกว่าจะลด
+  const NOTE_MAX=255;
+  function noteExtrasOf(block){
+    const type=block.querySelector('.type-select')?.value||'';
+    const isSuit=type.includes('เสื้อสูท'), isPants=type.includes('กางเกง');
+    if(!isSuit && !isPants) return [];
+    const ml=block.querySelector('.measure-list'); if(!ml || ml.classList.contains('hidden')) return [];
+    const items=[...ml.querySelectorAll('.mitem:not(.group-toggle-row)')];
+    const get=lab=>{ const w=lab.replace(/\s+/g,''); const m=items.find(x=>{ const k=(x.querySelector('.k')?.textContent||'').replace(/\s+/g,''); return k===w || (w==='ต้นแขน' && k.indexOf('ต้นแขน')===0); });
+      if(!m || !m.querySelector('.toggle button')?.classList.contains('on')) return {v:0,t:0};
+      const n=m.querySelector('.numonly:not(.takein-input)'), t=m.querySelector('.takein-input');
+      return {v:n?getMitemValue(n):0, t:t?Math.abs(getMitemValue(t)):0}; };
+    const dir=(l,v)=>v?l+': '+(v>0?'ขยายออก':'เก็บเข้า')+' '+Math.abs(v)+' นิ้ว':null;
+    const out=[dir('เอว',get('เอว').v), dir('สะโพก',get('สะโพก').v)];
+    if(isSuit){ out.unshift(dir('อก',get('อก').v)); const a=get('ต้นแขน').t; if(a) out.push('ต้นแขน: เก็บเข้า '+a+' นิ้ว'); const e=get('ต่ำศอก').v; if(e) out.push('ต่ำศอก: '+Math.abs(e)+' นิ้ว'); }
+    else { const k=get('ต่ำเข่า').v; if(k) out.push('ต่ำเข่า: '+Math.abs(k)+' นิ้ว'); }
+    return out.filter(Boolean);
+  }
+  function noteTotalLen(block){ const note=(block.querySelector('.note-input')?.value||'').trim(); return [note,...noteExtrasOf(block)].filter(Boolean).join('\n').length; }
+  function updateNoteCounter(block){
+    const ta=block.querySelector('.note-input'); if(!ta) return;
+    let c=block.querySelector('.note-count');
+    if(!c){ const row=ta.closest('.frow'); if(!row) return; c=document.createElement('div'); c.className='note-count'; c.setAttribute('aria-live','polite'); row.insertAdjacentElement('afterend',c); }
+    const used=noteTotalLen(block), extra=used-(ta.value||'').trim().length, left=NOTE_MAX-used;
+    c.textContent = left>=0 ? 'เหลือ '+left+' ตัว (สูงสุด '+NOTE_MAX+(extra>0?' · รวมที่ระบบต่อท้ายให้ '+extra+' ตัว':'')+')'
+                            : 'เกิน '+(-left)+' ตัว — ลดหมายเหตุให้เหลือไม่เกิน '+NOTE_MAX+' ตัว (Salesforce รับไม่ได้)';
+    c.classList.toggle('over',left<0); c.classList.toggle('low',left>=0 && left<=20);
+  }
+  function noteCountAll(){ document.querySelectorAll('#productsWrap .product-block').forEach(updateNoteCounter); }
+  (function(){
+    const pw=document.getElementById('productsWrap'); if(!pw) return;
+    let q=0; const later=()=>{ if(q) return; q=requestAnimationFrame(()=>{ q=0; noteCountAll(); }); };
+    pw.addEventListener('input',e=>{
+      const ta=e.target;
+      if(e.isTrusted && ta && ta.classList && ta.classList.contains('note-input')){   // พิมพ์/วางเอง → ตัดส่วนที่เกิน
+        const block=ta.closest('.product-block'), over=block?noteTotalLen(block)-NOTE_MAX:0;
+        if(over>0){ const v=ta.value, pos=(ta.selectionStart==null?v.length:ta.selectionStart), cut=Math.min(over,pos); ta.value=v.slice(0,pos-cut)+v.slice(pos); try{ ta.setSelectionRange(pos-cut,pos-cut); }catch(_e){} if(typeof resizeNoteInput==='function') resizeNoteInput(ta); }   // ตัดเฉพาะตัวที่เพิ่งพิมพ์/วาง (หน้าเคอร์เซอร์) ไม่แตะข้อความติ๊กท้ายช่อง
+      }
+      later();
+    });
+    pw.addEventListener('change',later); pw.addEventListener('click',()=>setTimeout(later,0));
+    new MutationObserver(later).observe(pw,{childList:true});
+    setInterval(noteCountAll,1500);   // ร่าง/บิลเก่าที่โหลดเข้าฟอร์ม (ไม่มี event)
+    setTimeout(noteCountAll,0);
+  })();
+  function findNoteOverLimit(){ return [...document.querySelectorAll('#productsWrap .product-block')].map((b,i)=>({b,i,n:noteTotalLen(b)})).filter(x=>x.b.querySelector('.note-input') && x.n>NOTE_MAX); }
+
   function findPendingLegConfirms(){
     return [...document.querySelectorAll('#productsWrap .mitem')].filter(m=>{ const v=legLowValue(m); return v!=null && legInputOf(m).dataset.legOk!==String(v); });
   }
@@ -13294,6 +13348,9 @@
     // [ใหม่ 2026-09-29 ตามที่ขอ] ความยาวขา < 32 นิ้วที่ยังไม่ได้ตอบ "แน่ใจ" → พากลับไปที่กล่องคำถามใต้ช่อง ยังไม่บันทึก
     const legPending=findPendingLegConfirms();
     if(legPending.length){ showPendingLegConfirm(legPending); return; }
+    // [2026-11-23 ตามที่ขอ] หมายเหตุเกิน 255 ตัว (รวมที่ระบบต่อท้าย) — Salesforce สร้างสินค้าไม่ได้ → ไม่ให้บันทึก
+    const noteOver=findNoteOverLimit();
+    if(noteOver.length){ noteCountAll(); showResult(false,'หมายเหตุยาวเกิน '+NOTE_MAX+' ตัวอักษร (Salesforce รับไม่ได้):\n'+noteOver.map(x=>'• สินค้าชิ้นที่ '+(x.i+1)+' ยาว '+x.n+' ตัว — ลดอีก '+(x.n-NOTE_MAX)+' ตัว').join('\n')); goTo(2); return; }
     const isEditing=!!_editingRecordId;
     // [ใหม่ตามที่ขอ] บิลใหม่ที่มีสินค้าเกิน "แกน" (เสื้อสูท+กางเกง) — ถามก่อนว่าจะรวมหรือแยกบิล (แก้ไขบิลเก่าไม่ถาม)
     if(!isEditing){
