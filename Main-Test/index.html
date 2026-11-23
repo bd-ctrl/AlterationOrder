@@ -5940,7 +5940,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-23-2-voice-4-qr-1-numpad-3';
+  const APP_VERSION = '2026-11-23-3-voice-4-qr-1-numpad-3';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -10341,6 +10341,28 @@
   })();
   function findFieldLimitProblems(){ return [...document.querySelectorAll('#productsWrap .product-block')].map((b,i)=>({i,p:fieldLimitProblems(b)})).filter(x=>x.p.length); }
 
+  // ── [2026-11-23 ตามที่ขอ] ช่องลูกค้า — เพดานจริงจาก Salesforce describe (GET /sf-field-limits · Worker sh18l · ตรวจ 23 พ.ย. 2569) ──
+  //   Contact: FirstName 40 · LastName 80 · Nickname1__c 20 · Email 80 · MobilePhone/Phone 40 (Lark รับยาวกว่านี้ → ใช้เพดาน Salesforce ทั้ง 3 ที่)
+  //   ที่อยู่จัดส่ง (Order.Messenger__c) 32,768 — ไม่ต้องกัน · Size เชิ้ต/กั๊ก 20 แต่หน้าเว็บจำกัด 3 อยู่แล้ว · หมายเหตุ 255 · SKU 15 · Size สูท 2 (กันแยกไว้แล้ว)
+  const CUST_LIMITS=[ {id:'custName',max:40,label:'ชื่อ'}, {id:'custLastName',max:80,label:'นามสกุล'}, {id:'custNick',max:20,label:'ชื่อเล่น'}, {id:'custEmail',max:80,label:'อีเมล'}, {id:'custPhone',max:40,label:'เบอร์โทรศัพท์'} ];
+  function custLimitProblems(){ return CUST_LIMITS.map(c=>{ const el=document.getElementById(c.id), v=(el&&el.value||'').trim(); return v.length>c.max?{c,el,len:v.length}:null; }).filter(Boolean); }
+  function updateCustLimitWarn(){
+    const bad=custLimitProblems();
+    CUST_LIMITS.forEach(c=>{
+      const el=document.getElementById(c.id); if(!el) return;
+      const row=el.closest('.frow')||el.parentElement; if(!row) return;
+      let w=row.nextElementSibling; if(!(w && w.classList.contains('flimit-warn') && w.dataset.for===c.id)) w=null;
+      const p=bad.find(x=>x.c.id===c.id);
+      if(p){ if(!w){ w=document.createElement('div'); w.className='flimit-warn'; w.dataset.for=c.id; row.insertAdjacentElement('afterend',w); } w.textContent='⚠ '+c.label+'ยาว '+p.len+' ตัว — Salesforce รับได้ไม่เกิน '+c.max+' ตัว (เกิน '+(p.len-c.max)+')'; }
+      else if(w) w.remove();
+    });
+  }
+  (function(){
+    let q=0; const later=()=>{ if(q) return; q=requestAnimationFrame(()=>{ q=0; updateCustLimitWarn(); }); };
+    CUST_LIMITS.forEach(c=>{ const el=document.getElementById(c.id); if(el){ el.addEventListener('input',later); el.addEventListener('change',later); } });
+    setInterval(updateCustLimitWarn,1500); setTimeout(updateCustLimitWarn,0);   // ค่าจากค้นหาลูกค้าเก่า/ร่าง (ไม่มี event)
+  })();
+
   function findNoteOverLimit(){ return [...document.querySelectorAll('#productsWrap .product-block')].map((b,i)=>({b,i,n:noteTotalLen(b)})).filter(x=>x.b.querySelector('.note-input') && x.n>NOTE_MAX); }
 
   function findPendingLegConfirms(){
@@ -13390,6 +13412,8 @@
     if(legPending.length){ showPendingLegConfirm(legPending); return; }
     // [2026-11-23 ตามที่ขอ] หมายเหตุเกิน 255 ตัว (รวมที่ระบบต่อท้าย) — Salesforce สร้างสินค้าไม่ได้ → ไม่ให้บันทึก
     // [2026-11-23 ตามที่ขอ] รหัสสินค้า > 15 ตัว / Size เสื้อสูท > 2 ตัว — Salesforce สร้างสินค้าไม่ได้ → ไม่ให้บันทึก
+    const custBad=custLimitProblems();   // [2026-11-23] ช่องลูกค้ายาวเกินที่ Salesforce รับ → ไม่ให้บันทึก
+    if(custBad.length){ updateCustLimitWarn(); showResult(false,'ข้อมูลลูกค้ายาวเกินที่ Salesforce รับ:\n'+custBad.map(x=>'• '+x.c.label+' ยาว '+x.len+' ตัว — ได้ไม่เกิน '+x.c.max+' ตัว').join('\n')); goTo(1); return; }
     const fldBad=findFieldLimitProblems();
     if(fldBad.length){ document.querySelectorAll('#productsWrap .product-block').forEach(updateFieldLimitWarn); showResult(false,'ข้อมูลยาวเกินที่ Salesforce รับ:\n'+fldBad.map(x=>x.p.map(p=>'• สินค้าชิ้นที่ '+(x.i+1)+': '+p.msg).join('\n')).join('\n')); goTo(2); return; }
     const noteOver=findNoteOverLimit();
