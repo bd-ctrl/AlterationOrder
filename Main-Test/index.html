@@ -5940,7 +5940,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-23-4-voice-4-qr-1-numpad-4';
+  const APP_VERSION = '2026-11-23-5-voice-4-qr-1-numpad-4';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -10360,16 +10360,22 @@
   // ── [2026-11-23 ตามที่ขอ] ช่องลูกค้า — เพดานจริงจาก Salesforce describe (GET /sf-field-limits · Worker sh18l · ตรวจ 23 พ.ย. 2569) ──
   //   Contact: FirstName 40 · LastName 80 · Nickname1__c 20 · Email 80 · MobilePhone/Phone 40 (Lark รับยาวกว่านี้ → ใช้เพดาน Salesforce ทั้ง 3 ที่)
   //   ที่อยู่จัดส่ง (Order.Messenger__c) 32,768 — ไม่ต้องกัน · Size เชิ้ต/กั๊ก 20 แต่หน้าเว็บจำกัด 3 อยู่แล้ว · หมายเหตุ 255 · SKU 15 · Size สูท 2 (กันแยกไว้แล้ว)
-  const CUST_LIMITS=[ {id:'custName',max:40,label:'ชื่อ'}, {id:'custLastName',max:80,label:'นามสกุล'}, {id:'custNick',max:20,label:'ชื่อเล่น'}, {id:'custEmail',max:80,label:'อีเมล'}, {id:'custPhone',max:40,label:'เบอร์โทรศัพท์'} ];
+  const CUST_LIMITS=[ {id:'custName',max:40,label:'ชื่อ'}, {id:'custLastName',max:80,label:'นามสกุล'}, {id:'custNick',max:20,label:'ชื่อเล่น'}, {id:'custEmail',max:80,label:'อีเมล'}, {id:'custPhone',max:10,label:'เบอร์โทรศัพท์'} ];
   // [2026-11-23 รอบ 2] อีเมลรูปแบบผิด → Salesforce ไม่รับ (Worker ตัดอีเมลทิ้งเงียบๆ = ลูกค้าไม่มีอีเมลใน Salesforce) → กันบันทึก · เบอร์ไม่ใช่ 9–10 หลัก → เตือนอย่างเดียว (เบอร์ต่างประเทศได้)
   const EMAIL_RE=/^[^\s@]{1,64}@[^\s@]{1,255}\.[^\s@]{2,63}$/;
   function custLimitProblems(){
     const out=CUST_LIMITS.map(c=>{ const el=document.getElementById(c.id), v=(el&&el.value||'').trim(); return v.length>c.max?{c,el,len:v.length,msg:c.label+'ยาว '+v.length+' ตัว — Salesforce รับได้ไม่เกิน '+c.max+' ตัว (เกิน '+(v.length-c.max)+')'}:null; }).filter(Boolean);
     const em=document.getElementById('custEmail'), ev=(em&&em.value||'').trim();
+    const ph=document.getElementById('custPhone'), pv=(ph&&ph.value||'').trim();   // [2026-11-23] เบอร์ต้องเป็นตัวเลข 10 หลักพอดี
+    if(pv && !/^\d{10}$/.test(pv)) out.push({c:CUST_LIMITS.find(c=>c.id==='custPhone'),el:ph,len:pv.length,msg:'เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลักพอดี — ตอนนี้ '+pv.length+' หลัก'});
     if(ev && ev.length<=80 && !EMAIL_RE.test(ev)) out.push({c:CUST_LIMITS.find(c=>c.id==='custEmail'),el:em,len:ev.length,msg:'อีเมลรูปแบบไม่ถูกต้อง (เช่น name@gmail.com) — Salesforce ไม่รับ เว้นว่างได้ถ้าไม่มี'});
     return out;
   }
-  function phoneSoftWarn(){ const v=(document.getElementById('custPhone')?.value||'').replace(/[\s-]/g,''); return v && !/^\+?\d{9,15}$/.test(v) ? 'เบอร์ควรเป็นตัวเลข 9–10 หลัก (ตรวจอีกครั้ง)' : (v && /^\d+$/.test(v) && (v.length<9||v.length>10) ? 'เบอร์ '+v.length+' หลัก — เบอร์ไทยปกติ 9–10 หลัก (ตรวจอีกครั้ง)' : ''); }
+  function phoneSoftWarn(){ return ''; }   // [2026-11-23] ไม่ใช้แล้ว — เบอร์ไม่ครบ 10 หลักเป็นข้อผิดพลาด (custLimitProblems)
+  // [2026-11-23 ตามที่ขอ "ใส่ได้แค่ 10 หลักเท่านั้น"] ช่องเบอร์รับเฉพาะตัวเลข ไม่เกิน 10 หลัก (ตัดตอนพิมพ์/วาง/โหลดจากร่าง-ลูกค้าเก่า)
+  (function(){ const el=document.getElementById('custPhone'); if(!el) return; el.setAttribute('inputmode','numeric'); el.setAttribute('maxlength','10');
+    const fix=()=>{ const v=String(el.value||''), c=v.replace(/[๐-๙]/g,ch=>String('๐๑๒๓๔๕๖๗๘๙'.indexOf(ch))).replace(/\D/g,'').slice(0,10); if(c!==v) el.value=c; };
+    el.addEventListener('input',fix,true); el.addEventListener('change',fix,true); setInterval(fix,1500); })();
   function updateCustLimitWarn(){
     const bad=custLimitProblems();
     CUST_LIMITS.forEach(c=>{
@@ -13651,7 +13657,7 @@
       const k=b.dataset.k;
       if(k==='ok'){ close(true); return; }
       if(mode==='size' && /^[A-Za-z]/.test(buf) && /^[0-9.]$/.test(k)){ buf=''; }   // เคยเลือกไซซ์ตัวอักษรไว้ แล้วกดตัวเลข = เริ่มใหม่
-      if(mode==='phone'){ if(/^[0-9]$/.test(k)){ if(fresh){ buf=''; fresh=false; } if(buf.length>=15) hint('เบอร์ใส่ได้ไม่เกิน 15 หลัก'); else buf+=k; } else if(k==='⌫'){ buf=fresh?'':buf.slice(0,-1); fresh=false; } else if(k==='ล้าง'){ buf=''; fresh=false; } show(); return; }
+      if(mode==='phone'){ if(/^[0-9]$/.test(k)){ if(fresh){ buf=''; fresh=false; } if(buf.length>=10) hint('เบอร์ใส่ได้ไม่เกิน 10 หลัก'); else buf+=k; } else if(k==='⌫'){ buf=fresh?'':buf.slice(0,-1); fresh=false; } else if(k==='ล้าง'){ buf=''; fresh=false; } show(); return; }
       if(mode==='size' && /^[0-9]$/.test(k)){ if(fresh){ buf=''; fresh=false; } if(buf.length>=sizeMax) hint('Size ใส่ได้ไม่เกิน '+sizeMax+' หลัก'); else buf+=k; show(); return; }
       if(mode==='size' && k==='.'){ if(!halfOk){ hint('Size ประเภทนี้ไม่มีทศนิยม'); show(); return; } if(fresh||buf===''){ hint('ใส่ตัวเลขก่อน เช่น 29.5'); show(); return; } if(buf.indexOf('.')<0) buf+='.'; fresh=false; show(); return; }
       if(mode==='size' && buf.indexOf('.')>=0 && /^[0-9]$/.test(k)){ if(buf.endsWith('.') && k==='5') buf+='5'; else hint('Size ทศนิยมได้แค่ .5'); show(); return; }
