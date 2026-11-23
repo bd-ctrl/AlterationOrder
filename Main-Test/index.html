@@ -5940,7 +5940,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-23-3-voice-4-qr-1-numpad-3';
+  const APP_VERSION = '2026-11-23-3-voice-4-qr-1-numpad-4';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -13575,16 +13575,17 @@
     const coarse=()=>{ try{ const ua=navigator.userAgent||''; return /iPhone|iPad|iPod|Android/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints>1) || matchMedia('(pointer:coarse)').matches; }catch(e){ return false; } };   // iPad/มือถือ · คอม Windows จอสัมผัสที่มีเมาส์ = พิมพ์ได้ปกติ
     if(!coarse()) return;
     const isSize=el=>!!(el && el.tagName==='INPUT' && el.classList.contains('size-input') && el.closest('.product-block'));   // [numpad-3] ช่อง Size ของสินค้า
-    const isKp=el=>isSize(el) || !!(el && el.tagName==='INPUT' && el.classList.contains('numonly') && !el.classList.contains('takein-input') && !el.closest('.field-wrap') && (!el.readOnly || el.dataset.kp==='1'));
+    const isPhone=el=>!!(el && el.id==='custPhone');   // [numpad-4 2026-11-23 ตามที่ขอ "เบอร์โทรศัพท์เป็น numpad ด้วย"]
+    const isKp=el=>isSize(el) || isPhone(el) || !!(el && el.tagName==='INPUT' && el.classList.contains('numonly') && !el.classList.contains('takein-input') && !el.closest('.field-wrap') && (!el.readOnly || el.dataset.kp==='1'));
     function mark(el){ if(el.dataset.kp==='1') return; el.dataset.kp='1'; el.readOnly=true; el.setAttribute('inputmode','none'); }
-    const sweep=()=>document.querySelectorAll('input.numonly, #productsWrap input.size-input').forEach(el=>{ if(isKp(el)) mark(el); });
+    const sweep=()=>document.querySelectorAll('input.numonly, #productsWrap input.size-input, #custPhone').forEach(el=>{ if(isKp(el)) mark(el); });
     const sheet=document.createElement('div'); sheet.className='kp-sheet'; sheet.setAttribute('role','dialog'); sheet.setAttribute('aria-label','แป้นตัวเลข');
     sheet.innerHTML='<div class="kp-in"><div class="kp-head"><span class="kp-lab"></span><span class="kp-val"></span></div><div class="kp-chips"></div><div class="kp-grid">'
       +['7','8','9','⌫','4','5','6','¼','1','2','3','½','0','.','ล้าง','¾'].map(k=>'<button type="button" data-k="'+k+'" class="'+(/[¼½¾]/.test(k)?'kp-fr':(k==='ล้าง'||k==='⌫'?'kp-fn':''))+'">'+k+'</button>').join('')
       +'<button type="button" class="kp-ok" data-k="ok">ตกลง</button></div></div>';
     let inp=null, buf='', fresh=true, openedAt=0, padEl=null, padOld='', mode='num', halfOk=false, sizeMax=3;
     const lab=sheet.querySelector('.kp-lab'), val=sheet.querySelector('.kp-val'), chips=sheet.querySelector('.kp-chips');
-    const show=()=>{ val.innerHTML=mode==='size'?((buf||'—')+''):((buf||'0')+'<small>นิ้ว</small>'); chips.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.sz===buf)); };
+    const show=()=>{ val.innerHTML=mode==='size'?((buf||'—')+''):mode==='phone'?(buf||'—'):((buf||'0')+'<small>นิ้ว</small>'); chips.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.sz===buf)); };
     // [numpad-3] Size ใช้กติกาเดิมของแอป (sizeRule): เสื้อสูท = ตัวเลข ≤2 หลัก · กางเกง = ตัวเลข ≤3 หลัก (ไม่มีจุด) · ประเภทอื่น ≤3 ตัว + ปุ่มไซซ์ตัวอักษร (ตามรายการไซซ์จริงของประเภทนั้น)
     function sizeSetup(el){
       const type=el.closest('.product-block')?.querySelector('.type-select')?.value||'';
@@ -13598,7 +13599,7 @@
     let hintT=0; function hint(t){ const k=lab.textContent; lab.textContent=t; lab.style.color='#b42318'; clearTimeout(hintT); hintT=setTimeout(()=>{ lab.textContent=k; lab.style.color=''; },1400); }
     function commit(){
       if(!inp) return;
-      const v=mode==='size'?String(buf||'').replace(/\.$/,''):kpClean(buf);
+      const v=mode==='size'?String(buf||'').replace(/\.$/,''):mode==='phone'?String(buf||''):kpClean(buf);
       if(inp.value!==v){ inp.value=v; inp.dispatchEvent(new Event('input',{bubbles:true})); inp.dispatchEvent(new Event('change',{bubbles:true})); }
     }
     function scroller(el){ let p=el.parentElement; while(p && p!==document.body){ const o=getComputedStyle(p).overflowY; if((o==='auto'||o==='scroll') && p.scrollHeight>p.clientHeight) return p; p=p.parentElement; } return document.scrollingElement; }
@@ -13608,10 +13609,12 @@
       if(inp===el) return; if(inp) close(true);
       if(!sheet.isConnected) document.body.appendChild(sheet);
       mark(el); inp=el; buf=el.value||''; fresh=true; el.classList.add('kp-on');
-      mode=isSize(el)?'size':'num';
+      mode=isSize(el)?'size':isPhone(el)?'phone':'num';
       if(mode==='size') sizeSetup(el); else chips.innerHTML='';
-      sheet.querySelectorAll('.kp-grid .kp-fr').forEach(b=>b.classList.toggle('kp-hide', mode==='size' && !(b.dataset.k==='½' && halfOk)));
-      const m=el.closest('.mitem'); lab.textContent=mode==='size'?'Size':(m&&m.querySelector('.k')?.textContent||'').trim();
+      if(mode==='phone') buf=String(buf).replace(/\D/g,'');
+      sheet.querySelectorAll('.kp-grid .kp-fr').forEach(b=>b.classList.toggle('kp-hide', mode==='phone' || (mode==='size' && !(b.dataset.k==='½' && halfOk))));
+      sheet.querySelectorAll('.kp-grid [data-k="."]').forEach(b=>b.classList.toggle('kp-hide', mode==='phone'));
+      const m=el.closest('.mitem'); lab.textContent=mode==='size'?'Size':mode==='phone'?'เบอร์โทรศัพท์':(m&&m.querySelector('.k')?.textContent||'').trim();
       show(); sheet.classList.add('show'); openedAt=performance.now();
       unpad(); padEl=scroller(el); padOld=padEl.style.paddingBottom; padEl.style.paddingBottom=(sheet.offsetHeight+24)+'px';   // ช่องแถวล่างสุดเลื่อนขึ้นพ้นแป้นได้
       setTimeout(()=>{ if(inp!==el) return; const r=el.getBoundingClientRect(), top=window.innerHeight-sheet.offsetHeight-16; if(r.bottom<=top && r.top>=80) return; const dy=r.bottom-top+Math.min(120,top/3); (padEl||document.scrollingElement).scrollBy({top:dy,behavior:'smooth'}); },220);   // เลื่อนช่องขึ้นมาเหนือแป้น (หน้านี้เลื่อนในกล่อง ไม่ใช่ทั้งหน้า)
@@ -13623,6 +13626,7 @@
       const k=b.dataset.k;
       if(k==='ok'){ close(true); return; }
       if(mode==='size' && /^[A-Za-z]/.test(buf) && /^[0-9.]$/.test(k)){ buf=''; }   // เคยเลือกไซซ์ตัวอักษรไว้ แล้วกดตัวเลข = เริ่มใหม่
+      if(mode==='phone'){ if(/^[0-9]$/.test(k)){ if(fresh){ buf=''; fresh=false; } if(buf.length>=15) hint('เบอร์ใส่ได้ไม่เกิน 15 หลัก'); else buf+=k; } else if(k==='⌫'){ buf=fresh?'':buf.slice(0,-1); fresh=false; } else if(k==='ล้าง'){ buf=''; fresh=false; } show(); return; }
       if(mode==='size' && /^[0-9]$/.test(k)){ if(fresh){ buf=''; fresh=false; } if(buf.length>=sizeMax) hint('Size ใส่ได้ไม่เกิน '+sizeMax+' หลัก'); else buf+=k; show(); return; }
       if(mode==='size' && k==='.'){ if(!halfOk){ hint('Size ประเภทนี้ไม่มีทศนิยม'); show(); return; } if(fresh||buf===''){ hint('ใส่ตัวเลขก่อน เช่น 29.5'); show(); return; } if(buf.indexOf('.')<0) buf+='.'; fresh=false; show(); return; }
       if(mode==='size' && buf.indexOf('.')>=0 && /^[0-9]$/.test(k)){ if(buf.endsWith('.') && k==='5') buf+='5'; else hint('Size ทศนิยมได้แค่ .5'); show(); return; }
