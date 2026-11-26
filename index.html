@@ -5860,7 +5860,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-23-5';
+  const APP_VERSION = '2026-11-26-2';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -10184,7 +10184,7 @@
     if(!c){ const row=ta.closest('.frow'); if(!row) return; c=document.createElement('div'); c.className='note-count'; c.setAttribute('aria-live','polite'); row.insertAdjacentElement('afterend',c); }
     const used=noteTotalLen(block), extra=used-(ta.value||'').trim().length, left=NOTE_MAX-used;
     c.textContent = left>=0 ? 'เหลือ '+left+' ตัว (สูงสุด '+NOTE_MAX+(extra>0?' · รวมที่ระบบต่อท้ายให้ '+extra+' ตัว':'')+')'
-                            : 'เกิน '+(-left)+' ตัว — ลดหมายเหตุให้เหลือไม่เกิน '+NOTE_MAX+' ตัว (Salesforce รับไม่ได้)';
+                            : 'เหลือ 0 ตัว (สูงสุด '+NOTE_MAX+')';   // [2026-11-23 ตามที่ขอ "ไม่ต้องบอก ถ้าเกินคือพิมพ์ไม่ได้เลย"] ไม่ขึ้นข้อความเกิน · พิมพ์/วางเกินถูกตัดอยู่แล้ว
     c.classList.toggle('over',left<0); c.classList.toggle('low',left>=0 && left<=20);
   }
   function noteCountAll(){ document.querySelectorAll('#productsWrap .product-block').forEach(updateNoteCounter); }
@@ -12954,6 +12954,35 @@
     var v=(verify||{})[id]; if(!v) return 'first';
     return v.n>=AUTO_VERIFY_MAX_RETRY ? 'giveup' : 'retry';
   }
+  // [2026-11-26 ตามที่ขอ] บัญชี rtw@suitcube.com (ชื่อ/สาขา RTW) เปิดแอปเมื่อไหร่ = ทำใบสรุปอัตโนมัติ (?auto=1) ไปพร้อมกันเบื้องหลัง
+  //   ฝังหน้า ?auto=1 ในกรอบซ่อน (ไม่ใช้ display:none — ฟอนต์/รูปวาดใบต้องโหลดได้) · ใช้บัตรผ่านเดียวกับแท็บนี้ · ออกจากระบบ/เปลี่ยนบัญชี = เอากรอบออก
+  //   หลายแท็บ/หลายเครื่องพร้อมกันได้ Worker จองบิลให้ทีละผู้ทำ (sh15) · holder ขึ้นต้น rtw- (ตัวเฝ้า sh18o นับเป็นเครื่องหลังบ้าน) · ปิดชั่วคราว: เปิดด้วย ?noauto=1
+  (function rtwAutoCompanion(){
+    var AUTO_USERS=['RTW','KOOKIE'];   // [2026-11-26-2 ตามที่ขอ] + บัญชี KOOKIE
+    try{
+      var q=new URLSearchParams(location.search);
+      if(q.get('auto')==='1' || q.get('noauto')==='1' || window.top!==window.self) return;
+    }catch(e){ return; }
+    var holder='rtw-'+Math.random().toString(36).slice(2,10), fr=null;
+    function authUser(){
+      var stores=[]; try{ stores.push(window.localStorage); }catch(e){} try{ stores.push(window.sessionStorage); }catch(e){}
+      for(var i=0;i<stores.length;i++){ try{ var o=JSON.parse(stores[i].getItem('suitcube_auth_v1')||'null'); var ex=Number(o && (o.expiresAt||o.exp))||0; if(o && o.user && o.token && (!ex || ex>Date.now())) return o.user; }catch(e){} }
+      return null;
+    }
+    function isRtw(u){ return !!u && [u.name,u.branch].some(function(x){ return AUTO_USERS.indexOf(String(x||'').trim().toUpperCase())>=0; }); }
+    function tick(){
+      var on=isRtw(authUser());
+      if(on && !fr && document.body){
+        fr=document.createElement('iframe');
+        fr.src=location.origin+location.pathname+'?auto=1&holder='+holder;
+        fr.title='ใบสรุปอัตโนมัติ (ทำงานเบื้องหลัง)'; fr.tabIndex=-1; fr.setAttribute('aria-hidden','true'); fr.id='rtwAutoFrame';
+        fr.style.cssText='position:fixed;left:-12000px;top:0;width:600px;height:400px;border:0;opacity:0;pointer-events:none;visibility:hidden';
+        document.body.appendChild(fr);
+      } else if(!on && fr){ fr.remove(); fr=null; }
+    }
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', tick); else tick();
+    setInterval(tick, 30000);
+  })();
   // ── ส่วนหน้าจอ + วงตรวจ (ทำงานเฉพาะเมื่อ URL มี ?auto=1) ──
   (function autoModeBoot(){
     var qs; try{ qs=new URLSearchParams(location.search); }catch(e){ return; }
