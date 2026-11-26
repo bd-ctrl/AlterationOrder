@@ -5947,7 +5947,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-26-4-voice-12-qr-1-numpad-4-belt-1';
+  const APP_VERSION = '2026-11-26-5-voice-13-qr-1-numpad-4-belt-1';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -13772,6 +13772,7 @@
       return t.replace(OUT_WORDS,'↑').replace(IN_WORDS,'↓');
     }
     const vToks=s=>(s.match(/\d+(?:\.\d+)?|\/|ครึ่ง|หุน/g)||[]), Q4=/^[123]$/;
+    const vToksU=s=>(s.match(/\d+(?:\.\d+)?|\/|ครึ่ง|หุน|นิ้ว/g)||[]);   // [voice-13] เหมือน vToks + เก็บคำ "นิ้ว" (ใช้กับขนาดจริง)
     function vFrac(nx){
       if(!nx.length) return {f:0};
       if(Q4.test(nx[0])&&nx[1]==='4') return {f:nx[0]/4};
@@ -13782,7 +13783,10 @@
     }
     function vSize(tk){
       let i=0; while(i<tk.length&&!/^\d/.test(tk[i])) i++; if(i>=tk.length) return null;
-      const a=tk[i], nx=tk.slice(i+1), raw=tk.slice(i).join(' ');
+      // [voice-13] "นิ้ว" ปิดค่า: หลัง "นิ้ว" รับต่อเฉพาะ ครึ่ง / เศษสี่ (14 24 34 · 1 4 …) ที่เหลือไม่นับ
+      const a=tk[i]; let rest=tk.slice(i+1);
+      if(rest[0]==='นิ้ว'){ const af=rest.slice(1).filter(x=>x!=='นิ้ว'); rest=(af[0]==='ครึ่ง'||/^[123]4$/.test(af[0]||'')||(Q4.test(af[0]||'')&&(af[1]==='4'||af[1]==='/')))?af:[]; }
+      const nx=rest.filter(x=>x!=='นิ้ว'), raw=[a].concat(nx).join(' ');
       if(/^\d{2}\.[123]4$/.test(a)) return {n:parseInt(a,10)+a.split('.')[1][0]/4};   // "23.24" = 23 2/4
       if(/^\d{4}$/.test(a)) return /^\d\d[123]4$/.test(a)?{n:+a.slice(0,2)+a[2]/4}:{unsure:true,raw};
       if(/^\d{3}$/.test(a)) return {unsure:true,raw};
@@ -13854,7 +13858,7 @@
         if(!d.dir){   // ขนาดจริง
           // [voice-5] "เก็บต้นแขน 1 นิ้ว" = ตัวเลขหลังชื่อคือค่าเก็บเข้า ไม่ใช่ขนาด
           if(d.takeIn&&dirBefore){ if(dir==='out') wr(d.label+' เก็บเข้า','ต้นแขนขยายออกไม่ได้ (เก็บเข้าได้อย่างเดียว) — ไม่ได้ใส่'); else { const q=vAdj(vToks(pre),3); if(q&&q.n!=null&&!q.over&&!q.unsure) put(d.label+' เก็บเข้า',{k:'out',d,n:q.n,dir:'in'}); else if(q) wr(d.label+' เก็บเข้า','ต้นแขนเก็บเข้า ไม่แน่ใจ (ได้ยิน "'+q.raw+'") — ไม่ได้ใส่'); } return; }
-          const sz=vSize(vToks(pre));
+          const sz=vSize(vToksU(pre));
           if(sz&&sz.unsure&&res[d.label]){ wb[d.label+' ซ้ำ']=d.label+' พูดซ้ำแต่ไม่แน่ใจ (ได้ยิน "'+sz.raw+'") — ใช้ค่าแรก '+vFmt(res[d.label].n); }   // [voice-5] ไม่ลบขนาดที่ได้ยินชัดก่อนหน้า
           else if(sz){ if(sz.unsure) wr(d.label,d.label+' ไม่แน่ใจ (ได้ยิน "'+sz.raw+'") — ไม่ได้ใส่ ตรวจแล้วกรอกเอง'); else put(d.label,{k:'out',d,n:sz.n,dir:''}); }
           if(d.takeIn&&dir){
@@ -13953,8 +13957,9 @@
       const box=block.querySelector('.voice-out'); if(!box) return;
       const st=vState(block), labels=Object.keys(st.applied);
       box.innerHTML='';
-      if(!labels.length && !st.pending.length && !st.over.length && !st.warn.length && !st.text){ box.hidden=true; return; }
+      if(!labels.length && !st.pending.length && !st.over.length && !st.warn.length && !st.text && !st.live){ box.hidden=true; return; }
       box.hidden=false;
+      if(st.live){ const lv=vEl('div','vh',st.live); lv.style.marginBottom='6px'; box.appendChild(lv); }   // [voice-13] สถานะระหว่างฟัง
       if(labels.length){
         const row=vEl('div','vchips'); row.appendChild(vEl('span','vcap','ใส่แล้ว'));
         labels.forEach(l=>{ const a=st.applied[l]; const c=vEl('span','vchip', a.d.label+' '+(a.takeIn?'เก็บเข้า ':'')+vFmt(a.n)+(a.d.dir?(a.dir==='in'?' เก็บเข้า':' ขยายออก'):'')+(a.along?' ตลอดแนว':''));
@@ -13991,13 +13996,15 @@
       }
       return box;
     }
-    function vApply(block,text){
+    function vApply(block,text,opt){   // [voice-13] opt.append = ท่อนถัดไปของรอบเดียวกัน
+      opt=opt||{};
       const type=block.querySelector('.type-select')?.value||'', st=vState(block), r=vParse(text,type);
       vBox(block);
       const note=[];   // [voice-8] คำสั่ง "ยกเลิก" / "ไม่เอา" ที่หมายถึงรอบก่อนหน้า
       if(r.cancelAll){ const had=Object.keys(st.applied).length; let g=0; while(Object.keys(st.applied).length&&g++<50) Object.keys(st.applied).forEach(k=>vClearOne(block,k)); st.pending=[]; if(had) note.push('ยกเลิกทั้งหมดที่พูดมาแล้ว (คืนค่าเดิมในช่อง)'); }
       else for(let i=0;i<r.dropPrev;i++){ const k=st.last[st.last.length-1]; if(k){ note.push('ไม่เอา '+k+' — เอาออกแล้ว'); vClearOne(block,k); } else note.push('ไม่มีสัดส่วนก่อนหน้าให้เอาออก'); }
-      st.text=text; st.pending=r.pending; st.over=r.over; st.warn=note.concat(r.warn); st.last=[];
+      if(opt.append){ st.text=(st.text?st.text+' · ':'')+text; st.pending=st.pending.concat(r.pending); st.over=st.over.concat(r.over); st.warn=st.warn.concat(note,r.warn); }
+      else { st.text=text; st.pending=r.pending; st.over=r.over; st.warn=note.concat(r.warn); st.last=[]; }
       r.out.forEach(o=>{ vSetOne(block,o.d,o.n,o.dir,o.along); });
       if(r.legLevel){ const lb=block.querySelector('.legstyle-chips button[data-val="'+r.legLevel+'"]'); if(lb){ vMeasureOn(block); if(!lb.classList.contains('on')) lb.click(); st.warn.unshift('ระดับความยาวขา '+r.legLevel+' — เลือกให้แล้ว'); } }   // [voice-9]
       if(r.out.length||note.length) vTouched(block);
@@ -14022,49 +14029,65 @@
       }
     }
     function vBtn(btn,mode){ btn.classList.toggle('rec',mode==='rec'); btn.disabled=mode==='busy'; btn.querySelector('.vt').textContent=mode==='rec'?'หยุด':(mode==='busy'?'กำลังแกะ…':'พูด'); }
-    // [voice-12] เฝ้าความเงียบระหว่างอัด: เงียบติดกันเกิน ms = เรียก onSilence ครั้งเดียว · คืน {stop}
-    const V_SILENCE_MS=10000;
-    function vSilenceWatch(stream, ms, onSilence){
+    // [voice-13] เฝ้าเสียงระหว่างอัด (WebAudio · ระดับพื้นปรับเอง · มีเสียงพูด = ดังกว่าพื้น 9 dB)
+    //   onPause(): มีเสียงพูดในท่อนนี้แล้ว และเงียบ ≥ pauseMs หรือท่อนยาว ≥ maxSegMs → ตัดท่อน · onEnd(): เงียบติดกัน ≥ endMs → จบรอบ
+    const V_SILENCE_MS=10000, V_PAUSE_MS=1000, V_MAX_SEG_MS=20000;
+    function vVoiceWatch(stream, h){
       let ctx=null, timer=null, done=false;
       try{
         const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return null;
         ctx=new AC(); const src=ctx.createMediaStreamSource(stream), an=ctx.createAnalyser(); an.fftSize=1024; src.connect(an);
-        const buf=new Float32Array(an.fftSize); let floor=-60, lastVoice=performance.now();
+        const buf=new Float32Array(an.fftSize); let floor=-60, lastVoice=performance.now(), segStart=performance.now(), segSpeech=false;
+        const api={ stop(){ done=true; if(timer) clearInterval(timer); try{ ctx&&ctx.close(); }catch(e){} }, segHasSpeech(){ return segSpeech; }, newSeg(){ segStart=performance.now(); segSpeech=false; } };
         timer=setInterval(()=>{
           if(done) return;
           if(ctx.state==='suspended') ctx.resume().catch(()=>{});
           an.getFloatTimeDomainData(buf); let sum=0; for(let i=0;i<buf.length;i++) sum+=buf[i]*buf[i];
           const db=10*Math.log10(sum/buf.length+1e-12), now=performance.now();
-          if(db<floor) floor=db; else floor+= (db-floor)*0.01;          // ระดับพื้น: ลงเร็ว ขึ้นช้า
-          if(db>floor+9 && db>-70) lastVoice=now;                         // มีเสียงพูด
-          if(now-lastVoice>ms){ done=true; clearInterval(timer); try{ onSilence(); }catch(e){} }
-        },200);
+          if(db<floor) floor=db; else floor+=(db-floor)*0.01;
+          if(db>floor+9 && db>-70){ lastVoice=now; segSpeech=true; }
+          if(now-lastVoice>=V_SILENCE_MS){ done=true; clearInterval(timer); try{ h.onEnd(); }catch(e){} return; }
+          if(segSpeech && (now-lastVoice>=V_PAUSE_MS || now-segStart>=V_MAX_SEG_MS)){ try{ h.onPause(); }catch(e){} }
+        },150);
+        return api;
       }catch(e){ return null; }
-      return { stop(){ done=true; if(timer) clearInterval(timer); try{ ctx&&ctx.close(); }catch(e){} } };
     }
     function vStart(block,btn){
-      if(cur){ if(cur.block===block&&cur.mr&&cur.mr.state==='recording') cur.mr.stop(); return; }
-      const box=vBox(block);
-      const show=t=>{ box.hidden=false; box.innerHTML=''; const h=document.createElement('div'); h.className='vh'; h.textContent=t; box.appendChild(h); };
-      const fail=t=>{ vState(block).warn=['⚠ '+t]; vRender(block); };
-      cur={block,btn,mr:null};
-      navigator.mediaDevices.getUserMedia({audio:{autoGainControl:true,noiseSuppression:true,echoCancellation:true}}).then(stream=>{   // [voice-9] วาง iPad ไกล: ให้เบราว์เซอร์ขยายเสียงเบา + ลดเสียงรบกวน
+      if(cur){ if(cur.block===block&&cur.end) cur.end(); return; }   // กด "หยุด" = จบรอบ (ท่อนที่ค้างยังส่งแกะ)
+      const box=vBox(block), st=vState(block);
+      const fail=t=>{ st.warn=(st.warn||[]).concat(['⚠ '+t]); vRender(block); };
+      const live=t=>{ st.live=t; vRender(block); };
+      cur={block,btn,end:null};
+      navigator.mediaDevices.getUserMedia({audio:{autoGainControl:true,noiseSuppression:true,echoCancellation:true}}).then(stream=>{   // [voice-9] วาง iPad ไกล: ขยายเสียงเบา + ลดเสียงรบกวน
         const L=['audio/mp4','audio/webm;codecs=opus','audio/webm']; let mime=''; if(MediaRecorder.isTypeSupported) for(const x of L) if(MediaRecorder.isTypeSupported(x)){ mime=x; break; }
-        const mr=mime?new MediaRecorder(stream,{mimeType:mime}):new MediaRecorder(stream), chunks=[]; let t0=0, vad=null;
-        cur.mr=mr;
-        mr.ondataavailable=e=>{ if(e.data&&e.data.size) chunks.push(e.data); };
-        mr.onstop=()=>{
-          if(vad) vad.stop();   // [voice-12]
-          stream.getTracks().forEach(x=>x.stop());
-          const blob=new Blob(chunks,{type:mr.mimeType||mime||'audio/webm'}), sec=(performance.now()-t0)/1000;
-          if(sec<0.6||blob.size<1500){ cur=null; vBtn(btn,''); fail('ไม่ได้ยินเสียง ลองกด "พูด" แล้วพูดใหม่'); return; }
-          vBtn(btn,'busy'); show('กำลังแกะเสียงด้วย Gemini…');
-          vGemini(blob).then(text=>{ if(text) vApply(block,text); else fail('Gemini ไม่ได้ยินคำพูด ลองพูดใหม่'); },
-                             err=>fail('แกะเสียงไม่สำเร็จ: '+(err&&err.message||err)))
-            .then(()=>{ cur=null; vBtn(btn,''); });
+        let texts=[], ended=false, seg=null, segN=0, applied=0, inFlight=0, chain=Promise.resolve(), vad=null;
+        const status=()=>live(ended ? (inFlight?'กำลังแกะท่อนสุดท้าย…':'') : ('กำลังฟัง… พูดเป็นท่อนได้เลย หยุดหายใจแล้วตัวเลขจะทยอยลง · เงียบ '+Math.round(V_SILENCE_MS/1000)+' วิหยุดเอง'+(inFlight?' · กำลังแกะ '+inFlight+' ท่อน':'')));
+        const finish=()=>{ if(!ended||inFlight||(seg&&seg.state==='recording')) return; stream.getTracks().forEach(x=>x.stop()); st.live=''; cur=null; vBtn(btn,'');
+          if(!segN) fail('ไม่ได้ยินเสียง ลองกด "พูด" แล้วพูดใหม่'); else vRender(block); };
+        const startSeg=()=>{
+          const chunks=[], r=mime?new MediaRecorder(stream,{mimeType:mime}):new MediaRecorder(stream), t0=performance.now();
+          r.ondataavailable=e=>{ if(e.data&&e.data.size) chunks.push(e.data); };
+          r.onstop=()=>{
+            const blob=new Blob(chunks,{type:r.mimeType||mime||'audio/webm'}), sec=(performance.now()-t0)/1000;
+            if(r._speech!==false && sec>=0.6 && blob.size>=1500){
+              const idx=++segN; inFlight++; status();
+              const p=vGemini(blob);
+              chain=chain.then(()=>p.then(text=>{ if(text){ texts.push(text);
+                /* อ่านทุกท่อนของรอบนี้รวมเป็นประโยคเดียวทุกครั้ง (ชื่อกับตัวเลขอยู่คนละท่อนก็จับคู่ได้) — ย้อนค่าที่ท่อนก่อนใส่ไว้แล้วใส่ใหม่ */
+                if(applied>0){ st.last.slice().reverse().forEach(k=>vClearOne(block,k)); st.last=[]; }
+                vApply(block,texts.join(' ')); applied++; } }, err=>fail('แกะเสียงท่อนที่ '+idx+' ไม่สำเร็จ: '+(err&&err.message||err))))
+                .then(()=>{ inFlight--; status(); finish(); });
+            }
+            finish();
+          };
+          r.start(); return r;
         };
-        mr.start(); t0=performance.now(); vBtn(btn,'rec'); show('กำลังฟัง… พูดได้เลย เช่น "ต่ำศอก 12 นิ้ว" · จบแล้วกด "หยุด" (เงียบเกิน '+Math.round(V_SILENCE_MS/1000)+' วินาทีหยุดเอง)');
-        vad=vSilenceWatch(stream, V_SILENCE_MS, ()=>{ if(mr.state==='recording') mr.stop(); });   // [voice-12]
+        const cut=()=>{ if(ended||!seg||seg.state!=='recording') return; seg._speech=true; seg.stop(); if(vad) vad.newSeg(); seg=startSeg(); };
+        const end=()=>{ if(ended) return; ended=true; if(vad) vad.stop(); if(seg&&seg.state==='recording'){ seg._speech=vad?vad.segHasSpeech():true; seg.stop(); } status(); finish(); };
+        cur.end=end;
+        seg=startSeg(); vBtn(btn,'rec'); box.hidden=false; status();
+        vad=vVoiceWatch(stream,{ onPause:cut, onEnd:end });
+        if(!vad) live('กำลังฟัง… จบแล้วกด "หยุด"');   // เบราว์เซอร์ไม่มี WebAudio = อัดก้อนเดียวแบบเดิม
       },()=>{ cur=null; vBtn(btn,''); fail('ไม่ได้อนุญาตไมโครโฟน — กดอนุญาตแล้วลองใหม่'); });
     }
     function vSync(block){
