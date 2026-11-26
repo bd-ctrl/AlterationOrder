@@ -1717,6 +1717,13 @@
   .note-count.over{color:#b42318;font-weight:500}
   /* [2026-11-23 ตามที่ขอ] เตือนรหัสสินค้า/Size ยาวเกินที่ Salesforce รับ */
   .flimit-warn{font-size:12px;color:#b42318;font-weight:500;text-align:right;margin:-4px 0 8px;line-height:1.4}
+  /* [belt-1 2026-11-25] ปุ่มเลือกไซซ์เข็มขัด (แบบ ก) */
+  .size-row.belt-row{align-items:flex-start}
+  .belt-chips-wrap{display:flex;flex-direction:column;align-items:flex-end;margin-left:auto}
+  .belt-chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+  .belt-chip{min-width:58px;padding:9px 0;border:1.5px solid #d9cfb8;border-radius:999px;background:#fff;font:inherit;font-size:17px;font-weight:600;color:#3a3326;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .belt-chip.on{background:#2b2620;border-color:#2b2620;color:#fff}
+  .belt-hint{font-size:12.5px;color:#9a8f7a;text-align:right;margin-top:6px}
 </style>
 <script>
 /* ===== [ใหม่ 2026-10-19 ตามที่ขอ] Suitcube Loader (ตัวสร้างลูกบาศก์รอโหลด · คู่กับ CSS .sc-loader) — ต้นฉบับ suitcube-loader.js ปรับ: เพิ่ม decor (ไม่ประกาศ role=status ซ้ำเมื่อมีข้อความ "กำลัง…" อยู่ข้างๆ) + inline (.sc-inl)
@@ -5940,7 +5947,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-23-6-voice-4-qr-1-numpad-4';
+  const APP_VERSION = '2026-11-26-3-voice-11-qr-1-numpad-4-belt-1';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -7379,7 +7386,7 @@
       block.querySelector('.size-input').value=data['รายการ'+n+'_ไซส์']||'';
       // [ใหม่ตามที่ขอ] โหลดร่าง/แก้ไขบิลเดิมที่เป็นรหัส NT/BT/CL ก็ต้องซ่อนแถว Size เหมือนตอนพิมพ์รหัสสดๆ ด้วย ไม่งั้นโหลดร่างแล้วช่องกลับมาโผล่
       const loadedTypeCode=parseSkuMeta(loadedSku).typeCode;
-      block.querySelector('.size-input').closest('.frow')?.classList.toggle('hidden', skuHasNoSize(loadedSku)); if(/^BL-/i.test(String(loadedSku||'').trim())) block.querySelector('.size-input').value='';
+      block.querySelector('.size-input').closest('.frow')?.classList.toggle('hidden', skuHasNoSize(loadedSku)); if(isNoSizeBL(loadedSku)) block.querySelector('.size-input').value='';
       block.querySelector('.type-select').value=type;
       // [แก้บั๊ก] เจอจริง — โหลดร่าง/บิลเก่ากลับมาแก้ (applyRawDataToForm) ไม่เคยดึงรูปที่เคยแนบไว้ (รายการN_รูป) กลับเข้า block._attachedImages เลย
       // รูปยังอยู่ในข้อมูลจริงปกติ (เห็นได้จาก /order-raw) แต่ปุ่ม "แนบรูป" กลับมาโชว์ "(ถ้ามี)" เหมือนไม่มีอะไรอยู่เลย ทำให้ดูเหมือนรูปหายไป
@@ -7434,7 +7441,7 @@
     block.querySelector('.size-input').value=p.size||'';
     // [ใหม่ตามที่ขอ] เหมือนกับตอนพิมพ์รหัสสดๆ — รหัส NT/BT/CL ต้องซ่อนแถว Size ด้วยตอนโหลดฟอร์มกลับมา (autosave/แก้ไขบิลเดิม)
     const loadedTypeCode=parseSkuMeta(p.sku||'').typeCode;
-    block.querySelector('.size-input').closest('.frow')?.classList.toggle('hidden', skuHasNoSize(p.sku||'')); if(/^BL-/i.test(String(p.sku||'').trim())) block.querySelector('.size-input').value='';
+    block.querySelector('.size-input').closest('.frow')?.classList.toggle('hidden', skuHasNoSize(p.sku||'')); if(isNoSizeBL(p.sku||'')) block.querySelector('.size-input').value='';
     if(p.type) block.querySelector('.type-select').value=p.type;
     if(p.branch) block.querySelector('.branch-prod').value=p.branch;
     const contactInp=block.querySelector('.contact-input'); if(contactInp) contactInp.value=p.contact||'';
@@ -9967,7 +9974,37 @@
   const NO_SIZE_TYPE_CODES = new Set(['NT','BT','CL','BL']);   // [2026-10-21] + BL (รหัสขึ้นต้น BL-)
   // [2026-10-21 ตามที่ขอ "BL ไม่มีไซซ์ ช่อง Size ต้องว่าง"] รหัสขึ้นต้น BL- (เช่น BL-25014-105 — เลขท้ายเป็นส่วนของรหัส ไม่ใช่ไซซ์) ไม่มีไซซ์: ซ่อนแถว Size · ไม่บังคับกรอก · ส่ง Size ว่างเสมอ
   // (เดิมช่อง Size บังคับกรอก พนักงานจึงต้องใส่ 105 → Salesforce ไม่รับ เพราะ Size เสื้อสูทรับได้ 2 ตัว — บิล SL26102004)
-  function skuHasNoSize(code){ code=String(code||'').trim(); if(!code) return false; return /^BL-/i.test(code) || NO_SIZE_TYPE_CODES.has(parseSkuMeta(code).typeCode); }
+  // [belt-1 2026-11-25 ตามที่ขอ] เข็มขัดที่มีไซซ์ (Parent SKU) — เลือกไซซ์ด้วยปุ่มแตะ ไซซ์ไม่ต่อท้ายรหัส (Salesforce รับรหัสได้ 15 ตัว)
+  const BELT_SIZES=['105','110','115','120'];
+  const BELT_SKUS=new Set(['BL-25011','BL-25012','BL-25013','BL-25014','BL-25015','BL-25016','BL-25017','BL-33001-BLK','BL-33002-BRO','BL-33003-BRO','BL-33012-BRO']);
+  function isBeltSku(code){ return BELT_SKUS.has(String(code||'').trim().toUpperCase()); }
+  function skuHasNoSize(code){ code=String(code||'').trim(); if(!code) return false; if(isBeltSku(code)) return false; return /^BL-/i.test(code) || NO_SIZE_TYPE_CODES.has(parseSkuMeta(code).typeCode); }
+  const isNoSizeBL=code=>/^BL-/i.test(String(code||'').trim()) && !isBeltSku(code);   // BL- ที่ไม่มีไซซ์ (นอกรายการเข็มขัด)
+  // ปุ่มเลือกไซซ์เข็มขัด — ช่อง .size-input ยังเป็นตัวเก็บค่าจริง (ซ่อนไว้) ปุ่มแค่ตั้งค่าให้
+  function updateBeltChips(block){
+    if(!block) return;
+    const sku=block.querySelector('.sku-input'), inp=block.querySelector('.size-input'); if(!sku||!inp) return;
+    const row=inp.closest('.frow'); if(!row) return;
+    let box=row.querySelector('.belt-chips-wrap');
+    if(!isBeltSku(sku.value)){ if(box){ box.remove(); inp.style.display=''; row.classList.remove('belt-row'); } return; }
+    row.classList.remove('hidden'); row.classList.add('belt-row'); inp.style.display='none';
+    if(!box){
+      box=document.createElement('div'); box.className='belt-chips-wrap';
+      const chips=document.createElement('div'); chips.className='belt-chips';
+      BELT_SIZES.forEach(v=>{ const b=document.createElement('button'); b.type='button'; b.className='belt-chip'; b.textContent=v; b.dataset.size=v; chips.appendChild(b); });
+      const h=document.createElement('div'); h.className='belt-hint'; h.textContent='เข็มขัด · แตะเลือกไซซ์ (บังคับเลือก)';
+      box.appendChild(chips); box.appendChild(h); row.appendChild(box);
+      chips.addEventListener('click',e=>{ const b=e.target.closest('.belt-chip'); if(!b) return; e.preventDefault();
+        inp.value=b.dataset.size; inp.dispatchEvent(new Event('input',{bubbles:true})); inp.dispatchEvent(new Event('change',{bubbles:true})); updateBeltChips(block); });
+    }
+    const cur=String(inp.value||'').trim();
+    if(cur && BELT_SIZES.indexOf(cur)<0) inp.value='';   // ค่าที่ไม่ใช่ไซซ์เข็มขัด (เช่น ค้างจากรหัสก่อน) ล้างทิ้ง ให้เลือกใหม่
+    box.querySelectorAll('.belt-chip').forEach(b=>b.classList.toggle('on', b.dataset.size===String(inp.value||'').trim()));
+  }
+  const syncBeltChips=()=>document.querySelectorAll('.product-block').forEach(updateBeltChips);
+  document.addEventListener('input',e=>{ if(e.target&&e.target.classList&&e.target.classList.contains('sku-input')) setTimeout(()=>updateBeltChips(e.target.closest('.product-block')),0); },true);
+  document.addEventListener('change',e=>{ if(e.target&&e.target.classList&&(e.target.classList.contains('sku-input')||e.target.classList.contains('type-select'))) setTimeout(()=>updateBeltChips(e.target.closest('.product-block')),0); },true);
+  setInterval(syncBeltChips,1200);   // โหลดร่าง/บิลเก่า/เพิ่มชิ้นจากจำนวน ตั้งค่าตรงๆ ไม่ยิง event
   // [ใหม่] รหัสสินค้าที่ยืนยันแล้วว่าเป็น Accessory (เช่น รองเท้า) แต่ไม่ตรงรูปแบบ prefix ปกติ (AT/BT/CL/LP/NT/SP) — hardcode รายชื่อไว้ตรงๆ ตามที่ขอ กันไม่ให้ auto-detect ประเภทพลาด
   const HARDCODED_ACCESSORY_SKUS = new Set([
     '504-H27-CF','752-H6-BLK','827-7-CF','50317-01-02-BRO','827-7-BRO','B69-HL-BLK','AM8803-V5-CF',
@@ -10994,6 +11031,7 @@
     const codeUpper=String(code).trim().toUpperCase();
     if(HARDCODED_ACCESSORY_SKUS.has(codeUpper)) return {type:'Accessory อื่นๆ',size:null,baseCode:code};
     // [2026-10-21 ตามที่ขอ "หมวดหมู่ต้องเป็น Accessory อื่นๆ"] รหัสขึ้นต้น BL- (เช่น BL-25014-105, BL-33001-BLK) = Accessory อื่นๆ · ไม่มีไซซ์ (เลขท้ายเป็นส่วนของรหัส) · เช็กเฉพาะ BL- ต้นรหัส ไม่กระทบ NT-BL-…/BT-L-BL-… ที่เป็น Accessory อยู่แล้ว
+    { const bm=/^(.+)-(105|110|115|120)$/.exec(codeUpper); if(bm && BELT_SKUS.has(bm[1])) return {type:'Accessory อื่นๆ',size:bm[2],baseCode:String(code).trim().slice(0,bm[1].length),typeCode:'BL'}; }   // [belt-1] BL-25011-110 = รหัส BL-25011 + ไซซ์ 110
     if(/^BL-/.test(codeUpper)) return {type:'Accessory อื่นๆ',size:null,baseCode:code,typeCode:'BL'};
     // [ใหม่ตามที่ขอ] เช็ครหัสรองเท้าฐาน+ไซซ์ท้ายรหัส (เช่น "C292-Y06-CF-39") ก่อน auto-detect ปกติเช่นกัน — รหัสพวกนี้ไม่มี prefix ประเภทแบบ J/P/V/SH เลย จับไม่ได้ถ้าไม่ hardcode
     const shoeSizeMatch = codeUpper.match(/^(.+)-(\d{2,3})$/);
@@ -11093,7 +11131,10 @@
   function normalizeAccessorySku(block){
     const chip=block&&block.querySelector('.type-select'), sku=block&&block.querySelector('.sku-input'), sizeEl=block&&block.querySelector('.size-input');
     if(!chip||!sku||chip.value!==ACC_TYPE_NAME) return false;
-    if(/^BL-/i.test(sku.value.trim())) return false;   // [2026-10-21] BL- เลขท้ายเป็นส่วนของรหัส (BL-25014-105) ไม่ใช่ไซซ์ — ห้ามตัดเป็น BL-25014 + Size 105
+    if(/^BL-/i.test(sku.value.trim())){   // [belt-1] เข็มขัดในรายการ: BL-25011-110 → BL-25011 + ไซซ์ 110 · BL- อื่นห้ามตัด (เลขท้ายเป็นส่วนของรหัส)
+      const pm=parseSkuMeta(sku.value.trim()); if(!(pm.size && isBeltSku(pm.baseCode))) return false;
+      const cur=sizeEl?sizeEl.value.trim():''; if(cur && cur!==pm.size) return false;
+      sku.value=pm.baseCode; if(sizeEl) sizeEl.value=pm.size; updateBeltChips(block); return true; }   // [2026-10-21] BL- เลขท้ายเป็นส่วนของรหัส (BL-25014-105) ไม่ใช่ไซซ์ — ห้ามตัดเป็น BL-25014 + Size 105
     const m=/^(.+)-(\d{2,3}(?:\.\d)?)$/.exec(sku.value.trim());
     if(!m) return false;
     const base=m[1], tail=m[2], cur=sizeEl?sizeEl.value.trim():'';
@@ -11129,9 +11170,10 @@
       if(size && sizeInput) sizeInput.value=size;
       // [ใหม่ตามที่ขอ] รหัส Accessory ขึ้นต้น NT/BT/CL ไม่มีไซซ์ให้กรอกเลย (ไม่เหมือน Accessory อื่นๆ ที่อาจมีไซซ์ เช่น รองเท้า) ซ่อนทั้งแถว Size ไปเลยไม่ต้องเหลือช่องว่างให้กรอก และล้างค่าไซซ์เก่าที่อาจค้างจากรหัสก่อนหน้าทิ้งด้วย
       const sizeRow=sizeInput?sizeInput.closest('.frow'):null;
-      const hideSize = NO_SIZE_TYPE_CODES.has(typeCode) || /^BL-/i.test(String(baseCode||''));
+      const hideSize = (NO_SIZE_TYPE_CODES.has(typeCode) && !isBeltSku(baseCode)) || isNoSizeBL(baseCode);   // [belt-1] เข็มขัดในรายการมีไซซ์
       if(sizeRow) sizeRow.classList.toggle('hidden', hideSize);
       if(hideSize && sizeInput) sizeInput.value='';
+      updateBeltChips(block);
       // ตั้งค่า .value ตรงๆ ไม่ยิง 'change' event เอง — ต้องเรียก renderMeasureSection เองด้วย
       // ไม่งั้นแถบ "รายละเอียด" (มาตรวัด) จะค้างเป็นประเภทเดิม (ค่าเริ่มต้นตอนสร้างก้อน) ไม่ตรงกับประเภทที่สแกน/พิมพ์รหัสมาได้
       // [แก้บั๊ก 2026-09-24] ยืนยันรหัส/ประเภทเดิมซ้ำ (พิมพ์รหัสเดิม+Enter ซ้ำ หรือสแกนซ้ำ) ต้องไม่ build ช่องวัดตัวใหม่ — เดิมเรียก renderMeasureSection ทุกครั้งแม้ประเภทไม่เปลี่ยน ทำให้ค่าแก้ไขขนาดที่กรอกไว้แล้วถูกล้างทิ้ง + สวิตช์ "รายละเอียด" รีเซ็ตกลับเป็น "ไม่แก้ไขขนาดสินค้า"
@@ -11926,7 +11968,7 @@
       const note=block.querySelector('.note-input')?.value?.trim()||'';
       data['รายการ'+n+'_ประเภท']=type;
       data['รายการ'+n+'_รหัส']=sku;
-      data['รายการ'+n+'_ไซส์']=/^BL-/i.test(sku)?'':size;   // [2026-10-21] BL- ไม่มีไซซ์ — ส่งว่างเสมอ
+      data['รายการ'+n+'_ไซส์']=isNoSizeBL(sku)?'':size;   // [belt-1] เข็มขัดในรายการส่งไซซ์ (Worker ต่อ "| size X" ท้ายหมายเหตุ)   // [2026-10-21] BL- ไม่มีไซซ์ — ส่งว่างเสมอ
       // [ใหม่ตามที่ขอ] หมายเหตุแยกรายชิ้น (เดิมมีแต่ รายการN_รหัส/ไซส์ ไม่เคยส่งหมายเหตุแยกรายชิ้นเลย) — Worker ใช้ประกอบเป็นช่อง Accessory 1/2/3 (1 ช่อง = 1 ชิ้น ครบทั้ง SKU/Size/หมายเหตุ) แทนการยัดรวมทุกชิ้นเป็นก้อนเดียว
       data['รายการ'+n+'_หมายเหตุ']=note;
       // [ใหม่ตามที่ขอ] "สินค้าใช้ของสาขา" แยกรายชิ้นด้วย (เดิม branchProd มีแต่ order-level ตัวเดียวต่อประเภท) — Worker เอาไปรวมในช่อง เสื้อสูท/กางเกง/เสื้อเชิ้ต/เสื้อกั๊ก N ด้วย
@@ -12024,7 +12066,8 @@
       const parsed=code?parseSkuMeta(code):null;
       // [แก้ตามที่ขอ] รหัส Accessory ขึ้นต้น NT/BT/CL ไม่มีไซซ์จริงเลย (แถว Size ถูกซ่อนไปแล้วในหน้าสินค้า) เลยไม่ต้องบังคับกรอก — Accessory รหัสอื่น (เช่น รองเท้า) ยังต้องกรอกไซซ์เหมือนเดิม
       const sizeNotNeeded = !!code && skuHasNoSize(code);
-      if(!sizeNotNeeded && !data['รายการ'+n+'_ไซส์']) missing.push({page:2,label:'สินค้ารายการที่ '+n+' — Size'});
+      if(code && isBeltSku(code) && BELT_SIZES.indexOf(String(data['รายการ'+n+'_ไซส์']||''))<0) missing.push({page:2,label:'สินค้ารายการที่ '+n+' — เลือกไซซ์เข็มขัด ('+BELT_SIZES.join(' / ')+')'});   // [belt-1]
+      else if(!sizeNotNeeded && !data['รายการ'+n+'_ไซส์']) missing.push({page:2,label:'สินค้ารายการที่ '+n+' — Size'});
       else if(!sizeNotNeeded && !sizeValueOk(data['รายการ'+n+'_ไซส์'],type)) missing.push({page:2,label:'สินค้ารายการที่ '+n+' — Size '+sizeRuleText(type)});
       if(String(data['รายการ'+n+'_หมายเหตุ']||'').includes(FOLLOW_WORD) && !FOLLOW_BILL_RE.test(String(data['รายการ'+n+'_หมายเหตุ']||''))) missing.push({page:2,label:'สินค้ารายการที่ '+n+' — กรอกเลขบิลต่อจากคำว่า ปรับแก้ตามเลขบิล'});
       // [ใหม่] เช็ค 2 ทาง — "ประเภทสินค้า" ที่เลือกไว้ ต้องตรงกับประเภทที่อ่านได้จากตัวรหัส SKU เอง กันเคสเลือกประเภทผิด/แก้ทับหลังสแกนแล้วข้อมูลสองช่องขัดกัน (เช่น รหัสลงท้าย -P- แต่ประเภทดันเลือกเป็น "เสื้อสูท")
@@ -13697,8 +13740,8 @@
       'เสื้อสูท (สำเร็จรูป)':[
         {label:'ความยาวแขน', dir:false, words:['ความยาวแขน','ยาวแขน','แขนเสื้อ','แขน']},
         {label:'ต้นแขน', dir:false, takeIn:true, words:['ขนาดต้นแขน','ต้นแขน']},
-        {label:'ความยาวเสื้อ (หน้า)', dir:false, words:['ความยาวเสื้อข้างหน้า','ยาวเสื้อข้างหน้า','ความยาวเสื้อหน้า','ความยาวเสื้อด้านหน้า','ยาวเสื้อหน้า','ตัวหน้า','ความยาวหน้า']},
-        {label:'ความยาวเสื้อ (หลัง)', dir:false, words:['ความยาวเสื้อข้างหลัง','ยาวเสื้อข้างหลัง','ความยาวเสื้อหลัง','ความยาวเสื้อด้านหลัง','ยาวเสื้อหลัง','ตัวหลัง','ความยาวหลัง']},
+        {label:'ความยาวเสื้อ (หน้า)', dir:false, words:['ความยาวเสื้อข้างหน้า','ยาวเสื้อข้างหน้า','ความยาวเสื้อหน้า','ความยาวเสื้อด้านหน้า','ยาวเสื้อหน้า','ตัวหน้า','ความยาวหน้า','ยาวหน้า','หน้า']},   // [voice-6] พูดสั้น "ยาวหน้า 27" / "หน้า 27",
+        {label:'ความยาวเสื้อ (หลัง)', dir:false, words:['ความยาวเสื้อข้างหลัง','ยาวเสื้อข้างหลัง','ความยาวเสื้อหลัง','ความยาวเสื้อด้านหลัง','ยาวเสื้อหลัง','ตัวหลัง','ความยาวหลัง','ยาวหลัง','หลัง']},,
         {label:'อก', dir:true, cap:3, words:['รอบอก','อก']},
         {label:'เอว', dir:true, cap:3, words:['รอบเอว','เอว']},
         {label:'สะโพก', dir:true, cap:3, words:['รอบสะโพก','สะโพก']},
@@ -13713,7 +13756,8 @@
         {label:'ความยาวขา', dir:false, words:['ความยาวขา','ยาวขา','ความยาวกางเกง']}
       ]
     };
-    const IN_WORDS=/เก็บเข้า|เอาเข้า|ลดลง|สั้นลง|ตัดสั้น|ลด|เข้า/g, OUT_WORDS=/ขยายออก|ปล่อยออก|ยาวขึ้น|ขยาย|ปล่อย|เพิ่ม|ออก/g;
+    const IN_WORDS=/เก็บเข้า|เอาเข้า|ลดลง|สั้นลง|ตัดสั้น|เก็บ|ลด|เข้า/g,   // [voice-5] "เก็บ" คำเดียว = เก็บเข้า
+     OUT_WORDS=/ขยายออก|ปล่อยออก|ยาวขึ้น|ขยาย|ปล่อย|เพิ่ม|ออก/g;
     const DIG={'ศูนย์':0,'หนึ่ง':1,'เอ็ด':1,'สอง':2,'ยี่':2,'สาม':3,'สี่':4,'ห้า':5,'หก':6,'เจ็ด':7,'แปด':8,'เก้า':9};
     // คำที่เครื่องแกะเสียงได้ยินผิดบ่อย (ผลทดสอบ 19 พ.ย.)
     const VFIX=[[/เก็บข้าว/g,'เก็บเข้า'],[/เอาข้าว/g,'เอาเข้า'],[/ต้นแผน/g,'ต้นแขน'],[/(^|[^โ])คนขา/g,'$1โคนขา'],[/ต่ำเขา/g,'ต่ำเข่า'],[/ป้ายขา/g,'ปลายขา']];
@@ -13743,7 +13787,8 @@
       if(/^\d{4}$/.test(a)) return /^\d\d[123]4$/.test(a)?{n:+a.slice(0,2)+a[2]/4}:{unsure:true,raw};
       if(/^\d{3}$/.test(a)) return {unsure:true,raw};
       let n=parseFloat(a); if(n<5) return {unsure:true,raw};
-      if(/^\d+$/.test(a)){ const f=vFrac(nx); if(f.odd) return {unsure:true,raw}; n+=f.f; }
+      if(/^\d+$/.test(a)){ if(nx.length&&nx.every(x=>x===a)) return {n};   // [voice-11] "22 เอ้ย 22" = 22
+        const f=vFrac(nx); if(f.odd) return {unsure:true,raw}; n+=f.f; }
       else if(nx[0]==='ครึ่ง') n+=0.5;
       return {n};
     }
@@ -13765,44 +13810,93 @@
     }
     const vFmt=n=>String(Math.round(n*1000)/1000);
     function vParse(text,type){
-      const t=vNorm(text), defs=VDEFS[type]||[], hits=[], all=[], taken=new Array(t.length).fill(false);
+      const defs=VDEFS[type]||[], all=[];
       defs.forEach((d,i)=>d.words.forEach(w=>all.push({w,i})));
       all.sort((a,b)=>b.w.length-a.w.length);
-      all.forEach(o=>{ let from=0,k; while((k=t.indexOf(o.w,from))>=0){ let free=true; for(let j=k;j<k+o.w.length;j++) if(taken[j]){ free=false; break; }
-        if(free){ for(let j=k;j<k+o.w.length;j++) taken[j]=true; hits.push({pos:k,end:k+o.w.length,i:o.i}); } from=k+o.w.length; } });
-      hits.sort((a,b)=>a.pos-b.pos);
+      const findHits=s=>{ const hs=[], taken=new Array(s.length).fill(false);
+        all.forEach(o=>{ let from=0,k; while((k=s.indexOf(o.w,from))>=0){ let free=true; for(let j=k;j<k+o.w.length;j++) if(taken[j]){ free=false; break; }
+          if(free){ for(let j=k;j<k+o.w.length;j++) taken[j]=true; hs.push({pos:k,end:k+o.w.length,i:o.i}); } from=k+o.w.length; } });
+        return hs.sort((a,b)=>a.pos-b.pos); };
+      // [voice-8] "ยกเลิก" = ยกเลิกทั้งหมดที่พูดมา (ใช้เฉพาะคำที่พูดหลังคำสุดท้าย) · "ไม่เอา(ดีกว่า/ละ)" = ตัดสัดส่วนที่พูดก่อนหน้าออก
+      let t=vNorm(text), cancelAll=false, dropPrev=0; const dropped=[];
+      { const CAN=/ยกเลิก(?:ทั้งหมด)?/g; let mm, cut=-1; while((mm=CAN.exec(t))) cut=mm.index+mm[0].length; if(cut>=0){ cancelAll=true; t=t.slice(cut); } }
+      { const DROP=/ไม่เอา(?:ดีกว่า|ละ|แล้ว|นะ|ค่ะ|คะ|ครับ)*/; let dm;
+        while((dm=DROP.exec(t))){ const hs=findHits(t.slice(0,dm.index)), z=dm.index+dm[0].length;
+          if(hs.length){ const h=hs[hs.length-1]; dropped.push(defs[h.i].label); t=t.slice(0,h.pos)+t.slice(z); } else { dropPrev++; t=t.slice(0,dm.index)+t.slice(z); } } }
+      const hits=findHits(t);
       // พูดซ้ำ/แก้คำ ("ต้นแขน 19 ต้นแขน 19 ครึ่ง" · "ความยาวขา 20 ไม่ใช่ 38") = ใช้ค่าหลังสุด
       const res={}, wb={}, empty={};
       const put=(k,v)=>{ res[k]=v; delete wb[k]; delete empty[k]; }, wr=(k,m)=>{ delete res[k]; wb[k]=m; delete empty[k]; };
+      // [voice-10] แบ่งคำทิศให้สัดส่วนที่มีทิศ (อก/เอว/สะโพก/โคนขา/ปลายขา) ก่อนวนอ่านค่า
+      const dirMap=new Map(), consumed=new Set(), grouped=[];
+      { let carry=null;   // ทิศของกลุ่มชื่อติดกัน ("อกเอว") ส่งต่อให้ตัวถัดไป
+        hits.forEach((h,idx)=>{ const d=defs[h.i]; if(!d.dir){ carry=null; return; }
+          const tEnd=idx+1<hits.length?hits[idx+1].pos:t.length, tail=t.slice(h.end,tEnd), sSt=idx>0?hits[idx-1].end:0, seg=t.slice(sSt,h.pos);
+          const nums=[...tail.matchAll(/\d+(?:\.\d+)?|ครึ่ง/g)], firstNum=nums.length?nums[0].index:-1, lastEnd=nums.length?nums[nums.length-1].index+nums[nums.length-1][0].length:-1;
+          let P=null; { const mm=/([↓↑])[^\d↓↑]*$/.exec(seg); if(mm&&!consumed.has(sSt+mm.index)) P={pos:sSt+mm.index,c:mm[1]}; }
+          let I=null, T=null; for(const x of tail.matchAll(/[↓↑]/g)){ const ap=h.end+x.index;
+            if(nums.length&&x.index>=lastEnd){ if(!T) T={pos:ap,c:x[0]}; /* คำทิศแรกหลังตัวเลข = ของตัวนี้ · ที่เหลือเป็นของตัวถัดไป */ } else if(!I) I={pos:ap,c:x[0]}; }
+          let use=I||P||(carry?{pos:-1,c:carry}:null)||T;
+          if(use){ if(use.pos>=0) consumed.add(use.pos); dirMap.set(idx,use.c==='↓'?'in':'out'); }
+          if(I) consumed.add(I.pos);
+          carry=(!nums.length&&use)?use.c:null;   // ไม่มีตัวเลขของตัวเอง = ชื่อในกลุ่ม ส่งทิศต่อ
+        }); }
       hits.forEach((h,idx)=>{
         const d=defs[h.i], tail=t.slice(h.end, idx+1<hits.length?hits[idx+1].pos:t.length);
         const m=/[↓↑]/.exec(tail), pre=m?tail.slice(0,m.index):tail, post=m?tail.slice(m.index+1):'';
-        let dir=m?(m[0]==='↓'?'in':'out'):'';
-        if(!dir){ const before=t.slice(idx>0?hits[idx-1].end:0,h.pos); if(/[↓↑]/.test(before)&&!vToks(before).length) dir=/↓/.test(before)?'in':'out'; }
+        let dir=m?(m[0]==='↓'?'in':'out'):'', dirBefore=false;
+        if(!dir){ const before=t.slice(idx>0?hits[idx-1].end:0,h.pos); if(/[↓↑]/.test(before)&&!vToks(before).length){ dir=/↓/.test(before)?'in':'out'; dirBefore=true; } }
+        // [voice-5] ท่อนก่อนหน้าจบด้วยคำทิศ ("…13 นิ้ว เก็บ|ต้นแขน 1") = คำทิศเป็นของครั้งนี้
+        if(!dir&&idx>0){ const before=t.slice(hits[idx-1].end,h.pos), mb=/([↓↑])[^\d↓↑]*$/.exec(before);
+          // [voice-9] สัดส่วนอื่น (มีทิศ): ใช้คำทิศท้ายท่อนก่อน เฉพาะเมื่อท่อนก่อนมีคำทิศของตัวเองอยู่ก่อนตัวเลขแล้ว ("เก็บเอวเข้า 1 นิ้ว | เก็บ|โคนขา 1") — ไม่แย่ง "เอว 1 ขยายออก" ของสัดส่วนก่อน
+          const ownFirst=/^[^\d]*[↓↑][^↓↑]*\d/.test(before), twoAfter=/\d[^\d]*[↓↑][^\d↓↑]*[↓↑][^\d↓↑]*$/.test(before);   // twoAfter = "เอว 1 ขยายออก | เก็บ|สะโพก"
+          if(mb&&(defs[h.i].takeIn||(defs[h.i].dir&&(ownFirst||twoAfter)))){ dir=mb[1]==='↓'?'in':'out'; dirBefore=true; } }
         if(!d.dir){   // ขนาดจริง
+          // [voice-5] "เก็บต้นแขน 1 นิ้ว" = ตัวเลขหลังชื่อคือค่าเก็บเข้า ไม่ใช่ขนาด
+          if(d.takeIn&&dirBefore){ if(dir==='out') wr(d.label+' เก็บเข้า','ต้นแขนขยายออกไม่ได้ (เก็บเข้าได้อย่างเดียว) — ไม่ได้ใส่'); else { const q=vAdj(vToks(pre),3); if(q&&q.n!=null&&!q.over&&!q.unsure) put(d.label+' เก็บเข้า',{k:'out',d,n:q.n,dir:'in'}); else if(q) wr(d.label+' เก็บเข้า','ต้นแขนเก็บเข้า ไม่แน่ใจ (ได้ยิน "'+q.raw+'") — ไม่ได้ใส่'); } return; }
           const sz=vSize(vToks(pre));
-          if(sz){ if(sz.unsure) wr(d.label,d.label+' ไม่แน่ใจ (ได้ยิน "'+sz.raw+'") — ไม่ได้ใส่ ตรวจแล้วกรอกเอง'); else put(d.label,{k:'out',d,n:sz.n,dir:''}); }
+          if(sz&&sz.unsure&&res[d.label]){ wb[d.label+' ซ้ำ']=d.label+' พูดซ้ำแต่ไม่แน่ใจ (ได้ยิน "'+sz.raw+'") — ใช้ค่าแรก '+vFmt(res[d.label].n); }   // [voice-5] ไม่ลบขนาดที่ได้ยินชัดก่อนหน้า
+          else if(sz){ if(sz.unsure) wr(d.label,d.label+' ไม่แน่ใจ (ได้ยิน "'+sz.raw+'") — ไม่ได้ใส่ ตรวจแล้วกรอกเอง'); else put(d.label,{k:'out',d,n:sz.n,dir:''}); }
           if(d.takeIn&&dir){
             if(dir==='out') wr(d.label+' เก็บเข้า','ต้นแขนขยายออกไม่ได้ (เก็บเข้าได้อย่างเดียว) — ไม่ได้ใส่');
             else { const q=vAdj(vToks(post),3); if(q){ if(q.n!=null&&!q.over&&!q.unsure) put(d.label+' เก็บเข้า',{k:'out',d,n:q.n,dir:'in'}); else wr(d.label+' เก็บเข้า','ต้นแขนเก็บเข้า ไม่แน่ใจ (ได้ยิน "'+q.raw+'") — ไม่ได้ใส่'); } }
           } else if(dir&&!sz) wr(d.label,d.label+' ต้องพูดเป็นขนาดจริง เช่น "'+d.label+' 23" (ไม่ใช่เก็บเข้า/ขยายออก) — ไม่ได้ใส่');
           if(!sz&&!dir&&!res[d.label]&&!wb[d.label]) empty[d.label]=d;
         } else {      // เก็บเข้า / ขยายออก
+          dir=dirMap.get(idx)||'';   // [voice-10] ทิศจากตัวแบ่งคำทิศด้านบน
           const q=vAdj(vToks(pre+' '+post),d.cap||3);
+          // [voice-10] ไม่มีตัวเลขของตัวเอง และตัวถัดไปเป็นสัดส่วนที่มีทิศ = ชื่อในกลุ่ม ("อกเอว 1.5") ใช้ค่าของตัวถัดไป
+          if(!q&&!/\d|ครึ่ง/.test(tail)&&idx+1<hits.length&&defs[hits[idx+1].i].dir){ grouped.push({d,next:defs[hits[idx+1].i],dir}); return; }
           if(!q){ if(!res[d.label]&&!wb[d.label]) empty[d.label]=d; return; }
           if(d.inOnly&&dir==='out'){ wr(d.label,d.label+' ขยายออกไม่ได้ — ไม่ได้ใส่'); return; }
           if(q.over){ put(d.label,{k:'over',d,n:q.n,cap:d.cap||3}); return; }
           if(q.unsure){ wr(d.label,d.label+' ไม่แน่ใจ (ได้ยิน "'+q.raw+'") — ไม่ได้ใส่'); return; }
+          if(!dir&&d.inOnly) dir='in';   // [voice-9] โคนขา/ต้นขา เก็บเข้าได้อย่างเดียว ไม่ต้องถาม
+          if(!dir&&res[d.label]&&res[d.label].k==='out'&&res[d.label].n===q.n) return;   // [voice-11] พูดทวนค่าเดิมไม่บอกทิศ = ใช้ทิศเดิม
           if(!dir){ put(d.label,{k:'pending',d,n:q.n}); return; }
           put(d.label,{k:'out',d,n:q.n,dir,along:!!(d.along&&/ตลอดแนว/.test(tail))});
         }
       });
+      // [voice-10] ชื่อในกลุ่มรับค่าเดียวกับตัวถัดไป (ย้อนจากท้าย กลุ่มยาว "อกเอวสะโพก 1" ได้ครบ)
+      for(let gi=grouped.length-1;gi>=0;gi--){ const g=grouped[gi], v=res[g.next.label], cap=g.d.cap||3;
+        if(!v||!(v.n>0)){ if(!res[g.d.label]&&!wb[g.d.label]) empty[g.d.label]=g.d; continue; }
+        const gdir=g.dir||v.dir||'';
+        if(v.n>cap) put(g.d.label,{k:'over',d:g.d,n:v.n,cap});
+        else if(!gdir&&!g.d.inOnly) put(g.d.label,{k:'pending',d:g.d,n:v.n});
+        else if(g.d.inOnly&&gdir==='out') wr(g.d.label,g.d.label+' ขยายออกไม่ได้ — ไม่ได้ใส่');
+        else put(g.d.label,{k:'out',d:g.d,n:v.n,dir:gdir||'in',along:false}); }
       const out=[], pending=[], over=[], warn=[];
       Object.keys(res).forEach(k=>{ const v=res[k]; (v.k==='out'?out:v.k==='pending'?pending:over).push(v); });
       Object.keys(wb).forEach(k=>warn.push(wb[k]));
       Object.keys(empty).forEach(k=>warn.push(k+' ไม่ได้ยินตัวเลข'));
-      if(!hits.length) warn.push('ไม่เจอชื่อสัดส่วนในประโยค ลองพูดชื่อสัดส่วนก่อนตัวเลข เช่น "ต่ำศอก 12"');
-      return {out,warn,pending,over,text:t};
+      dropped.forEach(l=>warn.push('ไม่เอา '+l+' — เอาออกแล้ว'));
+      if(!hits.length&&!cancelAll&&!dropPrev&&!dropped.length) warn.push('ไม่เจอชื่อสัดส่วนในประโยค ลองพูดชื่อสัดส่วนก่อนตัวเลข เช่น "ต่ำศอก 12"');
+      // [voice-9] ระดับความยาวขา (กางเกง) FB / NB / HB — ฟังทั้งตัวอังกฤษและที่ถอดเป็นไทย
+      let legLevel='';
+      if(/กางเกง/.test(type)){ const L=t.toUpperCase(); const mm=/(?:^|[^A-Z])(FB|NB|HB)(?:$|[^A-Z])/.exec(L);
+        if(mm) legLevel=mm[1]; else if(/เอฟบี|เอ็ฟบี|เอฟ\s*บี/.test(t)) legLevel='FB'; else if(/เอ็นบี|เอนบี|เอ็น\s*บี/.test(t)) legLevel='NB'; else if(/เอชบี|เฮชบี|เอซบี|เอ็ชบี|เอช\s*บี/.test(t)) legLevel='HB'; }
+      if(legLevel && !hits.length && warn.length===1 && /ไม่เจอชื่อสัดส่วน/.test(warn[0])) warn.length=0;
+      return {out,warn,pending,over,text:t,cancelAll,dropPrev,legLevel};
     }
     window.__voiceParseApp=vParse;   // สำหรับทดสอบ
     const kNorm=s=>String(s||'').replace(/\s+/g,'');
@@ -13812,35 +13906,47 @@
     }
     // [voice-3 ตามที่ขอ] กล่องผล = สิ่งที่ "ทำต่อได้": ป้ายค่าที่ใส่แล้ว (× ลบรายสัดส่วน) · ไม่ได้บอกทิศ = ปุ่มเลือก เก็บเข้า/ขยายออก
     //   · เกิน 3 = บอกให้พูดใหม่/กด +/− · ล้างที่พูดทั้งหมด · ประโยคที่ได้ยินย่อเป็นบรรทัดเล็กด้านล่าง
-    const vState=block=>block._vs||(block._vs={applied:{},pending:[],over:[],warn:[],text:''});
+    const vState=block=>block._vs||(block._vs={applied:{},pending:[],over:[],warn:[],text:'',last:[]});
     function vMeasureOn(block){
       setToggleOnIndex(block,'.toptoggle',0);
       const ml=block.querySelector('.measure-list'); if(ml) ml.classList.remove('hidden');
     }
     function vTouched(block){ const ml=block.querySelector('.measure-list'); if(ml) ml.dispatchEvent(new Event('input',{bubbles:true})); }   // ให้บันทึกร่างอัตโนมัติรู้ (ไม่ส่งเข้าช่องตัวเลขตรงๆ — ช่องจะรีเซ็ตทิศ)
+    // [voice-7] จำค่าในช่องก่อนพูด เพื่อ "ยกเลิก" แล้วคืนค่าเดิม (ไม่ใช่ตั้งเป็น 0)
+    function vSnap(m,takeIn){
+      const snap={editing:m.classList.contains('editing')};
+      if(takeIn){ const inp=m.querySelector('.takein-input'); snap.v=inp?Math.abs(parseFloat(inp.value)||0):0; }
+      else { const el=m.querySelector('.numonly:not(.takein-input)'), a=Math.abs(parseFloat(el&&el.value)||0); snap.v=el&&el.dataset.dir==='neg'?-a:a; const ac=m.querySelector('.along-check'); snap.along=!!(ac&&ac.checked); }
+      return snap;
+    }
     function vSetOne(block,d,n,dir,along){
       const m=findMitem(block,d.label), st=vState(block); if(!m){ st.warn.push(d.label+' ไม่มีในฟอร์มนี้'); return false; }
+      const takeIn=!!(d.takeIn && dir==='in'), key=takeIn?d.label+' เก็บเข้า':d.label;
+      const prev=vSnap(m,takeIn), prevApplied=st.applied[key]||null;
       vMeasureOn(block);
       setToggleOnIndex(m,'.toggle',0); m.classList.add('editing');
-      if(d.takeIn && dir==='in'){ setTakeInValue(m,n); st.applied[d.label+' เก็บเข้า']={d,n,dir,takeIn:true}; return true; }
+      if(takeIn){ setTakeInValue(m,n); st.applied[key]={d,n,dir,takeIn:true,prev,prevApplied}; st.last.push(key); return true; }
       const el=m.querySelector('.numonly:not(.takein-input)'); if(!el) return false;
       setMitemValue(el, d.dir ? (dir==='in'?-n:n) : n);
       if(d.along){ const ac=m.querySelector('.along-check'); if(ac&&ac.checked!==!!along){ ac.checked=!!along; ac.dispatchEvent(new Event('change',{bubbles:true})); } }
-      st.applied[d.label]={d,n,dir,along:!!along};
+      st.applied[key]={d,n,dir,along:!!along,prev,prevApplied};
+      st.last.push(key);
       return true;
     }
-    function vClearOne(block,key){
+    function vClearOne(block,key){   // [voice-7] คืนค่าที่อยู่ในช่องก่อนพูดครั้งนั้น (ไม่ใช่ 0)
       const st=vState(block), a=st.applied[key]; if(!a) return;
-      const m=findMitem(block,a.d.label);
+      const m=findMitem(block,a.d.label), p=a.prev||{v:0,editing:false,along:false};
       if(m){
-        if(a.takeIn) setTakeInValue(m,0);
+        if(a.takeIn) setTakeInValue(m,p.v);
         else {
-          const el=m.querySelector('.numonly:not(.takein-input)'); if(el) setMitemValue(el,0);
-          if(a.along){ const ac=m.querySelector('.along-check'); if(ac&&ac.checked){ ac.checked=false; ac.dispatchEvent(new Event('change',{bubbles:true})); } }
-          if(!st.applied[a.d.label+' เก็บเข้า']){ setToggleOnIndex(m,'.toggle',1); m.classList.remove('editing'); }
+          const el=m.querySelector('.numonly:not(.takein-input)'); if(el) setMitemValue(el,p.v);
+          const ac=m.querySelector('.along-check'); if(ac&&ac.checked!==!!p.along){ ac.checked=!!p.along; ac.dispatchEvent(new Event('change',{bubbles:true})); }
         }
+        const other=a.takeIn?a.d.label:a.d.label+' เก็บเข้า';
+        if(!p.editing && !st.applied[other]){ setToggleOnIndex(m,'.toggle',1); m.classList.remove('editing'); }
       }
-      delete st.applied[key];
+      if(a.prevApplied) st.applied[key]=a.prevApplied; else delete st.applied[key];
+      st.last=st.last.filter(k=>k!==key);
     }
     function vEl(tag,cls,text){ const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
     function vRender(block){
@@ -13864,7 +13970,7 @@
       st.warn.forEach(w=>box.appendChild(vEl('div','vwarn', w)));
       const foot=vEl('div','vfoot');
       foot.appendChild(vEl('span','vh2', st.text?('ได้ยินล่าสุด: '+st.text):''));
-      if(labels.length){ const c=vEl('button','vclr','ล้างที่พูดทั้งหมด'); c.type='button'; c.dataset.clr='1'; foot.appendChild(c); }
+      if(st.last.length){ const c=vEl('button','vclr','ยกเลิกที่พูดล่าสุด'); c.type='button'; c.dataset.clr='1'; foot.appendChild(c); }   // [voice-7] เดิม "ล้างที่พูดทั้งหมด" ลบค่าที่ใส่ไว้ก่อนหน้าไปด้วย
       const x=vEl('button','vx','×'); x.type='button'; x.dataset.close='1'; x.setAttribute('aria-label','ปิดกล่องนี้'); foot.appendChild(x);
       box.appendChild(foot);
     }
@@ -13878,7 +13984,7 @@
           const st=vState(block);
           if(t.dataset.rm){ vClearOne(block,t.dataset.rm); vTouched(block); }
           else if(t.dataset.pick!=null){ const p=st.pending[+t.dataset.pick]; if(p){ st.pending.splice(+t.dataset.pick,1); vSetOne(block,p.d,p.n,t.dataset.dir); vTouched(block); } }
-          else if(t.dataset.clr){ Object.keys(st.applied).forEach(l=>vClearOne(block,l)); st.pending=[]; st.over=[]; st.warn=[]; vTouched(block); }
+          else if(t.dataset.clr){ st.last.slice().reverse().forEach(l=>vClearOne(block,l)); st.last=[]; st.pending=[]; st.over=[]; st.warn=[]; vTouched(block); }
           else if(t.dataset.close){ st.pending=[]; st.over=[]; st.warn=[]; st.text=''; if(!Object.keys(st.applied).length){ box.hidden=true; return; } }
           vRender(block);
         });
@@ -13888,13 +13994,17 @@
     function vApply(block,text){
       const type=block.querySelector('.type-select')?.value||'', st=vState(block), r=vParse(text,type);
       vBox(block);
-      st.text=text; st.pending=r.pending; st.over=r.over; st.warn=r.warn.slice();
+      const note=[];   // [voice-8] คำสั่ง "ยกเลิก" / "ไม่เอา" ที่หมายถึงรอบก่อนหน้า
+      if(r.cancelAll){ const had=Object.keys(st.applied).length; let g=0; while(Object.keys(st.applied).length&&g++<50) Object.keys(st.applied).forEach(k=>vClearOne(block,k)); st.pending=[]; if(had) note.push('ยกเลิกทั้งหมดที่พูดมาแล้ว (คืนค่าเดิมในช่อง)'); }
+      else for(let i=0;i<r.dropPrev;i++){ const k=st.last[st.last.length-1]; if(k){ note.push('ไม่เอา '+k+' — เอาออกแล้ว'); vClearOne(block,k); } else note.push('ไม่มีสัดส่วนก่อนหน้าให้เอาออก'); }
+      st.text=text; st.pending=r.pending; st.over=r.over; st.warn=note.concat(r.warn); st.last=[];
       r.out.forEach(o=>{ vSetOne(block,o.d,o.n,o.dir,o.along); });
-      if(r.out.length) vTouched(block);
+      if(r.legLevel){ const lb=block.querySelector('.legstyle-chips button[data-val="'+r.legLevel+'"]'); if(lb){ vMeasureOn(block); if(!lb.classList.contains('on')) lb.click(); st.warn.unshift('ระดับความยาวขา '+r.legLevel+' — เลือกให้แล้ว'); } }   // [voice-9]
+      if(r.out.length||note.length) vTouched(block);
       vRender(block);
     }
     let cur=null;
-    const V_TERMS=['ความยาวแขน','ต้นแขน','ต่ำศอก','ความยาวเสื้อหน้า','ความยาวเสื้อหลัง','อก','เอว','สะโพก','โคนขา','ต้นขา','ต่ำเข่า','ปลายขา','ความยาวขา','เก็บเข้า','ขยายออก','ตลอดแนว'];
+    const V_TERMS=['ระดับความยาวขา','FB','NB','HB','ความยาวแขน','ต้นแขน','ต่ำศอก','ความยาวเสื้อหน้า','ความยาวเสื้อหลัง','ยาวหน้า','ยาวหลัง','อก','เอว','สะโพก','โคนขา','ต้นขา','ต่ำเข่า','ปลายขา','ความยาวขา','เก็บเข้า','ขยายออก','ตลอดแนว'];
     function vB64(blob){ return new Promise((ok,no)=>{ const fr=new FileReader(); fr.onload=()=>ok(String(fr.result).split(',')[1]||''); fr.onerror=()=>no(new Error('อ่านไฟล์เสียงไม่ได้')); fr.readAsDataURL(blob); }); }
     function vGeMime(t){ t=String(t||'').split(';')[0].toLowerCase(); return (!t||t==='audio/mp4'||t==='audio/x-m4a'||t==='video/mp4')?'audio/m4a':t; }
     function vGeText(j){ const out=[]; ((j&&j.steps)||[]).forEach(s=>((s&&s.content)||[]).forEach(c=>{ if(c&&typeof c.text==='string') out.push(c.text); })); if(out.length) return out.join(' ').trim();
@@ -13918,7 +14028,7 @@
       const show=t=>{ box.hidden=false; box.innerHTML=''; const h=document.createElement('div'); h.className='vh'; h.textContent=t; box.appendChild(h); };
       const fail=t=>{ vState(block).warn=['⚠ '+t]; vRender(block); };
       cur={block,btn,mr:null};
-      navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+      navigator.mediaDevices.getUserMedia({audio:{autoGainControl:true,noiseSuppression:true,echoCancellation:true}}).then(stream=>{   // [voice-9] วาง iPad ไกล: ให้เบราว์เซอร์ขยายเสียงเบา + ลดเสียงรบกวน
         const L=['audio/mp4','audio/webm;codecs=opus','audio/webm']; let mime=''; if(MediaRecorder.isTypeSupported) for(const x of L) if(MediaRecorder.isTypeSupported(x)){ mime=x; break; }
         const mr=mime?new MediaRecorder(stream,{mimeType:mime}):new MediaRecorder(stream), chunks=[]; let t0=0;
         cur.mr=mr;
