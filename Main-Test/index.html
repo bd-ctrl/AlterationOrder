@@ -1724,6 +1724,10 @@
   .belt-chip{min-width:58px;padding:9px 0;border:1.5px solid #d9cfb8;border-radius:999px;background:#fff;font:inherit;font-size:17px;font-weight:600;color:#3a3326;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
   .belt-chip.on{background:#2b2620;border-color:#2b2620;color:#fff}
   .belt-hint{font-size:12.5px;color:#9a8f7a;text-align:right;margin-top:6px}
+  /* [voice-14] ปุ่มฟังเสียงซ้ำ + ปุ่มพูดในฟอร์มนำกลับมาแก้ */
+  .voice-out .vplay{margin-top:8px}
+  .voice-out .vplay-btn{height:34px;padding:0 14px;border-radius:999px;border:1.5px solid var(--gold,#c9a14a);background:#fff;color:var(--ink,#2b2620);font:inherit;font-size:13.5px;font-weight:500;cursor:pointer}
+  #ra2View .ra2-sec .seclabel .voice-btn{margin-left:10px}
 </style>
 <script>
 /* ===== [ใหม่ 2026-10-19 ตามที่ขอ] Suitcube Loader (ตัวสร้างลูกบาศก์รอโหลด · คู่กับ CSS .sc-loader) — ต้นฉบับ suitcube-loader.js ปรับ: เพิ่ม decor (ไม่ประกาศ role=status ซ้ำเมื่อมีข้อความ "กำลัง…" อยู่ข้างๆ) + inline (.sc-inl)
@@ -5947,7 +5951,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-26-5-voice-13-qr-1-numpad-4-belt-1';
+  const APP_VERSION = '2026-11-26-6-voice-14-qr-1-numpad-4-belt-1';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -8636,7 +8640,8 @@
         + (skuWarn(f)?'<div class="ra2-editnote ra2-skuwarn" role="alert"><b>'+esc(RA_SKU_WARN)+'</b> — SKU ในระบบเก่าไม่มีตัวบอกประเภท ดูป้ายบนสินค้าจริงก่อนบันทึก</div>':'')
         + (ed?'<div class="ra2-editnote" role="note">กำลังแก้ไขบิลเลขที่ <b>'+esc(ed.billNoNew||'-')+'</b></div>':'')   // [2026-10-27-4 ตามที่ขอ] เหลือข้อความสั้นๆ แค่นี้
         + '<div class="ra2-body" data-ra2-body>'
-          + '<div class="ra2-sec s1"><div class="seclabel"><span class="n serif">01</span><span class="t">รายละเอียด</span>'
+          + '<div class="ra2-sec s1" data-vtype="'+esc(f.type||'')+'"><div class="seclabel"><span class="n serif">01</span><span class="t">รายละเอียด</span>'
+            + (hasM&&navigator.mediaDevices&&window.MediaRecorder?'<button type="button" class="voice-btn" aria-label="พูดใส่สัดส่วน"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span class="vt">พูด</span></button>':'')   // [voice-14] ปุ่มพูดในฟอร์มนำกลับมาแก้
             + (hasM?'<div class="toptoggle"><button type="button" class="on">แก้ไขขนาด</button><button type="button">ไม่แก้ไข</button></div>':'')+'</div>'
             + (hasM?'<div class="measure-list ra2-measure">'+cfg.items.map(buildMitemHtml).join('')+'</div><div class="ra2-off">ไม่แก้ขนาด — กด “แก้ไขขนาด” เพื่อเลือกจุด</div>'
                    :'<div class="ra2-off">สินค้าประเภทนี้ไม่มีจุดวัด — เขียนรายละเอียดในหมายเหตุ</div>')
@@ -13953,6 +13958,17 @@
       st.last=st.last.filter(k=>k!==key);
     }
     function vEl(tag,cls,text){ const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+    // [voice-14] เล่นเสียงทุกท่อนของรอบล่าสุดต่อกัน (เสียงอยู่แค่ในเครื่อง)
+    const vPlayer={block:null,audio:null,url:''};
+    function vStopPlay(){ const p=vPlayer; if(p.audio){ try{ p.audio.pause(); }catch(e){} } if(p.url){ try{ URL.revokeObjectURL(p.url); }catch(e){} } const b=p.block; p.block=null; p.audio=null; p.url=''; if(b) vRender(b); }
+    function vPlay(block){
+      vStopPlay(); const clips=(vState(block).clips||[]).slice(); if(!clips.length) return;
+      vPlayer.block=block; let i=0;
+      const next=()=>{ if(vPlayer.block!==block) return; if(i>=clips.length){ vStopPlay(); return; }
+        if(vPlayer.url){ try{ URL.revokeObjectURL(vPlayer.url); }catch(e){} }
+        vPlayer.url=URL.createObjectURL(clips[i++]); const a=new Audio(vPlayer.url); vPlayer.audio=a; a.onended=next; a.onerror=next; a.play().catch(()=>next()); };
+      next();
+    }
     function vRender(block){
       const box=block.querySelector('.voice-out'); if(!box) return;
       const st=vState(block), labels=Object.keys(st.applied);
@@ -13973,6 +13989,7 @@
       });
       st.over.forEach(o=>box.appendChild(vEl('div','vwarn', o.d.label+' '+vFmt(o.n)+' เกิน '+(o.cap||3)+' นิ้ว ไม่ได้ใส่ — พูดใหม่ หรือกด + / − ที่ช่อง'+o.d.label+'เอง')));
       st.warn.forEach(w=>box.appendChild(vEl('div','vwarn', w)));
+      if(st.clips&&st.clips.length&&!st.live){ const pb=vEl('div','vplay'); const b=vEl('button','vplay-btn',vPlayer.block===block?'⏸ หยุดเล่น':'▶ ฟังเสียงที่พูดล่าสุด'); b.type='button'; b.dataset.play='1'; pb.appendChild(b); box.appendChild(pb); }   // [voice-14]
       const foot=vEl('div','vfoot');
       foot.appendChild(vEl('span','vh2', st.text?('ได้ยินล่าสุด: '+st.text):''));
       if(st.last.length){ const c=vEl('button','vclr','ยกเลิกที่พูดล่าสุด'); c.type='button'; c.dataset.clr='1'; foot.appendChild(c); }   // [voice-7] เดิม "ล้างที่พูดทั้งหมด" ลบค่าที่ใส่ไว้ก่อนหน้าไปด้วย
@@ -13981,7 +13998,7 @@
     }
     function vBox(block){
       let box=block.querySelector('.voice-out');
-      if(!box){ box=document.createElement('div'); box.className='voice-out'; box.hidden=true; const sl=block.querySelector('.measure-section .seclabel'); if(sl&&sl.parentNode) sl.parentNode.insertBefore(box, sl.nextSibling); }
+      if(!box){ box=document.createElement('div'); box.className='voice-out'; box.hidden=true; const sl=block.querySelector('.measure-section .seclabel')||block.querySelector('.seclabel'); if(sl&&sl.parentNode) sl.parentNode.insertBefore(box, sl.nextSibling); }
       if(!box._vw){
         box._vw=true;
         box.addEventListener('click',e=>{
@@ -13990,6 +14007,7 @@
           if(t.dataset.rm){ vClearOne(block,t.dataset.rm); vTouched(block); }
           else if(t.dataset.pick!=null){ const p=st.pending[+t.dataset.pick]; if(p){ st.pending.splice(+t.dataset.pick,1); vSetOne(block,p.d,p.n,t.dataset.dir); vTouched(block); } }
           else if(t.dataset.clr){ st.last.slice().reverse().forEach(l=>vClearOne(block,l)); st.last=[]; st.pending=[]; st.over=[]; st.warn=[]; vTouched(block); }
+          else if(t.dataset.play){ if(vPlayer.block===block) vStopPlay(); else vPlay(block); vRender(block); return; }   // [voice-14]
           else if(t.dataset.close){ st.pending=[]; st.over=[]; st.warn=[]; st.text=''; if(!Object.keys(st.applied).length){ box.hidden=true; return; } }
           vRender(block);
         });
@@ -13998,7 +14016,7 @@
     }
     function vApply(block,text,opt){   // [voice-13] opt.append = ท่อนถัดไปของรอบเดียวกัน
       opt=opt||{};
-      const type=block.querySelector('.type-select')?.value||'', st=vState(block), r=vParse(text,type);
+      const type=block.querySelector('.type-select')?.value||block.dataset.vtype||'', st=vState(block), r=vParse(text,type);   // [voice-14] ฟอร์มนำกลับมาแก้ใช้ data-vtype
       vBox(block);
       const note=[];   // [voice-8] คำสั่ง "ยกเลิก" / "ไม่เอา" ที่หมายถึงรอบก่อนหน้า
       if(r.cancelAll){ const had=Object.keys(st.applied).length; let g=0; while(Object.keys(st.applied).length&&g++<50) Object.keys(st.applied).forEach(k=>vClearOne(block,k)); st.pending=[]; if(had) note.push('ยกเลิกทั้งหมดที่พูดมาแล้ว (คืนค่าเดิมในช่อง)'); }
@@ -14057,7 +14075,7 @@
       const box=vBox(block), st=vState(block);
       const fail=t=>{ st.warn=(st.warn||[]).concat(['⚠ '+t]); vRender(block); };
       const live=t=>{ st.live=t; vRender(block); };
-      cur={block,btn,end:null};
+      cur={block,btn,end:null}; vStopPlay(); st.clips=[];   // [voice-14] รอบใหม่ = เก็บเสียงใหม่
       navigator.mediaDevices.getUserMedia({audio:{autoGainControl:true,noiseSuppression:true,echoCancellation:true}}).then(stream=>{   // [voice-9] วาง iPad ไกล: ขยายเสียงเบา + ลดเสียงรบกวน
         const L=['audio/mp4','audio/webm;codecs=opus','audio/webm']; let mime=''; if(MediaRecorder.isTypeSupported) for(const x of L) if(MediaRecorder.isTypeSupported(x)){ mime=x; break; }
         let texts=[], ended=false, seg=null, segN=0, applied=0, inFlight=0, chain=Promise.resolve(), vad=null;
@@ -14070,7 +14088,7 @@
           r.onstop=()=>{
             const blob=new Blob(chunks,{type:r.mimeType||mime||'audio/webm'}), sec=(performance.now()-t0)/1000;
             if(r._speech!==false && sec>=0.6 && blob.size>=1500){
-              const idx=++segN; inFlight++; status();
+              const idx=++segN; inFlight++; (st.clips=st.clips||[]).push(blob); status();   // [voice-14] เก็บไว้ฟังซ้ำ
               const p=vGemini(blob);
               chain=chain.then(()=>p.then(text=>{ if(text){ texts.push(text);
                 /* อ่านทุกท่อนของรอบนี้รวมเป็นประโยคเดียวทุกครั้ง (ชื่อกับตัวเลขอยู่คนละท่อนก็จับคู่ได้) — ย้อนค่าที่ท่อนก่อนใส่ไว้แล้วใส่ใหม่ */
@@ -14099,6 +14117,9 @@
     }
     const wrap=document.getElementById('productsWrap');
     if(wrap){
+      // [voice-14] ปุ่มพูดในฟอร์มนำกลับมาแก้ (#ra2View) — ก้อน = ส่วน "01 รายละเอียด"
+      document.addEventListener('click',e=>{ const btn=e.target.closest&&e.target.closest('#ra2View .voice-btn'); if(!btn) return; e.preventDefault(); e.stopPropagation();
+        const block=btn.closest('.ra2-sec'); if(!block) return; if(!VDEFS[block.dataset.vtype||'']){ const st=vState(block); vBox(block); st.warn=['สินค้าประเภทนี้ยังพูดใส่สัดส่วนไม่ได้']; vRender(block); return; } vStart(block,btn); }, true);
       wrap.addEventListener('click',e=>{ const btn=e.target.closest&&e.target.closest('.voice-btn'); if(!btn) return; e.preventDefault(); e.stopPropagation(); const block=btn.closest('.product-block'); if(block) vStart(block,btn); });
       const syncAll=()=>wrap.querySelectorAll('.product-block').forEach(vSync);
       wrap.addEventListener('change',e=>{ if(e.target.classList&&e.target.classList.contains('type-select')) setTimeout(syncAll,0); });
