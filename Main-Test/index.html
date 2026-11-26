@@ -5947,7 +5947,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-26-3-voice-11-qr-1-numpad-4-belt-1';
+  const APP_VERSION = '2026-11-26-4-voice-12-qr-1-numpad-4-belt-1';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -14022,6 +14022,26 @@
       }
     }
     function vBtn(btn,mode){ btn.classList.toggle('rec',mode==='rec'); btn.disabled=mode==='busy'; btn.querySelector('.vt').textContent=mode==='rec'?'หยุด':(mode==='busy'?'กำลังแกะ…':'พูด'); }
+    // [voice-12] เฝ้าความเงียบระหว่างอัด: เงียบติดกันเกิน ms = เรียก onSilence ครั้งเดียว · คืน {stop}
+    const V_SILENCE_MS=10000;
+    function vSilenceWatch(stream, ms, onSilence){
+      let ctx=null, timer=null, done=false;
+      try{
+        const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return null;
+        ctx=new AC(); const src=ctx.createMediaStreamSource(stream), an=ctx.createAnalyser(); an.fftSize=1024; src.connect(an);
+        const buf=new Float32Array(an.fftSize); let floor=-60, lastVoice=performance.now();
+        timer=setInterval(()=>{
+          if(done) return;
+          if(ctx.state==='suspended') ctx.resume().catch(()=>{});
+          an.getFloatTimeDomainData(buf); let sum=0; for(let i=0;i<buf.length;i++) sum+=buf[i]*buf[i];
+          const db=10*Math.log10(sum/buf.length+1e-12), now=performance.now();
+          if(db<floor) floor=db; else floor+= (db-floor)*0.01;          // ระดับพื้น: ลงเร็ว ขึ้นช้า
+          if(db>floor+9 && db>-70) lastVoice=now;                         // มีเสียงพูด
+          if(now-lastVoice>ms){ done=true; clearInterval(timer); try{ onSilence(); }catch(e){} }
+        },200);
+      }catch(e){ return null; }
+      return { stop(){ done=true; if(timer) clearInterval(timer); try{ ctx&&ctx.close(); }catch(e){} } };
+    }
     function vStart(block,btn){
       if(cur){ if(cur.block===block&&cur.mr&&cur.mr.state==='recording') cur.mr.stop(); return; }
       const box=vBox(block);
@@ -14030,10 +14050,11 @@
       cur={block,btn,mr:null};
       navigator.mediaDevices.getUserMedia({audio:{autoGainControl:true,noiseSuppression:true,echoCancellation:true}}).then(stream=>{   // [voice-9] วาง iPad ไกล: ให้เบราว์เซอร์ขยายเสียงเบา + ลดเสียงรบกวน
         const L=['audio/mp4','audio/webm;codecs=opus','audio/webm']; let mime=''; if(MediaRecorder.isTypeSupported) for(const x of L) if(MediaRecorder.isTypeSupported(x)){ mime=x; break; }
-        const mr=mime?new MediaRecorder(stream,{mimeType:mime}):new MediaRecorder(stream), chunks=[]; let t0=0;
+        const mr=mime?new MediaRecorder(stream,{mimeType:mime}):new MediaRecorder(stream), chunks=[]; let t0=0, vad=null;
         cur.mr=mr;
         mr.ondataavailable=e=>{ if(e.data&&e.data.size) chunks.push(e.data); };
         mr.onstop=()=>{
+          if(vad) vad.stop();   // [voice-12]
           stream.getTracks().forEach(x=>x.stop());
           const blob=new Blob(chunks,{type:mr.mimeType||mime||'audio/webm'}), sec=(performance.now()-t0)/1000;
           if(sec<0.6||blob.size<1500){ cur=null; vBtn(btn,''); fail('ไม่ได้ยินเสียง ลองกด "พูด" แล้วพูดใหม่'); return; }
@@ -14042,7 +14063,8 @@
                              err=>fail('แกะเสียงไม่สำเร็จ: '+(err&&err.message||err)))
             .then(()=>{ cur=null; vBtn(btn,''); });
         };
-        mr.start(); t0=performance.now(); vBtn(btn,'rec'); show('กำลังฟัง… พูดได้เลย เช่น "ต่ำศอก 12 นิ้ว" · จบแล้วกด "หยุด"');
+        mr.start(); t0=performance.now(); vBtn(btn,'rec'); show('กำลังฟัง… พูดได้เลย เช่น "ต่ำศอก 12 นิ้ว" · จบแล้วกด "หยุด" (เงียบเกิน '+Math.round(V_SILENCE_MS/1000)+' วินาทีหยุดเอง)');
+        vad=vSilenceWatch(stream, V_SILENCE_MS, ()=>{ if(mr.state==='recording') mr.stop(); });   // [voice-12]
       },()=>{ cur=null; vBtn(btn,''); fail('ไม่ได้อนุญาตไมโครโฟน — กดอนุญาตแล้วลองใหม่'); });
     }
     function vSync(block){
