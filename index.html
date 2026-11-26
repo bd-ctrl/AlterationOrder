@@ -5860,7 +5860,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-26-2';
+  const APP_VERSION = '2026-11-26-4';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -12927,7 +12927,7 @@
     tr.sfDone=tr.sfDone||[]; sfNow.forEach(function(c){ if(tr.sfDone.indexOf(c)<0) tr.sfDone.push(c); });
     if(code==='NOT_READY'){ tr.waitN=(tr.waitN||0)+1; var d=tr.waitN>20?120000:30000; tr.nextAt=now+d; return { kind:'wait', delay:d }; }
     tr.errN=(tr.errN||0)+1;
-    if(tr.errN>=8){ tr.gaveUp=true; return { kind:'giveup' }; }
+    // [2026-11-26-3 ตามที่ขอ "อ่านใหม่ทุก 15 นาทีได้ไหม"] เดิมผิดครบ 8 ครั้ง (~45 นาที) = เลิกลองบิลนี้จนกว่าจะโหลดหน้าใหม่ → ตอนนี้ไม่เลิก ลองใหม่ทุก 15 นาทีตลอดที่ Worker ยังส่งบิลนี้มา (บิลภายใน 48 ชม.)
     var delay=Math.min(15*60*1000, 30000*Math.pow(2, tr.errN-1)); tr.nextAt=now+delay;
     return { kind:'retry', delay:delay };
   }
@@ -13087,6 +13087,11 @@
         });
         if((res.alreadyDone||[]).length) save();
         var items=res.items||[];
+        // [2026-11-26-4] Worker สั่งทำใหม่ (force = โทเคน) → ลืมผลเดิมของบิลนั้นครั้งเดียวต่อโทเคน แล้วทำใหม่
+        var forcedN=0; items.forEach(function(it){ if(!it.force) return; var tr=tries[it.recordId]; if(tr && tr.forceAt===it.force) return;
+          tries[it.recordId]={ forceAt:it.force }; delete state.done[it.recordId]; if(state.verify) delete state.verify[it.recordId]; forcedN++;
+          log('↻ '+it.billNo+' ระบบสั่งทำใบสรุปใหม่ (ยังไม่เข้า Salesforce เกิน 1 ชม.)'); });
+        if(forcedN && !DRY) save();
         var due=autoDue(items, tries, Date.now(), AUTO_MAX_PER_CYCLE); lastDueN=due.length;
         var okN=0;
         for(var i=0;i<due.length;i++){ if(await doOne(due[i])) okN++; }
