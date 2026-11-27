@@ -638,6 +638,47 @@
   .mitem[data-group-item]{display:none}
   .mitem[data-group-item].group-on{display:block}
   /* info popover */
+  /* [voice-32 ตามที่ขอ] หน้าแรกคู่มือ แบบ ก (design-demos/help-redesign/a.html) — เฉพาะ #infoPop */
+  #infoPop.hp-homeon .info-note,#infoPop.hp-homeon #infoTabs,#infoPop.hp-homeon .info-panel{display:none!important}
+  #infoPop .hp-home{display:none;background:#f7f4ec;min-height:100%;padding:34px 28px 40px}
+  #infoPop.hp-homeon .hp-home{display:block}
+  #infoPop.hp-homeon .hp-body{background:#f7f4ec}
+  #infoPop .hp-back{display:inline-flex;align-items:center;border:1px solid var(--rule,#ddd6c4);background:#fff;border-radius:99px;padding:3px 14px 3px 10px;margin-right:12px;font-family:'Prompt',sans-serif;font-size:14px;font-weight:500;color:var(--goldink,#8a6a2c);cursor:pointer;vertical-align:middle}
+  #infoPop.hp-homeon .hp-back{display:none}
+  #infoPop .hp-home-hero{text-align:center}
+  #infoPop .hp-home-hero h4{font-family:'Prompt',sans-serif;font-size:32px;font-weight:600;margin:0;color:var(--ink)}
+  #infoPop .hp-home-hero p{color:#6f6a5e;font-size:16px;font-weight:300;margin:6px 0 20px}
+  #infoPop .hp-sbar{position:relative;max-width:640px;margin:0 auto;display:flex;background:#fff;border-radius:10px;box-shadow:0 6px 24px rgba(35,34,32,.08)}
+  #infoPop .hp-sbar input{flex:1;min-width:0;border:0;background:none;padding:0 20px;height:56px;font:inherit;font-family:'Prompt',sans-serif;font-size:17px;outline:none;border-radius:10px 0 0 10px;color:var(--ink)}
+  #infoPop .hp-sbar .hp-sgo{width:68px;border:0;border-radius:0 10px 10px 0;background:var(--ink);color:var(--gold);display:grid;place-items:center;cursor:pointer}
+  #infoPop .hp-sbar .hp-sgo svg{width:22px;height:22px}
+  #infoPop .hp-sres{position:absolute;left:0;right:0;top:calc(100% + 6px);background:#fff;border:1px solid #e4ddcc;border-radius:12px;box-shadow:0 14px 40px rgba(35,34,32,.16);max-height:52vh;overflow:auto;z-index:6;text-align:left}
+  #infoPop .hp-sres[hidden]{display:none}
+  #infoPop .hp-sr{display:block;width:100%;text-align:left;border:0;background:none;padding:11px 18px;border-bottom:1px solid #f0ebde;cursor:pointer;font-family:'Prompt',sans-serif}
+  #infoPop .hp-sr:last-child{border-bottom:0}
+  #infoPop .hp-sr:hover{background:#faf6ea}
+  #infoPop .hp-sr b{display:block;font-weight:500;font-size:15.5px;color:var(--ink);line-height:1.45}
+  #infoPop .hp-sr span{display:block;font-size:13.5px;color:#6f6a5e;line-height:1.5}
+  #infoPop .hp-sr i{font-style:normal;font-size:12px;color:#9a9384}
+  #infoPop .hp-sr mark{background:#f6e3ad;color:inherit;border-radius:3px;padding:0 1px}
+  #infoPop .hp-sempty{padding:14px 18px;color:#6f6a5e;font-size:15px}
+  #infoPop .hp-chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+  #infoPop .hp-chips button{border:1px solid #e4ddcc;background:transparent;border-radius:99px;padding:4px 14px;font-family:'Prompt',sans-serif;font-size:14px;color:#6f6a5e;cursor:pointer}
+  #infoPop .hp-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:30px}
+  #infoPop .hp-card{background:#fff;border:0;border-radius:12px;padding:24px 14px 18px;text-align:center;box-shadow:0 4px 18px rgba(35,34,32,.06);display:flex;flex-direction:column;align-items:center;cursor:pointer;font-family:'Prompt',sans-serif;color:var(--ink)}
+  #infoPop .hp-card .ic{width:56px;height:56px;margin-bottom:12px;position:relative}
+  #infoPop .hp-card .ic svg{width:56px;height:56px}
+  #infoPop .hp-card .ic::after{content:"";position:absolute;right:-5px;top:1px;width:11px;height:11px;border-radius:50%;background:var(--gold)}
+  #infoPop .hp-card b{font-size:16.5px;font-weight:600;margin-bottom:6px;line-height:1.35}
+  #infoPop .hp-card span{font-size:13.5px;color:#6f6a5e;font-weight:300;line-height:1.5;flex:1;margin-bottom:14px}
+  #infoPop .hp-card em{font-style:normal;background:var(--ink);color:#fff;border-radius:99px;padding:4px 14px;font-size:12.5px;font-weight:300;letter-spacing:.01em}
+  #infoPop .hp-home-foot{text-align:center;margin-top:34px}
+  #infoPop .hp-home-foot b{display:block;font-family:'Prompt',sans-serif;font-size:22px;font-weight:600}
+  #infoPop .hp-home-foot span{display:block;color:#6f6a5e;font-weight:300;margin:4px 0 14px}
+  #infoPop .hp-home-foot button{border:1.5px solid var(--ink);background:none;border-radius:8px;padding:8px 18px;margin:0 4px 8px;font-family:'Prompt',sans-serif;font-weight:500;font-size:15px;color:var(--ink);cursor:pointer}
+  #infoPop .hp-flash{animation:hpFlash 2.4s ease-out}
+  @keyframes hpFlash{0%,35%{background:#f6e3ad;box-shadow:0 0 0 6px #f6e3ad}100%{background:transparent;box-shadow:0 0 0 6px transparent}}
+  @media (max-width:760px){#infoPop .hp-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}#infoPop .hp-home{padding:24px 16px 32px}#infoPop .hp-home-hero h4{font-size:26px}}
   .infopop{display:none;position:fixed;inset:0;background:rgba(20,18,14,.32);z-index:90;align-items:center;justify-content:center}
   .infopop.show{display:flex}
   .infocard{width:min(460px,92vw);background:#fffdf8;border-radius:18px;box-shadow:0 24px 60px rgba(0,0,0,.3);padding:26px 28px;max-height:80vh;overflow:auto}
@@ -2443,7 +2484,7 @@
   <div class="infopop" id="infoPop">
     <div class="infocard" role="dialog" aria-modal="true" aria-label="วิธีใช้งาน">
       <div class="hp-top">
-        <h3>วิธีใช้งาน <span class="x" id="infoClose" role="button" aria-label="ปิดวิธีใช้งาน">&times;</span></h3>
+        <h3><span><button type="button" class="hp-back" id="hpBack">‹ หน้าแรกคู่มือ</button>วิธีใช้งาน</span> <span class="x" id="infoClose" role="button" aria-label="ปิดวิธีใช้งาน">&times;</span></h3>
         <div class="info-note"><span><span class="req">*</span> คือข้อมูลที่บังคับต้องกรอก ถ้าไม่มี * แปลว่าไม่บังคับ</span></div>
         <div class="hist-tabs" id="infoTabs" role="tablist">
         <button class="hist-tab on" data-info-tab="header" role="tab" aria-selected="true"><span class="tl">ภาพรวม</span><span class="tl-sep"> · </span><span class="tl">แถบบน/ล่าง</span></button>
@@ -2458,6 +2499,16 @@
       </div>
 
       <div class="hp-body" id="infoBody">
+      <div class="hp-home" id="hpHome">
+        <div class="hp-home-hero">
+          <h4>วิธีใช้งาน</h4>
+          <p>พิมพ์สิ่งที่อยากรู้ หรือเลือกหมวดด้านล่าง</p>
+          <div class="hp-sbar"><input id="hpQ" type="search" placeholder="ค้นหา เช่น สแกน · ร่าง · พิมพ์ซ้ำ · โคนขา" autocomplete="off" enterkeyhint="search"><button type="button" class="hp-sgo" aria-label="ค้นหา"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button><div class="hp-sres" id="hpRes" hidden></div></div>
+          <div class="hp-chips"><button type="button" data-hpq="สแกน">สแกน</button><button type="button" data-hpq="ร่าง">ร่าง</button><button type="button" data-hpq="พิมพ์ซ้ำ">พิมพ์ซ้ำ</button><button type="button" data-hpq="บันทึกไม่สำเร็จ">บันทึกไม่สำเร็จ</button><button type="button" data-hpq="พูด">พูดใส่สัดส่วน</button></div>
+        </div>
+        <div class="hp-cards" id="hpCards"></div>
+        <div class="hp-home-foot"><b>ยังหาไม่เจอ?</b><span>ดูวิดีโอสั้น หรือดูปัญหาที่พบบ่อย</span><button type="button" data-hptab="voice">▶ วิดีโอบันทึกเสียง</button><button type="button" data-hptab="more">ปัญหาที่พบบ่อย</button></div>
+      </div>
       <div class="info-panel" data-info-panel="header">
         <h3 class="hp-title">ภาพรวม · แถบบน/ล่าง</h3>
 <p class="hp-lead">หน้านี้ให้ภาพรวมของแอป "สั่งแก้ปรับทรงสำเร็จรูป" และอธิบายแถบที่เห็นตลอดเวลาทุกหน้า คือ แถบด้านบน แถบขั้นตอน 01–03 และแถบด้านล่าง อ่านหน้านี้ก่อน แล้วค่อยไปอ่านรายละเอียดของแต่ละหน้าใน​<span class="nb">แท็บ</span>​อื่นของคู่มือนี้</p>
@@ -5014,7 +5065,7 @@
 <li><b>พูดแบบปกติได้:</b> "เอวเอาเข้านิ้วนึง" = 1 · "นิ้วเดียว" = 1 · "ขยายออกนิ้วครึ่ง" = 1.5 · "ครึ่งนิ้ว" = 0.5</li>
 <li><b>ทิศ:</b> "เก็บ" หรือ "เข้า" คำเดียว = เก็บเข้า · "ขยาย" / "ปล่อย" = ขยายออก · พูดทิศไว้หน้าชื่อก็ได้ ("เก็บสะโพก 1")</li>
 <li><b>ชื่อสั้นที่ใช้ได้:</b> "ยาวแขน" · "ยาวหน้า" / "ยาวหลัง" (ความยาวเสื้อ) · "ยาวขา" · "ต้นขา" = โคนขา</li>
-<li><b>โคนขา:</b> พูดเลขอย่างเดียว = เก็บเข้า · พูด "ตลอดแนว" = ติ๊กช่องตลอดแนวให้</li>
+<li><b>โคนขา:</b> พูดเลขอย่างเดียว = เก็บเข้า · พูด "ตลอดแนว" ตรงไหนของประโยคก็ได้ = ติ๊กช่องตลอดแนวให้ · พูด "โคนขาตลอดแนว" ไม่มีเลข = ติ๊กอย่างเดียว ใช้ค่าที่มีในช่อง</li>
 <li><b>ระดับความยาวขา:</b> พูด "FB" / "NB" / "HB" = เลือกปุ่มให้</li>
 </ul>
 
@@ -6066,7 +6117,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-27-16-voice-30-qr-1-numpad-5-belt-1';
+  const APP_VERSION = '2026-11-27-19-voice-32b-qr-1-numpad-5-belt-1';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -6180,11 +6231,60 @@
     infoBody.scrollTo({top:Math.max(0,top), behavior:(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)?'auto':'smooth'});
   });
   if(infoBtn){
-    infoBtn.addEventListener('click',()=>{ infoPop.classList.add('show'); switchInfoTab('header'); });
+    infoBtn.addEventListener('click',()=>{ infoPop.classList.add('show'); switchInfoTab('header'); if(window.hpShowHome) window.hpShowHome(); });   // [voice-32] เปิดคู่มือ = หน้าแรก
     infoClose.addEventListener('click',()=>infoPop.classList.remove('show'));
     infoPop.addEventListener('click',e=>{ if(e.target===infoPop) infoPop.classList.remove('show'); });
   }
 
+  // ── [voice-32 ตามที่ขอ] หน้าแรกคู่มือ แบบ ก: การ์ด 8 หมวด + ค้นหาทั้งชื่อเรื่องและเนื้อหา ──
+  (function(){
+    const pop=document.getElementById('infoPop'), home=document.getElementById('hpHome'), body=document.getElementById('infoBody'), q=document.getElementById('hpQ'), res=document.getElementById('hpRes'), back=document.getElementById('hpBack');
+    if(!pop||!home||!body||!q) return;
+    const P={start:'<path d="M4 6h16M4 12h10M4 18h7"/><path d="M17 15l3 3-3 3"/>',user:'<circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/>',item:'<path d="M8 3l-4 3 2 4 2-1v12h8V9l2 1 2-4-4-3c-.6 1.5-2.2 2.5-4 2.5S8.6 4.5 8 3z"/>',save:'<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 4v5h7V4M8 20v-6h8v6"/>',hist:'<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5M12 8v4l3 2"/>',repeat:'<path d="M4 10a8 8 0 0 1 14-4l2 2M20 14a8 8 0 0 1-14 4l-2-2"/><path d="M20 4v4h-4M4 20v-4h4"/>',mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',print:'<path d="M7 9V3h10v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/>'};
+    const T=[['header','start','เริ่มต้นใช้งาน','ทำบิล 1 ใบใน 4 ขั้นตอน · แถบบน/ล่าง · ข้อมูลจะหายไหม'],['1','user','หน้า 1 ข้อมูลลูกค้า','ค้นเบอร์ · ลูกค้าเก่า/ใหม่ · หลายคนใช้เบอร์เดียวกัน'],['2','item','หน้า 2 สินค้า','รหัส · สแกน · จุดวัด · สินค้าหลายชิ้น'],['3','save','หน้า 3 นัดรับ & บันทึก','ชำระเงิน · นัดรับ · แยกบิล · บันทึกไม่สำเร็จ'],['history','hist','ประวัติใบสั่งแก้','รายการนัดรับ · ประวัติ · แก้/ยกเลิกบิล'],['repeat','repeat','สินค้าแก้ครั้งที่ 2–5','หาด้วย P# / QR / เบอร์ · ฟอร์มนำกลับมาแก้'],['voice','mic','บันทึกเสียง · ถอดเสียง','พูดใส่สัดส่วน · คำสั่งเสียง · ฟังเสียงย้อนหลัง'],['more','print','ร่าง · พิมพ์ · ปัญหา','บันทึกร่าง · พิมพ์ใบสรุป · ปัญหาที่พบบ่อย']];
+    const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const tname=k=>(T.find(x=>x[0]===k)||[,,''])[2];
+    document.getElementById('hpCards').innerHTML=T.map(t=>'<button type="button" class="hp-card" data-hptab="'+t[0]+'"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">'+P[t[1]]+'</svg></span><b>'+esc(t[2])+'</b><span>'+esc(t[3])+'</span><em>เรียนรู้เพิ่มเติม</em></button>').join('');
+    function showHome(){ pop.classList.add('hp-homeon'); q.value=''; res.hidden=true; body.scrollTop=0; }
+    function openTab(k){ pop.classList.remove('hp-homeon'); res.hidden=true; switchInfoTab(k); }
+    window.hpShowHome=showHome;
+    if(back) back.addEventListener('click',showHome);
+    // ดัชนีค้นหา: ทุกย่อหน้า/ข้อในทุกหมวด + หัวข้อที่อยู่เหนือมัน (สร้างครั้งแรกที่พิมพ์)
+    let IDX=null;
+    function build(){ IDX=[];
+      document.querySelectorAll('#infoBody .info-panel').forEach(pn=>{ const k=pn.dataset.infoPanel; let head='';
+        pn.querySelectorAll('h4.hp-h, .hp-name, p, li, td, .hp-warn, .hp-note, .hp-desc').forEach(el=>{
+          if(el.closest('.hp-toc')) return;
+          if(el.matches('h4.hp-h')){ head=el.textContent.replace(/\s+/g,' ').replace(/\u200b/g,'').trim(); IDX.push({k,el,head,text:head,isHead:true}); return; }
+          if(el.matches('li,td,.hp-desc')&&el.querySelector('p,li,.hp-warn,.hp-note')) return;   // ใช้ข้อย่อยแทน (ไม่ซ้ำ)
+          const tx=el.textContent.replace(/\s+/g,' ').replace(/\u200b/g,'').trim(); if(tx.length<2) return;
+          IDX.push({k,el,head,text:tx,isHead:false}); }); }); }
+    function rx(v){ const c=[...v.replace(/\s+/g,'')].map(ch=>ch.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')); return c.length?new RegExp(c.join('\\s*'),'i'):null; }
+    function search(v){ const r=rx(v); if(!r) return []; if(!IDX) build();
+      const heads=[], body2=[], seen=new Set();
+      IDX.forEach(x=>{ if(!r.test(x.text)) return; const key=x.k+'|'+x.head+'|'+(x.isHead?'h':x.text.slice(0,40)); if(seen.has(key)) return; seen.add(key); (x.isHead?heads:body2).push(x); });
+      return heads.concat(body2).slice(0,14).map(x=>{ let sn=''; if(!x.isHead){ const m=r.exec(x.text), a=Math.max(0,m.index-36), e=Math.min(x.text.length,m.index+m[0].length+60);
+          sn=(a>0?'…':'')+esc(x.text.slice(a,m.index))+'<mark>'+esc(m[0])+'</mark>'+esc(x.text.slice(m.index+m[0].length,e))+(e<x.text.length?'…':''); }
+        return {x,html:'<b>'+(x.isHead?esc(x.head).replace(r,mm=>'<mark>'+mm+'</mark>'):esc(x.head||tname(x.k)))+'</b>'+(sn?'<span>'+sn+'</span>':'')+'<i>'+esc(tname(x.k))+'</i>'}; }); }
+    let last=[];
+    function render(){ const v=q.value.trim(); if(!v){ res.hidden=true; return; }
+      last=search(v);
+      res.innerHTML=last.length?last.map((o,i)=>'<button type="button" class="hp-sr" data-i="'+i+'">'+o.html+'</button>').join('')
+        :'<div class="hp-sempty">ไม่เจอเรื่องที่มีคำว่า “'+esc(v)+'” ลองคำสั้นลง เช่น “สแกน” “ร่าง” “พิมพ์”</div>';
+      res.hidden=false; }
+    q.addEventListener('input',render);
+    q.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); render(); if(last[0]) go(last[0].x); } });
+    home.querySelector('.hp-sgo').addEventListener('click',()=>{ render(); q.focus(); });
+    function go(x){ openTab(x.k); let p=x.el.parentElement; while(p&&p!==body){ if(p.tagName==='DETAILS') p.open=true; p=p.parentElement; }
+      setTimeout(()=>{ const top=x.el.getBoundingClientRect().top-body.getBoundingClientRect().top+body.scrollTop-24; body.scrollTop=Math.max(0,top);
+        x.el.classList.remove('hp-flash'); void x.el.offsetWidth; x.el.classList.add('hp-flash'); setTimeout(()=>x.el.classList.remove('hp-flash'),2600); },30); }
+    home.addEventListener('click',e=>{
+      const sr=e.target.closest('.hp-sr'); if(sr){ const o=last[+sr.dataset.i]; if(o) go(o.x); return; }
+      const c=e.target.closest('[data-hpq]'); if(c){ q.value=c.dataset.hpq; render(); q.focus(); return; }
+      const t=e.target.closest('[data-hptab]'); if(t){ openTab(t.dataset.hptab); return; }
+      if(!e.target.closest('.hp-sbar')) res.hidden=true; });
+    document.querySelectorAll('#infoTabs .hist-tab').forEach(b=>b.addEventListener('click',()=>pop.classList.remove('hp-homeon')));
+  })();
   // ── ปุ่มปริ้นใบสรุปย้อนหลัง (ข้างไอคอน ?) — เลือกช่วงวันที่ default เมื่อวาน-เมื่อวาน แล้วเข้าคิวให้ Print Agent ของสาขาพิมพ์จริง ──
   // ตัวเว็บเองไม่ได้พิมพ์ตรงๆ (เบราว์เซอร์คุยกับเครื่องพิมพ์ thermal ผ่าน LAN ตรงๆ ไม่ได้) แค่ตั้งค่า "คิวปริ้นซ้ำ" ใน Lark Base
   // แล้วรอเครื่อง Print Agent ที่ติดตั้งไว้ที่สาขา (ดูโฟลเดอร์ print-agent/) โพลมาเจอแล้วพิมพ์จริงเอง — ใช้ได้เฉพาะสาขาที่ติดตั้งไว้แล้ว
@@ -13894,7 +13994,7 @@
      OUT_WORDS=/ขยายออก|ปล่อยออก|ยาวขึ้น|ขยาย|ปล่อย|เพิ่ม|ออก/g;
     const DIG={'ศูนย์':0,'หนึ่ง':1,'เอ็ด':1,'สอง':2,'ยี่':2,'สาม':3,'สี่':4,'ห้า':5,'หก':6,'เจ็ด':7,'แปด':8,'เก้า':9};
     // คำที่เครื่องแกะเสียงได้ยินผิดบ่อย (ผลทดสอบ 19 พ.ย.)
-    const VFIX=[[/เก็บข้าว/g,'เก็บเข้า'],[/เอาข้าว/g,'เอาเข้า'],[/ต้นแผน/g,'ต้นแขน'],[/(^|[^โ])คนขา/g,'$1โคนขา'],[/ต่ำเขา/g,'ต่ำเข่า'],[/ป้ายขา/g,'ปลายขา']];
+    const VFIX=[[/เก็บข้าว/g,'เก็บเข้า'],[/เอาข้าว/g,'เอาเข้า'],[/ต้นแผน/g,'ต้นแขน'],[/(^|[^โ])คนขา/g,'$1โคนขา'],[/ต่ำเขา/g,'ต่ำเข่า'],[/ป้ายขา/g,'ปลายขา'],[/เเ/g,'แ']];
     function vNorm(t){
       t=String(t||'').normalize('NFC').replace(/\u0E4D\u0E32/g,'\u0E33').replace(/[๐-๙]/g,c=>String('๐๑๒๓๔๕๖๗๘๙'.indexOf(c)));
       t=t.replace(/\[[^\]]*\]|\([^)]*\)/g,' ').replace(/(\d),(\d)/g,'$1.$2');
@@ -14025,18 +14125,23 @@
         else if(!gdir&&!g.d.inOnly) put(g.d.label,{k:'pending',d:g.d,n:v.n});
         else if(g.d.inOnly&&gdir==='out') wr(g.d.label,g.d.label+' ขยายออกไม่ได้ — ไม่ได้ใส่');
         else put(g.d.label,{k:'out',d:g.d,n:v.n,dir:gdir||'in',along:false}); }
+      // [voice-31] "ตลอดแนว" มีที่โคนขา/ต้นขาที่เดียว — ได้ยินตรงไหนในประโยคก็เป็นของโคนขา · ไม่มีตัวเลข = ติ๊กตลอดแนวอย่างเดียว (ใช้ค่าที่มีในช่อง)
+      let alongOnly=null;
+      if(/ตลอดแนว/.test(t)){ const ad=defs.find(x=>x.along); if(ad){ const v=res[ad.label];
+        if(v&&v.k==='out') v.along=true;
+        else if(!v&&!wb[ad.label]){ delete empty[ad.label]; alongOnly=ad; } } }
       const out=[], pending=[], over=[], warn=[];
       Object.keys(res).forEach(k=>{ const v=res[k]; (v.k==='out'?out:v.k==='pending'?pending:over).push(v); });
       Object.keys(wb).forEach(k=>warn.push(wb[k]));
       Object.keys(empty).forEach(k=>warn.push(k+' ไม่ได้ยินตัวเลข'));
       dropped.forEach(l=>warn.push('ไม่เอา '+l+' — เอาออกแล้ว'));
-      if(!hits.length&&!cancelAll&&!dropPrev&&!dropped.length) warn.push('ไม่เจอชื่อสัดส่วนในประโยค ลองพูดชื่อสัดส่วนก่อนตัวเลข เช่น "ต่ำศอก 12"');
+      if(!hits.length&&!cancelAll&&!dropPrev&&!dropped.length&&!alongOnly) warn.push('ไม่เจอชื่อสัดส่วนในประโยค ลองพูดชื่อสัดส่วนก่อนตัวเลข เช่น "ต่ำศอก 12"');
       // [voice-9] ระดับความยาวขา (กางเกง) FB / NB / HB — ฟังทั้งตัวอังกฤษและที่ถอดเป็นไทย
       let legLevel='';
       if(/กางเกง/.test(type)){ const L=t.toUpperCase(); const mm=/(?:^|[^A-Z])(FB|NB|HB)(?:$|[^A-Z])/.exec(L);
         if(mm) legLevel=mm[1]; else if(/เอฟบี|เอ็ฟบี|เอฟ\s*บี/.test(t)) legLevel='FB'; else if(/เอ็นบี|เอนบี|เอ็น\s*บี/.test(t)) legLevel='NB'; else if(/เอชบี|เฮชบี|เอซบี|เอ็ชบี|เอช\s*บี/.test(t)) legLevel='HB'; }
       if(legLevel && !hits.length && warn.length===1 && /ไม่เจอชื่อสัดส่วน/.test(warn[0])) warn.length=0;
-      return {out,warn,pending,over,text:t,cancelAll,dropPrev,legLevel};
+      return {out,warn,pending,over,text:t,cancelAll,dropPrev,legLevel,alongOnly};
     }
     window.__voiceParseApp=vParse;   // สำหรับทดสอบ
     const kNorm=s=>String(s||'').replace(/\s+/g,'');
@@ -14068,10 +14173,18 @@
       if(takeIn){ setTakeInValue(m,n); st.applied[key]={d,n,dir,takeIn:true,prev,prevApplied}; st.last.push(key); return true; }
       const el=m.querySelector('.numonly:not(.takein-input)'); if(!el) return false;
       setMitemValue(el, d.dir ? (dir==='in'?-n:n) : n);
-      if(d.along){ const ac=m.querySelector('.along-check'); if(ac&&ac.checked!==!!along){ ac.checked=!!along; ac.dispatchEvent(new Event('change',{bubbles:true})); } }
+      if(d.along){ const ac=m.querySelector('.along-check'); if(ac&&along&&!ac.checked){ ac.checked=true; ac.dispatchEvent(new Event('change',{bubbles:true})); } along=!!(ac&&ac.checked); }   // [voice-31] ไม่พูดตลอดแนว = คงติ๊กเดิม
       st.applied[key]={d,n,dir,along:!!along,prev,prevApplied};
       st.last.push(key);
       return true;
+    }
+    function vAlongOnly(block,d){   // [voice-31] "โคนขาตลอดแนว" ไม่มีตัวเลข = ติ๊กตลอดแนว ใช้ค่าที่มีในช่อง
+      const m=findMitem(block,d.label), st=vState(block); if(!m){ st.warn.push(d.label+' ไม่มีในฟอร์มนี้'); return; }
+      const prev=vSnap(m,false), prevApplied=st.applied[d.label]||null, n=Math.abs(prev.v||0);
+      vMeasureOn(block); setToggleOnIndex(m,'.toggle',0); m.classList.add('editing');
+      const ac=m.querySelector('.along-check'); if(ac&&!ac.checked){ ac.checked=true; ac.dispatchEvent(new Event('change',{bubbles:true})); }
+      st.applied[d.label]={d,n,dir:'in',along:true,prev,prevApplied}; st.last.push(d.label);
+      if(!(n>0)) st.warn.push('ติ๊ก "ตลอดแนว" ให้แล้ว — ยังไม่มีตัวเลข'+d.label+' พูดเลขต่อ เช่น "โคนขา 1 นิ้ว" หรือกด +');
     }
     function vClearOne(block,key){   // [voice-7] คืนค่าที่อยู่ในช่องก่อนพูดครั้งนั้น (ไม่ใช่ 0)
       const st=vState(block), a=st.applied[key]; if(!a) return;
@@ -14145,7 +14258,7 @@
       if(st.live){ const lv=vEl('div','vh',st.live); lv.style.marginBottom='6px'; box.appendChild(lv); }   // [voice-13] สถานะระหว่างฟัง
       if(labels.length){
         const row=vEl('div','vchips'); row.appendChild(vEl('span','vcap','ใส่แล้ว'));
-        labels.forEach(l=>{ const a=st.applied[l]; const c=vEl('span','vchip', a.d.label+' '+(a.takeIn?'เก็บเข้า ':'')+vFmt(a.n)+(a.d.dir?(a.dir==='in'?' เก็บเข้า':' ขยายออก'):'')+(a.along?' ตลอดแนว':''));
+        labels.forEach(l=>{ const a=st.applied[l]; const c=vEl('span','vchip', (a.along&&!(a.n>0))?a.d.label+' ตลอดแนว':a.d.label+' '+(a.takeIn?'เก็บเข้า ':'')+vFmt(a.n)+(a.d.dir?(a.dir==='in'?' เก็บเข้า':' ขยายออก'):'')+(a.along?' ตลอดแนว':''));
           const x=vEl('button','', '×'); x.type='button'; x.dataset.rm=l; x.setAttribute('aria-label','ลบ '+l); c.appendChild(x); row.appendChild(c); });
         box.appendChild(row);
       }
@@ -14222,8 +14335,9 @@
       else { st.text=text; st.pending=r.pending; st.over=r.over; st.warn=note.concat(r.warn); st.last=[]; }
       if(switched){ const sku=(block.querySelector('.sku-input')?.value||'').trim(); st.warn.unshift('ได้ยินสัดส่วนของ'+(switched===V_PANTS?'กางเกง':'เสื้อสูท')+' — เปลี่ยนประเภทเป็น "'+switched+'" ให้แล้ว'+(sku?' · ตรวจรหัสสินค้าด้วย':'')); }   // [voice-24]
       r.out.forEach(o=>{ vSetOne(block,o.d,o.n,o.dir,o.along); });
+      if(r.alongOnly) vAlongOnly(block,r.alongOnly);   // [voice-31]
       if(r.legLevel){ const lb=block.querySelector('.legstyle-chips button[data-val="'+r.legLevel+'"]'); if(lb){ vMeasureOn(block); if(!lb.classList.contains('on')) lb.click(); st.warn.unshift('ระดับความยาวขา '+r.legLevel+' — เลือกให้แล้ว'); } }   // [voice-9]
-      if(r.out.length||note.length) vTouched(block);
+      if(r.out.length||note.length||r.alongOnly) vTouched(block);
       vRender(block);
     }
     let cur=null;
