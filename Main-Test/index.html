@@ -665,17 +665,48 @@
   #infoPop .hp-chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
   #infoPop .hp-chips button{border:1px solid #e4ddcc;background:transparent;border-radius:99px;padding:4px 14px;font-family:'Prompt',sans-serif;font-size:14px;color:#6f6a5e;cursor:pointer}
   #infoPop .hp-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:30px}
-  #infoPop .hp-card{background:#fff;border:0;border-radius:12px;padding:24px 14px 18px;text-align:center;box-shadow:0 4px 18px rgba(35,34,32,.06);display:flex;flex-direction:column;align-items:center;cursor:pointer;font-family:'Prompt',sans-serif;color:var(--ink)}
+  #infoPop .hp-card{position:relative;background:#fff;border:0;border-radius:12px;padding:24px 14px 18px;text-align:center;box-shadow:0 4px 18px rgba(35,34,32,.06);display:flex;flex-direction:column;align-items:center;cursor:pointer;font-family:'Prompt',sans-serif;color:var(--ink)}
   #infoPop .hp-card .ic{width:56px;height:56px;margin-bottom:12px;position:relative}
   #infoPop .hp-card .ic svg{width:56px;height:56px}
   #infoPop .hp-card .ic::after{content:"";position:absolute;right:-5px;top:1px;width:11px;height:11px;border-radius:50%;background:var(--gold)}
   #infoPop .hp-card b{font-size:16.5px;font-weight:600;margin-bottom:6px;line-height:1.35}
   #infoPop .hp-card span{font-size:13.5px;color:#6f6a5e;font-weight:300;line-height:1.5;flex:1;margin-bottom:14px}
   #infoPop .hp-card em{font-style:normal;background:var(--ink);color:#fff;border-radius:99px;padding:4px 14px;font-size:12.5px;font-weight:300;letter-spacing:.01em}
-  #infoPop .hp-home-foot{text-align:center;margin-top:34px}
-  #infoPop .hp-home-foot b{display:block;font-family:'Prompt',sans-serif;font-size:22px;font-weight:600}
-  #infoPop .hp-home-foot span{display:block;color:#6f6a5e;font-weight:300;margin:4px 0 14px}
-  #infoPop .hp-home-foot button{border:1.5px solid var(--ink);background:none;border-radius:8px;padding:8px 18px;margin:0 4px 8px;font-family:'Prompt',sans-serif;font-weight:500;font-size:15px;color:var(--ink);cursor:pointer}
+  #infoPop .hp-card .hp-new{flex:none;margin:0;position:absolute;top:10px;right:10px;background:#d23b2e;color:#fff;font-size:10.5px;font-weight:600;letter-spacing:.06em;line-height:1;padding:4px 7px;border-radius:99px}
+  /* [voice-34] หน้าอ่าน: แถบซ้าย + เนื้อหา */
+  #infoPop.hp-reading #infoTabs,#infoPop.hp-reading .hp-toc{display:none!important}
+  #infoPop.hp-reading .info-note{margin:0}
+  #infoPop .hp-side{display:none}
+  #infoPop.hp-reading .hp-body{display:grid;grid-template-columns:250px minmax(0,1fr);align-items:start;background:#fffdf8}
+  #infoPop.hp-reading .hp-side{display:block;grid-column:1;grid-row:1;position:sticky;top:0;max-height:100%;overflow:auto;padding:22px 14px 30px 20px;border-right:1px solid #eee7d6;background:#faf7ef;align-self:start;min-height:100%}
+  #infoPop.hp-reading .info-panel{grid-column:2;grid-row:1;min-width:0;padding:26px 40px 84px;max-width:800px}
+  #infoPop .hp-side-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  #infoPop .hp-side-top .ic{width:40px;height:40px;border-radius:10px;background:#f1e6c8;color:#a37f30;display:grid;place-items:center;flex:none}
+  #infoPop .hp-side-top .ic svg{width:22px;height:22px}
+  #infoPop .hp-side-top b{font-family:'Prompt',sans-serif;font-size:16px;font-weight:600;line-height:1.3;color:var(--ink)}
+  #infoPop .hp-side-cap{font-family:'Prompt',sans-serif;font-size:12px;font-weight:600;letter-spacing:.06em;color:#9a9384;margin:18px 0 6px 6px}
+  #infoPop .hp-side-list{list-style:none;margin:0;padding:0}
+  #infoPop .hp-side-list button{display:block;width:100%;text-align:left;border:0;background:none;border-radius:8px;padding:7px 10px;font-family:'Prompt',sans-serif;font-size:14px;line-height:1.45;color:#4a4538;cursor:pointer}
+  /* [voice-34c ตามที่ขอ] หัวข้อในแถบซ้ายแยกกันชัดขึ้น: เส้นคั่น + ระยะห่าง */
+  #infoPop .hp-side-list li{border-bottom:1px solid #ece4d0;padding:3px 0}
+  #infoPop .hp-side-list li:last-child{border-bottom:0}
+  #infoPop .hp-side-list button{padding:9px 10px;line-height:1.4}
+  #infoPop .hp-side-list button:hover{background:#f1ead8}
+  #infoPop .hp-side-list button.on{background:#fff;color:var(--ink);font-weight:600;box-shadow:inset 3px 0 0 #dcc58f,0 1px 4px rgba(35,34,32,.06)}
+  #infoPop .hp-side-list button.part{font-weight:600;color:var(--ink)}
+  #infoPop .hp-side-other button{font-size:13.5px;color:#6f6a5e}
+  #infoPop .hp-side-sel{display:none}
+  /* [voice-34b ตามที่ขอ] สีเส้นในหน้าอ่านอ่อนลง (เดิมน้ำตาลเข้ม) */
+  #infoPop.hp-reading .hp-title{border-bottom-color:#e3cf9f}
+  #infoPop.hp-reading h4.hp-h{border-left-color:#dcc58f}
+  #infoPop.hp-reading h4.hp-h.hp-part{background:rgba(220,197,143,.18);border-left-color:#dcc58f}
+  @media (max-width:760px){
+    #infoPop.hp-reading .hp-body{display:block}
+    #infoPop.hp-reading .hp-side{position:sticky;top:0;z-index:4;min-height:0;padding:10px 14px;border-right:0;border-bottom:1px solid #eee7d6}
+    #infoPop.hp-reading .hp-side-top,#infoPop.hp-reading .hp-side-cap,#infoPop.hp-reading .hp-side-list{display:none}
+    #infoPop.hp-reading .hp-side-sel{display:block;width:100%;height:42px;border:1px solid #e4ddcc;border-radius:10px;background:#fff;padding:0 10px;font-family:'Prompt',sans-serif;font-size:15px;color:var(--ink)}
+    #infoPop.hp-reading .info-panel{padding:18px 16px 84px}
+  }
   #infoPop .hp-flash{animation:hpFlash 2.4s ease-out}
   @keyframes hpFlash{0%,35%{background:#f6e3ad;box-shadow:0 0 0 6px #f6e3ad}100%{background:transparent;box-shadow:0 0 0 6px transparent}}
   @media (max-width:760px){#infoPop .hp-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}#infoPop .hp-home{padding:24px 16px 32px}#infoPop .hp-home-hero h4{font-size:26px}}
@@ -2499,6 +2530,7 @@
       </div>
 
       <div class="hp-body" id="infoBody">
+      <nav class="hp-side" id="hpSide" aria-label="หัวข้อในหมวดนี้"></nav>
       <div class="hp-home" id="hpHome">
         <div class="hp-home-hero">
           <h4>วิธีใช้งาน</h4>
@@ -2507,7 +2539,6 @@
           <div class="hp-chips"><button type="button" data-hpq="สแกน">สแกน</button><button type="button" data-hpq="ร่าง">ร่าง</button><button type="button" data-hpq="พิมพ์ซ้ำ">พิมพ์ซ้ำ</button><button type="button" data-hpq="บันทึกไม่สำเร็จ">บันทึกไม่สำเร็จ</button><button type="button" data-hpq="พูด">พูดใส่สัดส่วน</button></div>
         </div>
         <div class="hp-cards" id="hpCards"></div>
-        <div class="hp-home-foot"><b>ยังหาไม่เจอ?</b><span>ดูวิดีโอสั้น หรือดูปัญหาที่พบบ่อย</span><button type="button" data-hptab="voice">▶ วิดีโอบันทึกเสียง</button><button type="button" data-hptab="more">ปัญหาที่พบบ่อย</button></div>
       </div>
       <div class="info-panel" data-info-panel="header">
         <h3 class="hp-title">ภาพรวม · แถบบน/ล่าง</h3>
@@ -2541,7 +2572,7 @@
 
 <h4 class="hp-h" id="hp-header-3">แถบด้านบน (เห็นทุกหน้า)</h4>
 
-<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/header-01.jpg" width="1536" height="138" alt="แถบด้านบนของแอป เลือกสาขา R3 และพนักงานขาย Somchai แล้ว เลขที่บิลขึ้นเป็น R326100701"></div><figcaption>แถบด้านบน ซ้ายคือชื่อแอป ปุ่ม ? ปุ่มปริ้น และข้อความประกาศ ขวาคือ เลขที่บิล / สาขา / พนักงานขาย / รายการย้อนหลัง ในภาพเลือกสาขา R3 และพนักงานขาย Somchai แล้ว เลขที่บิลจึงขึ้น (ตามความกว้างหน้าจอ ข้อความในปุ่ม "รายการย้อนหลัง" อาจแตกเป็น 2–3 บรรทัด แต่ยังเป็นปุ่มเดียวกัน)</figcaption></figure>
+<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/header-01.jpg" width="1536" height="138" alt="แถบด้านบนของแอป เลือกสาขา R3 และพนักงานขาย Somchai แล้ว เลขที่บิลขึ้นเป็น R326100701"></div><figcaption>แถบด้านบน ซ้ายคือชื่อแอป ปุ่ม ? ปุ่มปริ้น และข้อความประกาศ ขวาคือ เลขที่บิล / สาขา / พนักงานขาย / รายการย้อนหลัง ในภาพเลือกสาขา R3 และพนักงานขาย Somchai แล้ว เลขที่บิลจึงขึ้น (ตามความกว้างหน้าจอ ข้อความในปุ่ม "รายการย้อนหลัง" อาจแตกเป็น 2–3 บรรทัด แต่ยังเป็นปุ่มเดียวกัน)</figcaption></figure>
 
 <div class="hp-item">
   <div class="hp-name">ชื่อแอป "สั่งแก้ปรับทรงสำเร็จรูป" <span class="hp-kind">กดได้</span></div>
@@ -2603,7 +2634,7 @@
 <div class="hp-item">
   <div class="hp-name">พนักงานขาย <span class="hp-req">*</span> <span class="hp-kind">พิมพ์แล้วเลือกชื่อ (ไม่มีดาวบนหน้าจอ แต่บังคับ)</span></div>
   <div class="hp-desc">
-    <figure class="hp-fig"><img data-src="help_img/header-02.jpg" width="659" height="492" alt="กดช่องพนักงานขายแล้วมีรายชื่อ Somchai, Somsri, Malee, Anan, Nok, Pim ขึ้นให้เลือก"><figcaption>แตะช่อง "พนักงานขาย" แล้วระบบขึ้นรายชื่อ 6 ชื่อแรก (ชื่อในภาพเป็นชื่อตัวอย่าง) ชื่อเดิมในช่องถูกเลือกค้างเป็นสีน้ำเงิน พิมพ์ทับได้เลย</figcaption></figure>
+    <figure class="hp-fig"><img data-src="../help_img/header-02.jpg" width="659" height="492" alt="กดช่องพนักงานขายแล้วมีรายชื่อ Somchai, Somsri, Malee, Anan, Nok, Pim ขึ้นให้เลือก"><figcaption>แตะช่อง "พนักงานขาย" แล้วระบบขึ้นรายชื่อ 6 ชื่อแรก (ชื่อในภาพเป็นชื่อตัวอย่าง) ชื่อเดิมในช่องถูกเลือกค้างเป็นสีน้ำเงิน พิมพ์ทับได้เลย</figcaption></figure>
     <ul class="hp-list">
       <li>แตะที่ช่อง ระบบขึ้นรายชื่อ 6 ชื่อแรกให้ก่อน</li>
       <li>พิมพ์ตัวอักษรบางส่วนของชื่อ รายชื่อจะเหลือเฉพาะชื่อที่มีตัวอักษรนั้น (ไม่สนตัวพิมพ์เล็ก/ใหญ่) เช่น พิมพ์ "som" จะเจอ Somchai, Somsri</li>
@@ -2636,7 +2667,7 @@
 
 <h4 class="hp-h" id="hp-header-4">แถบขั้นตอน 01 / 02 / 03</h4>
 
-<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/header-03.jpg" width="1536" height="87" alt="แถบขั้นตอน 3 หน้า เมื่ออยู่หน้า 02: ข้อมูลลูกค้าเป็นเครื่องหมายถูก สินค้าเป็นวงกลมสีทอง นัดรับสินค้าเป็นเลข 03 สีเทา และมุมขวาเขียนว่า รายการที่ 1"></div><figcaption>ภาพตอนอยู่หน้า 02 — หน้า 01 ที่ผ่านมาแล้วเป็นเครื่องหมายถูก หน้าที่เปิดอยู่เป็นวงกลมสีทองบนแถบสีครีม หน้า 03 ที่ยังไม่ถึงเป็นเลขสีเทา และมุมขวาเขียนว่า "รายการที่ 1"</figcaption></figure>
+<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/header-03.jpg" width="1536" height="87" alt="แถบขั้นตอน 3 หน้า เมื่ออยู่หน้า 02: ข้อมูลลูกค้าเป็นเครื่องหมายถูก สินค้าเป็นวงกลมสีทอง นัดรับสินค้าเป็นเลข 03 สีเทา และมุมขวาเขียนว่า รายการที่ 1"></div><figcaption>ภาพตอนอยู่หน้า 02 — หน้า 01 ที่ผ่านมาแล้วเป็นเครื่องหมายถูก หน้าที่เปิดอยู่เป็นวงกลมสีทองบนแถบสีครีม หน้า 03 ที่ยังไม่ถึงเป็นเลขสีเทา และมุมขวาเขียนว่า "รายการที่ 1"</figcaption></figure>
 
 <ol class="hp-steps">
   <li><b>01 ข้อมูลลูกค้า</b> — เบอร์โทร ชื่อ นามสกุล</li>
@@ -2680,14 +2711,14 @@
   </tbody>
 </table></div>
 
-<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/header-04.jpg" width="1536" height="93" alt="แถบล่างหน้า 01: ปุ่มถังขยะสีแดง เลขเวอร์ชัน ปุ่มบันทึกร่างรูปแผ่นดิสก์ และลูกศรถัดไปสีทอง"></div><figcaption>แถบล่างของหน้า 01 จากซ้ายไปขวา: ถังขยะสีแดง · เลขเวอร์ชัน · บันทึกร่าง (ไอคอนแผ่นดิสก์) · ลูกศรถัดไปสีทอง</figcaption></figure>
+<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/header-04.jpg" width="1536" height="93" alt="แถบล่างหน้า 01: ปุ่มถังขยะสีแดง เลขเวอร์ชัน ปุ่มบันทึกร่างรูปแผ่นดิสก์ และลูกศรถัดไปสีทอง"></div><figcaption>แถบล่างของหน้า 01 จากซ้ายไปขวา: ถังขยะสีแดง · เลขเวอร์ชัน · บันทึกร่าง (ไอคอนแผ่นดิสก์) · ลูกศรถัดไปสีทอง</figcaption></figure>
 
-<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/header-05.jpg" width="1536" height="93" alt="แถบล่างหน้า 03: ปุ่มถังขยะ ลูกศรย้อนกลับ เลขเวอร์ชัน ปุ่มบันทึกร่าง และปุ่มสีทอง บันทึกข้อมูล"></div><figcaption>แถบล่างของหน้า 03: ถังขยะ · ลูกศรย้อนกลับ · เลขเวอร์ชัน · บันทึกร่าง · <b>บันทึกข้อมูล</b> (ปุ่มสีทอง) ปุ่มบันทึกข้อมูลมีเฉพาะหน้านี้</figcaption></figure>
+<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/header-05.jpg" width="1536" height="93" alt="แถบล่างหน้า 03: ปุ่มถังขยะ ลูกศรย้อนกลับ เลขเวอร์ชัน ปุ่มบันทึกร่าง และปุ่มสีทอง บันทึกข้อมูล"></div><figcaption>แถบล่างของหน้า 03: ถังขยะ · ลูกศรย้อนกลับ · เลขเวอร์ชัน · บันทึกร่าง · <b>บันทึกข้อมูล</b> (ปุ่มสีทอง) ปุ่มบันทึกข้อมูลมีเฉพาะหน้านี้</figcaption></figure>
 
 <div class="hp-item">
   <div class="hp-name"><span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-14M10 11v6M14 11v6"/></svg>ถังขยะ</span> <span class="hp-kind">ปุ่มวงกลมสีแดง ล้างทั้งฟอร์ม</span></div>
   <div class="hp-desc">
-    <figure class="hp-fig"><img data-src="help_img/header-07.jpg" width="582" height="270" alt="หน้าต่างถามว่า ต้องการล้างข้อมูลในฟอร์มทั้งหมดใช่ไหม ข้อมูลที่กรอกไว้ตอนนี้จะหายไป มีปุ่ม ยกเลิก และ ล้างข้อมูล"><figcaption>กดถังขยะแล้วระบบถามก่อนเสมอ กด "ยกเลิก" เพื่อกลับไปทำต่อ หรือ "ล้างข้อมูล" เพื่อล้างจริง</figcaption></figure>
+    <figure class="hp-fig"><img data-src="../help_img/header-07.jpg" width="582" height="270" alt="หน้าต่างถามว่า ต้องการล้างข้อมูลในฟอร์มทั้งหมดใช่ไหม ข้อมูลที่กรอกไว้ตอนนี้จะหายไป มีปุ่ม ยกเลิก และ ล้างข้อมูล"><figcaption>กดถังขยะแล้วระบบถามก่อนเสมอ กด "ยกเลิก" เพื่อกลับไปทำต่อ หรือ "ล้างข้อมูล" เพื่อล้างจริง</figcaption></figure>
     <ul class="hp-list">
       <li>ปุ่มนี้ล้าง<b>ทั้งฟอร์ม ทั้ง 3 หน้า</b> (ไม่ใช่แค่หน้าที่เปิดอยู่) รวมถึงสาขา พนักงานขาย เลขที่บิล และสินค้าทุกชิ้น หลังล้างหน้าจะโหลดใหม่และกลับมาที่หน้า 01</li>
       <li>ข้อความในหน้าต่างยืนยันคือ "ต้องการล้างข้อมูลในฟอร์มทั้งหมดใช่ไหม? ข้อมูลที่กรอกไว้ตอนนี้จะหายไป" ถ้ากำลังแก้ไขบิลเก่าอยู่ จะมีข้อความต่อท้ายว่า "และจะออกจากโหมดแก้ไขบิลนี้ด้วย"</li>
@@ -2716,9 +2747,9 @@
     </table></div>
     <p>ข้อความเหล่านี้ขึ้นแทนคำว่า "บันทึกร่าง" ชั่วครู่ แล้วปุ่มกลับมาเป็น "บันทึกร่าง" เอง</p>
 
-    <figure class="hp-fig"><img data-src="help_img/header-06.jpg" width="885" height="138" alt="แถบบนตอนยังไม่เลือกสาขา เลขที่บิลเป็นขีด ช่องสาขามีกรอบเน้นสีเข้มรอบช่อง และช่องพนักงานขายเขียนว่า กรุณาเลือก"><figcaption>ภาพที่ 1 แถบบนหลังกดบันทึกร่างตอนยังไม่เลือกสาขา เลขที่บิลเป็น "—" และช่อง "สาขา" มีกรอบเน้นขึ้นมาให้เห็น</figcaption></figure>
+    <figure class="hp-fig"><img data-src="../help_img/header-06.jpg" width="885" height="138" alt="แถบบนตอนยังไม่เลือกสาขา เลขที่บิลเป็นขีด ช่องสาขามีกรอบเน้นสีเข้มรอบช่อง และช่องพนักงานขายเขียนว่า กรุณาเลือก"><figcaption>ภาพที่ 1 แถบบนหลังกดบันทึกร่างตอนยังไม่เลือกสาขา เลขที่บิลเป็น "—" และช่อง "สาขา" มีกรอบเน้นขึ้นมาให้เห็น</figcaption></figure>
 
-    <figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/header-11.jpg" width="1536" height="93" alt="แถบล่างหน้า 01 ที่ปุ่มบันทึกร่างเปลี่ยนเป็นข้อความ เลือกสาขาที่แถบบนก่อน"></div><figcaption>ภาพที่ 2 แถบล่างในจังหวะเดียวกัน ปุ่มบันทึกร่างเปลี่ยนเป็น "เลือกสาขาที่แถบบนก่อน" กรอบเน้นและข้อความนี้อยู่แค่ประมาณ 2 วินาทีแล้วหายเอง ปุ่มกลับมาเป็น "บันทึกร่าง" ให้เลือกสาขาแล้วกดใหม่</figcaption></figure>
+    <figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/header-11.jpg" width="1536" height="93" alt="แถบล่างหน้า 01 ที่ปุ่มบันทึกร่างเปลี่ยนเป็นข้อความ เลือกสาขาที่แถบบนก่อน"></div><figcaption>ภาพที่ 2 แถบล่างในจังหวะเดียวกัน ปุ่มบันทึกร่างเปลี่ยนเป็น "เลือกสาขาที่แถบบนก่อน" กรอบเน้นและข้อความนี้อยู่แค่ประมาณ 2 วินาทีแล้วหายเอง ปุ่มกลับมาเป็น "บันทึกร่าง" ให้เลือกสาขาแล้วกดใหม่</figcaption></figure>
 
     <p><b>กติกาของร่าง</b></p>
     <ul class="hp-list">
@@ -2762,7 +2793,7 @@
 
     <div class="hp-case">
       <div class="hp-case-title">แบบที่ 1 — กรอกยังไม่ครบ</div>
-      <figure class="hp-fig"><img data-src="help_img/header-08.jpg" width="582" height="587" alt="หน้าต่างสีขาวมีเครื่องหมายกากบาทสีแดง ข้อความ กรุณากรอกข้อมูลที่จำเป็นให้ครบ และรายการที่ขาด 7 ข้อ"><figcaption>ตัวอย่างตอนกดบันทึกข้อมูลโดยยังไม่ได้กรอกอะไรเลย หน้าต่างบอกรายการที่ขาดทั้งหมด</figcaption></figure>
+      <figure class="hp-fig"><img data-src="../help_img/header-08.jpg" width="582" height="587" alt="หน้าต่างสีขาวมีเครื่องหมายกากบาทสีแดง ข้อความ กรุณากรอกข้อมูลที่จำเป็นให้ครบ และรายการที่ขาด 7 ข้อ"><figcaption>ตัวอย่างตอนกดบันทึกข้อมูลโดยยังไม่ได้กรอกอะไรเลย หน้าต่างบอกรายการที่ขาดทั้งหมด</figcaption></figure>
       <ul class="hp-list">
         <li>ขึ้นหน้าต่าง "กรุณากรอกข้อมูลที่จำเป็นให้ครบ:" แล้วไล่ข้อที่ขาดทีละบรรทัด เช่น "สาขา (แถบด้านบน)" "พนักงานขาย (แถบด้านบน)" "เบอร์โทรศัพท์" "ชื่อ" "นามสกุล" "สินค้ารายการที่ 1 — รหัสสินค้า" "สินค้ารายการที่ 1 — Size" และ "ชื่อผู้อนุมัติงานด่วน" (ขึ้นเฉพาะตอนเลือก "ด่วน" แต่ยังไม่ได้เลือกผู้อนุมัติ)</li>
         <li>พอหน้าต่างนี้ขึ้น ระบบจะพาไปหน้าแรกที่ขาดข้อมูลให้ทันที โดยหน้านั้นอยู่ด้านหลังหน้าต่าง (เช่น ขาดชื่อลูกค้าก็ไปหน้า 01) กด <span class="hp-btn">ตกลง</span> เพื่อปิดหน้าต่าง แล้วกรอกข้อมูลที่ขาด ถ้ารายการที่ขาดอยู่หลายหน้า ระบบพาไปแค่หน้าแรกที่ขาด หน้าอื่นให้กดที่แถบขั้นตอนไปดูเอง กรอกครบแล้วกด <span class="hp-btn">บันทึกข้อมูล</span> อีกครั้ง</li>
@@ -2797,7 +2828,7 @@
         <li>ตรวจให้ถูกต้อง แล้วกด <span class="hp-btn">ยืนยัน</span> เพื่อบันทึกทีละบิล (ปุ่มด้านหลังจะเขียนว่า "กำลังบันทึกบิลที่ 1/2…" ไล่ไปจนครบ) หรือกด <span class="hp-btn">ย้อนกลับไปแก้</span> เพื่อกลับไปแก้ไขก่อน ซึ่งยังไม่บันทึกอะไร</li>
         <li>รายละเอียดการแยกบิลอยู่ใน​<span class="nb">แท็บ</span> "หน้าที่ 2 สินค้า" และ "หน้าที่ 3 นัดรับ &amp; บันทึก"</li>
       </ul>
-      <figure class="hp-fig"><img data-src="help_img/header-12.jpg" width="792" height="657" alt="หน้าต่างแยกบิล สินค้า 3 รายการ แยกเป็น 2 บิล บิลแรกมีสูทกับกางเกง บิลที่สองมีเสื้อเชิ้ต มีปุ่ม ย้อนกลับไปแก้ และ ยืนยัน"><figcaption>ตัวอย่างสินค้า 3 รายการ ระบบแยกเป็น 2 บิล บิลแรกคือสูท + กางเกง (1 ชุด) บิลที่สองคือเสื้อเชิ้ต เลขที่บิลในภาพเป็นเลขตัวอย่าง ตัวเลขในวงกลมคือลำดับสินค้าที่กรอกในหน้า 02</figcaption></figure>
+      <figure class="hp-fig"><img data-src="../help_img/header-12.jpg" width="792" height="657" alt="หน้าต่างแยกบิล สินค้า 3 รายการ แยกเป็น 2 บิล บิลแรกมีสูทกับกางเกง บิลที่สองมีเสื้อเชิ้ต มีปุ่ม ย้อนกลับไปแก้ และ ยืนยัน"><figcaption>ตัวอย่างสินค้า 3 รายการ ระบบแยกเป็น 2 บิล บิลแรกคือสูท + กางเกง (1 ชุด) บิลที่สองคือเสื้อเชิ้ต เลขที่บิลในภาพเป็นเลขตัวอย่าง ตัวเลขในวงกลมคือลำดับสินค้าที่กรอกในหน้า 02</figcaption></figure>
     </div>
 
     <div class="hp-case">
@@ -2820,7 +2851,7 @@
         <li>ถ้าบันทึกสำเร็จแต่ท้ายข้อความมีบรรทัด "(หมายเหตุ: บันทึกลง Lark Base ไม่สำเร็จ — …)" ให้ถ่ายรูปหน้าจอ แล้วแจ้งทีมไอทีพร้อมเลขที่บิลที่ขึ้นในหน้าต่าง</li>
         <li><b>ถ้าแยกบิลแล้วมีบางบิลไม่สำเร็จ</b> หน้าต่างผลจะขึ้นต้นว่า "บันทึกสำเร็จ — แยกเป็น N บิล" ซึ่ง N คือจำนวนบิลที่<b>สำเร็จ</b> ไม่ใช่จำนวนที่ตั้งใจแยก ตามด้วยเลขที่บิลที่สำเร็จแล้ว แล้วต่อด้วยบรรทัด "มีปัญหาบางส่วน กรุณาแจ้งทีมไอที:" และรายการ เช่น "บิลที่ 2: …" ข้อความนี้แปลว่าบางบิลถูกสร้างเข้าระบบไปแล้ว แต่บางบิลไม่สำเร็จ</li>
       </ul>
-      <figure class="hp-fig"><img data-src="help_img/header-13.jpg" width="582" height="354" alt="หน้าต่างผลสีขาวมีเครื่องหมายถูก ข้อความ บันทึกสำเร็จ แยกเป็น 1 บิล เลขที่บิล และบรรทัด มีปัญหาบางส่วน กรุณาแจ้งทีมไอที บิลที่ 2 ระบบขัดข้องชั่วคราว"><figcaption>ตัวอย่างแยกบิลแล้วบิลที่ 1 สำเร็จ บิลที่ 2 ไม่สำเร็จ ข้อความสาเหตุในภาพ ("ระบบขัดข้องชั่วคราว (ตัวอย่างจำลอง)") เป็นข้อความตัวอย่างที่จำลองขึ้นมา ของจริงจะเป็นข้อความอื่น</figcaption></figure>
+      <figure class="hp-fig"><img data-src="../help_img/header-13.jpg" width="582" height="354" alt="หน้าต่างผลสีขาวมีเครื่องหมายถูก ข้อความ บันทึกสำเร็จ แยกเป็น 1 บิล เลขที่บิล และบรรทัด มีปัญหาบางส่วน กรุณาแจ้งทีมไอที บิลที่ 2 ระบบขัดข้องชั่วคราว"><figcaption>ตัวอย่างแยกบิลแล้วบิลที่ 1 สำเร็จ บิลที่ 2 ไม่สำเร็จ ข้อความสาเหตุในภาพ ("ระบบขัดข้องชั่วคราว (ตัวอย่างจำลอง)") เป็นข้อความตัวอย่างที่จำลองขึ้นมา ของจริงจะเป็นข้อความอื่น</figcaption></figure>
       <div class="hp-warn">กรณีมีบางบิลไม่สำเร็จ ฟอร์มจะยังไม่ถูกล้าง <b>อย่ากด บันทึกข้อมูล ซ้ำทันที</b> เพราะบิลที่สำเร็จไปแล้วจะถูกสร้างซ้ำอีกรอบ และอย่ารีเฟรชหน้า ให้จดหรือถ่ายรูปเลขที่บิลที่ขึ้นในหน้าต่าง แล้วเปิด <span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 4v4h4"/><path d="M12 8v4l3 2"/></svg>รายการย้อนหลัง</span> <span class="nb">เช็ก</span>​ว่าบิลไหนเข้าแล้ว แล้วแจ้งทีมไอที รายละเอียดทุกกรณีอยู่ใน​<span class="nb">แท็บ</span> "หน้าที่ 3 นัดรับ &amp; บันทึก" หัวข้อ "ถ้าบันทึกไม่สำเร็จ"</div>
     </div>
   </div>
@@ -2830,9 +2861,9 @@
 
 <p>เมื่อกดไอคอนแก้ไขบิลจากรายการย้อนหลังแล้วเข้าโหมดแก้ไข แถบบนและแถบล่างจะต่างจากตอนทำบิลใหม่ ดูขั้นตอนทั้งหมดได้ใน​<span class="nb">แท็บ</span> "หน้าที่ 3 นัดรับ &amp; บันทึก" หัวข้อ "แก้ไขบิลที่บันทึกแล้ว"</p>
 
-<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/header-16.jpg" width="1536" height="351" alt="หน้า 01 ในโหมดแก้ไข แถบบนมีเลขที่บิลและสาขา ใต้แถบขั้นตอนมีแถบสีทอง กำลังแก้ไขบิลนี้ ชื่อผู้แก้ไข และช่องชื่อ"></div><figcaption>หน้า 01 ในโหมดแก้ไข มีแถบ "กำลังแก้ไขบิลนี้ — ชื่อผู้แก้ไข *" เพิ่มขึ้นมา ส่วนช่อง "เลขที่บิล" ที่แถบบน (ในภาพคือ R326100705 เป็นเลขตัวอย่าง) เป็นเลขบิลใหม่ถัดไปของสาขา ไม่ใช่เลขของบิลที่กำลังแก้</figcaption></figure>
+<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/header-16.jpg" width="1536" height="351" alt="หน้า 01 ในโหมดแก้ไข แถบบนมีเลขที่บิลและสาขา ใต้แถบขั้นตอนมีแถบสีทอง กำลังแก้ไขบิลนี้ ชื่อผู้แก้ไข และช่องชื่อ"></div><figcaption>หน้า 01 ในโหมดแก้ไข มีแถบ "กำลังแก้ไขบิลนี้ — ชื่อผู้แก้ไข *" เพิ่มขึ้นมา ส่วนช่อง "เลขที่บิล" ที่แถบบน (ในภาพคือ R326100705 เป็นเลขตัวอย่าง) เป็นเลขบิลใหม่ถัดไปของสาขา ไม่ใช่เลขของบิลที่กำลังแก้</figcaption></figure>
 
-<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/header-17.jpg" width="1536" height="93" alt="แถบล่างหน้า 03 ในโหมดแก้ไข ปุ่มสีทองเขียนว่า บันทึกการแก้ไข"></div><figcaption>แถบล่างของหน้า 03 ในโหมดแก้ไข ปุ่มสีทองเปลี่ยนจาก "บันทึกข้อมูล" เป็น "บันทึกการแก้ไข"</figcaption></figure>
+<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/header-17.jpg" width="1536" height="93" alt="แถบล่างหน้า 03 ในโหมดแก้ไข ปุ่มสีทองเขียนว่า บันทึกการแก้ไข"></div><figcaption>แถบล่างของหน้า 03 ในโหมดแก้ไข ปุ่มสีทองเปลี่ยนจาก "บันทึกข้อมูล" เป็น "บันทึกการแก้ไข"</figcaption></figure>
 
 <ul class="hp-list">
   <li>ที่หน้า 01 มีแถบ "กำลังแก้ไขบิลนี้ — ชื่อผู้แก้ไข *" ต้องเลือก <span class="hp-field">ชื่อผู้แก้ไข</span> ก่อนจึงจะบันทึกได้ ถ้ายังไม่เลือก หน้าต่างแจ้งเตือนจะมีบรรทัด "ชื่อผู้แก้ไข"</li>
@@ -2890,7 +2921,7 @@
 
 <h4 class="hp-h" id="hp-header-9">แถบสีเหลือง "มีเวอร์ชันใหม่แล้ว"</h4>
 
-<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/header-09.jpg" width="1536" height="225" alt="แถบสีเหลืองอ่อนเหนือแถบด้านบน ข้อความ มีเวอร์ชันใหม่แล้ว รีเฟรชเพื่อใช้งานเวอร์ชันล่าสุด และปุ่มสีทอง รีเฟรชตอนนี้"></div><figcaption>แถบแจ้งเตือนอยู่บนสุดของหน้าจอ เหนือแถบด้านบน มีข้อความ "มีเวอร์ชันใหม่แล้ว รีเฟรชเพื่อใช้งานเวอร์ชันล่าสุด" และปุ่ม "รีเฟรชตอนนี้"</figcaption></figure>
+<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/header-09.jpg" width="1536" height="225" alt="แถบสีเหลืองอ่อนเหนือแถบด้านบน ข้อความ มีเวอร์ชันใหม่แล้ว รีเฟรชเพื่อใช้งานเวอร์ชันล่าสุด และปุ่มสีทอง รีเฟรชตอนนี้"></div><figcaption>แถบแจ้งเตือนอยู่บนสุดของหน้าจอ เหนือแถบด้านบน มีข้อความ "มีเวอร์ชันใหม่แล้ว รีเฟรชเพื่อใช้งานเวอร์ชันล่าสุด" และปุ่ม "รีเฟรชตอนนี้"</figcaption></figure>
 
 <ul class="hp-list">
   <li>แถบนี้ขึ้นเมื่อมีการอัปเดตแอปบนเว็บ และเครื่องที่เปิดค้างอยู่ยังเป็นรุ่นเก่า</li>
@@ -2905,7 +2936,7 @@
 <div class="hp-item">
   <div class="hp-name">iPad / มือถือ / คอมพิวเตอร์ <span class="hp-kind">ปรับหน้าตาตามความกว้างหน้าจอ</span></div>
   <div class="hp-desc">
-    <figure class="hp-fig"><img data-src="help_img/header-10.jpg" width="563" height="1218" alt="หน้า 01 บนหน้าจอมือถือ แถบบนเรียงเป็นแถวเล็กๆ ชื่อแอปกับสองปุ่ม ข้อความประกาศ เลขที่บิลกับสาขา พนักงานขายกับรายการย้อนหลัง ตามด้วยแถบขั้นตอนและแถบล่าง"><figcaption>หน้า 01 บนจอมือถือ แถบบนเรียงเป็นหลายแถว แต่ปุ่มและช่องเหมือนกันทุกอย่าง แถบล่างมีถังขยะ เลขเวอร์ชัน บันทึกร่าง และลูกศรถัดไปเหมือนเดิม</figcaption></figure>
+    <figure class="hp-fig"><img data-src="../help_img/header-10.jpg" width="563" height="1218" alt="หน้า 01 บนหน้าจอมือถือ แถบบนเรียงเป็นแถวเล็กๆ ชื่อแอปกับสองปุ่ม ข้อความประกาศ เลขที่บิลกับสาขา พนักงานขายกับรายการย้อนหลัง ตามด้วยแถบขั้นตอนและแถบล่าง"><figcaption>หน้า 01 บนจอมือถือ แถบบนเรียงเป็นหลายแถว แต่ปุ่มและช่องเหมือนกันทุกอย่าง แถบล่างมีถังขยะ เลขเวอร์ชัน บันทึกร่าง และลูกศรถัดไปเหมือนเดิม</figcaption></figure>
     <ul class="hp-list">
       <li>iPad แนวนอน และคอมพิวเตอร์ที่หน้าต่างกว้างพอ หน้า 02 และ 03 จะแบ่งเป็น 2 คอลัมน์ซ้าย-ขวา</li>
       <li>iPad แนวตั้ง มือถือ หรือหน้าต่างที่แคบ จะเรียงเป็นคอลัมน์เดียว ต้องเลื่อนลงเพื่อดูส่วนล่างของหน้า ข้อความ "รายการที่ N" ที่แถบขั้นตอนจะไม่แสดง</li>
@@ -2971,7 +3002,7 @@
 <p class="hp-lead">หน้านี้ใช้บอกระบบว่า "ลูกค้าคนนี้คือใคร" ก่อนจะไปใส่สินค้าในหน้าถัดไป เริ่มจากกรอกเบอร์โทรศัพท์ ระบบจะค้นหาในรายชื่อลูกค้าของ Salesforce ให้เอง ถ้าเป็นลูกค้าเก่าจะเติมชื่อให้ ถ้าเป็นลูกค้าใหม่ก็กรอกต่อได้เลย หัวข้อด้านล่างอธิบายทุกช่อง ทุกปุ่ม และทุกอย่างที่จะเห็นบนจอในแต่ละกรณี</p>
 <details class="hp-toc" id="hp-toc-1"><summary>สารบัญหน้านี้ — กดหัวข้อเพื่อข้ามไปอ่าน (13 หัวข้อ)</summary><ul class="hp-toc-list"><li><a class="hp-jump" href="#hp-1-1">ภาพรวมของหน้า</a></li><li><a class="hp-jump" href="#hp-1-2">ขั้นตอนกรอกข้อมูลลูกค้า</a></li><li><a class="hp-jump" href="#hp-1-3">รายละเอียดแต่ละช่อง</a></li><li><a class="hp-jump" href="#hp-1-4">เมื่อค้นเบอร์โทรศัพท์แล้ว จะเกิดอะไรขึ้น</a></li><li><a class="hp-jump" href="#hp-1-5">กรณีลูกค้าเก่า (เบอร์มีในระบบ)</a></li><li><a class="hp-jump" href="#hp-1-6">กรณีลูกค้าใหม่ (ไม่พบเบอร์ในระบบ)</a></li><li><a class="hp-jump" href="#hp-1-7">สร้างรายชื่อใหม่ในเบอร์เดิม (คนละคน ใช้เบอร์เดียวกัน)</a></li><li><a class="hp-jump" href="#hp-1-8">หลังกดบันทึกบิล ข้อมูลลูกค้าไปไหน</a></li><li><a class="hp-jump" href="#hp-1-9">แก้ชื่อของลูกค้าเก่า (ป้ายถามยืนยัน)</a></li><li><a class="hp-jump" href="#hp-1-10">ค้นเบอร์ใหม่อีกครั้ง</a></li><li><a class="hp-jump" href="#hp-1-11">ตรวจข้อมูลตอนบันทึกบิล</a></li><li><a class="hp-jump" href="#hp-1-12">ตอนเปิดบิลเก่ามาแก้ไข</a></li><li><a class="hp-jump" href="#hp-1-13">ปัญหาที่พบบ่อย</a></li></ul><p class="hp-toc-hint">อ่านไปแล้วอยากกลับมาที่สารบัญนี้ กดปุ่มวงกลมสีดำที่มีลูกศรชี้ขึ้น มุมขวาล่างของหน้าต่าง</p></details>
 <h4 class="hp-h" id="hp-1-1">ภาพรวมของหน้า</h4>
-<figure class="hp-fig"><img data-src="help_img/p1-01.jpg" width="1536" height="1152" alt="หน้าที่ 1 ข้อมูลลูกค้า มีตัวเลข 1 ถึง 10 กำกับแต่ละส่วน"><figcaption>ตัวเลขสีฟ้าในรูปตรงกับรายการข้างล่าง ดอกจันสีแดง (*) คือช่องที่ต้องกรอก ยกเว้นช่อง สาขา และ พนักงานขาย บนแถบด้านบน ซึ่งบนหน้าจอไม่มีดอกจันให้เห็น แต่ต้องกรอกเหมือนกัน ช่องอื่นที่ไม่มีดอกจัน (ชื่อเล่น อีเมล เพศ) เว้นว่างไว้ได้</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p1-01.jpg" width="1536" height="1152" alt="หน้าที่ 1 ข้อมูลลูกค้า มีตัวเลข 1 ถึง 10 กำกับแต่ละส่วน"><figcaption>ตัวเลขสีฟ้าในรูปตรงกับรายการข้างล่าง ดอกจันสีแดง (*) คือช่องที่ต้องกรอก ยกเว้นช่อง สาขา และ พนักงานขาย บนแถบด้านบน ซึ่งบนหน้าจอไม่มีดอกจันให้เห็น แต่ต้องกรอกเหมือนกัน ช่องอื่นที่ไม่มีดอกจัน (ชื่อเล่น อีเมล เพศ) เว้นว่างไว้ได้</figcaption></figure>
 <ul class="hp-list">
 <li><b>1</b> ช่อง <span class="hp-field">สาขา</span> และ <span class="hp-field">พนักงานขาย</span> บนแถบด้านบน (เห็นได้ทุกหน้า) ต้องเลือกก่อนบันทึกบิล (สองช่องนี้ต้องกรอก แม้บนหน้าจอไม่มีดอกจัน)</li>
 <li><b>2</b> <span class="hp-field">เบอร์โทรศัพท์</span> ช่องนี้ใช้ค้นหาลูกค้า</li>
@@ -3022,7 +3053,7 @@
 <li><b>ถ้าแก้เบอร์</b> ระบบค้นใหม่ตามเบอร์ที่แก้ (ดูกรณี "แก้เบอร์หลังระบบเติมชื่อให้แล้ว" ด้านล่าง)</li>
 <li>ช่องนี้บังคับกรอก ถ้าว่างจะมีบรรทัด "เบอร์โทรศัพท์" ในกล่องแจ้งข้อมูลที่ขาด</li>
 </ul>
-<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/p1-02.jpg" width="1416" height="251" alt="กล่องกำลังค้นหา อยู่ใต้ช่องเบอร์โทรศัพท์"></div><figcaption>ทันทีที่ออกจากช่องเบอร์ จะมีกล่อง "กำลังค้นหา…" ใต้ช่องเบอร์ ถ้า​<span class="nb">อินเทอร์เน็ต</span>​ช้ากล่องนี้จะอยู่นานขึ้น ให้รอให้ผลขึ้นก่อน</figcaption></figure>
+<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/p1-02.jpg" width="1416" height="251" alt="กล่องกำลังค้นหา อยู่ใต้ช่องเบอร์โทรศัพท์"></div><figcaption>ทันทีที่ออกจากช่องเบอร์ จะมีกล่อง "กำลังค้นหา…" ใต้ช่องเบอร์ ถ้า​<span class="nb">อินเทอร์เน็ต</span>​ช้ากล่องนี้จะอยู่นานขึ้น ให้รอให้ผลขึ้นก่อน</figcaption></figure>
 </div></div>
 
 <div class="hp-item"><div class="hp-name">ชื่อ <span class="hp-req">*</span> / นามสกุล <span class="hp-req">*</span> <span class="hp-kind">พิมพ์ข้อความ</span></div><div class="hp-desc">
@@ -3059,7 +3090,7 @@
 <li>ถ้ากำลังแก้ไขบิลเก่าอยู่ ข้อความในกล่องจะต่อท้ายว่า "และจะออกจากโหมดแก้ไขบิลนี้ด้วย"</li>
 <li>ไม่ลบร่างที่เคยกด บันทึกร่าง ไว้</li>
 </ul>
-<figure class="hp-fig"><img data-src="help_img/p1-11.jpg" width="582" height="270" alt="กล่องถามว่าต้องการล้างข้อมูลในฟอร์มทั้งหมดใช่ไหม มีปุ่มยกเลิกและล้างข้อมูล"><figcaption>กล่องที่ขึ้นหลังกดปุ่ม ถังขยะ ปุ่ม ยกเลิก (ขอบบาง) คือไม่ล้าง ปุ่ม ล้างข้อมูล (สีทอง) คือล้างทั้งฟอร์มจริง</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p1-11.jpg" width="582" height="270" alt="กล่องถามว่าต้องการล้างข้อมูลในฟอร์มทั้งหมดใช่ไหม มีปุ่มยกเลิกและล้างข้อมูล"><figcaption>กล่องที่ขึ้นหลังกดปุ่ม ถังขยะ ปุ่ม ยกเลิก (ขอบบาง) คือไม่ล้าง ปุ่ม ล้างข้อมูล (สีทอง) คือล้างทั้งฟอร์มจริง</figcaption></figure>
 </div></div>
 
 <div class="hp-item"><div class="hp-name"><span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></svg>บันทึกร่าง</span> <span class="hp-kind">ปุ่มขอบบาง อยู่ติดซ้ายมือของปุ่ม ถัดไป ที่แถบล่าง</span></div><div class="hp-desc">
@@ -3075,9 +3106,9 @@
 <li>เปิดร่างกลับมาแก้ได้ที่ปุ่ม <span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 4v4h4"/><path d="M12 8v4l3 2"/></svg>รายการย้อนหลัง</span> มุมบนขวา แล้วเลือก​<span class="nb">แท็บ</span> "ร่างที่บันทึกไว้" (รายละเอียดเรื่องร่างทั้งหมดอยู่ใน​<span class="nb">แท็บ</span> "ร่าง · พิมพ์ · ปัญหาที่พบบ่อย" หัวข้อ "1. บันทึกร่าง")</li>
 </ul>
 <p><b>หน้าจอของปุ่มในแต่ละสถานะ</b></p>
-<figure class="hp-fig"><img data-src="help_img/p1-12.jpg" width="1536" height="1152" alt="กดบันทึกร่างโดยยังไม่เลือกสาขา ปุ่มเปลี่ยนเป็นเลือกสาขาที่แถบบนก่อน และช่องสาขามีกรอบเน้น"><figcaption>กดบันทึกร่างโดยยังไม่เลือกสาขา ปุ่มที่มุมขวาล่างเปลี่ยนเป็น "เลือกสาขาที่แถบบนก่อน" และช่อง สาขา ที่แถบด้านบนมีกรอบเน้น ให้เลือกสาขาตรงนั้น</figcaption></figure>
-<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/p1-13.jpg" width="1536" height="99" alt="แถบล่างที่ปุ่มบันทึกร่างเปลี่ยนเป็นบันทึกแล้ว พร้อมเครื่องหมายถูก"></div><figcaption>บันทึกร่างสำเร็จ ปุ่มเปลี่ยนเป็น "บันทึกแล้ว" พร้อมเครื่องหมายถูก แล้วกลับเป็น "บันทึกร่าง" เอง (ภาพตัดมาเฉพาะแถบล่าง)</figcaption></figure>
-<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/p1-14.jpg" width="1536" height="99" alt="แถบล่างที่ปุ่มบันทึกร่างเปลี่ยนเป็นบันทึกในเครื่องแล้ว ยังไม่ซิงก์"></div><figcaption>ร่างอยู่ในเครื่องนี้แล้ว แต่ยังไม่ได้ส่งสำเนาขึ้นระบบกลาง ปุ่มขึ้น "บันทึกในเครื่องแล้ว · ยังไม่​<span class="nb">ซิงก์</span>" ป้ายนี้อยู่ค้างนานกว่า "บันทึกแล้ว" (ภาพตัดมาเฉพาะแถบล่าง)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p1-12.jpg" width="1536" height="1152" alt="กดบันทึกร่างโดยยังไม่เลือกสาขา ปุ่มเปลี่ยนเป็นเลือกสาขาที่แถบบนก่อน และช่องสาขามีกรอบเน้น"><figcaption>กดบันทึกร่างโดยยังไม่เลือกสาขา ปุ่มที่มุมขวาล่างเปลี่ยนเป็น "เลือกสาขาที่แถบบนก่อน" และช่อง สาขา ที่แถบด้านบนมีกรอบเน้น ให้เลือกสาขาตรงนั้น</figcaption></figure>
+<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/p1-13.jpg" width="1536" height="99" alt="แถบล่างที่ปุ่มบันทึกร่างเปลี่ยนเป็นบันทึกแล้ว พร้อมเครื่องหมายถูก"></div><figcaption>บันทึกร่างสำเร็จ ปุ่มเปลี่ยนเป็น "บันทึกแล้ว" พร้อมเครื่องหมายถูก แล้วกลับเป็น "บันทึกร่าง" เอง (ภาพตัดมาเฉพาะแถบล่าง)</figcaption></figure>
+<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/p1-14.jpg" width="1536" height="99" alt="แถบล่างที่ปุ่มบันทึกร่างเปลี่ยนเป็นบันทึกในเครื่องแล้ว ยังไม่ซิงก์"></div><figcaption>ร่างอยู่ในเครื่องนี้แล้ว แต่ยังไม่ได้ส่งสำเนาขึ้นระบบกลาง ปุ่มขึ้น "บันทึกในเครื่องแล้ว · ยังไม่​<span class="nb">ซิงก์</span>" ป้ายนี้อยู่ค้างนานกว่า "บันทึกแล้ว" (ภาพตัดมาเฉพาะแถบล่าง)</figcaption></figure>
 </div></div>
 
 <div class="hp-item"><div class="hp-name"><span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>ถัดไป</span> <span class="hp-kind">ปุ่มกลมสีทอง มุมขวาล่าง</span></div><div class="hp-desc">
@@ -3109,7 +3140,7 @@
 <h4 class="hp-h" id="hp-1-5">กรณีลูกค้าเก่า (เบอร์มีในระบบ)</h4>
 
 <div class="hp-case"><div class="hp-case-title">เจอ 1 ชื่อ (ช่องยังว่างอยู่)</div>
-<figure class="hp-fig"><img data-src="help_img/p1-03.jpg" width="1416" height="696" alt="ฟอร์มที่ระบบเติมชื่อลูกค้าให้แล้ว และปุ่มสร้างรายชื่อใหม่ใต้ฟอร์ม"><figcaption>ตัวอย่างเบอร์ 0812345678 ที่มีลูกค้าคนเดียวคือ สมชาย ใจดี ระบบเติม ชื่อ นามสกุล ชื่อเล่น และอีเมลให้ ส่วน เพศ ยังเป็น ไม่ระบุ ใต้ฟอร์มมีปุ่มเส้นประสีทอง</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p1-03.jpg" width="1416" height="696" alt="ฟอร์มที่ระบบเติมชื่อลูกค้าให้แล้ว และปุ่มสร้างรายชื่อใหม่ใต้ฟอร์ม"><figcaption>ตัวอย่างเบอร์ 0812345678 ที่มีลูกค้าคนเดียวคือ สมชาย ใจดี ระบบเติม ชื่อ นามสกุล ชื่อเล่น และอีเมลให้ ส่วน เพศ ยังเป็น ไม่ระบุ ใต้ฟอร์มมีปุ่มเส้นประสีทอง</figcaption></figure>
 <p><b>สิ่งที่เห็น</b></p>
 <ul class="hp-list">
 <li>กล่อง "กำลังค้นหา…" ขึ้นแป๊บเดียวแล้วหายไป</li>
@@ -3121,7 +3152,7 @@
 </div>
 
 <div class="hp-case"><div class="hp-case-title">เจอหลายชื่อในเบอร์เดียวกัน</div>
-<figure class="hp-fig"><img data-src="help_img/p1-04.jpg" width="1416" height="503" alt="รายชื่อลูกค้า 3 คนที่ใช้เบอร์เดียวกัน และตัวเลือก + New Contact"><figcaption>ตัวอย่างเบอร์ 0823456789 ที่มี 3 ชื่อ แต่ละแถวคือ 1 คน ชื่อเล่น (ถ้ามี) อยู่ใต้ชื่อ แถวสุดท้ายคือ + New Contact</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p1-04.jpg" width="1416" height="503" alt="รายชื่อลูกค้า 3 คนที่ใช้เบอร์เดียวกัน และตัวเลือก + New Contact"><figcaption>ตัวอย่างเบอร์ 0823456789 ที่มี 3 ชื่อ แต่ละแถวคือ 1 คน ชื่อเล่น (ถ้ามี) อยู่ใต้ชื่อ แถวสุดท้ายคือ + New Contact</figcaption></figure>
 <p><b>เมื่อไหร่ที่เป็นแบบนี้</b> เบอร์โทรศัพท์เดียวกันมีหลายคนในระบบ เช่น คนในครอบครัวใช้เบอร์เดียวกัน ระบบจะไม่เดาให้ ต้องเลือกเอง (ระบบแสดงรายชื่อได้สูงสุด 20 ชื่อ)</p>
 <p><b>สิ่งที่เห็น</b></p>
 <ul class="hp-list">
@@ -3142,7 +3173,7 @@
 </div>
 
 <div class="hp-case"><div class="hp-case-title">พิมพ์ชื่อไว้ก่อน แล้วค่อยกรอกเบอร์ (เจอ 1 ชื่อ และชื่อไม่ตรงกัน)</div>
-<figure class="hp-fig"><img data-src="help_img/p1-06.jpg" width="1416" height="498" alt="กล่องบอกว่าเบอร์นี้มีในระบบ ข้อมูลที่กรอกไว้ไม่ถูกทับ พร้อมตัวเลือกใช้ข้อมูลลูกค้าเดิม"><figcaption>พิมพ์ชื่อ มานี นามสกุล มีสุข ไว้ก่อน (ช่องชื่อถูกกล่องบังอยู่ เห็นแค่นามสกุล) แล้วกรอกเบอร์ที่ในระบบเป็นของ สมชาย ใจดี ระบบไม่ทับ แต่ขึ้นตัวเลือกให้กดใช้เอง</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p1-06.jpg" width="1416" height="498" alt="กล่องบอกว่าเบอร์นี้มีในระบบ ข้อมูลที่กรอกไว้ไม่ถูกทับ พร้อมตัวเลือกใช้ข้อมูลลูกค้าเดิม"><figcaption>พิมพ์ชื่อ มานี นามสกุล มีสุข ไว้ก่อน (ช่องชื่อถูกกล่องบังอยู่ เห็นแค่นามสกุล) แล้วกรอกเบอร์ที่ในระบบเป็นของ สมชาย ใจดี ระบบไม่ทับ แต่ขึ้นตัวเลือกให้กดใช้เอง</figcaption></figure>
 <p>ระบบจะไม่ล้างและไม่ทับสิ่งที่คุณพิมพ์ไว้เอง สิ่งที่เห็นคือกล่องที่มีข้อความ "เบอร์นี้มีในระบบ — ข้อมูลที่กรอกไว้ยังอยู่ ไม่ถูกทับ" และแถวชื่อลูกค้าเดิม พร้อมคำอธิบายใต้ชื่อว่า "กดเพื่อใช้ข้อมูลลูกค้าเดิม (แทนที่ที่กรอกไว้)"</p>
 <ul class="hp-list">
 <li>ถ้าคุณพิมพ์ถูกต้องแล้ว และเป็นคนละคนกับที่เจอ ไม่ต้องกดอะไร กล่องจะหายเองใน 6 วินาที ข้อมูลที่พิมพ์ไว้ยังอยู่ครบ (ในกรณีนี้ปุ่มเส้นประสีทองไม่ขึ้น)</li>
@@ -3165,7 +3196,7 @@
 <h4 class="hp-h" id="hp-1-6">กรณีลูกค้าใหม่ (ไม่พบเบอร์ในระบบ)</h4>
 
 <div class="hp-case"><div class="hp-case-title">ไม่พบเบอร์ (ยังไม่ได้กรอกอะไร)</div>
-<figure class="hp-fig"><img data-src="help_img/p1-05.jpg" width="1416" height="422" alt="กล่องไม่พบลูกค้าในระบบ มีภาพผู้หญิงยกแขนไขว้"><figcaption>ตัวอย่างเบอร์ 0899999999 ที่ไม่มีในระบบ กล่องสีขาวมีภาพการ์ตูนผู้หญิงยกแขนไขว้เป็นกากบาท</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p1-05.jpg" width="1416" height="422" alt="กล่องไม่พบลูกค้าในระบบ มีภาพผู้หญิงยกแขนไขว้"><figcaption>ตัวอย่างเบอร์ 0899999999 ที่ไม่มีในระบบ กล่องสีขาวมีภาพการ์ตูนผู้หญิงยกแขนไขว้เป็นกากบาท</figcaption></figure>
 <p><b>สิ่งที่เห็น</b> กล่องสีขาวใต้ช่องเบอร์ มีภาพการ์ตูนผู้หญิงยกแขนไขว้ ข้อความตัวหนา "ไม่พบลูกค้าในระบบ" และข้อความเล็กว่า "ยังไม่มีข้อมูลลูกค้า กรุณากรอกข้อมูลด้านล่างเพื่อเพิ่มลูกค้าใหม่" ช่อง ชื่อ นามสกุล ชื่อเล่น อีเมล ว่างอยู่</p>
 <ul class="hp-list">
 <li><b>กล่องอยู่นานแค่ไหน</b> ถ้ายังไม่ได้กรอกอะไร กล่องจะไม่หายเอง จะหายเมื่อคุณแตะที่อื่น</li>
@@ -3181,7 +3212,7 @@
 </div>
 
 <div class="hp-case"><div class="hp-case-title">ไม่พบเบอร์ แต่คุณพิมพ์ชื่อไว้ก่อนแล้ว</div>
-<figure class="hp-fig"><img data-src="help_img/p1-07.jpg" width="1416" height="419" alt="ฟอร์มที่ยังมีชื่อ นามสกุล ชื่อเล่น ครบ หลังกล่องไม่พบลูกค้าหุบไป"><figcaption>พิมพ์ชื่อ มานี นามสกุล มีสุข ชื่อเล่น นี ไว้ก่อน แล้วกรอกเบอร์ที่ไม่มีในระบบ ภาพนี้ถ่ายหลังกล่องหุบไปแล้ว ข้อมูลที่พิมพ์ไว้ยังอยู่ครบ</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p1-07.jpg" width="1416" height="419" alt="ฟอร์มที่ยังมีชื่อ นามสกุล ชื่อเล่น ครบ หลังกล่องไม่พบลูกค้าหุบไป"><figcaption>พิมพ์ชื่อ มานี นามสกุล มีสุข ชื่อเล่น นี ไว้ก่อน แล้วกรอกเบอร์ที่ไม่มีในระบบ ภาพนี้ถ่ายหลังกล่องหุบไปแล้ว ข้อมูลที่พิมพ์ไว้ยังอยู่ครบ</figcaption></figure>
 <ul class="hp-list">
 <li>กล่อง "ไม่พบลูกค้าในระบบ" ขึ้นเหมือนเดิม แต่จะหุบเองในราว 2 วินาที เพื่อให้เห็นข้อมูลที่พิมพ์ไว้ใต้กล่อง</li>
 <li>ข้อมูลที่พิมพ์ไว้ (ชื่อ นามสกุล ชื่อเล่น อีเมล) ไม่หายและไม่ถูกล้าง ใส่เบอร์ก่อนหรือพิมพ์ชื่อก่อนก็ได้ผลเหมือนกัน</li>
@@ -3192,7 +3223,7 @@
 <p>บางครั้งเบอร์ที่ค้นเจอเป็นของอีกคน เช่น เบอร์บ้านหรือเบอร์ที่คนในครอบครัวใช้ร่วมกัน แต่ลูกค้าที่มาวันนี้เป็นอีกคน ในกรณีนี้ให้สร้างรายชื่อใหม่ มี 2 ทาง ขึ้นอยู่กับว่าเบอร์นั้นเจอกี่ชื่อ</p>
 
 <div class="hp-item"><div class="hp-name">ปุ่ม "+ ต้องการสร้างรายชื่อใหม่ของเบอร์โทรศัพท์นี้" <span class="hp-kind">ปุ่มเส้นประสีทอง ใต้ช่อง เพศ</span></div><div class="hp-desc">
-<figure class="hp-fig"><img data-src="help_img/p1-09.jpg" width="1416" height="660" alt="ฟอร์มหลังกดปุ่มสร้างรายชื่อใหม่ เบอร์ยังอยู่ ชื่อ นามสกุล ชื่อเล่น อีเมล ว่าง"><figcaption>หลังกดปุ่ม เบอร์ 0812345678 ยังอยู่ ส่วน ชื่อ นามสกุล ชื่อเล่น อีเมล ว่างเปล่า และปุ่มสีทองหายไป พร้อมให้พิมพ์ชื่อคนใหม่</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p1-09.jpg" width="1416" height="660" alt="ฟอร์มหลังกดปุ่มสร้างรายชื่อใหม่ เบอร์ยังอยู่ ชื่อ นามสกุล ชื่อเล่น อีเมล ว่าง"><figcaption>หลังกดปุ่ม เบอร์ 0812345678 ยังอยู่ ส่วน ชื่อ นามสกุล ชื่อเล่น อีเมล ว่างเปล่า และปุ่มสีทองหายไป พร้อมให้พิมพ์ชื่อคนใหม่</figcaption></figure>
 <p><b>ปุ่มนี้ขึ้นเมื่อไหร่</b> ขึ้นเฉพาะตอนค้นเบอร์เจอ "พอดี 1 ชื่อ" และชื่อนั้นถูกใช้อยู่ในฟอร์มแล้ว ซึ่งเกิดได้ 3 แบบ คือ ระบบเติมให้เอง พิมพ์ชื่อตรงกับที่เจอ หรือกดแถว "กดเพื่อใช้ข้อมูลลูกค้าเดิม"</p>
 <p><b>ปุ่มนี้ไม่ขึ้นเมื่อไหร่</b></p>
 <ul class="hp-list">
@@ -3235,7 +3266,7 @@
 
 <h4 class="hp-h" id="hp-1-9">แก้ชื่อของลูกค้าเก่า (ป้ายถามยืนยัน)</h4>
 <div class="hp-case"><div class="hp-case-title">แก้ชื่อหรือชื่อเล่นที่ระบบเติมให้</div>
-<figure class="hp-fig"><img data-src="help_img/p1-08.jpg" width="1416" height="630" alt="ป้ายถามต้องการเปลี่ยนชื่อและชื่อเล่น มีปุ่มใช่และไม่ใช่"><figcaption>แก้ชื่อเป็น สมศักดิ์ และชื่อเล่นเป็น ศักดิ์ ระบบถามยืนยันแยกกัน 2 ป้าย ส่วนอีเมลที่แก้เป็น new@example.com ไม่มีป้ายถาม</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p1-08.jpg" width="1416" height="630" alt="ป้ายถามต้องการเปลี่ยนชื่อและชื่อเล่น มีปุ่มใช่และไม่ใช่"><figcaption>แก้ชื่อเป็น สมศักดิ์ และชื่อเล่นเป็น ศักดิ์ ระบบถามยืนยันแยกกัน 2 ป้าย ส่วนอีเมลที่แก้เป็น new@example.com ไม่มีป้ายถาม</figcaption></figure>
 <p>ลูกค้าเก่าที่ระบบเติมให้ ถ้าคุณแก้ ชื่อ หรือ นามสกุล หรือ ชื่อเล่น จะมีป้ายขึ้นใต้ช่องนั้นทันที เขียนว่า "ต้องการเปลี่ยนชื่อจาก (ชื่อเดิม) เป็น (ชื่อใหม่) หรือไม่" หรือ "ต้องการเปลี่ยนชื่อเล่นจาก (ชื่อเดิม) เป็น (ชื่อใหม่) หรือไม่" พร้อมปุ่ม ใช่ และ ไม่ใช่</p>
 <ul class="hp-list">
 <li>กด <b>ใช่</b> ระบบใช้ชื่อใหม่ที่พิมพ์ และป้ายหายไป (ถ้าแก้ต่ออีก ป้ายจะถามใหม่เทียบกับชื่อที่เพิ่งยืนยัน)</li>
@@ -3259,7 +3290,7 @@
 
 <h4 class="hp-h" id="hp-1-11">ตรวจข้อมูลตอนบันทึกบิล</h4>
 <p>ข้อมูลหน้านี้จะถูกตรวจตอนกด "บันทึกข้อมูล" ที่หน้า 03 เท่านั้น (ถ้ากำลังแก้ไขบิลเก่า ปุ่มนี้ชื่อ "บันทึกการแก้ไข") ไม่ได้ตรวจตอนกด ถัดไป ถ้ามีข้อมูลที่ต้องกรอกยังไม่ครบ จะมีกล่องขึ้น ไม่บันทึกบิล และไม่ส่งข้อมูลไปไหน</p>
-<figure class="hp-fig"><img data-src="help_img/p1-10.jpg" width="564" height="570" alt="กล่องกรุณากรอกข้อมูลที่จำเป็นให้ครบ แสดงรายการที่ขาด"><figcaption>กล่องที่ขึ้นตอนกดบันทึกข้อมูลโดยยังไม่ได้กรอกอะไรเลย 5 บรรทัดแรก (สาขา พนักงานขาย เบอร์โทรศัพท์ ชื่อ นามสกุล) เป็นของหน้า 01 อีก 2 บรรทัด (สินค้ารายการที่ 1 — รหัสสินค้า และ Size) เป็นของหน้า 02 ส่วนหน้า 03 มีค่าเริ่มต้นให้แล้วจึงไม่ขึ้นในฟอร์มว่าง แต่ถ้าสาขาที่นัดรับหรือวันที่นัดรับถูกล้างออก ก็จะมีบรรทัดของหน้า 03 ต่อท้ายด้วย</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p1-10.jpg" width="564" height="570" alt="กล่องกรุณากรอกข้อมูลที่จำเป็นให้ครบ แสดงรายการที่ขาด"><figcaption>กล่องที่ขึ้นตอนกดบันทึกข้อมูลโดยยังไม่ได้กรอกอะไรเลย 5 บรรทัดแรก (สาขา พนักงานขาย เบอร์โทรศัพท์ ชื่อ นามสกุล) เป็นของหน้า 01 อีก 2 บรรทัด (สินค้ารายการที่ 1 — รหัสสินค้า และ Size) เป็นของหน้า 02 ส่วนหน้า 03 มีค่าเริ่มต้นให้แล้วจึงไม่ขึ้นในฟอร์มว่าง แต่ถ้าสาขาที่นัดรับหรือวันที่นัดรับถูกล้างออก ก็จะมีบรรทัดของหน้า 03 ต่อท้ายด้วย</figcaption></figure>
 <div class="hp-tablewrap"><table class="hp-table">
 <thead><tr><th>บรรทัดในกล่อง</th><th>หมายความว่า</th><th>แก้ที่ไหน</th></tr></thead>
 <tbody>
@@ -3288,8 +3319,8 @@
 <li>ที่หน้า 01 ด้านบนสุดจะมีแถบ "กำลังแก้ไขบิลนี้ — ชื่อผู้แก้ไข *" ที่มีชื่อที่คุณใส่ไว้ในกล่องก่อนหน้าอยู่แล้ว แก้เป็นชื่ออื่นได้ ถ้าลบชื่อทิ้ง จะเห็นคำว่า "กรุณาเลือก…" กลับมา</li>
 <li>แก้ข้อมูลที่ต้องการ แล้วไปหน้า 03 กดปุ่ม "บันทึกการแก้ไข" (ในโหมดนี้ปุ่ม "บันทึกข้อมูล" เปลี่ยนชื่อเป็น "บันทึกการแก้ไข")</li>
 </ol>
-<figure class="hp-fig"><img data-src="help_img/p1-15.jpg" width="582" height="393" alt="กล่องถามต้องการแก้ไขบิลนี้ใช่ไหม มีช่องชื่อผู้แก้ไข และปุ่มยกเลิก ไปหน้าแก้ไข"><figcaption>กล่องที่ขึ้นหลังกดไอคอนแก้ไขบิล ต้องมีชื่อในช่อง ชื่อผู้แก้ไข (ในภาพใช้ชื่อสมมติ Test Staff) จึงกด "ไปหน้าแก้ไข" ได้</figcaption></figure>
-<figure class="hp-fig"><img data-src="help_img/p1-16.jpg" width="1536" height="783" alt="หน้าที่ 1 ในโหมดแก้ไข มีแถบกำลังแก้ไขบิลนี้ ชื่อผู้แก้ไข ที่มีชื่ออยู่แล้ว"><figcaption>หน้า 01 ในโหมดแก้ไขบิล แถบสีทองด้านบนเขียน "กำลังแก้ไขบิลนี้ — ชื่อผู้แก้ไข *" และมีชื่อที่ใส่ไว้ในกล่องก่อนหน้าอยู่แล้ว (ชื่อสมมติ Test Staff)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p1-15.jpg" width="582" height="393" alt="กล่องถามต้องการแก้ไขบิลนี้ใช่ไหม มีช่องชื่อผู้แก้ไข และปุ่มยกเลิก ไปหน้าแก้ไข"><figcaption>กล่องที่ขึ้นหลังกดไอคอนแก้ไขบิล ต้องมีชื่อในช่อง ชื่อผู้แก้ไข (ในภาพใช้ชื่อสมมติ Test Staff) จึงกด "ไปหน้าแก้ไข" ได้</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p1-16.jpg" width="1536" height="783" alt="หน้าที่ 1 ในโหมดแก้ไข มีแถบกำลังแก้ไขบิลนี้ ชื่อผู้แก้ไข ที่มีชื่ออยู่แล้ว"><figcaption>หน้า 01 ในโหมดแก้ไขบิล แถบสีทองด้านบนเขียน "กำลังแก้ไขบิลนี้ — ชื่อผู้แก้ไข *" และมีชื่อที่ใส่ไว้ในกล่องก่อนหน้าอยู่แล้ว (ชื่อสมมติ Test Staff)</figcaption></figure>
 <div class="hp-warn">ถ้าลบชื่อในแถบนี้ทิ้งแล้วกดบันทึก จะบันทึกไม่ผ่าน และมีบรรทัด "ชื่อผู้แก้ไข" อยู่ท้ายสุดของรายการที่ขาดในกล่องแจ้งข้อมูล ให้ใส่ชื่อกลับแล้วกดบันทึกอีกครั้ง</div>
 
 <h4 class="hp-h" id="hp-1-13">ปัญหาที่พบบ่อย</h4>
@@ -3308,7 +3339,7 @@
 <p class="hp-lead">หน้านี้ใช้ใส่ข้อมูล “สินค้า” ที่ลูกค้านำมาปรับแก้ สินค้า 1 ชิ้นจะอยู่ในกล่อง 1 ก้อน ตั้งชื่อว่า PRODUCT #1, PRODUCT #2 ไปเรื่อยๆ บิลใบเดียวใส่สินค้าได้หลายชิ้น กรอกให้ครบทีละชิ้น แล้วกด <span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg>ถัดไป</span> เพื่อไปหน้านัดรับสินค้า</p>
 <details class="hp-toc" id="hp-toc-2"><summary>สารบัญหน้านี้ — กดหัวข้อเพื่อข้ามไปอ่าน (14 หัวข้อ)</summary><ul class="hp-toc-list"><li><a class="hp-jump" href="#hp-2-1">หน้านี้มีอะไรบ้าง</a></li><li><a class="hp-jump" href="#hp-2-2">กรอกสินค้า 1 ชิ้น ทีละขั้น</a></li><li><a class="hp-jump" href="#hp-2-3">ช่องและปุ่มของสินค้าแต่ละชิ้น (ฝั่งซ้าย)</a></li><li><a class="hp-jump" href="#hp-2-4">หลังกด Enter หรือเลือกรายการ ระบบทำอะไรให้บ้าง</a></li><li><a class="hp-jump" href="#hp-2-5">รหัสสินค้าต้องยาวไม่เกิน 15 ตัวอักษร</a></li><li><a class="hp-jump" href="#hp-2-6">สแกนด้วยกล้อง</a></li><li><a class="hp-jump" href="#hp-2-7">ช่องอื่นๆ ของสินค้าแต่ละชิ้น</a></li><li><a class="hp-jump" href="#hp-2-8">ส่วน “02 รายละเอียด” (ฝั่งขวา) ใช้แก้ขนาด</a></li><li><a class="hp-jump" href="#hp-2-9">จุดวัดของแต่ละประเภท</a></li><li><a class="hp-jump" href="#hp-2-10">Accessory อื่นๆ ไซซ์ไม่ต้องติดไปกับรหัส</a></li><li><a class="hp-jump" href="#hp-2-11">เมื่อบิลมีสินค้าหลายชิ้น</a></li><li><a class="hp-jump" href="#hp-2-12">ข้อความเตือนตอนกดบันทึก ที่เกี่ยวกับหน้านี้</a></li><li><a class="hp-jump" href="#hp-2-13">ปุ่มที่แถบล่างของหน้านี้</a></li><li><a class="hp-jump" href="#hp-2-14">ข้อควรระวังที่พบบ่อย</a></li></ul><p class="hp-toc-hint">อ่านไปแล้วอยากกลับมาที่สารบัญนี้ กดปุ่มวงกลมสีดำที่มีลูกศรชี้ขึ้น มุมขวาล่างของหน้าต่าง</p></details>
 <h4 class="hp-h" id="hp-2-1">หน้านี้มีอะไรบ้าง</h4>
-<figure class="hp-fig"><img data-src="help_img/p2-01.jpg" width="1536" height="1014" alt="หน้าที่ 2 สินค้า ตอนเริ่มกรอก"><figcaption>หน้าที่ 2 ตอนยังไม่กรอกอะไร ฝั่งซ้ายคือข้อมูลสินค้า ฝั่งขวาคือ “02 รายละเอียด” (จุดวัดตัว) ส่วนแถบสีครีมด้านล่างมีปุ่ม 4 ปุ่ม คือถังขยะสีแดง ลูกศรย้อนกลับ บันทึกร่าง และลูกศรถัดไป</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p2-01.jpg" width="1536" height="1014" alt="หน้าที่ 2 สินค้า ตอนเริ่มกรอก"><figcaption>หน้าที่ 2 ตอนยังไม่กรอกอะไร ฝั่งซ้ายคือข้อมูลสินค้า ฝั่งขวาคือ “02 รายละเอียด” (จุดวัดตัว) ส่วนแถบสีครีมด้านล่างมีปุ่ม 4 ปุ่ม คือถังขยะสีแดง ลูกศรย้อนกลับ บันทึกร่าง และลูกศรถัดไป</figcaption></figure>
 <ul class="hp-list">
 <li><b>ฝั่งซ้าย</b> เป็นข้อมูลของสินค้าชิ้นนั้น ได้แก่ ประเภท (มีถังขยะเล็กอยู่ข้างๆ) รหัสสินค้า Size สินค้าใช้ของสาขา ตัวเลือกเพิ่มเติม รูปสินค้า หมายเหตุ และปุ่ม <span class="hp-btn">เพิ่มสินค้า</span> ซึ่งอยู่ใต้ช่องหมายเหตุ ต้องเลื่อนหน้าลงไปหา</li>
 <li><b>ฝั่งขวา “02 รายละเอียด”</b> ใช้เมื่อต้องแก้ขนาด ตอนเริ่มจะเลือกอยู่ที่ <span class="hp-btn">ไม่แก้ไขขนาดสินค้า</span> ฝั่งขวาจึงว่าง</li>
@@ -3371,7 +3402,7 @@
 <li><b>กดปุ่มสแกน</b> <span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"></path><path d="M3 12h18"></path></svg>สแกน​<span class="nb">บาร์โค้ด</span> / QR</span> ข้างช่อง เพื่อเปิดกล้อง (ดูหัวข้อ “สแกนด้วยกล้อง” ด้านล่าง)</li>
 <li><b>เครื่องสแกน​<span class="nb">บาร์โค้ด</span> (USB หรือบลูทูธ)</b> เครื่องนี้ทำงานเหมือนคนพิมพ์เร็วๆ แล้วกด Enter ให้เอง ให้แตะช่อง รหัสสินค้า ไว้ก่อน แล้วยิงได้เลย ไม่ต้องกดปุ่มสแกน</li>
 </ul>
-<figure class="hp-fig"><img data-src="help_img/p2-02.jpg" width="615" height="720" alt="รายการรหัสสินค้าที่ขึ้นขณะพิมพ์"><figcaption>พิมพ์ “UF5” ในช่องรหัสสินค้า จะมีรายการรหัสที่ตรงขึ้นมา มีชื่อประเภทกำกับแต่ละบรรทัด (รหัสในภาพเป็นรหัสสมมติ) แตะรายการที่ต้องการ</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p2-02.jpg" width="615" height="720" alt="รายการรหัสสินค้าที่ขึ้นขณะพิมพ์"><figcaption>พิมพ์ “UF5” ในช่องรหัสสินค้า จะมีรายการรหัสที่ตรงขึ้นมา มีชื่อประเภทกำกับแต่ละบรรทัด (รหัสในภาพเป็นรหัสสมมติ) แตะรายการที่ต้องการ</figcaption></figure>
 </div></div>
 
 <h4 class="hp-h" id="hp-2-4">หลังกด Enter หรือเลือกรายการ ระบบทำอะไรให้บ้าง</h4>
@@ -3398,7 +3429,7 @@
 </tbody></table></div>
 <div class="hp-case"><div class="hp-case-title">สถานการณ์: สแกนสูทที่รหัสลงท้าย -J</div>
 <p>ระบบเพิ่ม PRODUCT #2 เป็นกางเกง ใส่รหัส UF543-P (เปลี่ยน -J เป็น -P) ให้เอง และแถบมุมขวาบนเปลี่ยนเป็น “ทั้งหมด 2 รายการ” <b>ไซซ์ไม่ถูกคัดลอก</b> ช่อง Size ของกางเกงจะว่าง เพราะเลขไซซ์เสื้อกับกางเกงคนละระบบกัน ให้พิมพ์ Size ของกางเกงเอง</p>
-<figure class="hp-fig"><img data-src="help_img/p2-03.jpg" width="1536" height="920" alt="PRODUCT #2 กางเกงที่ระบบเพิ่มให้"><figcaption>หลังสแกนสูท UF543-J-50 ระบบเพิ่ม PRODUCT #2 เป็นกางเกง รหัส UF543-P ให้เอง ช่อง Size ยังว่าง รอพนักงานกรอก</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p2-03.jpg" width="1536" height="920" alt="PRODUCT #2 กางเกงที่ระบบเพิ่มให้"><figcaption>หลังสแกนสูท UF543-J-50 ระบบเพิ่ม PRODUCT #2 เป็นกางเกง รหัส UF543-P ให้เอง ช่อง Size ยังว่าง รอพนักงานกรอก</figcaption></figure>
 <ul class="hp-list">
 <li>ถ้ามีกางเกงรหัสคู่นั้นอยู่ในบิลแล้ว ระบบจะไม่เพิ่มซ้ำ</li>
 <li>ถ้าชิ้นถัดไปยังว่างอยู่ หรือเป็นกางเกงที่ยังไม่ใส่รหัส ระบบจะใช้ชิ้นนั้น ไม่งั้นจะเพิ่มชิ้นใหม่ต่อท้าย (ข้อมูลที่กรอกไว้ในชิ้นถัดไปไม่ถูกทับ)</li>
@@ -3421,7 +3452,7 @@
 <li>เล็งกล้องไปที่​<span class="nb">บาร์โค้ด</span>​หรือ QR ให้อยู่ในกรอบสีทอง เมื่ออ่านได้ หน้าต่างจะปิดเอง และระบบเติมรหัส Size ประเภท เหมือนกด Enter</li>
 <li>ถ้าไม่ต้องการสแกน กดเครื่องหมาย × ที่มุมหน้าต่าง หรือแตะนอกหน้าต่างเพื่อปิด</li>
 </ol>
-<figure class="hp-fig"><img data-src="help_img/p2-04.jpg" width="630" height="714" alt="หน้าต่างสแกนบาร์โค้ด / QR"><figcaption>หน้าต่างสแกน ภาพนี้ถ่ายตอนเปิดกล้องไม่ได้ ข้อความใต้กรอบจึงเป็น “ขอสิทธิ์กล้องไม่สำเร็จ …” ให้พิมพ์รหัสในช่อง “หรือพิมพ์รหัสด้วยตนเอง” แล้วกด “ใช้รหัสนี้” แทน (กด Enter ในช่องนั้นก็ได้)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p2-04.jpg" width="630" height="714" alt="หน้าต่างสแกนบาร์โค้ด / QR"><figcaption>หน้าต่างสแกน ภาพนี้ถ่ายตอนเปิดกล้องไม่ได้ ข้อความใต้กรอบจึงเป็น “ขอสิทธิ์กล้องไม่สำเร็จ …” ให้พิมพ์รหัสในช่อง “หรือพิมพ์รหัสด้วยตนเอง” แล้วกด “ใช้รหัสนี้” แทน (กด Enter ในช่องนั้นก็ได้)</figcaption></figure>
 <div class="hp-tablewrap"><table class="hp-table"><thead><tr><th>ข้อความใต้กรอบ</th><th>แปลว่า</th></tr></thead><tbody>
 <tr><td>กำลังเปิดกล้อง…</td><td>รอสักครู่</td></tr>
 <tr><td>เล็งกล้องไปที่​<span class="nb">บาร์โค้ด</span>/QR ให้อยู่ในกรอบ</td><td>กล้องอ่านได้ทั้ง​<span class="nb">บาร์โค้ด</span>​และ QR</td></tr>
@@ -3478,7 +3509,7 @@
 </ul>
 <div class="hp-warn">หมายเหตุของ <b>Accessory อื่นๆ</b> ไม่ขึ้นบนใบสรุปที่พิมพ์ตอนกดบันทึก ใบสรุปของ Accessory ไม่มีหัวข้อ “หมายเหตุ” เลย แม้จะพิมพ์ไว้ในช่อง (ข้อความยังถูกส่งไปกับบิลตามปกติ แต่ไม่ถูกวาดลงใบสรุป) ถ้ามีเรื่องที่ช่างต้องรู้เกี่ยวกับ Accessory ให้แจ้งช่างอีกทางหนึ่ง เสื้อสูท กางเกง เสื้อเชิ้ต และเสื้อกั๊ก ไม่มีปัญหานี้</div></div></div>
 
-<figure class="hp-fig"><img data-src="help_img/p2-05.jpg" width="1536" height="920" alt="ช่องติ๊ก หมายเหตุ และชื่อพนักงานที่ติดต่อ"><figcaption>ตัวอย่างกางเกงที่เลือกสินค้าใช้ของสาขา T21 (แถบบนเป็น R3) จึงมีช่อง “ชื่อพนักงานที่ติดต่อ” ขึ้นมา ติ๊กครบ 3 ช่องแล้ว คำทั้งหมดต่อท้ายในช่องหมายเหตุ ฝั่งขวาเลือก NB ที่ ระดับความยาว คำ NB ก็ไปต่อท้ายหมายเหตุด้วย ปุ่ม เพิ่มสินค้า อยู่ใต้ช่องหมายเหตุ (ภาพนี้เลื่อนหน้าลงมาแล้ว ชื่อและข้อความเป็นข้อมูลสมมติ)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p2-05.jpg" width="1536" height="920" alt="ช่องติ๊ก หมายเหตุ และชื่อพนักงานที่ติดต่อ"><figcaption>ตัวอย่างกางเกงที่เลือกสินค้าใช้ของสาขา T21 (แถบบนเป็น R3) จึงมีช่อง “ชื่อพนักงานที่ติดต่อ” ขึ้นมา ติ๊กครบ 3 ช่องแล้ว คำทั้งหมดต่อท้ายในช่องหมายเหตุ ฝั่งขวาเลือก NB ที่ ระดับความยาว คำ NB ก็ไปต่อท้ายหมายเหตุด้วย ปุ่ม เพิ่มสินค้า อยู่ใต้ช่องหมายเหตุ (ภาพนี้เลื่อนหน้าลงมาแล้ว ชื่อและข้อความเป็นข้อมูลสมมติ)</figcaption></figure>
 
 <div class="hp-item"><div class="hp-name"><span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v8M8 12h8"></path></svg>เพิ่มสินค้า</span> <span class="hp-kind">ปุ่มสีดำ ใต้ช่องหมายเหตุ</span></div><div class="hp-desc">
 <ul class="hp-list">
@@ -3522,7 +3553,7 @@
 <li>ขีดจำกัด อก เอว สะโพก ของเสื้อสูท และ เอว สะโพก ของกางเกง <b>ขยายออกหรือเก็บเข้าได้ไม่เกินข้างละ 3 นิ้ว</b> กดต่อก็ไม่เพิ่ม ส่วน โคนขา/ต้นขา และ ปลายขา ไม่มีขีดจำกัดในหน้านี้</li>
 </ul>
 <div class="hp-warn"><b>โคนขา/ต้นขา และ ปลายขา ของกางเกง:</b> บนหน้าจอขึ้น “ขยายออก” หรือ “เก็บเข้า” ตามปุ่มที่กด แต่ใบสรุปที่พิมพ์จะเขียนว่า “เก็บโคนขา/ต้นขา” และ “เก็บปลายขา” เสมอ ไม่ว่ากด + หรือ − (เช่น กด + สองครั้ง หน้าจอขึ้น “นิ้ว · ขยายออก” แต่ใบสรุปพิมพ์ “เก็บโคนขา/ต้นขา 0.5 นิ้ว”) ช่างที่อ่านใบสรุปอาจเข้าใจว่าเป็นเก็บเข้า ถ้ากด + (ขยายออก) ที่สองจุดนี้ ให้เขียนบอกช่างในช่องหมายเหตุกางเกงด้วย เช่น “ปลายขา ขยายออก 0.5 นิ้ว” ส่วน เอว สะโพก ของกางเกง และ อก เอว สะโพก ของเสื้อสูท ใบสรุปเขียนทิศทางตรงกับที่กด</div>
-<figure class="hp-fig"><img data-src="help_img/p2-06.jpg" width="1536" height="1073" alt="เสื้อสูทที่เปิดแก้ไขขนาดสินค้า"><figcaption>เสื้อสูทที่กด “แก้ไขขนาดสินค้า” แล้ว ความยาวแขนพิมพ์ 1.5 ต้นแขนพิมพ์ 2 พร้อมแคปซูล เก็บเข้า 0.5 อกขยายออก 0.5 (สีน้ำเงิน) เอวเก็บเข้า 1 (สีแดง) จุดที่เหลือเป็น “ไม่แก้ไข” ฝั่งซ้ายเห็นรหัส UF543-J และ Size 50 ที่ระบบเติมให้ (รหัสและตัวเลขในภาพเป็นข้อมูลสมมติ ไม่ได้บอกว่าควรกรอกเท่าไร)</figcaption></figure></div></div>
+<figure class="hp-fig"><img data-src="../help_img/p2-06.jpg" width="1536" height="1073" alt="เสื้อสูทที่เปิดแก้ไขขนาดสินค้า"><figcaption>เสื้อสูทที่กด “แก้ไขขนาดสินค้า” แล้ว ความยาวแขนพิมพ์ 1.5 ต้นแขนพิมพ์ 2 พร้อมแคปซูล เก็บเข้า 0.5 อกขยายออก 0.5 (สีน้ำเงิน) เอวเก็บเข้า 1 (สีแดง) จุดที่เหลือเป็น “ไม่แก้ไข” ฝั่งซ้ายเห็นรหัส UF543-J และ Size 50 ที่ระบบเติมให้ (รหัสและตัวเลขในภาพเป็นข้อมูลสมมติ ไม่ได้บอกว่าควรกรอกเท่าไร)</figcaption></figure></div></div>
 
 <div class="hp-item"><div class="hp-name"><span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v8M8 12h8"></path></svg>เก็บเข้า</span> ของต้นแขน <span class="hp-kind">ปุ่มขอบประสีทอง · เฉพาะ ต้นแขน (ขนาดต้นแขน) ของเสื้อสูท</span></div><div class="hp-desc">
 <ul class="hp-list">
@@ -3540,7 +3571,7 @@
 <li>กด <span class="hp-btn">แน่ใจ</span> ถ้าตัวเลขถูกต้อง กล่องจะเปลี่ยนเป็นบรรทัดสีเขียว “ยืนยันความยาวขา 30 นิ้วแล้ว” พร้อมปุ่มเล็ก เปลี่ยน</li>
 <li>กด <span class="hp-btn">ไม่แน่ใจ</span> ถ้าอยากแก้ ระบบพากลับไปที่ช่องตัวเลขให้พิมพ์ใหม่ กล่องคำถามยังอยู่จนกว่าจะแก้เป็น 32 ขึ้นไป หรือกด แน่ใจ</li>
 </ol>
-<figure class="hp-fig"><img data-src="help_img/p2-07.jpg" width="914" height="1056" alt="กล่องถามยืนยันความยาวขา และปุ่มปรับขนาดสีแดง สีน้ำเงิน"><figcaption>ส่วน “02 รายละเอียด” ของกางเกง (ตัดมาเฉพาะฝั่งขวา) เอวเก็บเข้า 1 (สีแดง) สะโพกขยายออก 0.5 (สีน้ำเงิน) ความยาวขาพิมพ์ 30 จึงมีกล่องส้มถาม แน่ใจ / ไม่แน่ใจ ล่างสุดคือปุ่มเลือก ระดับความยาว FB NB HB</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p2-07.jpg" width="914" height="1056" alt="กล่องถามยืนยันความยาวขา และปุ่มปรับขนาดสีแดง สีน้ำเงิน"><figcaption>ส่วน “02 รายละเอียด” ของกางเกง (ตัดมาเฉพาะฝั่งขวา) เอวเก็บเข้า 1 (สีแดง) สะโพกขยายออก 0.5 (สีน้ำเงิน) ความยาวขาพิมพ์ 30 จึงมีกล่องส้มถาม แน่ใจ / ไม่แน่ใจ ล่างสุดคือปุ่มเลือก ระดับความยาว FB NB HB</figcaption></figure>
 <ul class="hp-list">
 <li>กด <span class="hp-btn">เปลี่ยน</span> ที่บรรทัดสีเขียว ระบบจะถามใหม่ และพากลับไปที่ช่อง ถ้าแก้ตัวเลขเป็นค่าอื่นที่ยังต่ำกว่า 32 ก็ถามใหม่ด้วย</li>
 <li>ตั้งแต่ 32 นิ้วขึ้นไป ไม่ถาม</li>
@@ -3579,7 +3610,7 @@
 
 <h4 class="hp-h" id="hp-2-10">Accessory อื่นๆ ไซซ์ไม่ต้องติดไปกับรหัส</h4>
 <p>สำหรับ Accessory (เช่น รองเท้า) รหัสสินค้า <b>ห้ามมีไซซ์ต่อท้าย</b> ไซซ์ให้ใส่ที่ช่อง Size อย่างเดียว เช่น รหัสเต็ม AT-D9301-42 ต้องเป็นรหัส AT-D9301 และ Size 42 ประเภทนี้ไม่มี “02 รายละเอียด” และไม่มีช่องติ๊ก เย็บย้ำกระดุม</p>
-<figure class="hp-fig"><img data-src="help_img/p2-08.jpg" width="1536" height="840" alt="Accessory ที่ไซซ์ถูกแยกไปช่อง Size"><figcaption>พิมพ์ AT-D9301-42 แล้วกด Enter ระบบเลือกประเภทเป็น Accessory อื่นๆ ตัดไซซ์ออกจากรหัสเหลือ AT-D9301 และใส่ 42 ในช่อง Size ฝั่งขวาว่างเพราะประเภทนี้ไม่มีจุดวัด และมีช่องติ๊กแค่ 2 ช่อง (รหัสในภาพเป็นรหัสสมมติ และในภาพรหัส AT-D9301 อยู่ในรายการสินค้าของระบบ ระบบจึงตัดไซซ์ให้เอง ถ้ารหัสไม่อยู่ในรายการ กด Enter แล้วรหัสจะยังเป็น AT-D9301-42 และ Size ว่าง ให้พิมพ์ 42 ที่ช่อง Size เอง แล้วระบบจะตัดเลขท้ายออกจากรหัสให้)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p2-08.jpg" width="1536" height="840" alt="Accessory ที่ไซซ์ถูกแยกไปช่อง Size"><figcaption>พิมพ์ AT-D9301-42 แล้วกด Enter ระบบเลือกประเภทเป็น Accessory อื่นๆ ตัดไซซ์ออกจากรหัสเหลือ AT-D9301 และใส่ 42 ในช่อง Size ฝั่งขวาว่างเพราะประเภทนี้ไม่มีจุดวัด และมีช่องติ๊กแค่ 2 ช่อง (รหัสในภาพเป็นรหัสสมมติ และในภาพรหัส AT-D9301 อยู่ในรายการสินค้าของระบบ ระบบจึงตัดไซซ์ให้เอง ถ้ารหัสไม่อยู่ในรายการ กด Enter แล้วรหัสจะยังเป็น AT-D9301-42 และ Size ว่าง ให้พิมพ์ 42 ที่ช่อง Size เอง แล้วระบบจะตัดเลขท้ายออกจากรหัสให้)</figcaption></figure>
 <ul class="hp-list">
 <li>ระบบตัดเลขท้ายรหัสให้ (ตัวเลข 2–3 หลัก หรือมีทศนิยม 1 ตำแหน่ง) เมื่อ <b>Size ตรงกับเลขท้ายรหัส</b> หรือเมื่อ <b>Size ว่างและรหัสที่ตัดไซซ์แล้วมีอยู่ในรายการสินค้าของระบบ</b> นอกจากนี้ระบบไม่เดา</li>
 <li>ถ้าเป็นรหัสที่ระบบไม่รู้จัก รหัสจะยังยาวทั้งก้อนและ Size ว่าง ให้พิมพ์ Size ให้ตรงกับเลขท้ายรหัส (เช่น 42) ระบบจะตัดเลขท้ายออกจากรหัสให้เอง หรือจะแก้รหัสเองให้ไม่มีไซซ์ก็ได้</li>
@@ -3601,7 +3632,7 @@
 <tr><td>สูท 1 + กางเกง 1 อย่างเดียว</td><td>รวมแล้วได้บิลเดียว ไม่มีหน้าต่างนี้ บันทึกเลย</td></tr>
 <tr><td>กรอกซ้ำกันทุกช่อง</td><td>มีข้อความเตือนสีส้ม “มีสินค้าประเภทเดียวกันที่กรอกตรงกันทุกช่อง (รหัส · ไซส์ · รายละเอียดการแก้) — <span class="nb">เช็ก</span>​อีกครั้งว่าไม่ได้กรอกซ้ำโดยไม่ตั้งใจ”</td></tr>
 </tbody></table></div>
-<figure class="hp-fig"><img data-src="help_img/p2-09.jpg" width="750" height="615" alt="หน้าต่างแยกบิล"><figcaption>บิลที่มีสูท กางเกง และเสื้อเชิ้ต อย่างละชิ้น ระบบแยกเป็น 2 บิล บิลแรกมีสูท+กางเกง (ชิ้นที่ 1 และ 2) บิลที่สองมีเสื้อเชิ้ต (ชิ้นที่ 3) เลขที่บิลในภาพเป็นเลขสมมติ เลขจริงออกตอนบันทึก</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p2-09.jpg" width="750" height="615" alt="หน้าต่างแยกบิล"><figcaption>บิลที่มีสูท กางเกง และเสื้อเชิ้ต อย่างละชิ้น ระบบแยกเป็น 2 บิล บิลแรกมีสูท+กางเกง (ชิ้นที่ 1 และ 2) บิลที่สองมีเสื้อเชิ้ต (ชิ้นที่ 3) เลขที่บิลในภาพเป็นเลขสมมติ เลขจริงออกตอนบันทึก</figcaption></figure>
 
 <h4 class="hp-h" id="hp-2-12">ข้อความเตือนตอนกดบันทึก ที่เกี่ยวกับหน้านี้</h4>
 <p>การตรวจข้อมูลเกิดตอนกดบันทึกข้อมูลที่หน้า 3 ไม่ใช่ตอนกดถัดไป ถ้าข้อมูลไม่ครบจะขึ้นป๊อปอัป “กรุณากรอกข้อมูลที่จำเป็นให้ครบ:” ตามด้วยรายการข้อละบรรทัด และระบบพากลับไปหน้าของข้อแรกที่มีปัญหา (ถ้าเป็นข้อของสินค้า คือหน้า 2) กดตกลงเพื่อปิดป๊อปอัปแล้วแก้ได้เลย ตัวเลข N คือเลขสินค้าตาม PRODUCT #N</p>
@@ -3611,7 +3642,7 @@
 <tr><td>สินค้ารายการที่ N — Size</td><td>ช่อง Size ว่าง (ยกเว้น Accessory ที่รหัสขึ้นต้น NT, BT, CL)</td><td>พิมพ์ Size</td></tr>
 <tr><td>สินค้ารายการที่ N — ประเภทสินค้า ("เสื้อสูท (สำเร็จรูป)") ไม่ตรงกับรหัส SKU "UF543-P" (รหัสนี้ควรเป็น "กางเกง (สำเร็จรูป)")</td><td>ประเภทที่เลือกกับตัวย่อในรหัสขัดกัน</td><td>เลือกประเภทให้ตรงกับรหัส หรือกด Enter ในช่องรหัสสินค้าอีกครั้งให้ระบบเลือกให้</td></tr>
 </tbody></table></div>
-<figure class="hp-fig"><img data-src="help_img/p2-10.jpg" width="540" height="477" alt="ป๊อปอัปรหัสสินค้ายาวเกิน 15 ตัว"><figcaption>ป๊อปอัปเมื่อรหัส AT-ABCDE12-WHT-42 (รหัสสมมติ) ยาว 17 ตัว และ Size ว่าง มี 2 ข้อ คือรหัสยาวเกิน 15 ตัว และยังไม่ได้ใส่ Size กดตกลงแล้วแก้ที่หน้า 2 วิธีแก้มี 2 แบบ แบบที่ 1 ตัด -42 ออกจากรหัส เหลือ AT-ABCDE12-WHT (14 ตัว) แล้วพิมพ์ 42 ในช่อง Size แบบที่ 2 (ใช้ได้เมื่อประเภทเป็น Accessory อื่นๆ) พิมพ์ 42 ในช่อง Size อย่างเดียว ระบบจะตัด -42 ออกจากรหัสให้เอง</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p2-10.jpg" width="540" height="477" alt="ป๊อปอัปรหัสสินค้ายาวเกิน 15 ตัว"><figcaption>ป๊อปอัปเมื่อรหัส AT-ABCDE12-WHT-42 (รหัสสมมติ) ยาว 17 ตัว และ Size ว่าง มี 2 ข้อ คือรหัสยาวเกิน 15 ตัว และยังไม่ได้ใส่ Size กดตกลงแล้วแก้ที่หน้า 2 วิธีแก้มี 2 แบบ แบบที่ 1 ตัด -42 ออกจากรหัส เหลือ AT-ABCDE12-WHT (14 ตัว) แล้วพิมพ์ 42 ในช่อง Size แบบที่ 2 (ใช้ได้เมื่อประเภทเป็น Accessory อื่นๆ) พิมพ์ 42 ในช่อง Size อย่างเดียว ระบบจะตัด -42 ออกจากรหัสให้เอง</figcaption></figure>
 <div class="hp-note">เรื่องความยาวขาต่ำกว่า 32 นิ้วที่ยังไม่ได้ตอบ แน่ใจ ไม่ใช้ป๊อปอัปนี้ ระบบพากลับหน้า 2 ไปที่กล่องคำถามสีส้มแทน</div>
 
 <h4 class="hp-h" id="hp-2-13">ปุ่มที่แถบล่างของหน้านี้</h4>
@@ -3648,7 +3679,7 @@
 
 <h4 class="hp-h" id="hp-3-1">ภาพรวมหน้า 3</h4>
 
-<figure class="hp-fig"><img data-src="help_img/p3-01.jpg" width="1536" height="1014" alt="หน้า 3 ตอนเปิดมาใหม่"><figcaption>หน้า 3 ตอนเปิดมาใหม่ ฝั่งซ้ายคือ "01 การชำระเงิน" ฝั่งขวาคือ "02 การนัดรับ" แถบสีครีมด้านล่างคือปุ่มของหน้านี้</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p3-01.jpg" width="1536" height="1014" alt="หน้า 3 ตอนเปิดมาใหม่"><figcaption>หน้า 3 ตอนเปิดมาใหม่ ฝั่งซ้ายคือ "01 การชำระเงิน" ฝั่งขวาคือ "02 การนัดรับ" แถบสีครีมด้านล่างคือปุ่มของหน้านี้</figcaption></figure>
 
 <ul class="hp-list">
 <li><b>ฝั่งซ้าย "01 การชำระเงิน"</b> เลือกว่าจ่ายแล้วหรือค้างชำระ (ถ้าค้างจะมีช่องใส่จำนวนเงินขึ้นมา)</li>
@@ -3707,14 +3738,14 @@
 
 <div class="hp-item"><div class="hp-name">สถานที่ส่ง <span class="hp-req">*</span> <span class="hp-kind">พิมพ์ข้อความ</span></div><div class="hp-desc">
 โผล่ขึ้นมาเฉพาะตอนเลือก <b>Messenger</b> หรือ <b>ขนส่งเอกชน</b> พิมพ์ชื่อผู้รับและที่อยู่ให้ครบ ช่องจะมีข้อความจางๆ ว่า "กรอกสถานที่สำหรับจัดส่งสินค้า" ข้อความที่พิมพ์จะไปอยู่บนใบสรุป ใต้บรรทัดวิธีจัดส่ง
-<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/p3-02.jpg" width="1494" height="276" alt="ตัวอย่างเลือกค้างชำระและ Messenger"></div><figcaption>ตัวอย่าง เลือก "ค้างชำระ" ช่อง "จำนวนเงินที่ค้างชำระ" โผล่ขึ้นมาทางซ้าย เลือก "Messenger" ช่อง "สถานที่ส่ง" โผล่ขึ้นมาทางขวา</figcaption></figure>
+<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/p3-02.jpg" width="1494" height="276" alt="ตัวอย่างเลือกค้างชำระและ Messenger"></div><figcaption>ตัวอย่าง เลือก "ค้างชำระ" ช่อง "จำนวนเงินที่ค้างชำระ" โผล่ขึ้นมาทางซ้าย เลือก "Messenger" ช่อง "สถานที่ส่ง" โผล่ขึ้นมาทางขวา</figcaption></figure>
 </div></div>
 
 <div class="hp-warn">ช่อง "สถานที่ส่ง" มีดอกจัน แต่ถ้าเลือก Messenger แล้วเว้นช่องนี้ว่างไว้ แอปจะไม่เตือนและบันทึกให้ผ่าน ใบสรุปจะเขียนแค่ "Messenger" โดยไม่มีที่อยู่ ให้กรอกที่อยู่ทุกครั้ง</div>
 
 <div class="hp-item"><div class="hp-name">วันที่นัดรับ <span class="hp-req">*</span> <span class="hp-kind">ปฏิทิน</span></div><div class="hp-desc">
 กดที่ข้อความวันที่ (เช่น "วันพุธที่ 14 ตุลา 2569") ปฏิทินจะเปิดลงมาใต้ช่อง ค่าเริ่มต้นคือ<b>อีก 7 วัน</b>นับจากวันนี้ ปีที่แสดงเป็น พ.ศ.
-<figure class="hp-fig"><img data-src="help_img/p3-03.jpg" width="870" height="605" alt="ปฏิทินเลือกวันที่นัดรับ"><figcaption>ปฏิทินเลือกวันที่นัดรับ วันก่อนวันนี้เป็นสีเทาจางกดไม่ได้ วันนี้เป็นวงกลมสีทองทึบ วันที่เลือกอยู่เป็นวงกลมสีอ่อนตัวหนา</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p3-03.jpg" width="870" height="605" alt="ปฏิทินเลือกวันที่นัดรับ"><figcaption>ปฏิทินเลือกวันที่นัดรับ วันก่อนวันนี้เป็นสีเทาจางกดไม่ได้ วันนี้เป็นวงกลมสีทองทึบ วันที่เลือกอยู่เป็นวงกลมสีอ่อนตัวหนา</figcaption></figure>
 <ul class="hp-list">
 <li>เลือกวันนี้ หรือวันข้างหน้าได้ <b>เลือกวันที่ผ่านมาแล้วไม่ได้</b> (ตัวเลขเป็นสีเทาจางและกดไม่ติด)</li>
 <li>กดตัวเลขวันที่ที่ต้องการ ระบบเลือกให้ทันทีและปิดปฏิทินเอง</li>
@@ -3760,7 +3791,7 @@
 <li>ชื่อผู้อนุมัติไม่ได้พิมพ์บนใบสรุป (ระบบเก็บชื่อไว้ในข้อมูลบิล)</li>
 <li>ถ้ากดปุ่มกลับเป็น "ไม่ด่วน" ช่องนี้จะหายไป และชื่อที่เลือกไว้จะไม่ถูกส่ง</li>
 </ul>
-<figure class="hp-fig"><img data-src="help_img/p3-04.jpg" width="870" height="395" alt="เวลานัดรับ งานด่วน และผู้อนุมัติ"><figcaption>ตัวอย่าง เลือกวันที่ที่ใกล้ (ระบบเดาว่าด่วน) เลือก "ระบุ" เวลา และมีช่อง "ชื่อผู้อนุมัติงานด่วน" ขึ้นมาให้เลือก ช่องเวลาในภาพแสดงเป็น "12:00 PM" ตามการตั้งค่าเวลาของเครื่อง ซึ่งคือ 12:00 น.</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p3-04.jpg" width="870" height="395" alt="เวลานัดรับ งานด่วน และผู้อนุมัติ"><figcaption>ตัวอย่าง เลือกวันที่ที่ใกล้ (ระบบเดาว่าด่วน) เลือก "ระบุ" เวลา และมีช่อง "ชื่อผู้อนุมัติงานด่วน" ขึ้นมาให้เลือก ช่องเวลาในภาพแสดงเป็น "12:00 PM" ตามการตั้งค่าเวลาของเครื่อง ซึ่งคือ 12:00 น.</figcaption></figure>
 </div></div>
 
 <div class="hp-case"><div class="hp-case-title">สถานการณ์ ลูกค้ามารับที่สาขาอื่นที่ไม่ใช่สาขาที่ซื้อ</div>
@@ -3819,9 +3850,9 @@
 <li><b>แอปล้างฟอร์มและรีเฟรชหน้าให้เอง</b> พอแนบรูปเสร็จ หน้าจะรีเฟรช ข้อมูลทุกหน้าว่างพร้อมลงบิลถัดไป แล้วกล่องผลลัพธ์จะขึ้นมาอีกรอบพร้อมรูปใบสรุป ให้ดูเลขที่บิลแล้วกด <span class="hp-btn">ตกลง</span></li>
 </ol>
 
-<figure class="hp-fig"><img data-src="help_img/p3-05.jpg" width="534" height="917" alt="กล่องบันทึกสำเร็จพร้อมใบสรุป"><figcaption>กล่องบันทึกสำเร็จ ด้านบนคือเลขที่บิล ตรงกลางคือกรอบรูปใบสรุปของสินค้าแต่ละชิ้น (ในภาพเห็นใบแรกแค่ครึ่งบน) ปุ่ม "ตกลง" อยู่ใต้กรอบเสมอ ไม่ต้องเลื่อนหา</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p3-05.jpg" width="534" height="917" alt="กล่องบันทึกสำเร็จพร้อมใบสรุป"><figcaption>กล่องบันทึกสำเร็จ ด้านบนคือเลขที่บิล ตรงกลางคือกรอบรูปใบสรุปของสินค้าแต่ละชิ้น (ในภาพเห็นใบแรกแค่ครึ่งบน) ปุ่ม "ตกลง" อยู่ใต้กรอบเสมอ ไม่ต้องเลื่อนหา</figcaption></figure>
 
-<figure class="hp-fig"><img data-src="help_img/p3-11.jpg" width="534" height="917" alt="เลื่อนกรอบรูปใบสรุปลงมาเห็นปุ่มบันทึกรูปใบสรุป"><figcaption>ใช้นิ้วเลื่อนขึ้นลงในกรอบรูปใบสรุป (ไม่ต้องเลื่อนทั้งกล่อง) จะเห็นปุ่ม "บันทึกรูปใบสรุป" อยู่ใต้รูปแต่ละใบ ในภาพเห็นปุ่มของใบแรก และส่วนบนของใบที่สองโผล่ใต้ปุ่ม ช่องว่างสีขาวเหนือปุ่มคือที่เว้นท้ายใบสรุปไว้ ไม่ใช่ข้อผิดพลาด</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p3-11.jpg" width="534" height="917" alt="เลื่อนกรอบรูปใบสรุปลงมาเห็นปุ่มบันทึกรูปใบสรุป"><figcaption>ใช้นิ้วเลื่อนขึ้นลงในกรอบรูปใบสรุป (ไม่ต้องเลื่อนทั้งกล่อง) จะเห็นปุ่ม "บันทึกรูปใบสรุป" อยู่ใต้รูปแต่ละใบ ในภาพเห็นปุ่มของใบแรก และส่วนบนของใบที่สองโผล่ใต้ปุ่ม ช่องว่างสีขาวเหนือปุ่มคือที่เว้นท้ายใบสรุปไว้ ไม่ใช่ข้อผิดพลาด</figcaption></figure>
 
 <div class="hp-note">คำว่า "ส่งเข้าระบบเรียบร้อยแล้ว" หมายถึงบิลถูกเก็บลง Lark Base แล้ว ยังไม่เข้า Salesforce ขั้นต่อไปทีมหลังบ้านจะตรวจบิลและยืนยันเข้า Salesforce ให้</div>
 
@@ -3841,7 +3872,7 @@
 
 <div class="hp-item"><div class="hp-name">กล่องที่มีกากบาทสีแดง "กรุณากรอกข้อมูลที่จำเป็นให้ครบ:"</div><div class="hp-desc">
 แปลว่ายังมีช่องที่ต้องกรอกแต่ยังว่างอยู่ ข้อความจะไล่รายการช่องที่ขาดให้ทุกบรรทัด ตอนกล่องขึ้น แอปจะสลับไปที่หน้าซึ่งมีช่องแรกที่ขาดไว้ให้เองแล้ว (หน้านั้นอยู่ด้านหลังกล่อง) กด <span class="hp-btn">ตกลง</span> เพื่อปิดกล่อง แล้วกรอกช่องที่ขาดตามรายการ ถ้ารายการขาดหลายหน้า ให้แก้ทีละหน้าตามรายการในกล่อง แล้วกดบันทึกอีกครั้ง ถ้ายังขาดอยู่ แอปจะแจ้งรายการที่เหลือให้ใหม่
-<figure class="hp-fig"><img data-src="help_img/p3-06.jpg" width="549" height="554" alt="กล่องแจ้งช่องที่ยังไม่ได้กรอก"><figcaption>ตัวอย่างกล่องแจ้งช่องที่ขาด (กดบันทึกทั้งที่ยังไม่ได้กรอกอะไรเลย) แต่ละบรรทัดคือช่องที่ต้องกลับไปกรอก</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p3-06.jpg" width="549" height="554" alt="กล่องแจ้งช่องที่ยังไม่ได้กรอก"><figcaption>ตัวอย่างกล่องแจ้งช่องที่ขาด (กดบันทึกทั้งที่ยังไม่ได้กรอกอะไรเลย) แต่ละบรรทัดคือช่องที่ต้องกลับไปกรอก</figcaption></figure>
 </div></div>
 
 <div class="hp-tablewrap"><table class="hp-table">
@@ -3869,7 +3900,7 @@
 <li>กด <span class="hp-btn">แน่ใจ</span> ถ้าตัวเลขถูกต้อง แล้วกลับมากดบันทึกอีกครั้ง</li>
 <li>กด <span class="hp-btn">ไม่แน่ใจ</span> เพื่อกลับไปแก้ตัวเลขในช่อง</li>
 </ul>
-<figure class="hp-fig"><img data-src="help_img/p3-07.jpg" width="876" height="341" alt="คำถามยืนยันความยาวขา"><figcaption>คำถามยืนยันความยาวขาที่ขึ้นใต้ช่อง "ความยาวขา" ต้องกด "แน่ใจ" หรือแก้ตัวเลข ก่อนจึงจะบันทึกได้</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p3-07.jpg" width="876" height="341" alt="คำถามยืนยันความยาวขา"><figcaption>คำถามยืนยันความยาวขาที่ขึ้นใต้ช่อง "ความยาวขา" ต้องกด "แน่ใจ" หรือแก้ตัวเลข ก่อนจึงจะบันทึกได้</figcaption></figure>
 </div></div>
 
 <h4 class="hp-h" id="hp-3-8">บิลที่มีสินค้าหลายชิ้น และกล่องแยกบิล</h4>
@@ -3895,7 +3926,7 @@
 </tbody>
 </table></div>
 
-<figure class="hp-fig"><img data-src="help_img/p3-08.jpg" width="759" height="624" alt="กล่องแยกบิล แยกเป็น 2 บิล"><figcaption>กล่องแยกบิล ตัวอย่างสินค้า 3 รายการแยกเป็น 2 บิล แต่ละการ์ดคือ 1 บิล ตัวเลขในวงกลมคือลำดับสินค้าที่กรอกในฟอร์ม</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p3-08.jpg" width="759" height="624" alt="กล่องแยกบิล แยกเป็น 2 บิล"><figcaption>กล่องแยกบิล ตัวอย่างสินค้า 3 รายการแยกเป็น 2 บิล แต่ละการ์ดคือ 1 บิล ตัวเลขในวงกลมคือลำดับสินค้าที่กรอกในฟอร์ม</figcaption></figure>
 
 <div class="hp-item"><div class="hp-name">วิธีอ่านกล่องแยกบิล</div><div class="hp-desc">
 <ul class="hp-list">
@@ -3957,7 +3988,7 @@
 <li>สำเร็จ จะขึ้นกล่อง "บันทึกการแก้ไขสำเร็จ" พร้อม "เลขที่บิล" และรูปใบสรุปใหม่ จากนั้นฟอร์มจะล้างเหมือนบันทึกบิลใหม่ (ยกเว้นร่างที่เคยบันทึกไว้ ซึ่งไม่ถูกลบให้ตอนบันทึกการแก้ไข)</li>
 </ol>
 
-<figure class="hp-fig"><img data-src="help_img/p3-09.jpg" width="534" height="347" alt="กล่องยืนยันก่อนไปหน้าแก้ไข"><figcaption>กล่องที่ขึ้นหลังกดไอคอนดินสอ ต้องใส่ "ชื่อผู้แก้ไข" ก่อนกด "ไปหน้าแก้ไข"</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/p3-09.jpg" width="534" height="347" alt="กล่องยืนยันก่อนไปหน้าแก้ไข"><figcaption>กล่องที่ขึ้นหลังกดไอคอนดินสอ ต้องใส่ "ชื่อผู้แก้ไข" ก่อนกด "ไปหน้าแก้ไข"</figcaption></figure>
 
 <div class="hp-case"><div class="hp-case-title">สถานการณ์ กดไปหน้าแก้ไขแล้วขึ้นหน้าต่าง "โหลดบิลมาแก้ไขไม่สำเร็จ: …"</div>
 แปลว่าแอปยังโหลดบิลเดิมมาไม่ได้ จึง<b>ยังไม่ได้เข้าโหมดแก้ไข</b> (ไม่มีแถบ "กำลังแก้ไขบิลนี้" ขึ้น) บิลเดิมไม่ถูกเปลี่ยนอะไร และกล่องรายการย้อนหลังยังเปิดค้างอยู่
@@ -3974,9 +4005,9 @@
 <li>เลขที่บิลที่แถบด้านบนยังโชว์เลขของบิลใหม่ถัดไป ไม่ใช่เลขของบิลที่กำลังแก้ ตอนบันทึก ระบบจะใช้เลขที่บิลเดิมของบิลนั้น ไม่ออกเลขใหม่</li>
 <li>ถ้าวันที่นัดรับเดิมผ่านมาแล้ว ระบบจะเปลี่ยนเป็นวันนี้ให้ในช่องวันที่นัดรับ ให้ตรวจและเลือกวันใหม่ให้ถูกต้อง (ถ้าแก้บิลอยู่แล้วรีเฟรชหน้า ข้อความวันที่บนจออาจไม่ตรงกับวันที่ที่เก็บไว้ ดูคำเตือนสีแดงที่ช่อง วันที่นัดรับ ในหัวข้อ 02 การนัดรับ)</li>
 </ul>
-<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/p3-10.jpg" width="1536" height="217" alt="โหมดแก้ไข แถบชื่อผู้แก้ไขที่หน้า 1"></div><figcaption>หน้า 1 ในโหมดแก้ไข มีแถบ "กำลังแก้ไขบิลนี้ — ชื่อผู้แก้ไข" พร้อมชื่อที่เลือกไว้ (ในภาพคือ Somying)</figcaption></figure>
+<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/p3-10.jpg" width="1536" height="217" alt="โหมดแก้ไข แถบชื่อผู้แก้ไขที่หน้า 1"></div><figcaption>หน้า 1 ในโหมดแก้ไข มีแถบ "กำลังแก้ไขบิลนี้ — ชื่อผู้แก้ไข" พร้อมชื่อที่เลือกไว้ (ในภาพคือ Somying)</figcaption></figure>
 
-<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/p3-12.jpg" width="1536" height="93" alt="แถบปุ่มของหน้า 3 ในโหมดแก้ไข ปุ่มสีทองเขียนว่าบันทึกการแก้ไข"></div><figcaption>แถบปุ่มด้านล่างของหน้า 3 ในโหมดแก้ไข ปุ่มสีทองเปลี่ยนเป็น "บันทึกการแก้ไข"</figcaption></figure>
+<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/p3-12.jpg" width="1536" height="93" alt="แถบปุ่มของหน้า 3 ในโหมดแก้ไข ปุ่มสีทองเขียนว่าบันทึกการแก้ไข"></div><figcaption>แถบปุ่มด้านล่างของหน้า 3 ในโหมดแก้ไข ปุ่มสีทองเปลี่ยนเป็น "บันทึกการแก้ไข"</figcaption></figure>
 </div></div>
 
 <div class="hp-item"><div class="hp-name">เมื่อกด "บันทึกการแก้ไข" ระบบทำอะไร</div><div class="hp-desc">
@@ -4084,9 +4115,9 @@
   <li>หน้าต่างจะเด้งขึ้นมา และเปิดที่​<span class="nb">แท็บ</span> <span class="hp-field">รายการที่นัดรับ</span> ทุกครั้ง แม้ครั้งก่อนคุณจะปิดไว้ที่​<span class="nb">แท็บ</span>​อื่น</li>
   <li>ปิดหน้าต่างโดยกด <span class="hp-btn">&times;</span> มุมขวาบน หรือแตะที่พื้นสีเข้มนอกหน้าต่าง</li>
 </ol>
-<figure class="hp-fig"><img data-src="help_img/history-a-01.jpg" width="675" height="114" alt="แถบด้านบนของแอปบน iPad มีกรอบสีแดงล้อมปุ่มรายการย้อนหลังที่มุมขวา ข้อความบนปุ่มขึ้นเป็น 3 บรรทัด"><figcaption>ปุ่ม <b>รายการย้อนหลัง</b> อยู่มุมขวาสุดของแถบบน ถัดจากช่อง <b>พนักงานขาย</b> ภาพนี้ตัดมาเฉพาะส่วนขวาของแถบบน ถ่ายด้วยขนาดหน้าจอ iPad แนวนอน ข้อความบนปุ่มจึงขึ้นเป็น 3 บรรทัด (รายการ / ย้อน / หลัง) และไอคอนนาฬิกาเป็นตัวเล็ก ตัวปุ่มไม่มีกรอบ มีแค่เส้นคั่นบางๆ ทางซ้าย (กรอบสีแดงในภาพ ใส่เพิ่มเพื่อชี้ตำแหน่ง ในแอปจริงไม่มีกรอบ)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/history-a-01.jpg" width="675" height="114" alt="แถบด้านบนของแอปบน iPad มีกรอบสีแดงล้อมปุ่มรายการย้อนหลังที่มุมขวา ข้อความบนปุ่มขึ้นเป็น 3 บรรทัด"><figcaption>ปุ่ม <b>รายการย้อนหลัง</b> อยู่มุมขวาสุดของแถบบน ถัดจากช่อง <b>พนักงานขาย</b> ภาพนี้ตัดมาเฉพาะส่วนขวาของแถบบน ถ่ายด้วยขนาดหน้าจอ iPad แนวนอน ข้อความบนปุ่มจึงขึ้นเป็น 3 บรรทัด (รายการ / ย้อน / หลัง) และไอคอนนาฬิกาเป็นตัวเล็ก ตัวปุ่มไม่มีกรอบ มีแค่เส้นคั่นบางๆ ทางซ้าย (กรอบสีแดงในภาพ ใส่เพิ่มเพื่อชี้ตำแหน่ง ในแอปจริงไม่มีกรอบ)</figcaption></figure>
 <div class="hp-note">บน iPad แนวนอน ข้อความบนปุ่มอาจแตกเป็น 3 บรรทัด (รายการ / ย้อน / หลัง) ส่วนบนจอที่กว้างมาก เช่น จอคอมพิวเตอร์ ข้อความจะเป็นบรรทัดเดียวและปุ่มอยู่มุมขวาของแถบบน ส่วนบน iPad แนวตั้ง ข้อความเป็นบรรทัดเดียวเช่นกัน แต่แถบบนจะแตกเป็น 2 แถว ปุ่มจะอยู่ในแถวที่สอง ต่อจากช่อง <span class="hp-field">พนักงานขาย</span> (ไม่ได้อยู่มุมขวา และไม่มีเส้นคั่นทางซ้าย) ทุกแบบกดได้เหมือนกัน ไอคอนบนปุ่มคือไอคอนนาฬิกาย้อนเวลาเดียวกับที่เห็นในขั้นตอนที่ 2</div>
-<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/history-a-12.jpg" width="1152" height="135" alt="แถบบนของแอปบน iPad แนวตั้ง แตกเป็น 2 แถว ปุ่มรายการย้อนหลังอยู่แถวที่สอง ต่อจากช่องพนักงานขาย มีกรอบสีแดงล้อมปุ่ม"></div><figcaption>แถบด้านบนของแอปบน iPad แนวตั้ง แตกเป็น 2 แถว ปุ่ม <b>รายการย้อนหลัง</b> อยู่แถวที่สอง ต่อจากช่อง <b>พนักงานขาย</b> ข้อความบนปุ่มเป็นบรรทัดเดียว (กรอบสีแดงในภาพ ใส่เพิ่มเพื่อชี้ตำแหน่ง ในแอปจริงไม่มีกรอบ)</figcaption></figure>
+<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/history-a-12.jpg" width="1152" height="135" alt="แถบบนของแอปบน iPad แนวตั้ง แตกเป็น 2 แถว ปุ่มรายการย้อนหลังอยู่แถวที่สอง ต่อจากช่องพนักงานขาย มีกรอบสีแดงล้อมปุ่ม"></div><figcaption>แถบด้านบนของแอปบน iPad แนวตั้ง แตกเป็น 2 แถว ปุ่ม <b>รายการย้อนหลัง</b> อยู่แถวที่สอง ต่อจากช่อง <b>พนักงานขาย</b> ข้อความบนปุ่มเป็นบรรทัดเดียว (กรอบสีแดงในภาพ ใส่เพิ่มเพื่อชี้ตำแหน่ง ในแอปจริงไม่มีกรอบ)</figcaption></figure>
 
 <h4 class="hp-h" id="hp-history-2">หน้าต่างนี้มี 3 <span class="nb">แท็บ</span> ใช้เมื่อไหร่</h4>
 <div class="hp-tablewrap"><table class="hp-table">
@@ -4109,7 +4140,7 @@
       <li><span class="nb">แท็บ</span> <span class="hp-field">ประวัติ</span>: ป้ายคือ <span class="hp-field">สาขาที่ซื้อ</span> ของ​<span class="nb">แท็บ</span>​นั้น (ช่องเลือกสาขาของ​<span class="nb">แท็บ</span> ประวัติ)</li>
       <li><span class="nb">แท็บ</span> <span class="hp-field">ร่างที่บันทึกไว้</span>: ป้ายเป็นแค่ข้อความ ไม่มีลูกศรชี้ลง และกดไม่ได้ ป้ายจะแสดงสาขาที่เลือกไว้ที่แถบบน ถ้ายังไม่ได้เลือกสาขาที่แถบบน ป้ายจะถูกซ่อน</li>
     </ul>
-    <figure class="hp-fig"><img data-src="help_img/history-a-05.jpg" width="960" height="1227" alt="ส่วนหัวของหน้าต่าง 3 ภาพเรียงกัน แต่ละแท็บมีป้ายสาขาต่างกัน"><figcaption>บน: <span class="nb">แท็บ</span> <b>รายการที่นัดรับ</b> ป้าย <b>สาขา SC ▾</b> ตรงกับช่อง <b>สาขาที่ซื้อ SC</b> (ช่อง <b>สาขาที่นัดรับ</b> ยังเป็น PM) · กลาง: <span class="nb">แท็บ</span> <b>ประวัติ</b> ป้าย <b>สาขา T21 ▾</b> ตรงกับช่อง <b>สาขาที่ซื้อ T21</b> · ล่าง: <span class="nb">แท็บ</span> <b>ร่างที่บันทึกไว้</b> ป้าย <b>สาขา PM</b> ไม่มี ▾ กดไม่ได้</figcaption></figure>
+    <figure class="hp-fig"><img data-src="../help_img/history-a-05.jpg" width="960" height="1227" alt="ส่วนหัวของหน้าต่าง 3 ภาพเรียงกัน แต่ละแท็บมีป้ายสาขาต่างกัน"><figcaption>บน: <span class="nb">แท็บ</span> <b>รายการที่นัดรับ</b> ป้าย <b>สาขา SC ▾</b> ตรงกับช่อง <b>สาขาที่ซื้อ SC</b> (ช่อง <b>สาขาที่นัดรับ</b> ยังเป็น PM) · กลาง: <span class="nb">แท็บ</span> <b>ประวัติ</b> ป้าย <b>สาขา T21 ▾</b> ตรงกับช่อง <b>สาขาที่ซื้อ T21</b> · ล่าง: <span class="nb">แท็บ</span> <b>ร่างที่บันทึกไว้</b> ป้าย <b>สาขา PM</b> ไม่มี ▾ กดไม่ได้</figcaption></figure>
   </div>
 </div>
 <div class="hp-warn">ใน​<span class="nb">แท็บ</span> <span class="hp-field">รายการที่นัดรับ</span> ป้ายสาขามักถูกเข้าใจผิดว่าเป็นสาขาที่ลูกค้ามารับ ที่จริงคือ <b>สาขาที่ซื้อ</b> (สาขาที่ลงบิล) ถ้าจะกรองตามสาขาที่ลูกค้ามารับ ให้ใช้ช่อง <span class="hp-field">สาขาที่นัดรับ</span> ใต้บรรทัดวันที่</div>
@@ -4119,7 +4150,7 @@
 <div class="hp-note">คำที่ใช้ใน​<span class="nb">แท็บ</span>​นี้: <b>เลขที่บิล</b> คือเลขที่เห็นตอนลงบิล เช่น R326100701 · <b>O#</b> คือเลข​<span class="nb">ออเดอร์</span>​ของทั้งบิลใน Salesforce · <b>P#</b> คือเลขของสินค้าแต่ละชิ้นในบิล (เช่น บิลสูทกับกางเกงมี P# 2 ตัว) O# และ P# จะขึ้นหลังจากบิลถูกส่งเข้า Salesforce แล้วเท่านั้น บิลที่เพิ่งบันทึกจึงอาจยังไม่มีเลขทั้งสอง</div>
 
 <h4 class="hp-h" id="hp-history-5">หน้าตาของ​<span class="nb">แท็บ</span>​นี้ (เรียงจากบนลงล่าง)</h4>
-<figure class="hp-fig"><img data-src="help_img/history-a-02.jpg" width="960" height="534" alt="ส่วนบนของแท็บรายการที่นัดรับ มีบรรทัดวันที่ ช่องสาขาที่ซื้อ ช่องสาขาที่นัดรับ และคำอธิบายสี P#"><figcaption>ส่วนบนของ​<span class="nb">แท็บ</span> <b>รายการที่นัดรับ</b> (ภาพนี้ใช้ข้อมูลสมมติ ตัวอย่างวันนี้คือ 7 ต.ค. 69)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/history-a-02.jpg" width="960" height="534" alt="ส่วนบนของแท็บรายการที่นัดรับ มีบรรทัดวันที่ ช่องสาขาที่ซื้อ ช่องสาขาที่นัดรับ และคำอธิบายสี P#"><figcaption>ส่วนบนของ​<span class="nb">แท็บ</span> <b>รายการที่นัดรับ</b> (ภาพนี้ใช้ข้อมูลสมมติ ตัวอย่างวันนี้คือ 7 ต.ค. 69)</figcaption></figure>
 <ol class="hp-steps">
   <li><b>ป้ายสาขา</b> ที่หัวหน้าต่าง (<span class="hp-btn">สาขา PM ▾</span>) ใช้เปลี่ยน <span class="hp-field">สาขาที่ซื้อ</span></li>
   <li><b>แถบ​<span class="nb">แท็บ</span></b> 3 <span class="nb">แท็บ</span> <span class="nb">แท็บ</span>​ที่เปิดอยู่เป็นสีขาว</li>
@@ -4129,7 +4160,7 @@
   <li><b>คำอธิบายสี P#</b> หนึ่งบรรทัด: <span class="hp-field">P# ยังไม่ถึงสาขา</span> (สีแดง) และ <span class="hp-field">P# ถึงสาขาแล้ว</span> (สีเขียว มีไอคอนร้านค้า)</li>
   <li><b>รายการบิล</b> เป็นการ์ดเรียงต่อกันลงมา ส่วนบนทั้งหมด (<span class="nb">แท็บ</span> วันที่ สาขา) อยู่กับที่ ส่วนที่เลื่อนขึ้นลงได้คือกรอบรายการบิลด้านล่าง บน iPad กรอบนี้เล็ก เห็นการ์ดได้ประมาณ 1 ใบ ให้ลากนิ้วขึ้นลงในกรอบรายการเพื่อดูใบถัดไป และตอนกด <span class="hp-btn">แก้ไข</span> ช่อง <span class="hp-field">จาก</span> / <span class="hp-field">ถึง</span> จะโผล่เพิ่มขึ้นมา กรอบรายการจะเล็กลงอีก เลือกวันเสร็จแล้วให้กด <span class="hp-btn">เสร็จ</span> กรอบรายการจะกลับมาใหญ่ขึ้น</li>
 </ol>
-<figure class="hp-fig"><img data-src="help_img/history-a-11.jpg" width="960" height="944" alt="หน้าต่างประวัติใบสั่งแก้ทั้งใบบน iPad กรอบรายการอยู่ล่างสุด เห็นการ์ดใบแรกไม่เต็มใบ"><figcaption>หน้าต่างทั้งใบบน iPad แนวนอน (ข้อมูลสมมติ) กรอบรายการอยู่ล่างสุด ใต้บรรทัดคำอธิบายสี P# เห็นการ์ดใบแรกได้ไม่เต็มใบ ต้องลากนิ้วขึ้นลงในกรอบนี้เพื่อดูส่วนที่เหลือและการ์ดใบถัดไป</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/history-a-11.jpg" width="960" height="944" alt="หน้าต่างประวัติใบสั่งแก้ทั้งใบบน iPad กรอบรายการอยู่ล่างสุด เห็นการ์ดใบแรกไม่เต็มใบ"><figcaption>หน้าต่างทั้งใบบน iPad แนวนอน (ข้อมูลสมมติ) กรอบรายการอยู่ล่างสุด ใต้บรรทัดคำอธิบายสี P# เห็นการ์ดใบแรกได้ไม่เต็มใบ ต้องลากนิ้วขึ้นลงในกรอบนี้เพื่อดูส่วนที่เหลือและการ์ดใบถัดไป</figcaption></figure>
 
 <div class="hp-item">
   <div class="hp-name">บรรทัดช่วงวันที่นัดรับ และปุ่ม แก้ไข / เสร็จ <span class="hp-kind">ข้อความสรุป + ปุ่มสลับ</span></div>
@@ -4140,7 +4171,7 @@
       <li>กด <span class="hp-btn">เสร็จ</span>: กลับไปเห็นบรรทัดสรุปที่อัปเดตแล้ว</li>
       <li>ช่อง <span class="hp-field">จาก</span> และ <span class="hp-field">ถึง</span> โชว์วันที่แบบไทยพร้อมชื่อวัน เช่น "7 ต.ค. 69 (พุธ)" ถ้าเป็นวันนี้ จะมี "(วันนี้)" ต่อท้าย ถ้าเป็นเมื่อวานจะมี "(เมื่อวาน)"</li>
     </ul>
-    <figure class="hp-fig"><img data-src="help_img/history-a-03.jpg" width="960" height="615" alt="แท็บรายการที่นัดรับตอนกดแก้ไข เห็นช่องจาก ถึง ปุ่มเสร็จ และลิงก์ล้างตัวกรองวันที่"><figcaption>หลังกด <b>แก้ไข</b>: ปุ่มกลายเป็น <b>เสร็จ</b> มีช่อง <b>จาก</b> / <b>ถึง</b> และลิงก์ <b>ล้างตัวกรองวันที่</b> (มุมขวาล่าง)</figcaption></figure>
+    <figure class="hp-fig"><img data-src="../help_img/history-a-03.jpg" width="960" height="615" alt="แท็บรายการที่นัดรับตอนกดแก้ไข เห็นช่องจาก ถึง ปุ่มเสร็จ และลิงก์ล้างตัวกรองวันที่"><figcaption>หลังกด <b>แก้ไข</b>: ปุ่มกลายเป็น <b>เสร็จ</b> มีช่อง <b>จาก</b> / <b>ถึง</b> และลิงก์ <b>ล้างตัวกรองวันที่</b> (มุมขวาล่าง)</figcaption></figure>
   </div>
 </div>
 
@@ -4155,7 +4186,7 @@
       <li>ถ้าวันที่ต้องการอยู่คนละเดือน กด <span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>ก่อนหน้า</span> หรือ <span class="hp-btn">ถัดไป<svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span> ที่หัวปฏิทินเพื่อเลื่อนเดือนก่อนเลือกวัน</li>
       <li>เมื่อเลือกครบแล้วกด <span class="hp-btn">เสร็จ</span> เพื่อกลับไปเห็นบรรทัดสรุป</li>
     </ol>
-    <figure class="hp-fig"><img data-src="help_img/history-a-04.jpg" width="960" height="944" alt="ปฏิทินเดือนตุลาคม 2569 เปิดทับช่องสาขา วันที่ 7 มีวงกลมสีทอง"><figcaption>ปฏิทินที่เปิดจากช่อง <b>จาก</b> หัวปฏิทินมีปุ่ม <b>ก่อนหน้า</b> / <b>ถัดไป</b> วันที่ 7 เป็นวันนี้ จึงเป็นวงกลมสีทองเข้ม ปฏิทินเปิดทับรายการด้านล่างชั่วคราว</figcaption></figure>
+    <figure class="hp-fig"><img data-src="../help_img/history-a-04.jpg" width="960" height="944" alt="ปฏิทินเดือนตุลาคม 2569 เปิดทับช่องสาขา วันที่ 7 มีวงกลมสีทอง"><figcaption>ปฏิทินที่เปิดจากช่อง <b>จาก</b> หัวปฏิทินมีปุ่ม <b>ก่อนหน้า</b> / <b>ถัดไป</b> วันที่ 7 เป็นวันนี้ จึงเป็นวงกลมสีทองเข้ม ปฏิทินเปิดทับรายการด้านล่างชั่วคราว</figcaption></figure>
     <ul class="hp-list">
       <li>เปิดได้ครั้งละ 1 ปฏิทิน ถ้าแตะอีกช่อง ปฏิทินเดิมจะปิดแล้วเปิดของช่องใหม่แทน</li>
       <li>แตะช่องเดิมซ้ำ หรือแตะที่อื่นนอกปฏิทิน ปฏิทินจะปิดโดยไม่เปลี่ยนค่า</li>
@@ -4222,7 +4253,7 @@
   <div class="hp-name">คำอธิบายสี P# (ยังไม่ถึงสาขา / ถึงสาขาแล้ว) <span class="hp-kind">ดูสถานะสินค้าแต่ละชิ้น</span></div>
   <div class="hp-desc">
     <p>ทุกชิ้นสินค้าในบิลที่ลงใน Salesforce แล้วจะมีรหัส <b>P#</b> (เช่น P# 400101) ที่การ์ดแต่ละใบ P# แต่ละตัวจะเปลี่ยนสีบอกว่าสินค้าชิ้นนั้นมาถึงสาขาหรือยัง ตรวจเป็น <b>รายชิ้น</b> ไม่ใช่ทั้งบิล เช่น บิลสูท+กางเกง เสื้อสูทยังไม่มา แต่กางเกงมาถึงแล้ว ก็จะเห็น P# สองตัวสีต่างกัน</p>
-    <figure class="hp-fig"><img data-src="help_img/history-a-06.jpg" width="930" height="354" alt="คำอธิบายสี P# และการ์ดบิลที่ P# 400101 เป็นสีแดง ส่วน P# 400102 เป็นสีเขียวมีไอคอนร้านค้า"><figcaption>บรรทัดคำอธิบายสีอยู่เหนือรายการ ในการ์ดใบแรก P# 400101 (เสื้อสูท) เป็น <b>สีแดง</b> = ยังไม่ถึงสาขา ส่วน P# 400102 (กางเกง) เป็น <b>สีเขียว มีไอคอนร้านค้า</b> = ถึงสาขาแล้ว</figcaption></figure>
+    <figure class="hp-fig"><img data-src="../help_img/history-a-06.jpg" width="930" height="354" alt="คำอธิบายสี P# และการ์ดบิลที่ P# 400101 เป็นสีแดง ส่วน P# 400102 เป็นสีเขียวมีไอคอนร้านค้า"><figcaption>บรรทัดคำอธิบายสีอยู่เหนือรายการ ในการ์ดใบแรก P# 400101 (เสื้อสูท) เป็น <b>สีแดง</b> = ยังไม่ถึงสาขา ส่วน P# 400102 (กางเกง) เป็น <b>สีเขียว มีไอคอนร้านค้า</b> = ถึงสาขาแล้ว</figcaption></figure>
     <div class="hp-tablewrap"><table class="hp-table">
       <thead><tr><th>สิ่งที่เห็นที่ P#</th><th>ความหมาย</th></tr></thead>
       <tbody>
@@ -4235,7 +4266,7 @@
     </table></div>
     <div class="hp-warn">เฉพาะ P# สีเขียวที่ <b>มีไอคอนร้านค้า</b> เท่านั้นที่แปลว่าถึงสาขาแล้ว P# สีเขียวเปล่าๆ ยังตอบไม่ได้ ให้รอสักครู่ แล้วดูว่าสีเปลี่ยนไหม หรือตรวจสถานะใน Salesforce</div>
     <div class="hp-warn">ให้ดูสถานะที่ P# ในบรรทัด SKU ตอนบนของการ์ดเท่านั้น ถ้าบิลมีสินค้าประเภทเดียวกันมากกว่า 1 ชิ้น (เช่น กางเกง 2 ตัว) จะมี P# โชว์ซ้ำอีกจุดในกล่องค่าวัดตัวสีเทาอ่อนด้านล่างของการ์ด P# ตัวนั้นเป็นป้ายเขียวอ่อนเสมอ ไม่เปลี่ยนสี และไม่มีไอคอนร้านค้า ไม่ได้บอกว่าถึงสาขาแล้ว</div>
-    <figure class="hp-fig"><img data-src="help_img/history-a-07.jpg" width="930" height="354" alt="การ์ดบิลเดิมแต่ P# ทั้งสองตัวเป็นสีเขียว ไม่มีไอคอนร้านค้า"><figcaption>ตอนเพิ่งเปิดหน้าต่างและระบบยังเช็คสถานะไม่เสร็จ: P# ทุกตัวเป็นสีเขียวเปล่า (ไม่มีไอคอน) เมื่อระบบเช็คเสร็จ สีจะเปลี่ยนเป็นแดง หรือเขียวพร้อมไอคอนเหมือนภาพก่อนหน้า (เป็นบิลเดียวกันกับภาพก่อนหน้า)</figcaption></figure>
+    <figure class="hp-fig"><img data-src="../help_img/history-a-07.jpg" width="930" height="354" alt="การ์ดบิลเดิมแต่ P# ทั้งสองตัวเป็นสีเขียว ไม่มีไอคอนร้านค้า"><figcaption>ตอนเพิ่งเปิดหน้าต่างและระบบยังเช็คสถานะไม่เสร็จ: P# ทุกตัวเป็นสีเขียวเปล่า (ไม่มีไอคอน) เมื่อระบบเช็คเสร็จ สีจะเปลี่ยนเป็นแดง หรือเขียวพร้อมไอคอนเหมือนภาพก่อนหน้า (เป็นบิลเดียวกันกับภาพก่อนหน้า)</figcaption></figure>
     <p><b>สถานะมาจากไหน และอัปเดตเมื่อไหร่</b></p>
     <ul class="hp-list">
       <li>หลังรายการขึ้นแล้ว หน้าเว็บจะถามระบบ (Salesforce) ว่าสินค้าแต่ละ P# อยู่ขั้นตอนไหนของงานแก้ (เช่น QC, ตรวจสอบสินค้าที่สาขา) แล้วเปลี่ยนสีให้ ใช้เวลาสักครู่หลังรายการขึ้น และเช็คของ <b>ทุกบิลของสาขาที่ซื้อที่โหลดมา</b> ไม่ใช่เฉพาะบิลในช่วงวันที่ที่เลือก</li>
@@ -4258,7 +4289,7 @@
 <div class="hp-case">
   <div class="hp-case-title">บิลที่ไม่มี O# และไม่มี P# เลย</div>
   <p>การ์ดจะไม่มีบรรทัด O# และไม่มี P# ท้ายบรรทัด SKU แต่มีปุ่มแก้ไขบิล <span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span> และปุ่มยกเลิกบิล <span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 8l8 8"/></svg></span> ในแถวเลขที่บิล แปลว่าบิลนี้ "ยังไม่ยืนยันเข้า Salesforce" (ตามคำที่แอปใช้กับปุ่มแก้ไขบิล) รายละเอียดดูหัวข้อ <span class="nb">แท็บ</span> ประวัติ ด้านล่าง ข้อมูลใน​<span class="nb">แท็บ</span>​นี้ไม่โหลดซ้ำเอง ถ้าสงสัยว่าการ์ดนี้ควรมี O# / P# แล้ว ให้โหลดรายการใหม่ตามวิธีในหัวข้อ คำอธิบายสี P# และถ้ายังเหมือนเดิม ให้แจ้งทีมไอที</p>
-  <figure class="hp-fig"><img data-src="help_img/history-a-08.jpg" width="930" height="275" alt="การ์ดบิลที่ไม่มี O# และ P# มีปุ่มแก้ไขและปุ่มยกเลิกต่อท้ายเลขที่บิล"><figcaption>บิลที่ยังไม่มี O# / P# (การ์ดตัดมาเฉพาะส่วนบน) เห็นปุ่มแก้ไขบิลและปุ่มยกเลิกบิลอยู่ในแถวเลขที่บิล ถัดจากชื่อประเภทสินค้า</figcaption></figure>
+  <figure class="hp-fig"><img data-src="../help_img/history-a-08.jpg" width="930" height="275" alt="การ์ดบิลที่ไม่มี O# และ P# มีปุ่มแก้ไขและปุ่มยกเลิกต่อท้ายเลขที่บิล"><figcaption>บิลที่ยังไม่มี O# / P# (การ์ดตัดมาเฉพาะส่วนบน) เห็นปุ่มแก้ไขบิลและปุ่มยกเลิกบิลอยู่ในแถวเลขที่บิล ถัดจากชื่อประเภทสินค้า</figcaption></figure>
 </div>
 
 <div class="hp-item">
@@ -4275,7 +4306,7 @@
       <li><b>บิลที่ยกเลิกแล้วยังอยู่ในรายการ:</b> มีป้ายสีแดงอ่อน "ยกเลิกแล้ว" ต่อท้ายเลขที่บิล เลขที่บิลมีเส้นขีดฆ่า และทั้งการ์ดจางลง ไม่ต้องเตรียมของให้บิลนั้น (ข้อความยืนยันของแอปตอนยกเลิกบอกว่า บิลที่ยกเลิกจะไม่ถูกนับในรายการงานที่ต้องทำ และจะไม่ถูกส่งเข้า Salesforce) ปุ่มยกเลิกบิลบนการ์ดนั้นจะเป็นวงกลมทึบ</li>
       <li><b>บิลค้างชำระ:</b> มีแถบสีแดงเต็มความกว้างการ์ด มีเครื่องหมายเตือนรูปสามเหลี่ยมนำหน้า แล้วเขียนว่า "ค้างชำระ" ตามด้วยยอด เช่น "ค้างชำระ 500 บาท" (ถ้าระบบมียอดค้างบันทึกไว้) เป็นแถบเตือนให้เห็นชัดว่าบิลนี้ยังค้างชำระ (รายละเอียดอื่นของการชำระเงินดูหัวข้อ <span class="nb">แท็บ</span> ประวัติ)</li>
     </ul>
-    <figure class="hp-fig"><img data-src="help_img/history-a-10.jpg" width="840" height="728" alt="การ์ด 2 ใบ ใบบนเป็นบิลที่ยกเลิกแล้ว มีป้ายยกเลิกแล้ว ใบล่างเป็นบิลค้างชำระ มีแถบแดงค้างชำระ 500 บาท"><figcaption>บน: บิลที่ยกเลิกแล้ว (ป้าย <b>ยกเลิกแล้ว</b> เลขที่บิลมีเส้นขีดฆ่า ทั้งการ์ดจางลง) · ล่าง: บิลค้างชำระ (แถบแดง <b>ค้างชำระ 500 บาท</b> มีเครื่องหมายเตือนนำหน้า) การ์ดล่างตัดมาเฉพาะส่วนบน</figcaption></figure>
+    <figure class="hp-fig"><img data-src="../help_img/history-a-10.jpg" width="840" height="728" alt="การ์ด 2 ใบ ใบบนเป็นบิลที่ยกเลิกแล้ว มีป้ายยกเลิกแล้ว ใบล่างเป็นบิลค้างชำระ มีแถบแดงค้างชำระ 500 บาท"><figcaption>บน: บิลที่ยกเลิกแล้ว (ป้าย <b>ยกเลิกแล้ว</b> เลขที่บิลมีเส้นขีดฆ่า ทั้งการ์ดจางลง) · ล่าง: บิลค้างชำระ (แถบแดง <b>ค้างชำระ 500 บาท</b> มีเครื่องหมายเตือนนำหน้า) การ์ดล่างตัดมาเฉพาะส่วนบน</figcaption></figure>
     <p>ส่วนอื่นของการ์ด (ตารางค่าวัดตัว สถานะการชำระเงิน หมายเหตุ ประวัติการแก้ไข และปุ่ม <span class="hp-btn">ดึงข้อมูลล่าสุด + พิมพ์ใบสรุปใหม่</span>) อธิบายไว้ที่หัวข้อ <span class="nb">แท็บ</span> ประวัติ ด้านล่าง เพราะการ์ดหน้าตาเดียวกัน</p>
     <p>การแตะที่ตัวการ์ดเฉยๆ ไม่ทำอะไร จะมีปฏิกิริยาเฉพาะตอนแตะปุ่มที่อยู่บนการ์ด ปุ่มที่แตะได้บนการ์ดใน​<span class="nb">แท็บ</span>​นี้มี 3 อย่าง (ใช้ร่วมกับ​<span class="nb">แท็บ</span> <span class="hp-field">ประวัติ</span> วิธีใช้ละเอียดดูหัวข้อ <span class="nb">แท็บ</span> ประวัติ ด้านล่าง)</p>
     <ul class="hp-list">
@@ -4289,7 +4320,7 @@
 <div class="hp-item">
   <div class="hp-name">ข้อความสถานะของรายการ <span class="hp-kind">กำลังโหลด / ผิดพลาด / ไม่พบรายการ</span></div>
   <div class="hp-desc">
-    <figure class="hp-fig"><img data-src="help_img/history-a-09.jpg" width="876" height="455" alt="ข้อความสถานะ 4 แบบ เรียงลงมา กำลังโหลด โหลดไม่สำเร็จ เชื่อมต่อไม่สำเร็จ และไม่พบรายการ"><figcaption>ข้อความที่อาจขึ้นในกรอบรายการ เรียงจากบนลงล่าง</figcaption></figure>
+    <figure class="hp-fig"><img data-src="../help_img/history-a-09.jpg" width="876" height="455" alt="ข้อความสถานะ 4 แบบ เรียงลงมา กำลังโหลด โหลดไม่สำเร็จ เชื่อมต่อไม่สำเร็จ และไม่พบรายการ"><figcaption>ข้อความที่อาจขึ้นในกรอบรายการ เรียงจากบนลงล่าง</figcaption></figure>
     <div class="hp-tablewrap"><table class="hp-table">
       <thead><tr><th>ข้อความ</th><th>เกิดเมื่อ</th><th>ทำอย่างไร</th></tr></thead>
       <tbody>
@@ -4388,9 +4419,9 @@
 <li>กดไอคอนหรือปุ่มบนการ์ดเพื่อ แก้ไข / ยกเลิก / ดึงข้อมูลล่าสุด (แตะที่ตัวการ์ดเฉยๆ ไม่มีอะไรเกิดขึ้น ต้องกดที่ไอคอนหรือปุ่มเท่านั้น)</li>
 </ol>
 
-<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/history-b-12.jpg" width="1536" height="146" alt="แถบหัวของหน้าหลัก มีปุ่ม ? ปุ่มปริ้น และปุ่มรายการย้อนหลังที่ข้อความตัดเป็น 3 บรรทัด"></div><figcaption>แถบหัวของหน้าหลักบน iPad: 1 ปุ่ม ? (วิธีใช้งาน) · 2 ปุ่มปริ้น · 3 ปุ่ม “รายการย้อนหลัง” ที่มุมขวา ข้อความบนปุ่มตัดเป็น 3 บรรทัด (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
+<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/history-b-12.jpg" width="1536" height="146" alt="แถบหัวของหน้าหลัก มีปุ่ม ? ปุ่มปริ้น และปุ่มรายการย้อนหลังที่ข้อความตัดเป็น 3 บรรทัด"></div><figcaption>แถบหัวของหน้าหลักบน iPad: 1 ปุ่ม ? (วิธีใช้งาน) · 2 ปุ่มปริ้น · 3 ปุ่ม “รายการย้อนหลัง” ที่มุมขวา ข้อความบนปุ่มตัดเป็น 3 บรรทัด (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
 
-<figure class="hp-fig"><img data-src="help_img/history-b-01.jpg" width="960" height="468" alt="ส่วนบนของแท็บประวัติ มีหมายเลข 1 ถึง 8 กำกับแต่ละส่วน"><figcaption>ส่วนควบคุมด้านบนของ​<span class="nb">แท็บ</span> “ประวัติ” ตามหมายเลข: 1 <span class="nb">แท็บ</span> “ประวัติ” · 2 ป้ายสาขา · 3 ช่อง “สาขาที่ซื้อ” · 4 ช่องค้นหา · 5 ปุ่มสแกน · 6, 7, 8 ชิปกรอง (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/history-b-01.jpg" width="960" height="468" alt="ส่วนบนของแท็บประวัติ มีหมายเลข 1 ถึง 8 กำกับแต่ละส่วน"><figcaption>ส่วนควบคุมด้านบนของ​<span class="nb">แท็บ</span> “ประวัติ” ตามหมายเลข: 1 <span class="nb">แท็บ</span> “ประวัติ” · 2 ป้ายสาขา · 3 ช่อง “สาขาที่ซื้อ” · 4 ช่องค้นหา · 5 ปุ่มสแกน · 6, 7, 8 ชิปกรอง (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
 
 <h4 class="hp-h" id="hp-history-12">ส่วนควบคุมด้านบน อธิบายทีละอัน</h4>
 
@@ -4442,7 +4473,7 @@
 </ul>
 ชิปที่เลือกจะ <b>ค้างอยู่</b> แม้ปิดแล้วเปิดหน้าต่างใหม่ (จนกว่าจะรีเฟรชหน้าเว็บ) ถ้ารายการหายไปหมดหรือน้อยผิดปกติ ให้ดูก่อนว่าชิปที่เลือกอยู่คือ “ทั้งหมด” หรือยัง</div></div>
 
-<figure class="hp-fig"><img data-src="help_img/history-b-06.jpg" width="960" height="554" alt="กดชิป บิลที่สามารถแก้ไขข้อมูลได้ แล้วเห็นการ์ดที่มีไอคอนดินสอและวงกลมขีดทแยง"><figcaption>เมื่อกดชิป “บิลที่สามารถแก้ไขข้อมูลได้” จะเห็นเฉพาะการ์ดที่มีไอคอนดินสอและวงกลมขีดทแยงข้างเลขที่บิล (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/history-b-06.jpg" width="960" height="554" alt="กดชิป บิลที่สามารถแก้ไขข้อมูลได้ แล้วเห็นการ์ดที่มีไอคอนดินสอและวงกลมขีดทแยง"><figcaption>เมื่อกดชิป “บิลที่สามารถแก้ไขข้อมูลได้” จะเห็นเฉพาะการ์ดที่มีไอคอนดินสอและวงกลมขีดทแยงข้างเลขที่บิล (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
 
 <h4 class="hp-h" id="hp-history-13">กติกา: บิลแบบไหน “แก้ไขได้” / “แก้ไขไม่ได้”</h4>
 
@@ -4472,7 +4503,7 @@
 <h4 class="hp-h" id="hp-history-14">การ์ดบิล: อ่านอย่างไร</h4>
 <p>การ์ดหนึ่งใบคือบิลหนึ่งใบ การ์ดแบบเดียวกันนี้ปรากฏใน​<span class="nb">แท็บ</span> “รายการที่นัดรับ” ด้วย ปุ่มและไอคอนทำงานเหมือนกัน การ์ดที่ยังไม่มี O# / P# (แก้ไขได้) หน้าตาเป็นแบบนี้</p>
 
-<figure class="hp-fig"><img data-src="help_img/history-b-02.jpg" width="918" height="666" alt="การ์ดบิลที่แก้ไขได้ มีหมายเลข 1 ถึง 12 กำกับแต่ละส่วน"><figcaption>การ์ดบิลที่ “แก้ไขได้” มีหมายเลขกำกับตามตารางด้านล่าง สังเกตว่าไม่มี O# และไม่มี P# แต่มีไอคอนดินสอ (6) และวงกลมขีดทแยง (7) (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/history-b-02.jpg" width="918" height="666" alt="การ์ดบิลที่แก้ไขได้ มีหมายเลข 1 ถึง 12 กำกับแต่ละส่วน"><figcaption>การ์ดบิลที่ “แก้ไขได้” มีหมายเลขกำกับตามตารางด้านล่าง สังเกตว่าไม่มี O# และไม่มี P# แต่มีไอคอนดินสอ (6) และวงกลมขีดทแยง (7) (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
 
 <div class="hp-tablewrap"><table class="hp-table">
 <thead><tr><th>เลข</th><th>ส่วนของการ์ด</th><th>หน้าตา</th><th>บอกอะไร</th></tr></thead>
@@ -4495,7 +4526,7 @@
 
 <p>การ์ดที่ส่งเข้า Salesforce แล้ว (แก้ไขไม่ได้) มีส่วนเพิ่มเข้ามา และไอคอนดินสอหายไป</p>
 
-<figure class="hp-fig"><img data-src="help_img/history-b-03.jpg" width="918" height="728" alt="การ์ดบิลที่ส่งเข้า Salesforce แล้ว มีเลข O# P# แถบค้างชำระสีแดง และปุ่มดึงข้อมูลล่าสุด"><figcaption>การ์ดบิลที่ “แก้ไขไม่ได้” (ส่งเข้า Salesforce แล้ว) ตัวอักษรไทยกำกับตามตารางด้านล่าง เทียบกับภาพก่อนหน้า: มี O# แถวบน มี P# ต่อท้ายรหัส ไม่มีดินสอและวงกลมขีดทแยง และมีปุ่มดึงข้อมูลล่าสุด (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/history-b-03.jpg" width="918" height="728" alt="การ์ดบิลที่ส่งเข้า Salesforce แล้ว มีเลข O# P# แถบค้างชำระสีแดง และปุ่มดึงข้อมูลล่าสุด"><figcaption>การ์ดบิลที่ “แก้ไขไม่ได้” (ส่งเข้า Salesforce แล้ว) ตัวอักษรไทยกำกับตามตารางด้านล่าง เทียบกับภาพก่อนหน้า: มี O# แถวบน มี P# ต่อท้ายรหัส ไม่มีดินสอและวงกลมขีดทแยง และมีปุ่มดึงข้อมูลล่าสุด (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
 
 <div class="hp-tablewrap"><table class="hp-table">
 <thead><tr><th>อักษร</th><th>ส่วนของการ์ด</th><th>หน้าตา</th><th>บอกอะไร</th></tr></thead>
@@ -4511,9 +4542,9 @@
 
 <p>นอกจากนี้ การ์ดอาจมีส่วนพิเศษอีก 5 อย่าง ขึ้นตามสถานการณ์ของบิล</p>
 
-<figure class="hp-fig"><img data-src="help_img/history-b-04.jpg" width="918" height="717" alt="การ์ดบิลที่ยกเลิกแล้ว (จางลง มีป้ายยกเลิกแล้ว) และการ์ดที่ประเภทสินค้าไม่ตรงกับ SKU (ตัวแดงมีเครื่องหมายเตือน)"><figcaption>บน: บิลที่ “ยกเลิกแล้ว” (1 ป้าย “ยกเลิกแล้ว” · 2 วงกลมแดงทึบ · 3 เลขที่บิลถูกขีดฆ่า ทั้งการ์ดจางลง) ล่าง: ประเภทสินค้าไม่ตรงกับรหัส SKU (4 ชื่อประเภทเป็นสีแดงมีเครื่องหมายเตือน) (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/history-b-04.jpg" width="918" height="717" alt="การ์ดบิลที่ยกเลิกแล้ว (จางลง มีป้ายยกเลิกแล้ว) และการ์ดที่ประเภทสินค้าไม่ตรงกับ SKU (ตัวแดงมีเครื่องหมายเตือน)"><figcaption>บน: บิลที่ “ยกเลิกแล้ว” (1 ป้าย “ยกเลิกแล้ว” · 2 วงกลมแดงทึบ · 3 เลขที่บิลถูกขีดฆ่า ทั้งการ์ดจางลง) ล่าง: ประเภทสินค้าไม่ตรงกับรหัส SKU (4 ชื่อประเภทเป็นสีแดงมีเครื่องหมายเตือน) (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
 
-<figure class="hp-fig"><img data-src="help_img/history-b-05.jpg" width="918" height="552" alt="การ์ดบิลที่มีข้อความ ไม่มีการปรับสัดส่วน กล่องหมายเหตุ และกล่องประวัติการแก้ไข"><figcaption>การ์ดที่เคยถูกแก้ไขและมีหมายเหตุ: 1 “ไม่มีการปรับสัดส่วน” · 2 กล่อง “หมายเหตุ” · 3 กล่อง “ประวัติการแก้ไข” (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/history-b-05.jpg" width="918" height="552" alt="การ์ดบิลที่มีข้อความ ไม่มีการปรับสัดส่วน กล่องหมายเหตุ และกล่องประวัติการแก้ไข"><figcaption>การ์ดที่เคยถูกแก้ไขและมีหมายเหตุ: 1 “ไม่มีการปรับสัดส่วน” · 2 กล่อง “หมายเหตุ” · 3 กล่อง “ประวัติการแก้ไข” (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
 
 <div class="hp-tablewrap"><table class="hp-table">
 <thead><tr><th>ส่วนพิเศษ</th><th>หน้าตา</th><th>ความหมาย</th></tr></thead>
@@ -4542,8 +4573,8 @@
 <li>ขึ้น “บันทึกการแก้ไขสำเร็จ” พร้อมเลขที่บิลเดิม ระบบสร้างและแนบรูปใบสรุปใหม่ให้ รอจนปุ่มกลับเป็น “ตกลง” แล้วฟอร์มจะถูกล้างให้เอง</li>
 </ol>
 
-<figure class="hp-fig"><img data-src="help_img/history-b-07.jpg" width="582" height="393" alt="หน้าต่างยืนยันการแก้ไขบิล มีช่องชื่อผู้แก้ไข และปุ่มยกเลิก กับ ไปหน้าแก้ไข"><figcaption>หน้าต่างที่ขึ้นหลังกดไอคอนดินสอ ต้องเลือกชื่อผู้แก้ไขก่อนกด “ไปหน้าแก้ไข”</figcaption></figure>
-<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/history-b-08.jpg" width="1536" height="225" alt="แถบกำลังแก้ไขบิลนี้ ชื่อผู้แก้ไข ที่หน้า 1 ของฟอร์ม"></div><figcaption>หน้า 1 ของฟอร์มหลังกดไปหน้าแก้ไข จะมีแถบ “กำลังแก้ไขบิลนี้ — ชื่อผู้แก้ไข *” อยู่ด้านบน</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/history-b-07.jpg" width="582" height="393" alt="หน้าต่างยืนยันการแก้ไขบิล มีช่องชื่อผู้แก้ไข และปุ่มยกเลิก กับ ไปหน้าแก้ไข"><figcaption>หน้าต่างที่ขึ้นหลังกดไอคอนดินสอ ต้องเลือกชื่อผู้แก้ไขก่อนกด “ไปหน้าแก้ไข”</figcaption></figure>
+<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/history-b-08.jpg" width="1536" height="225" alt="แถบกำลังแก้ไขบิลนี้ ชื่อผู้แก้ไข ที่หน้า 1 ของฟอร์ม"></div><figcaption>หน้า 1 ของฟอร์มหลังกดไปหน้าแก้ไข จะมีแถบ “กำลังแก้ไขบิลนี้ — ชื่อผู้แก้ไข *” อยู่ด้านบน</figcaption></figure>
 
 <h4 class="hp-h" id="hp-history-16">เรื่องที่ควรรู้ตอนแก้ไขบิล</h4>
 <ul class="hp-list">
@@ -4626,7 +4657,7 @@
 <li>ใต้รูปแต่ละใบมีปุ่ม “บันทึกรูปใบสรุป” กดเพื่อเก็บรูปลงเครื่อง เสร็จแล้วกด <span class="hp-btn">ตกลง</span></li>
 </ol>
 
-<figure class="hp-fig"><img data-src="help_img/history-b-09.jpg" width="400" height="1111" alt="ใบสรุปใหม่ที่ระบบสร้าง มีเลข O# และ P# ด้านบน และ QR ด้านล่าง"><figcaption>ใบสรุปใหม่ที่ได้ (ย่อภาพ ตัดส่วนว่างท้ายใบออก) มี O# และ P# บรรทัดบน และ QR ท้ายใบ QR นี้เปิดไปที่หน้าสินค้าชิ้นนั้นใน Salesforce (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/history-b-09.jpg" width="400" height="1111" alt="ใบสรุปใหม่ที่ระบบสร้าง มีเลข O# และ P# ด้านบน และ QR ด้านล่าง"><figcaption>ใบสรุปใหม่ที่ได้ (ย่อภาพ ตัดส่วนว่างท้ายใบออก) มี O# และ P# บรรทัดบน และ QR ท้ายใบ QR นี้เปิดไปที่หน้าสินค้าชิ้นนั้นใน Salesforce (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
 
 <ul class="hp-list">
 <li><b>ปุ่มนี้ไม่ได้สั่งเครื่องพิมพ์ให้เอง</b> และไม่เปิดหน้าต่างพิมพ์ สิ่งที่ได้คือรูปใบสรุปใหม่ที่เห็นบนจอ และระบบจะส่งคำสั่งแนบรูปนี้เข้าบิลใน Lark กับเข้าสินค้าชิ้นนั้นใน Salesforce ให้เอง แต่แอป <b>ไม่ตรวจและไม่แจ้ง</b> ถ้าแนบไม่สำเร็จ ถ้าต้องมีรูปไว้แน่ๆ ให้กด “บันทึกรูปใบสรุป” เก็บไว้ด้วย ถ้าต้องการกระดาษ ให้ใช้ปุ่มปริ้น <span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><path d="M6 18H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2"/><path d="M6 14h12v7H6z"/></svg></span> ที่แถบบน (ดูสถานการณ์ “อยากได้ใบสรุปลงกระดาษ” ด้านล่าง ในหน้าต่างพิมพ์ให้พิมพ์เฉพาะตัวเลขของ O# / P# ไม่ต้องพิมพ์ O# หรือ P# นำหน้า) รายละเอียดอยู่ที่​<span class="nb">แท็บ</span> “ร่าง · พิมพ์ · ปัญหาที่พบบ่อย”</li>
@@ -4650,7 +4681,7 @@
 <li>กด <span class="hp-btn">สั่งพิมพ์</span> ระบบดึงข้อมูลล่าสุดจาก Salesforce วาดใบสรุปใหม่ แล้วเปิดหน้าต่างพิมพ์ของเบราว์เซอร์ให้เลือกเครื่องพิมพ์</li>
 <li>จบแล้วหน้าต่างบอกสรุป เช่น “อัปเดตข้อมูลล่าสุด + เข้าคิวพิมพ์แล้ว 1 / 1 รายการ” พร้อมเลขที่บิลและเลข Suitcube ID / Product ID ให้ตรวจ กด <span class="hp-btn">ปิด</span></li>
 </ol>
-<figure class="hp-fig"><img data-src="help_img/history-b-13.jpg" width="690" height="893" alt="หน้าต่างพิมพ์ใบสั่งแก้ปรับทรงสำเร็จรูป มีช่องเลขที่บิล Suitcube Order Suitcube Product และปุ่มสั่งพิมพ์"><figcaption>หน้าต่างพิมพ์: 1 ช่อง “เลขที่บิล” (ที่ใส่ R326100602 ไว้) · 2 ช่อง “Suitcube Order” · 3 ช่อง “Suitcube Product” (สองช่องนี้ใส่เฉพาะตัวเลข) · 4 ปุ่ม “สั่งพิมพ์” (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/history-b-13.jpg" width="690" height="893" alt="หน้าต่างพิมพ์ใบสั่งแก้ปรับทรงสำเร็จรูป มีช่องเลขที่บิล Suitcube Order Suitcube Product และปุ่มสั่งพิมพ์"><figcaption>หน้าต่างพิมพ์: 1 ช่อง “เลขที่บิล” (ที่ใส่ R326100602 ไว้) · 2 ช่อง “Suitcube Order” · 3 ช่อง “Suitcube Product” (สองช่องนี้ใส่เฉพาะตัวเลข) · 4 ปุ่ม “สั่งพิมพ์” (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
 <p>รายละเอียดอื่นของการพิมพ์ดูที่​<span class="nb">แท็บ</span> “ร่าง · พิมพ์ · ปัญหาที่พบบ่อย”</p></div>
 
 <div class="hp-case"><div class="hp-case-title">สถานการณ์: บิลกรอกผิดทั้งใบ ไม่ใช้แล้ว</div>
@@ -4703,7 +4734,7 @@
 <li>กดปุ่ม <span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></svg>บันทึกร่าง</span> ที่แถบล่างด้านขวา (มีทั้ง 3 หน้าของฟอร์ม) หน้า 1 และหน้า 2 ปุ่มนี้อยู่ข้างปุ่มลูกศรถัดไป <span class="hp-btn"><svg class="hp-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span> หน้า 3 อยู่ข้างปุ่ม “บันทึกข้อมูล” ส่วนปุ่มถังขยะอยู่ซ้ายสุดของแถบเดียวกัน (ตัวเลขเล็กๆ ที่อยู่ทางซ้ายของปุ่ม บันทึกร่าง คือเลขเวอร์ชันของแอป ไม่ใช่ปุ่ม)</li>
 <li>ดูข้อความที่ปุ่ม: “บันทึกแล้ว” = เก็บเรียบร้อย เครื่องอื่นของสาขาเดียวกันเห็นร่างนี้ได้ · “บันทึกในเครื่องแล้ว · ยังไม่​<span class="nb">ซิงก์</span>” = เก็บไว้ในเครื่องนี้แล้ว แต่ยังส่งขึ้นเซิร์ฟเวอร์ไม่ได้ (เช่น <span class="nb">อินเทอร์เน็ต</span>​หลุด) เครื่องอื่นยังไม่เห็น · “บันทึกร่างไม่สำเร็จ” = เก็บไม่ได้เลย ลองใหม่</li>
 </ol>
-<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/history-b-11.jpg" width="1536" height="120" alt="แถบล่างของหน้า 1 มีปุ่มถังขยะซ้ายสุด ปุ่มบันทึกร่างและปุ่มลูกศรถัดไปอยู่ด้านขวา"></div><figcaption>แถบล่างของฟอร์มหน้า 1: 1 ปุ่มถังขยะ (ซ้ายสุด) · 2 ปุ่ม “บันทึกร่าง” (ด้านขวา) · 3 ปุ่มลูกศรถัดไป ตัวเลขเล็กๆ ทางซ้ายของปุ่ม บันทึกร่าง คือเลขเวอร์ชันของแอป (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
+<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/history-b-11.jpg" width="1536" height="120" alt="แถบล่างของหน้า 1 มีปุ่มถังขยะซ้ายสุด ปุ่มบันทึกร่างและปุ่มลูกศรถัดไปอยู่ด้านขวา"></div><figcaption>แถบล่างของฟอร์มหน้า 1: 1 ปุ่มถังขยะ (ซ้ายสุด) · 2 ปุ่ม “บันทึกร่าง” (ด้านขวา) · 3 ปุ่มลูกศรถัดไป ตัวเลขเล็กๆ ทางซ้ายของปุ่ม บันทึกร่าง คือเลขเวอร์ชันของแอป (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
 
 <ul class="hp-list">
 <li><b>ลืมกดบันทึกร่าง?</b> ตอนแตะเปิดร่างอื่น กดดินสอแก้บิลเก่า หรือผ่านเที่ยงคืน ระบบบันทึกข้อมูลลูกค้าที่กรอกค้างไว้เป็นร่างให้เอง (ป้าย <span class="draft-auto">บันทึกอัตโนมัติ</span> ในแท็บร่าง)</li>
@@ -4713,7 +4744,7 @@
 </ul>
 
 <h4 class="hp-h" id="hp-history-23">หน้าตาและการใช้งาน​<span class="nb">แท็บ</span> “ร่างที่บันทึกไว้”</h4>
-<figure class="hp-fig"><img data-src="help_img/history-b-10.jpg" width="960" height="764" alt="แท็บร่างที่บันทึกไว้ มีช่องค้นหาจากเบอร์โทร บรรทัดจำนวนร่าง และการ์ดร่าง 3 ใบ"><figcaption><span class="nb">แท็บ</span> “ร่างที่บันทึกไว้” ของสาขา R3 มีร่าง 3 ใบ ใบบนสุดมีป้ายแดง “ในเครื่องนี้ ยังไม่​<span class="nb">ซิงก์</span>” (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/history-b-10.jpg" width="960" height="764" alt="แท็บร่างที่บันทึกไว้ มีช่องค้นหาจากเบอร์โทร บรรทัดจำนวนร่าง และการ์ดร่าง 3 ใบ"><figcaption><span class="nb">แท็บ</span> “ร่างที่บันทึกไว้” ของสาขา R3 มีร่าง 3 ใบ ใบบนสุดมีป้ายแดง “ในเครื่องนี้ ยังไม่​<span class="nb">ซิงก์</span>” (ภาพใช้ข้อมูลสมมติ)</figcaption></figure>
 
 <div class="hp-item"><div class="hp-name">ชื่อ​<span class="nb">แท็บ</span>​และตัวเลข <span class="hp-kind">ร่างที่บันทึกไว้ (N)</span></div><div class="hp-desc">ตัวเลขในวงเล็บคือจำนวนร่าง ตอนเพิ่งเปิดหน้าต่างจะนับจากร่างที่เก็บในเครื่องนี้ก่อน พอกดเปิด​<span class="nb">แท็บ</span>​นี้แล้วจะอัปเดตเป็นจำนวนร่างของสาขาที่เลือกอยู่ที่แถบบน (รวมร่างในเครื่องนี้ที่ยังไม่​<span class="nb">ซิงก์</span>) ถ้าไม่มีร่างจะไม่แสดงตัวเลข</div></div>
 
@@ -4823,10 +4854,10 @@
 <li>ที่บรรทัด SKU ของสินค้าชิ้นนั้น กดป้าย <span class="hp-btn">แก้ครั้งที่ 2 ›</span> (ตัวเลขคือครั้งที่จะบันทึก)</li>
 <li>ฟอร์มนำกลับมาแก้จะเปิดแทนรายการในหน้าต่างเดิม กด <span class="hp-btn">‹ รายการที่นัดรับ</span> มุมซ้ายบนเพื่อกลับ</li>
 </ol>
-<figure class="hp-fig"><img data-src="help_img/repeat-01.jpg" width="640" height="659" alt="แท็บรายการที่นัดรับ มีช่องค้นหาเลขสินค้า เบอร์โทร หรือชื่อลูกค้า และการ์ดบิลที่มีป้ายแก้ครั้งที่ 2"><figcaption>แท็บ “รายการที่นัดรับ” — ช่องค้นหาอยู่ใต้ “สาขาที่นัดรับ” และป้าย “แก้ครั้งที่ 2 ›” อยู่ท้ายบรรทัด SKU ของชิ้นที่ถึงสาขาแล้ว (ชื่อ/เบอร์ในภาพเป็นข้อมูลตัวอย่าง)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/repeat-01.jpg" width="640" height="659" alt="แท็บรายการที่นัดรับ มีช่องค้นหาเลขสินค้า เบอร์โทร หรือชื่อลูกค้า และการ์ดบิลที่มีป้ายแก้ครั้งที่ 2"><figcaption>แท็บ “รายการที่นัดรับ” — ช่องค้นหาอยู่ใต้ “สาขาที่นัดรับ” และป้าย “แก้ครั้งที่ 2 ›” อยู่ท้ายบรรทัด SKU ของชิ้นที่ถึงสาขาแล้ว (ชื่อ/เบอร์ในภาพเป็นข้อมูลตัวอย่าง)</figcaption></figure>
 
 <h4 class="hp-h" id="hp-repeat-5">ป้ายบนการ์ด แปลว่าอะไร</h4>
-<figure class="hp-fig"><img data-src="help_img/repeat-02.jpg" width="596" height="485" alt="การ์ดบิลที่มี P# สีแดงหนึ่งชิ้น และ P# สีเขียวพร้อมป้ายแก้ครั้งที่ 2"><figcaption>ชิ้นแรก P# สีแดง = ยังไม่ถึงสาขา · ชิ้นที่สอง P# สีเขียว + ป้าย “แก้ครั้งที่ 2 ›” = กดเพื่อเปิดฟอร์มได้</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/repeat-02.jpg" width="596" height="485" alt="การ์ดบิลที่มี P# สีแดงหนึ่งชิ้น และ P# สีเขียวพร้อมป้ายแก้ครั้งที่ 2"><figcaption>ชิ้นแรก P# สีแดง = ยังไม่ถึงสาขา · ชิ้นที่สอง P# สีเขียว + ป้าย “แก้ครั้งที่ 2 ›” = กดเพื่อเปิดฟอร์มได้</figcaption></figure>
 <div class="hp-tablewrap"><table class="hp-table"><thead><tr><th>ที่เห็นบนการ์ด</th><th>แปลว่า</th><th>กดแล้วเป็นอย่างไร</th></tr></thead><tbody>
 <tr><td>ป้ายทอง <span class="hp-btn">แก้ครั้งที่ N ›</span></td><td>พร้อมบันทึกครั้งที่ N</td><td>เปิดฟอร์มนำกลับมาแก้</td></tr>
 <tr><td>ป้าย <span class="hp-btn">นำกลับมาแก้</span></td><td>ยังโหลดข้อมูลจาก Salesforce ไม่เสร็จ</td><td>ขึ้น “กำลังโหลด…” แล้วเปิดฟอร์ม หรือบอกเหตุผลที่แก้ไม่ได้</td></tr>
@@ -4848,10 +4879,10 @@
 <tr><td>ชื่อ นามสกุล หรือชื่อเล่น (2 ตัวอักษรขึ้นไป)</td><td>ทุกบิลของลูกค้าที่ชื่อตรง</td><td>ทุกสาขา · 2 ปีล่าสุด · เจอเยอะให้พิมพ์ให้เจาะจงขึ้น</td></tr>
 <tr><td>กดปุ่มสแกน (มุมขวา) หรือยิงเครื่องสแกนที่ QR บนใบสรุป</td><td>สินค้าของ QR นั้น</td><td>ขึ้น “สแกนแล้ว → P# …” แล้วค้นให้ทันที</td></tr>
 </tbody></table></div>
-<figure class="hp-fig"><img data-src="help_img/repeat-03.jpg" width="640" height="615" alt="ค้นด้วย P# 403079 พบ 1 บิล ค้นทุกวันที่"><figcaption>ค้นด้วย P# — “พบ 1 บิล · ค้นทุกวันที่” ป้ายหน้าช่องเปลี่ยนเป็น P#</figcaption></figure>
-<figure class="hp-fig"><img data-src="help_img/repeat-04.jpg" width="640" height="515" alt="ค้นด้วยชื่อ พบมากกว่า 40 บิล ทุกสาขา 2 ปีล่าสุด"><figcaption>ค้นด้วยชื่อ — “พบ … บิล · ทุกสาขา · 2 ปีล่าสุด” (ชื่อ/เบอร์ในภาพเป็นข้อมูลตัวอย่าง)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/repeat-03.jpg" width="640" height="615" alt="ค้นด้วย P# 403079 พบ 1 บิล ค้นทุกวันที่"><figcaption>ค้นด้วย P# — “พบ 1 บิล · ค้นทุกวันที่” ป้ายหน้าช่องเปลี่ยนเป็น P#</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/repeat-04.jpg" width="640" height="515" alt="ค้นด้วยชื่อ พบมากกว่า 40 บิล ทุกสาขา 2 ปีล่าสุด"><figcaption>ค้นด้วยชื่อ — “พบ … บิล · ทุกสาขา · 2 ปีล่าสุด” (ชื่อ/เบอร์ในภาพเป็นข้อมูลตัวอย่าง)</figcaption></figure>
 <p><b>บิลจาก Salesforce (กรอบสีฟ้า):</b> ตอนค้นด้วยชื่อหรือเบอร์ จะมีส่วน “จาก Salesforce · บิลก่อนมีแอป หรือหลังบ้านเปิดให้” ต่อท้าย เป็นบิลที่ไม่ได้ลงผ่านแอปนี้ (ลงก่อนมีแอป หรือหลังบ้านเปิดใน Salesforce เอง) ย้อนหลัง 2 ปี กดป้าย “นำกลับมาแก้” ได้เหมือนการ์ดปกติ</p>
-<figure class="hp-fig"><img data-src="help_img/repeat-05.jpg" width="640" height="500" alt="ส่วนจาก Salesforce การ์ดกรอบสีฟ้า มีป้ายนำกลับมาแก้"><figcaption>การ์ดกรอบสีฟ้า = บิลที่มีแค่ใน Salesforce</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/repeat-05.jpg" width="640" height="500" alt="ส่วนจาก Salesforce การ์ดกรอบสีฟ้า มีป้ายนำกลับมาแก้"><figcaption>การ์ดกรอบสีฟ้า = บิลที่มีแค่ใน Salesforce</figcaption></figure>
 <ul class="hp-list">
 <li>กด × ในช่องเพื่อล้างคำค้นและกลับไปดูรายการตามช่วงวันที่</li>
 <li>ค้นไม่เจอ: ลองพิมพ์ชื่อเล่น นามสกุล หรือเบอร์โทรแทน · ค้นไม่สำเร็จ (อินเทอร์เน็ต/ระบบ) ให้พิมพ์หรือยิงเลขเดิมอีกครั้ง</li>
@@ -4872,7 +4903,7 @@
 </ul>
 
 <h4 class="hp-h" id="hp-repeat-9">ส่วนที่ 01 รายละเอียด (จุดที่แก้ หมายเหตุ เย็บย้ำกระดุม รูป)</h4>
-<figure class="hp-fig"><img data-src="help_img/repeat-06.jpg" width="1127" height="1180" alt="ฟอร์มนำกลับมาแก้ ส่วนรายละเอียด ความยาวขาแก้เป็น 38.5 นิ้ว มีค่าครั้งที่ 1 39 นิ้ว ติ๊กเย็บย้ำกระดุม และช่องเพิ่มรูป"><figcaption>ส่วน 01 บน iPad — ใต้จุดที่เปิดแก้ มีตัวแดงบอกค่าครั้งที่ 1 ไว้เทียบ (ภาพนี้: ความยาวขาครั้งที่ 1 = 39 นิ้ว แก้ใหม่เป็น 38.5)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/repeat-06.jpg" width="1127" height="1180" alt="ฟอร์มนำกลับมาแก้ ส่วนรายละเอียด ความยาวขาแก้เป็น 38.5 นิ้ว มีค่าครั้งที่ 1 39 นิ้ว ติ๊กเย็บย้ำกระดุม และช่องเพิ่มรูป"><figcaption>ส่วน 01 บน iPad — ใต้จุดที่เปิดแก้ มีตัวแดงบอกค่าครั้งที่ 1 ไว้เทียบ (ภาพนี้: ความยาวขาครั้งที่ 1 = 39 นิ้ว แก้ใหม่เป็น 38.5)</figcaption></figure>
 <ol class="hp-steps">
 <li><b>แก้ไขขนาด / ไม่แก้ไข</b> (มุมขวาของหัวข้อ): ถ้าครั้งนี้แก้แค่อย่างอื่น (เช่น เย็บกระดุม) เลือก “ไม่แก้ไข” แล้วเขียนในหมายเหตุ</li>
 <li><b>จุดวัด</b>: กด <span class="hp-btn">แก้ไข</span> ที่จุดที่จะแก้ แล้วใส่ค่า วิธีกรอกเหมือนฟอร์มลงบิลปกติทุกอย่าง (ปุ่ม ± ทีละ 0.25 นิ้ว · จุดที่มีทิศทางเลือก <b>เก็บเข้า</b> / <b>ขยายออก</b> · ต้นแขนมีช่อง “เก็บเข้า” เพิ่ม · บางจุดมี “ตลอดแนว” · กางเกงมีระดับความยาว FB / NB / HB ไม่บังคับ)</li>
@@ -4885,7 +4916,7 @@
 <div class="hp-warn">ถ้าขึ้น “ข้อความที่จะบันทึกยาว … ตัว … เกิน 255” ต้องลดหมายเหตุลงตามจำนวนที่บอกก่อน ถึงจะกดบันทึกได้</div>
 
 <h4 class="hp-h" id="hp-repeat-10">ส่วนที่ 02 นัดรับ (สาขา จัดส่ง วันที่ งานด่วน ผู้ตรวจ)</h4>
-<figure class="hp-fig"><img data-src="help_img/repeat-07.jpg" width="1127" height="851" alt="ส่วนนัดรับ เปิดปฏิทินเลือกวันที่นัดรับ วันที่ผ่านมาแล้วกดไม่ได้"><figcaption>กดวันที่เพื่อเปิดปฏิทิน · ก่อนหน้า/ถัดไป เปลี่ยนเดือน · วันที่ผ่านไปแล้วกดไม่ได้</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/repeat-07.jpg" width="1127" height="851" alt="ส่วนนัดรับ เปิดปฏิทินเลือกวันที่นัดรับ วันที่ผ่านมาแล้วกดไม่ได้"><figcaption>กดวันที่เพื่อเปิดปฏิทิน · ก่อนหน้า/ถัดไป เปลี่ยนเดือน · วันที่ผ่านไปแล้วกดไม่ได้</figcaption></figure>
 <div class="hp-tablewrap"><table class="hp-table"><thead><tr><th>ช่อง</th><th>ค่าเริ่มต้น</th><th>วิธีใช้ / กติกา</th></tr></thead><tbody>
 <tr><td>สาขาที่นัดรับ *</td><td>สาขานัดรับของบิลเดิม (ถ้าไม่มีใช้สาขาที่ซื้อ หรือสาขาด้านบน)</td><td>เลือกสาขา หรือ <b>Messenger</b> / <b>ขนส่งเอกชน</b> ถ้าเลือกจัดส่ง จะมีช่อง <b>สถานที่ส่ง *</b> (ชื่อผู้รับ ที่อยู่ เบอร์โทร) และระบบเติม “· จัดส่ง … – ที่อยู่” ท้ายรายละเอียด</td></tr>
 <tr><td>วันที่นัดรับ *</td><td>อีก 7 วันนับจากวันนี้</td><td>เลือกวันนี้หรือวันถัดไปเท่านั้น ไกลสุดไม่เกิน 1 ปี</td></tr>
@@ -4893,7 +4924,7 @@
 <tr><td>งานด่วน</td><td>ไม่ด่วน</td><td>ถ้าเลือกวันนัดรับเร็วกว่า 7 วัน ระบบเปิดเป็น “ด่วน” ให้เอง (กดเปลี่ยนเองได้) เมื่อด่วนต้องเลือก <b>ชื่อผู้อนุมัติงานด่วน *</b> และใบสรุปจะมี “!! งานด่วน !!”</td></tr>
 <tr><td>ชื่อพนักงานตรวจสอบประจำสาขา *</td><td>ชื่อในช่องพนักงานขายของหน้าหลัก (ถ้ามีในรายชื่อ)</td><td>พิมพ์แล้วเลือกจากรายชื่อพนักงานใน Salesforce <b>เท่านั้น</b> ชื่อนี้จะพิมพ์บนใบสรุปเป็น “พนักงานตรวจสอบ”</td></tr>
 </tbody></table></div>
-<figure class="hp-fig"><img data-src="help_img/repeat-08.jpg" width="1127" height="611" alt="ส่วนนัดรับ เลือก Messenger มีช่องสถานที่ส่ง งานด่วนเปิด มีผู้อนุมัติ และชื่อพนักงานตรวจสอบ ปุ่มบันทึกข้อมูลกดได้"><figcaption>ตัวอย่างกรอกครบ: จัดส่ง Messenger + งานด่วน + ผู้อนุมัติ + ผู้ตรวจ → ปุ่ม “บันทึกข้อมูล” เป็นสีทอง กดได้</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/repeat-08.jpg" width="1127" height="611" alt="ส่วนนัดรับ เลือก Messenger มีช่องสถานที่ส่ง งานด่วนเปิด มีผู้อนุมัติ และชื่อพนักงานตรวจสอบ ปุ่มบันทึกข้อมูลกดได้"><figcaption>ตัวอย่างกรอกครบ: จัดส่ง Messenger + งานด่วน + ผู้อนุมัติ + ผู้ตรวจ → ปุ่ม “บันทึกข้อมูล” เป็นสีทอง กดได้</figcaption></figure>
 <div class="hp-case"><div class="hp-case-title">รายชื่อผู้ตรวจไม่ขึ้น / เลือกชื่อไม่ได้</div>
 <ul class="hp-list">
 <li>“กำลังโหลดรายชื่อผู้ตรวจจาก Salesforce…” — รอสักครู่</li>
@@ -4927,7 +4958,7 @@
 </ul>
 
 <h4 class="hp-h" id="hp-repeat-13">หลังกดบันทึก: หน้าสรุปและใบสรุป</h4>
-<figure class="hp-fig"><img data-src="help_img/repeat-09.jpg" width="1127" height="1480" alt="หน้าบันทึกนำกลับมาแก้ ครั้งที่ 2 แล้ว ตารางสิ่งที่แก้ในครั้งนี้ ข้อมูลเก่าเทียบข้อมูลใหม่ และรูปใบสรุปสินค้านำกลับมาแก้"><figcaption>หน้าสรุปหลังบันทึก — ตาราง “สิ่งที่แก้ในครั้งนี้” เทียบค่าครั้งที่ 1 กับค่าใหม่ · ใบสรุป “สินค้านำกลับมาแก้” · “อัปโหลดรูปใบสรุปแล้ว” · ปุ่มบันทึกรูป / เสร็จสิ้น (ภาพจากโหมดทดสอบ ชื่อ/เบอร์เป็นข้อมูลตัวอย่าง)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/repeat-09.jpg" width="1127" height="1480" alt="หน้าบันทึกนำกลับมาแก้ ครั้งที่ 2 แล้ว ตารางสิ่งที่แก้ในครั้งนี้ ข้อมูลเก่าเทียบข้อมูลใหม่ และรูปใบสรุปสินค้านำกลับมาแก้"><figcaption>หน้าสรุปหลังบันทึก — ตาราง “สิ่งที่แก้ในครั้งนี้” เทียบค่าครั้งที่ 1 กับค่าใหม่ · ใบสรุป “สินค้านำกลับมาแก้” · “อัปโหลดรูปใบสรุปแล้ว” · ปุ่มบันทึกรูป / เสร็จสิ้น (ภาพจากโหมดทดสอบ ชื่อ/เบอร์เป็นข้อมูลตัวอย่าง)</figcaption></figure>
 <ul class="hp-list">
 <li>หัวเขียว <b>บันทึกนำกลับมาแก้ ครั้งที่ N แล้ว</b></li>
 <li><b>ใบสรุปสินค้านำกลับมาแก้</b> ต่างจากใบปกติ: บรรทัดบน = เลขบิลใหม่ · ครั้งที่ N / วันที่นำกลับมาแก้ / O# · P# · หัวเรื่อง “สินค้านำกลับมาแก้” · “พนักงานตรวจสอบ” แทนพนักงานขาย · ไม่มีบรรทัด “ใช้สินค้าจาก” · ท้ายใบมี <b>QR</b> (ลิงก์หน้าสินค้าใน Salesforce) เหมือนใบปกติ</li>
@@ -4978,17 +5009,17 @@
 <li>ค้นด้วย<b>ช่วงวันที่อย่างเดียว</b>จะไม่รวมใบนำกลับมาแก้ ต้องใส่เลขอย่างใดอย่างหนึ่งข้างบน</li>
 <li>ใบนำกลับมาแก้พิมพ์เต็มความกว้างกระดาษ 72 มม. ขอบบน 1 ซม. (ต่างจากใบปกติ)</li>
 </ul>
-<figure class="hp-fig"><img data-src="help_img/repeat-12.jpg" width="460" height="664" alt="หน้าต่างพิมพ์ ใส่ Suitcube Product 403442 พบทั้งหมด 1 งาน ใบนำกลับมาแก้ 1"><figcaption>ใส่เลข P# ในช่อง Suitcube Product → นับใบนำกลับมาแก้ให้ในวงเล็บ</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/repeat-12.jpg" width="460" height="664" alt="หน้าต่างพิมพ์ ใส่ Suitcube Product 403442 พบทั้งหมด 1 งาน ใบนำกลับมาแก้ 1"><figcaption>ใส่เลข P# ในช่อง Suitcube Product → นับใบนำกลับมาแก้ให้ในวงเล็บ</figcaption></figure>
 
 <h4 class="hp-h" id="hp-repeat-17">แก้ไขงานนำกลับมาแก้ที่บันทึกแล้ว</h4>
-<figure class="hp-fig"><img data-src="help_img/repeat-10.jpg" width="581" height="523" alt="การ์ดที่ป้ายเป็นรอหลังบ้านส่ง มีปุ่มแก้ไขครั้งที่ 2 และข้อความบันทึกงานแก้ครั้งที่ 2 แล้ว รอหลังบ้านลงชื่อและส่งข้อมูลไป Salesforce"><figcaption>หลังบันทึก: ป้าย “รอหลังบ้านส่ง” + ปุ่ม “✎ แก้ไขครั้งที่ 2” (แตะป้ายเทาเพื่อดูเหตุผล)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/repeat-10.jpg" width="581" height="523" alt="การ์ดที่ป้ายเป็นรอหลังบ้านส่ง มีปุ่มแก้ไขครั้งที่ 2 และข้อความบันทึกงานแก้ครั้งที่ 2 แล้ว รอหลังบ้านลงชื่อและส่งข้อมูลไป Salesforce"><figcaption>หลังบันทึก: ป้าย “รอหลังบ้านส่ง” + ปุ่ม “✎ แก้ไขครั้งที่ 2” (แตะป้ายเทาเพื่อดูเหตุผล)</figcaption></figure>
 <ol class="hp-steps">
 <li>ที่การ์ด (หรือผลค้นหา) กด <span class="hp-btn">✎ แก้ไขครั้งที่ N</span> ปุ่มขึ้น “กำลังโหลด…”</li>
 <li>ฟอร์มเปิดพร้อมข้อมูลเดิม ป้ายบนเป็น <b>แก้ไข ครั้งที่ N</b> และแถบ <b>กำลังแก้ไขบิลเลขที่ (เลขบิลใหม่)</b> จุดวัด งานด่วน/ผู้อนุมัติ และที่อยู่จัดส่งถูกแยกกลับเข้าช่องให้</li>
 <li>แก้สิ่งที่ต้องการ แล้วกด <span class="hp-btn">บันทึกการแก้ไข</span> (ถ้ายังไม่ได้เปลี่ยนอะไร ปุ่มจะบอก “ยังขาด: ยังไม่ได้แก้อะไร”)</li>
 <li>หน้าสรุปขึ้น <b>แก้ไขรายการนำกลับมาแก้ ครั้งที่ N แล้ว</b> พร้อมกล่อง “สิ่งที่แก้ไข” และวาดใบสรุปใหม่ทับไฟล์ชื่อเดิมใน Lark</li>
 </ol>
-<figure class="hp-fig"><img data-src="help_img/repeat-11.jpg" width="1127" height="340" alt="ฟอร์มแก้ไข ป้ายแก้ไขครั้งที่ 2 และแถบกำลังแก้ไขบิลเลขที่"><figcaption>โหมดแก้ไข — แถบ “กำลังแก้ไขบิลเลขที่ …”</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/repeat-11.jpg" width="1127" height="340" alt="ฟอร์มแก้ไข ป้ายแก้ไขครั้งที่ 2 และแถบกำลังแก้ไขบิลเลขที่"><figcaption>โหมดแก้ไข — แถบ “กำลังแก้ไขบิลเลขที่ …”</figcaption></figure>
 <ul class="hp-list">
 <li>แก้ใน <b>Lark เท่านั้น</b> ไม่ส่งเข้า Salesforce ตอนนั้น (ข้อมูลที่แก้จะถูกส่งตอนส่งจริง) ระบบจดใน “ประวัติการแก้ไข” ว่าใครแก้ เมื่อไหร่</li>
 <li>เลขที่บิลใหม่คงเดิม · ในโหมดแก้ไขเพิ่มรูปไม่ได้ · วันที่และผู้ตรวจเดิมยังใช้ได้แม้วันผ่านไปแล้วหรือชื่อไม่อยู่ในรายชื่อแล้ว</li>
@@ -5145,7 +5176,7 @@
 <li>ทำงานต่อได้เลย — กดบันทึกร่างแล้ว <b>ข้อมูลยังอยู่ในฟอร์มเหมือนเดิม</b> ระบบไม่ได้ล้างให้</li>
 </ol>
 
-<figure class="hp-fig"><img data-src="help_img/more-01.jpg" width="600" height="299" alt="ปุ่มบันทึกร่างสามสถานะ"><figcaption>ปุ่มบันทึกร่างที่แถบล่าง 3 สถานะ (บนลงล่าง): ปกติ · หลังบันทึกสำเร็จ “บันทึกแล้ว” · บันทึกในเครื่องได้ แต่ส่งขึ้นเซิร์ฟเวอร์ไม่ได้ “บันทึกในเครื่องแล้ว · ยังไม่​<span class="nb">ซิงก์</span>”. ลูกศรสีทองด้านขวาคือปุ่มถัดไป</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/more-01.jpg" width="600" height="299" alt="ปุ่มบันทึกร่างสามสถานะ"><figcaption>ปุ่มบันทึกร่างที่แถบล่าง 3 สถานะ (บนลงล่าง): ปกติ · หลังบันทึกสำเร็จ “บันทึกแล้ว” · บันทึกในเครื่องได้ แต่ส่งขึ้นเซิร์ฟเวอร์ไม่ได้ “บันทึกในเครื่องแล้ว · ยังไม่​<span class="nb">ซิงก์</span>”. ลูกศรสีทองด้านขวาคือปุ่มถัดไป</figcaption></figure>
 
 <div class="hp-tablewrap"><table class="hp-table">
 <thead><tr><th>ข้อความบนปุ่ม</th><th>ความหมาย</th><th>ต้องทำอะไร</th></tr></thead>
@@ -5158,7 +5189,7 @@
 </tbody>
 </table></div>
 
-<figure class="hp-fig"><img data-src="help_img/more-02.jpg" width="891" height="247" alt="ช่องสาขามีกรอบแดงและปุ่มบอกให้เลือกสาขาก่อน"><figcaption>กด <span class="hp-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="hp-ico"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path><path d="M17 21v-8H7v8"></path><path d="M7 3v5h8"></path></svg>บันทึกร่าง</span> ตอนยังไม่เลือกสาขา: ช่อง <b>สาขา</b> ที่แถบบนมีกรอบแดง (ภาพบน) และปุ่มเปลี่ยนเป็น “เลือกสาขาที่แถบบนก่อน” (ภาพล่าง) — ร่างยังไม่ถูกบันทึก</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/more-02.jpg" width="891" height="247" alt="ช่องสาขามีกรอบแดงและปุ่มบอกให้เลือกสาขาก่อน"><figcaption>กด <span class="hp-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="hp-ico"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path><path d="M17 21v-8H7v8"></path><path d="M7 3v5h8"></path></svg>บันทึกร่าง</span> ตอนยังไม่เลือกสาขา: ช่อง <b>สาขา</b> ที่แถบบนมีกรอบแดง (ภาพบน) และปุ่มเปลี่ยนเป็น “เลือกสาขาที่แถบบนก่อน” (ภาพล่าง) — ร่างยังไม่ถูกบันทึก</figcaption></figure>
 
 <h4 class="hp-h" id="hp-more-4">ร่างเก็บอะไรไว้ และไม่เก็บอะไร</h4>
 <div class="hp-item"><div class="hp-name">สิ่งที่ร่างเก็บไว้ให้</div><div class="hp-desc">
@@ -5217,7 +5248,7 @@
 <li>ทำต่อให้เสร็จ แล้วกด <span class="hp-btn">บันทึกข้อมูล</span> ที่หน้า 3 ตามปกติ — เมื่อบิลบันทึกสำเร็จ ร่างของลูกค้าคนนี้ (เบอร์เดียวกัน) จะถูกลบให้เอง</li>
 </ol>
 
-<figure class="hp-fig"><img data-src="help_img/more-03.jpg" width="960" height="765" alt="แท็บร่างที่บันทึกไว้มีสามร่าง"><figcaption><span class="nb">แท็บ</span> <b>ร่างที่บันทึกไว้ (3)</b> ของสาขา R3: ป้าย “สาขา R3” มุมขวาบน, ช่องค้นหาจากเบอร์โทรศัพท์, บรรทัด “ร่างของสาขา R3 ทั้งหมด 3 ร่าง”, และแถวร่างเรียงจากใหม่ไปเก่า (ชื่อ · เบอร์ / เวลาที่บันทึก · พนักงานที่บันทึก / ปุ่ม ×) — ข้อมูลในภาพเป็นข้อมูลสมมติ</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/more-03.jpg" width="960" height="765" alt="แท็บร่างที่บันทึกไว้มีสามร่าง"><figcaption><span class="nb">แท็บ</span> <b>ร่างที่บันทึกไว้ (3)</b> ของสาขา R3: ป้าย “สาขา R3” มุมขวาบน, ช่องค้นหาจากเบอร์โทรศัพท์, บรรทัด “ร่างของสาขา R3 ทั้งหมด 3 ร่าง”, และแถวร่างเรียงจากใหม่ไปเก่า (ชื่อ · เบอร์ / เวลาที่บันทึก · พนักงานที่บันทึก / ปุ่ม ×) — ข้อมูลในภาพเป็นข้อมูลสมมติ</figcaption></figure>
 
 <div class="hp-item"><div class="hp-name">ร่างอัตโนมัติ <span class="draft-auto">บันทึกอัตโนมัติ</span></div><div class="hp-desc">ถ้าในฟอร์มมีข้อมูลลูกค้า (ชื่อ นามสกุล ชื่อเล่น เบอร์ หรือรหัสสินค้า/จุดวัด) ที่ยังไม่ได้กดบันทึกร่าง แล้ว<b>แตะเปิดร่างอื่น</b> หรือ<b>กดดินสอแก้บิลเก่า</b> ระบบบันทึกข้อมูลที่กรอกค้างไว้เป็นร่างให้ก่อนเอง ไม่ถาม แล้วขึ้นข้อความเล็กด้านล่างจอ “บันทึกร่างอัตโนมัติแล้ว: (ชื่อลูกค้า)”
 <ul class="hp-list">
@@ -5243,7 +5274,7 @@
 <li>“เลือกสาขาที่แถบบน เพื่อดูร่างที่ใช้ร่วมกันทุกเครื่องของสาขานั้น (ตอนนี้แสดงเฉพาะร่างในเครื่องนี้)” — ยังไม่ได้เลือกสาขา</li>
 </ul></div></div>
 
-<figure class="hp-fig"><img data-src="help_img/more-04.jpg" width="960" height="696" alt="แท็บร่างตอนเชื่อมต่อเซิร์ฟเวอร์ไม่ได้"><figcaption>ตอนเชื่อมต่อเซิร์ฟเวอร์ไม่ได้: มีบรรทัดแดง “เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ — แสดงเฉพาะร่างในเครื่องนี้” และร่างที่ยังส่งไม่ขึ้นมีป้ายแดง “ในเครื่องนี้ ยังไม่​<span class="nb">ซิงก์</span>” (ร่างบน ส่วนร่างล่าง​<span class="nb">ซิงก์</span>​แล้วจึงไม่มีป้าย)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/more-04.jpg" width="960" height="696" alt="แท็บร่างตอนเชื่อมต่อเซิร์ฟเวอร์ไม่ได้"><figcaption>ตอนเชื่อมต่อเซิร์ฟเวอร์ไม่ได้: มีบรรทัดแดง “เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ — แสดงเฉพาะร่างในเครื่องนี้” และร่างที่ยังส่งไม่ขึ้นมีป้ายแดง “ในเครื่องนี้ ยังไม่​<span class="nb">ซิงก์</span>” (ร่างบน ส่วนร่างล่าง​<span class="nb">ซิงก์</span>​แล้วจึงไม่มีป้าย)</figcaption></figure>
 
 <div class="hp-case"><div class="hp-case-title"><span class="nb">ไอแพด</span>​อีกเครื่องของสาขาเดียวกันอยากทำต่อ</div>
 <p>เครื่องที่ 2 เลือกสาขาเดียวกันที่แถบบน → กด <span class="hp-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="hp-ico"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 4v4h4"></path><path d="M12 8v4l3 2"></path></svg>รายการย้อนหลัง</span> → <span class="nb">แท็บ</span> <span class="hp-btn">ร่างที่บันทึกไว้</span> → เห็นร่างที่เครื่องแรกบันทึก (ถ้าเครื่องแรกขึ้น “บันทึกแล้ว”) → แตะเพื่อเปิดทำต่อ. รายการโหลดใหม่จากเซิร์ฟเวอร์ทุกครั้งที่เปิด​<span class="nb">แท็บ</span> และเมื่อเปลี่ยนสาขาที่แถบบน</p></div>
@@ -5265,7 +5296,7 @@
 
 <h4 class="hp-h" id="hp-more-11">แบบที่ 2: <span class="hp-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="hp-ico"><path d="M6 9V3h12v6"></path><path d="M6 18H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2"></path><path d="M6 14h12v7H6z"></path></svg>ปุ่มปริ้น</span> — พิมพ์ซ้ำเอง</h4>
 <p>ปุ่มไอคอนเครื่องพิมพ์อยู่มุมซ้ายบน ข้างไอคอน <span class="hp-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" class="hp-ico"><path d="M9.09 9.5a3 3 0 0 1 5.82 1c0 2-3 3-3 3"></path><path d="M12 17.2v.01"></path></svg>วิธีใช้งาน</span> (ถัดจากชื่อหน้า “สั่งแก้ปรับทรงสำเร็จรูป”). ชื่อปุ่มคือ “พิมพ์ใบสั่งแก้ปรับทรงสำเร็จรูป” (ขึ้นเมื่อวางเมาส์บนปุ่ม). หน้าต่างที่เปิดขึ้นเขียนกำกับว่า <b>“สำหรับทีมสั่งตัด”</b> — ใช้ค้นบิลเก่าแล้วสั่งพิมพ์ใบสรุปซ้ำ</p>
-<figure class="hp-fig"><img data-src="help_img/more-05.jpg" width="870" height="135" alt="มุมซ้ายบนมีไอคอนเครื่องหมายคำถามและไอคอนเครื่องพิมพ์"><figcaption>มุมซ้ายบนของหน้า: ไอคอน ? (วิธีใช้งาน) และไอคอนเครื่องพิมพ์ (ปุ่มปริ้น). ข้อความเล็กใต้ชื่อหน้า (“สินค้าสำเร็จรูปที่นำกลับมาแก้ เริ่มใช้ 3 สาขา CM RCD R3 เริ่มใช้วันแรกวันที่ 22 ตุลาคม”) เป็นป้ายประกาศอย่างเดียว ไม่ได้เปลี่ยนการทำงานของปุ่ม</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/more-05.jpg" width="870" height="135" alt="มุมซ้ายบนมีไอคอนเครื่องหมายคำถามและไอคอนเครื่องพิมพ์"><figcaption>มุมซ้ายบนของหน้า: ไอคอน ? (วิธีใช้งาน) และไอคอนเครื่องพิมพ์ (ปุ่มปริ้น). ข้อความเล็กใต้ชื่อหน้า (“สินค้าสำเร็จรูปที่นำกลับมาแก้ เริ่มใช้ 3 สาขา CM RCD R3 เริ่มใช้วันแรกวันที่ 22 ตุลาคม”) เป็นป้ายประกาศอย่างเดียว ไม่ได้เปลี่ยนการทำงานของปุ่ม</figcaption></figure>
 
 <div class="hp-item"><div class="hp-name">สาขา <span class="hp-kind">Dropdown</span></div><div class="hp-desc">เริ่มต้น “ทุกสาขา”. เลือกสาขาเพื่อเอาเฉพาะบิลที่ลงด้วยสาขานั้น (= สาขาที่เลือกที่แถบบนตอนลงบิล) — ไม่ใช่สาขาที่นัดรับ</div></div>
 <div class="hp-item"><div class="hp-name">เลขที่บิล <span class="hp-kind">พิมพ์ข้อความ</span></div><div class="hp-desc">พิมพ์ไม่ครบก็เจอ เช่น R3261007 ได้ทุกบิลที่เลขที่บิลมีข้อความนี้. ช่องบอกว่า “เว้นว่าง = ค้นด้วยช่วงวันที่แทน”</div></div>
@@ -5279,7 +5310,7 @@
 <div class="hp-item"><div class="hp-name">ปุ่ม ยกเลิก / สั่งพิมพ์</div><div class="hp-desc"><span class="hp-btn">ยกเลิก</span> ปิดหน้าต่าง · <span class="hp-btn">สั่งพิมพ์</span> เริ่มทำงานตามหัวข้อ “สั่งพิมพ์ทำอะไรบ้าง” ด้านล่าง</div></div>
 <div class="hp-item"><div class="hp-name">แถบ “การพิมพ์” และปุ่ม หยุดพิมพ์ <span class="hp-kind">ใต้ป้ายพบทั้งหมด</span></div><div class="hp-desc">บอกว่าเครื่องพิมพ์ตอนนี้ “ปกติ” หรือ “หยุดพิมพ์อยู่”. <span class="hp-btn">หยุดพิมพ์</span> ใช้ตอนกระดาษออกมาผิดบิลหรือออกมากเกินไป: ระบบหยุดส่งบิลไปเครื่องพิมพ์ทันที และสั่งเครื่องพิมพ์ล้างงานที่ค้างอยู่ (บิลที่ยังไม่ได้พิมพ์ยังอยู่ในคิว ไม่หาย). ระหว่างหยุดอยู่ <b>ทุกเครื่องที่เปิดหน้านี้จะเห็นแถบแดงบนสุด</b> จนกว่าจะมีคนกด <span class="hp-btn">เริ่มพิมพ์ต่อ</span> (ไม่เริ่มให้เอง ต้องกดเอง). ถ้าขึ้น “ยังไม่รับทราบ” แปลว่าโปรแกรมพิมพ์ที่เครื่องพิมพ์อาจปิดอยู่ ให้ล้างคิวที่เครื่องพิมพ์เอง</div></div>
 
-<figure class="hp-fig"><img data-src="help_img/more-06.jpg" width="690" height="894" alt="หน้าต่างพิมพ์ใบสั่งแก้ปรับทรงสำเร็จรูป"><figcaption>หน้าต่างพิมพ์ตอนเปิดใหม่: ป้ายทอง “พบทั้งหมด 2 งาน (เมื่อวาน)”, สาขา “ทุกสาขา”, ช่องเลขที่บิล / Suitcube Order / Suitcube Product ว่าง, จาก-ถึงเป็นเมื่อวาน (ข้อมูลในภาพเป็นข้อมูลสมมติ)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/more-06.jpg" width="690" height="894" alt="หน้าต่างพิมพ์ใบสั่งแก้ปรับทรงสำเร็จรูป"><figcaption>หน้าต่างพิมพ์ตอนเปิดใหม่: ป้ายทอง “พบทั้งหมด 2 งาน (เมื่อวาน)”, สาขา “ทุกสาขา”, ช่องเลขที่บิล / Suitcube Order / Suitcube Product ว่าง, จาก-ถึงเป็นเมื่อวาน (ข้อมูลในภาพเป็นข้อมูลสมมติ)</figcaption></figure>
 
 <div class="hp-tablewrap"><table class="hp-table">
 <thead><tr><th>กรอกอะไร</th><th>ระบบค้นอย่างไร</th></tr></thead>
@@ -5300,7 +5331,7 @@
 <li>ทำซ้ำกับช่อง <span class="hp-field">ถึง</span>. ถ้าต้องการวันเดียว ให้เลือกวันเดียวกันทั้งใน จาก และ ถึง</li>
 </ol>
 <div class="hp-warn">ตอนปฏิทินเปิดอยู่ ปฏิทินจะลอยทับปุ่ม <span class="hp-btn">ยกเลิก</span> และ <span class="hp-btn">สั่งพิมพ์</span> จนกดปุ่มไม่ได้. ให้เลือกวันที่ให้เสร็จ หรือแตะที่วันที่ในช่องเดิมอีกครั้ง หรือแตะที่ว่างนอกปฏิทิน (ในหน้าต่างพิมพ์) 1 ครั้งให้ปฏิทินปิดก่อน แล้วค่อยกดปุ่ม</div>
-<figure class="hp-fig"><img data-src="help_img/more-11.jpg" width="690" height="609" alt="ปฏิทินเปิดทับปุ่มยกเลิกและสั่งพิมพ์ในหน้าต่างพิมพ์"><figcaption>ปฏิทินที่เปิดจากช่อง <b>จาก</b>: หัวปฏิทินมีปุ่ม ก่อนหน้า / ถัดไป และชื่อเดือน. วงกลมสีทองเข้ม = วันนี้ (7), วงกลมสีอ่อน = วันที่เลือกอยู่ (6 = เมื่อวาน). ปุ่ม ยกเลิก / สั่งพิมพ์ ถูกปฏิทินบังเกือบหมด (เห็นแค่ขอบบนอยู่หลังปฏิทิน) — ข้อมูลในภาพเป็นข้อมูลสมมติ</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/more-11.jpg" width="690" height="609" alt="ปฏิทินเปิดทับปุ่มยกเลิกและสั่งพิมพ์ในหน้าต่างพิมพ์"><figcaption>ปฏิทินที่เปิดจากช่อง <b>จาก</b>: หัวปฏิทินมีปุ่ม ก่อนหน้า / ถัดไป และชื่อเดือน. วงกลมสีทองเข้ม = วันนี้ (7), วงกลมสีอ่อน = วันที่เลือกอยู่ (6 = เมื่อวาน). ปุ่ม ยกเลิก / สั่งพิมพ์ ถูกปฏิทินบังเกือบหมด (เห็นแค่ขอบบนอยู่หลังปฏิทิน) — ข้อมูลในภาพเป็นข้อมูลสมมติ</figcaption></figure>
 
 <h4 class="hp-h" id="hp-more-13">วิธีใช้ ทีละขั้น</h4>
 <ol class="hp-steps">
@@ -5310,7 +5341,7 @@
 <li>เมื่อสร้างใบสรุปครบ ระบบเปิดหน้าต่างพิมพ์ของ​<span class="nb">ไอแพด</span>/คอมพิวเตอร์ขึ้นเอง — เลือกเครื่องพิมพ์แล้วสั่งพิมพ์</li>
 <li>หน้าต่างพิมพ์ใบสั่งแก้เปลี่ยนเป็นหน้าสรุปผล (ภาพถัดไป) — ตรวจว่าทุกบิลขึ้นครบ แล้วกด <span class="hp-btn">ปิด</span></li>
 </ol>
-<figure class="hp-fig"><img data-src="help_img/more-07.jpg" width="690" height="597" alt="หน้าสรุปหลังกดสั่งพิมพ์"><figcaption>หน้าสรุปหลังกดสั่งพิมพ์: “อัปเดตข้อมูลล่าสุด + เข้าคิวพิมพ์แล้ว 2 / 2 รายการ (ทุกสาขา, วันที่ที่ค้น)” และแถวต่อบิล: เลขที่บิล · Suitcube ID (O#) · Product ID (P#)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/more-07.jpg" width="690" height="597" alt="หน้าสรุปหลังกดสั่งพิมพ์"><figcaption>หน้าสรุปหลังกดสั่งพิมพ์: “อัปเดตข้อมูลล่าสุด + เข้าคิวพิมพ์แล้ว 2 / 2 รายการ (ทุกสาขา, วันที่ที่ค้น)” และแถวต่อบิล: เลขที่บิล · Suitcube ID (O#) · Product ID (P#)</figcaption></figure>
 
 <h4 class="hp-h" id="hp-more-14">สั่งพิมพ์ทำอะไรบ้าง (ต่อบิล)</h4>
 <ol class="hp-steps">
@@ -5324,7 +5355,7 @@
 
 <div class="hp-case"><div class="hp-case-title">บิลที่ยังไม่มีเลข P# (หลังบ้านยังไม่ยืนยัน หรือเพิ่งยืนยันและเลขยังไม่ขึ้น)</div>
 <p>ในหน้าสรุป แถวของบิลนั้นขึ้นเครื่องหมายเตือนหน้าเลขที่บิล และข้อความ “สร้างใบสรุปใหม่ไม่สำเร็จ: ไม่พบ Product ID ของบิลนี้” (ตัวเลขสรุปจะน้อยกว่าจำนวนที่พบ เช่น 2 / 3 และบิลนั้นไม่มีกระดาษออก; บิลอื่นในรอบเดียวกันที่มีเลขแล้วยังพิมพ์ตามปกติ). ให้ถามพนักงานหลังบ้านว่ายืนยันบิลนี้แล้วหรือยัง (ดูหัวข้อ “ทำไมบิลใหม่ยังไม่มี QR”) แล้วค่อยสั่งพิมพ์ใหม่</p></div>
-<figure class="hp-fig"><img data-src="help_img/more-12.jpg" width="690" height="687" alt="หน้าสรุปการพิมพ์ที่มีบิลหนึ่งใบพิมพ์ไม่ได้"><figcaption>ตัวอย่างหน้าสรุป: ป้ายทองบอก “พบทั้งหมด 3 งาน” แต่หน้าสรุปได้ <b>2 / 3</b> รายการ เพราะบิลกลาง (R326100602) ยังไม่มีเลข P# — แถวนั้นมีเครื่องหมายเตือนสามเหลี่ยมสีเหลืองและบรรทัดสาเหตุ ส่วนอีก 2 บิลพิมพ์ตามปกติ (ข้อมูลในภาพเป็นข้อมูลสมมติ)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/more-12.jpg" width="690" height="687" alt="หน้าสรุปการพิมพ์ที่มีบิลหนึ่งใบพิมพ์ไม่ได้"><figcaption>ตัวอย่างหน้าสรุป: ป้ายทองบอก “พบทั้งหมด 3 งาน” แต่หน้าสรุปได้ <b>2 / 3</b> รายการ เพราะบิลกลาง (R326100602) ยังไม่มีเลข P# — แถวนั้นมีเครื่องหมายเตือนสามเหลี่ยมสีเหลืองและบรรทัดสาเหตุ ส่วนอีก 2 บิลพิมพ์ตามปกติ (ข้อมูลในภาพเป็นข้อมูลสมมติ)</figcaption></figure>
 <div class="hp-case"><div class="hp-case-title">ป้ายขึ้น “พบทั้งหมด 0 งาน” (ตัวแดง)</div>
 <p>ไม่มีบิลตรงเงื่อนไข. <span class="nb">เช็ก</span>​ตามลำดับ: วันที่ยังเป็น “เมื่อวาน” อยู่ไหม · เลือกสาขาถูกไหม (สาขาที่ลงบิล) · พิมพ์เลขบิล/O#/P# ผิดหรือเปล่า. ถ้ากด สั่งพิมพ์ ต่อจะขึ้น “ไม่พบบิลในช่วงวันที่นี้” หรือ “ไม่พบบิลตามเงื่อนไขที่ค้นหานี้”</p></div>
 <div class="hp-case"><div class="hp-case-title">ป้ายขึ้น “นับจำนวนงานไม่สำเร็จ”</div>
@@ -5351,7 +5382,7 @@
 </tbody>
 </table></div>
 
-<figure class="hp-fig"><img data-src="help_img/more-08.jpg" width="612" height="909" alt="เปรียบเทียบใบสรุปตอนบันทึกกับใบพิมพ์ซ้ำ"><figcaption>ใบสรุปใบเดียวกัน 2 แบบ. <b>ซ้าย</b> = ใบที่ออกตอนกดบันทึก: ไม่มีบรรทัด O#/P# และไม่มี QR. <b>ขวา</b> = ใบพิมพ์ซ้ำ: มีบรรทัด “O# … · P# … (ชิ้นที่ 1)” และ QR code ท้ายใบ (เห็น QR ครบทั้งอัน). ทั้งสองใบมีบรรทัด “ที่สาขาR3” ใต้วันนัดรับ (ข้อมูลในภาพเป็นข้อมูลสมมติ)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/more-08.jpg" width="612" height="909" alt="เปรียบเทียบใบสรุปตอนบันทึกกับใบพิมพ์ซ้ำ"><figcaption>ใบสรุปใบเดียวกัน 2 แบบ. <b>ซ้าย</b> = ใบที่ออกตอนกดบันทึก: ไม่มีบรรทัด O#/P# และไม่มี QR. <b>ขวา</b> = ใบพิมพ์ซ้ำ: มีบรรทัด “O# … · P# … (ชิ้นที่ 1)” และ QR code ท้ายใบ (เห็น QR ครบทั้งอัน). ทั้งสองใบมีบรรทัด “ที่สาขาR3” ใต้วันนัดรับ (ข้อมูลในภาพเป็นข้อมูลสมมติ)</figcaption></figure>
 
 <h4 class="hp-h" id="hp-more-16">ทำไมบิลใหม่ยังไม่มี QR (และอาจยังไม่มี P#)</h4>
 <ul class="hp-list">
@@ -5450,7 +5481,7 @@
 <li><b>วิธีแก้:</b> ตัดไซซ์ท้ายรหัสออก แล้วพิมพ์ไซซ์ลงช่อง <span class="hp-field">Size</span> แทน (เช่น รหัส ...-39 → รหัสไม่มี -39 และช่อง Size ใส่ 39). ข้อความแจ้งเตือนเขียนไว้ตรง ๆ ว่า “ไซซ์ที่ต่อท้ายรหัสให้ตัดออกแล้วใส่ช่อง Size แทน”</li>
 <li><b>ถ้าตัดไซซ์ออกแล้วรหัสยังเกิน 15 ตัว</b> (ขึ้นข้อความเดิมซ้ำ) แปลว่ารหัสนี้ยาวเกินที่ Salesforce รับ — บันทึกไม่ได้. อย่าตัดรหัสเอง ให้จดรหัสสินค้าแจ้งทีมไอที แล้วกด <span class="hp-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="hp-ico"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path><path d="M17 21v-8H7v8"></path><path d="M7 3v5h8"></path></svg>บันทึกร่าง</span> เก็บไว้ก่อน (ร่างเก็บ 7 วัน)</li>
 </ul></div>
-<figure class="hp-fig"><img data-src="help_img/more-09.jpg" width="540" height="477" alt="กล่องแจ้งข้อมูลที่จำเป็นยังไม่ครบ มีข้อความรหัสสินค้ายาวเกิน"><figcaption>กล่องเตือนตอนกดบันทึก: รหัสสินค้ายาว 17 ตัว (เกิน 15) และยังไม่ได้ใส่ Size — แก้ตามที่เขียนในกล่อง (รหัสในภาพเป็นรหัสสมมติ)</figcaption></figure>
+<figure class="hp-fig"><img data-src="../help_img/more-09.jpg" width="540" height="477" alt="กล่องแจ้งข้อมูลที่จำเป็นยังไม่ครบ มีข้อความรหัสสินค้ายาวเกิน"><figcaption>กล่องเตือนตอนกดบันทึก: รหัสสินค้ายาว 17 ตัว (เกิน 15) และยังไม่ได้ใส่ Size — แก้ตามที่เขียนในกล่อง (รหัสในภาพเป็นรหัสสมมติ)</figcaption></figure>
 
 <div class="hp-case"><div class="hp-case-title">ขึ้นคำถาม “แน่ใจหรือเปล่าที่จะบันทึกข้อมูลความยาวขาเท่ากับ … นิ้ว”</div>
 <ul class="hp-list">
@@ -5551,7 +5582,7 @@
 <li><b>สาเหตุ:</b> มีการอัปเดตหน้าเว็บ ระบบตรวจเจอเองทุก 2 ชั่วโมง และตอนสลับกลับมาที่หน้านี้ (ห่างจากการตรวจครั้งก่อนเกิน 2 นาที)</li>
 <li><b>วิธีแก้:</b> กด <span class="hp-btn">รีเฟรชตอนนี้</span> เมื่อสะดวก (ไม่บังคับ แต่ควรทำเพื่อใช้ฟีเจอร์ล่าสุด). ข้อมูลที่กรอกค้างอยู่ระบบจำไว้ให้ จะกลับมาหลังรีเฟรช <b>แต่รูปที่แนบไว้ไม่กลับมา</b> — ควรรีเฟรชตอนไม่ได้อยู่กลางบิล หรือกด <span class="hp-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="hp-ico"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path><path d="M17 21v-8H7v8"></path><path d="M7 3v5h8"></path></svg>บันทึกร่าง</span> ก่อน (ร่างเก็บ 7 วัน แต่ไม่เก็บรูป) แล้วแนบรูปใหม่ทีหลัง. เลขเวอร์ชันของหน้าที่เปิดอยู่คือตัวเลขเล็ก ๆ ขึ้นต้นด้วย v. ข้างปุ่ม <span class="hp-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="hp-ico"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path><path d="M17 21v-8H7v8"></path><path d="M7 3v5h8"></path></svg>บันทึกร่าง</span> — แจ้งทีมไอทีพร้อมเลขนี้เมื่อพบปัญหา</li>
 </ul></div>
-<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="help_img/more-10.jpg" width="1536" height="80" alt="แถบแจ้งมีเวอร์ชันใหม่"></div><figcaption>แถบแจ้งเตือนเวอร์ชันใหม่ (อยู่บนสุดของหน้า): ข้อความ “มีเวอร์ชันใหม่แล้ว รีเฟรชเพื่อใช้งานเวอร์ชันล่าสุด” และปุ่ม “รีเฟรชตอนนี้”</figcaption></figure>
+<figure class="hp-fig hp-fig-strip"><div class="hp-strip-scroll"><img data-src="../help_img/more-10.jpg" width="1536" height="80" alt="แถบแจ้งมีเวอร์ชันใหม่"></div><figcaption>แถบแจ้งเตือนเวอร์ชันใหม่ (อยู่บนสุดของหน้า): ข้อความ “มีเวอร์ชันใหม่แล้ว รีเฟรชเพื่อใช้งานเวอร์ชันล่าสุด” และปุ่ม “รีเฟรชตอนนี้”</figcaption></figure>
         <div class="hp-fab"><a class="hp-jump" href="#hp-toc-more" title="กลับไปที่สารบัญ" aria-label="กลับไปที่สารบัญ">สารบัญ</a></div>
       </div>
       </div>
@@ -6117,7 +6148,7 @@
   // [ใหม่ตามที่ขอ] เลขเวอร์ชันของหน้านี้ — ต้องเปลี่ยนทุกครั้งที่ deploy ใหม่ (รูปแบบ YYYY-MM-DD-ครั้งที่ในวันนั้น)
   // ระบบจะดึงไฟล์ index.html จากเซิร์ฟเวอร์มาเทียบเลขนี้ทุก 2 ชม. + ทุกครั้งที่พนักงานสลับกลับมาที่แท็บ ถ้าไม่ตรง = เด้งแถบเตือนให้รีเฟรช
   // (แก้ปัญหาที่พนักงานเปิดแท็บค้างไว้หลายวัน รันโค้ดเวอร์ชันเก่าโดยไม่รู้ตัว หลัง deploy)
-  const APP_VERSION = '2026-11-27-19-voice-32b-qr-1-numpad-5-belt-1';
+  const APP_VERSION = '2026-11-27-23-voice-34c-qr-1-numpad-5-belt-1';
   // [ใหม่ 2026-10-16 ตามที่ขอ] คำที่ช่องติ๊ก "ใช้ช่างหน้าร้าน" เติมลงหมายเหตุกางเกง · หมายเหตุมีคำนี้ + สาขาที่ซื้อ KK + กางเกง = ใบสรุปของชิ้นนั้นเป็น 4×6 นิ้ว (shouldUseReceipt4x6)
   const SHOP_TAILOR_WORD='ใช้ช่างหน้าร้าน';
 
@@ -6240,13 +6271,35 @@
   (function(){
     const pop=document.getElementById('infoPop'), home=document.getElementById('hpHome'), body=document.getElementById('infoBody'), q=document.getElementById('hpQ'), res=document.getElementById('hpRes'), back=document.getElementById('hpBack');
     if(!pop||!home||!body||!q) return;
-    const P={start:'<path d="M4 6h16M4 12h10M4 18h7"/><path d="M17 15l3 3-3 3"/>',user:'<circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/>',item:'<path d="M8 3l-4 3 2 4 2-1v12h8V9l2 1 2-4-4-3c-.6 1.5-2.2 2.5-4 2.5S8.6 4.5 8 3z"/>',save:'<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 4v5h7V4M8 20v-6h8v6"/>',hist:'<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5M12 8v4l3 2"/>',repeat:'<path d="M4 10a8 8 0 0 1 14-4l2 2M20 14a8 8 0 0 1-14 4l-2-2"/><path d="M20 4v4h-4M4 20v-4h4"/>',mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',print:'<path d="M7 9V3h10v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/>'};
+    const P={start:'<path d="M4 6h16M4 12h10M4 18h7"/><path d="M17 15l3 3-3 3"/>',user:'<circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/>',item:'<path d="M9.5 3h5l-1.2 3.2h-2.6z"/><path d="M10.7 6.2L8.6 16.5 12 21l3.4-4.5-2.1-10.3"/>',save:'<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 4v5h7V4M8 20v-6h8v6"/>',hist:'<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5M12 8v4l3 2"/>',repeat:'<path d="M4 10a8 8 0 0 1 14-4l2 2M20 14a8 8 0 0 1-14 4l-2-2"/><path d="M20 4v4h-4M4 20v-4h4"/>',mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',print:'<path d="M7 9V3h10v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/>'};
     const T=[['header','start','เริ่มต้นใช้งาน','ทำบิล 1 ใบใน 4 ขั้นตอน · แถบบน/ล่าง · ข้อมูลจะหายไหม'],['1','user','หน้า 1 ข้อมูลลูกค้า','ค้นเบอร์ · ลูกค้าเก่า/ใหม่ · หลายคนใช้เบอร์เดียวกัน'],['2','item','หน้า 2 สินค้า','รหัส · สแกน · จุดวัด · สินค้าหลายชิ้น'],['3','save','หน้า 3 นัดรับ & บันทึก','ชำระเงิน · นัดรับ · แยกบิล · บันทึกไม่สำเร็จ'],['history','hist','ประวัติใบสั่งแก้','รายการนัดรับ · ประวัติ · แก้/ยกเลิกบิล'],['repeat','repeat','สินค้าแก้ครั้งที่ 2–5','หาด้วย P# / QR / เบอร์ · ฟอร์มนำกลับมาแก้'],['voice','mic','บันทึกเสียง · ถอดเสียง','พูดใส่สัดส่วน · คำสั่งเสียง · ฟังเสียงย้อนหลัง'],['more','print','ร่าง · พิมพ์ · ปัญหา','บันทึกร่าง · พิมพ์ใบสรุป · ปัญหาที่พบบ่อย']];
+    // [voice-33 ตามที่ขอ] ป้าย NEW: หมวดที่เพิ่ม/แก้วิธีใช้ใหม่ ใส่วันที่ไว้ที่นี่ · ขึ้น 14 วันแล้วหายเอง (แก้คู่มือหมวดไหน = เปลี่ยนวันที่ของหมวดนั้น)
+    const HP_NEW={voice:'2026-11-27','2':'2026-11-27'};
+    const isNew=k=>{ const d=HP_NEW[k]; if(!d) return false; const age=(Date.now()-new Date(d+'T00:00:00+07:00').getTime())/864e5; return age>=0&&age<14; };
     const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
     const tname=k=>(T.find(x=>x[0]===k)||[,,''])[2];
-    document.getElementById('hpCards').innerHTML=T.map(t=>'<button type="button" class="hp-card" data-hptab="'+t[0]+'"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">'+P[t[1]]+'</svg></span><b>'+esc(t[2])+'</b><span>'+esc(t[3])+'</span><em>เรียนรู้เพิ่มเติม</em></button>').join('');
-    function showHome(){ pop.classList.add('hp-homeon'); q.value=''; res.hidden=true; body.scrollTop=0; }
-    function openTab(k){ pop.classList.remove('hp-homeon'); res.hidden=true; switchInfoTab(k); }
+    document.getElementById('hpCards').innerHTML=T.map(t=>'<button type="button" class="hp-card" data-hptab="'+t[0]+'">'+(isNew(t[0])?'<span class="hp-new">NEW</span>':'')+'<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">'+P[t[1]]+'</svg></span><b>'+esc(t[2])+'</b><span>'+esc(t[3])+'</span><em>เรียนรู้เพิ่มเติม</em></button>').join('');
+    function showHome(){ pop.classList.remove('hp-reading'); pop.classList.add('hp-homeon'); q.value=''; res.hidden=true; body.scrollTop=0; }
+    function openTab(k){ pop.classList.remove('hp-homeon'); pop.classList.add('hp-reading'); res.hidden=true; switchInfoTab(k); buildSide(k); }
+    // [voice-34] แถบซ้ายของหน้าอ่าน
+    const side=document.getElementById('hpSide'); let heads=[];
+    function buildSide(k){ if(!side) return; const pn=document.querySelector('#infoBody .info-panel[data-info-panel="'+k+'"]'); const t=T.find(x=>x[0]===k)||T[0];
+      heads=pn?[...pn.querySelectorAll('h4.hp-h')].filter(h=>!h.closest('.hp-toc')&&h.textContent.trim()):[];
+      const nm=h=>esc(h.textContent.replace(/\s+/g,' ').replace(/\u200b/g,'').trim());
+      side.innerHTML='<div class="hp-side-top"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+P[t[1]]+'</svg></span><b>'+esc(t[2])+'</b></div>'
+        +'<select class="hp-side-sel" aria-label="ไปที่หัวข้อ"><option value="">'+esc(t[2])+' · เลือกหัวข้อ…</option>'+heads.map((h,i)=>'<option value="'+i+'">'+nm(h)+'</option>').join('')+'<option disabled>──────────</option>'+T.filter(x=>x[0]!==k).map(x=>'<option value="t:'+x[0]+'">หมวด: '+esc(x[2])+'</option>').join('')+'</select>'
+        +'<div class="hp-side-cap">ในหมวดนี้</div><ul class="hp-side-list">'+heads.map((h,i)=>'<li><button type="button" data-hi="'+i+'"'+(h.classList.contains('hp-part')?' class="part"':'')+'>'+nm(h)+'</button></li>').join('')+'</ul>'
+        +'<div class="hp-side-cap">หมวดอื่น</div><ul class="hp-side-list hp-side-other">'+T.filter(x=>x[0]!==k).map(x=>'<li><button type="button" data-ht="'+x[0]+'">'+esc(x[2])+'</button></li>').join('')+'</ul>';
+      spy(); }
+    function toHead(i){ const h=heads[i]; if(!h) return; let p=h.parentElement; while(p&&p!==body){ if(p.tagName==='DETAILS') p.open=true; p=p.parentElement; }
+      const off=(window.matchMedia&&matchMedia('(max-width:760px)').matches&&side)?side.offsetHeight:0;
+      body.scrollTop=Math.max(0,h.getBoundingClientRect().top-body.getBoundingClientRect().top+body.scrollTop-14-off); }
+    function spy(){ if(!pop.classList.contains('hp-reading')||!side) return; const top=body.getBoundingClientRect().top+90; let cur=0;
+      heads.forEach((h,i)=>{ if(h.getBoundingClientRect().top<=top) cur=i; });
+      side.querySelectorAll('[data-hi]').forEach(b=>{ const on=+b.dataset.hi===cur; if(on!==b.classList.contains('on')){ b.classList.toggle('on',on); if(on&&side.scrollHeight>side.clientHeight){ const r=b.getBoundingClientRect(), sr=side.getBoundingClientRect(); if(r.top<sr.top+40||r.bottom>sr.bottom-40) side.scrollTop+=r.top-sr.top-sr.height/2; } } }); }
+    body.addEventListener('scroll',()=>{ if(!spy._q){ spy._q=1; requestAnimationFrame(()=>{ spy._q=0; spy(); }); } },{passive:true});
+    if(side){ side.addEventListener('click',e=>{ const a=e.target.closest('[data-hi]'); if(a){ toHead(+a.dataset.hi); return; } const b=e.target.closest('[data-ht]'); if(b) openTab(b.dataset.ht); });
+      side.addEventListener('change',e=>{ const v=e.target.value; if(!v) return; if(v.indexOf('t:')===0) openTab(v.slice(2)); else { toHead(+v); e.target.value=''; } }); }
     window.hpShowHome=showHome;
     if(back) back.addEventListener('click',showHome);
     // ดัชนีค้นหา: ทุกย่อหน้า/ข้อในทุกหมวด + หัวข้อที่อยู่เหนือมัน (สร้างครั้งแรกที่พิมพ์)
@@ -6277,7 +6330,7 @@
     home.querySelector('.hp-sgo').addEventListener('click',()=>{ render(); q.focus(); });
     function go(x){ openTab(x.k); let p=x.el.parentElement; while(p&&p!==body){ if(p.tagName==='DETAILS') p.open=true; p=p.parentElement; }
       setTimeout(()=>{ const top=x.el.getBoundingClientRect().top-body.getBoundingClientRect().top+body.scrollTop-24; body.scrollTop=Math.max(0,top);
-        x.el.classList.remove('hp-flash'); void x.el.offsetWidth; x.el.classList.add('hp-flash'); setTimeout(()=>x.el.classList.remove('hp-flash'),2600); },30); }
+        spy(); x.el.classList.remove('hp-flash'); void x.el.offsetWidth; x.el.classList.add('hp-flash'); setTimeout(()=>x.el.classList.remove('hp-flash'),2600); },30); }
     home.addEventListener('click',e=>{
       const sr=e.target.closest('.hp-sr'); if(sr){ const o=last[+sr.dataset.i]; if(o) go(o.x); return; }
       const c=e.target.closest('[data-hpq]'); if(c){ q.value=c.dataset.hpq; render(); q.focus(); return; }
